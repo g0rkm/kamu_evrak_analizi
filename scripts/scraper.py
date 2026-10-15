@@ -68,18 +68,17 @@ class ResmiGazeteScraper:
     async def scrape_pdf_document(self, page, url):
         try:
             async with page.expect_download(timeout=30000) as download_info:
-                await page.goto(url)
+                try:
+                    await page.goto(url)
+                except Exception:
+                    pass  # "Download is starting" hatasi beklenen bir durum
             download = await download_info.value
-            tmp_path = download.path()
-            if tmp_path is None:
-                # Bazi durumlarda save_as kullanmak gerekir
-                import tempfile
-                tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
-                tmp_path = tmp_file.name
-                tmp_file.close()
-                await download.save_as(tmp_path)
 
-            import pymupdf
+            tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
+            tmp_path = tmp_file.name
+            tmp_file.close()
+            await download.save_as(tmp_path)
+
             doc = pymupdf.open(tmp_path)
             text = ""
             for p in doc:
