@@ -6,7 +6,7 @@ from app.models.analysis import LegislationMatch
 LEGISLATION_SYSTEM_PROMPT = """Sen bir kamu hukuku ve mevzuat uzmanısın. Verilen evrak metnine ve mevzuat veritabanına bakarak ilgili mevzuatları eşleştir.
 
 Mevzuat veritabanı:
-{legislation_db}
+__LEGISLATION_DB__
 
 Yanıtını SADECE aşağıdaki JSON formatında ver:
 {
@@ -37,7 +37,7 @@ class LegislationAgent(BaseAgent):
     async def execute(self, text: str, document_type: str = "") -> list[LegislationMatch]:
         """Evrak metni için ilgili mevzuatları bul."""
         self.log("Mevzuat eşleştirme başlatılıyor...")
-        system = LEGISLATION_SYSTEM_PROMPT.format(legislation_db=self.legislation_db)
+        system = LEGISLATION_SYSTEM_PROMPT.replace("__LEGISLATION_DB__", self.legislation_db)
         user_msg = f"Evrak türü: {document_type}\n\nEvrak metni:\n{text[:3000]}"
         data = await self.llm_service.chat_json(system, user_msg)
         matches = [LegislationMatch(**m) for m in data.get("matches", [])]
