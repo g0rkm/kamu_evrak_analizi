@@ -1,0 +1,79 @@
+/* Tailwind ile uyumlu özel stiller ve animasyonlar */
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.8);
+}
+
+/* Tab Active State Stilleri */
+.result-tab.active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.dark .result-tab.active {
+    color: #60a5fa;
+    border-bottom-color: #60a5fa;
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.result-tab {
+    color: #64748b;
+}
+
+.dark .result-tab {
+    color: #94a3b8;
+}
+
+/* Tab içerik geçişleri için fade-in animasyonu */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tab-content:not(.hidden) {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Drag & Drop hover efekti */
+#dropZone.dragover {
+    border-color: #2563eb;
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* Print-friendly stiller */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    header, section.lg:col-span-4, .result-tab {
+        display: none !important;
+    }
+    section.lg:col-span-8 {
+        width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+}

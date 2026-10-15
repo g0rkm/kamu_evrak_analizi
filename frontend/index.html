@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamu Evrak Analizi Sistemi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="h-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-200 flex flex-col">
+
+    <!-- Üst Bar -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-landmark text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight">Kamu Evrak Analizi Sistemi</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Yapay Zeka Destekli Evrak İşleme ve Yönlendirme</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <!-- Tema Toggle Butonu -->
+                <button id="themeToggle" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 transition" title="Tema Değiştir">
+                    <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                    <i class="fa-solid fa-sun hidden dark:inline text-lg text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Ana İçerik Alanı -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden">
+        
+        <!-- Sol Panel: Girdi Alanları (4 Kolon) -->
+        <section class="lg:col-span-4 flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5 overflow-y-auto">
+            <h2 class="text-base font-semibold mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-file-arrow-up text-blue-600"></i> Evrak veya Metin Girişi
+            </h2>
+
+            <!-- Sekme Seçimi (Dosya vs Metin) -->
+            <div class="flex rounded-lg bg-slate-100 dark:bg-slate-700 p-1 mb-4 text-sm font-medium">
+                <button id="tabFileBtn" class="flex-1 py-2 rounded-md bg-white dark:bg-slate-600 shadow-sm transition text-center">Dosya Yükle</button>
+                <button id="tabTextBtn" class="flex-1 py-2 rounded-md text-slate-500 dark:text-slate-400 transition text-center">Metin Gir</button>
+            </div>
+
+            <!-- Dosya Yükleme Paneli -->
+            <div id="filePanel" class="flex flex-col flex-1">
+                <div id="dropZone" class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-6 text-center flex flex-col items-center justify-center flex-1 cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition group min-h-[200px]">
+                    <div class="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium mb-1">Dosyayı buraya sürükleyin veya <span class="text-blue-600 dark:text-blue-400 underline">seçin</span></p>
+                    <p class="text-xs text-slate-400">PDF, PNG, JPG veya TXT (Maks. 20MB)</p>
+                    <input type="file" id="fileInput" class="hidden" accept=".pdf,.png,.jpg,.jpeg,.txt">
+                </div>
+                <div id="fileInfo" class="hidden mt-3 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg flex items-center justify-between text-sm">
+                    <span id="fileName" class="truncate font-medium text-slate-700 dark:text-slate-200"></span>
+                    <button id="removeFileBtn" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <!-- Metin Giriş Paneli -->
+            <div id="textPanel" class="hidden flex flex-col flex-1">
+                <textarea id="textInput" placeholder="Evrak içeriğini buraya yapıştırın..." class="flex-1 w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm min-h-[200px]"></textarea>
+            </div>
+
+            <!-- Analiz Et Butonu -->
+            <button id="analyzeBtn" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-medium py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Analiz Et
+            </button>
+        </section>
+
+        <!-- Sağ Panel: Sonuçlar Bölümü (8 Kolon) -->
+        <section class="lg:col-span-8 flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+            
+            <!-- Tab Başlıkları -->
+            <div class="flex overflow-x-auto border-b border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 px-4 pt-3 gap-2 no-scrollbar">
+                <button data-tab="classification" class="result-tab active px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 border-transparent transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-file-lines"></i> Sınıflandırma & Özet
+                </button>
+                <button data-tab="entities" class="result-tab px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 border-transparent transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-network-wired"></i> İçerik Analizi
+                </button>
+                <button data-tab="legislation" class="result-tab px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 border-transparent transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-scale-balanced"></i> Mevzuat
+                </button>
+                <button data-tab="draft" class="result-tab px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 border-transparent transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib"></i> Yazı Taslağı
+                </button>
+                <button data-tab="routing" class="result-tab px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 border-transparent transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-share-nodes"></i> Yönlendirme
+                </button>
+                <button data-tab="logs" class="result-tab px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 border-transparent transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-terminal"></i> Agent Logları
+                </button>
+            </div>
+
+            <!-- İçerik Alanı -->
+            <div class="flex-1 p-6 overflow-y-auto relative">
+                
+                <!-- Boş Durum -->
+                <div id="emptyState" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 p-6 text-center">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center mb-4 text-2xl">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </div>
+                    <p class="font-medium text-base">Analiz başlatmak için soldan bir evrak yükleyin veya metin girin.</p>
+                    <p class="text-xs text-slate-400 mt-1">Yapay zeka tüm pipeline adımlarını otomatik olarak çalıştıracaktır.</p>
+                </div>
+
+                <!-- Loading Overlay -->
+                <div id="loadingState" class="hidden absolute inset-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center">
+                    <div class="relative w-16 h-16 mb-4">
+                        <div class="absolute inset-0 rounded-full border-4 border-blue-200 dark:border-blue-900"></div>
+                        <div class="absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+                    </div>
+                    <p class="font-semibold text-slate-700 dark:text-slate-200">Evrak Analiz Ediliyor...</p>
+                    <p id="loadingStatusText" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Agent'lar koordine ediliyor, lütfen bekleyin (Bu işlem biraz sürebilir)</p>
+                </div>
+
+                <!-- Tab 1: Sınıflandırma & Özet -->
+                <div id="content-classification" class="tab-content space-y-6 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Evrak Türü</span>
+                            <div class="mt-2 flex items-center gap-3">
+                                <span id="docTypeBadge" class="px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">Belirlenmedi</span>
+                                <span id="docSubType" class="text-xs text-slate-500"></span>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Güven Skoru</span>
+                            <div class="mt-2 flex items-center gap-3">
+                                <div class="flex-1 bg-slate-200 dark:bg-slate-600 h-2.5 rounded-full overflow-hidden">
+                                    <div id="confidenceBar" class="bg-blue-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
+                                <span id="confidenceText" class="text-sm font-bold">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Sınıflandırma Gerekçesi</span>
+                        <p id="classificationReasoning" class="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Yönetici Özeti</span>
+                        <p id="summaryText" class="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- Tab 2: İçerik Analizi -->
+                <div id="content-entities" class="tab-content space-y-6 hidden">
+                    <div>
+                        <h3 class="text-sm font-semibold mb-3 flex items-center gap-2"><i class="fa-solid fa-table text-blue-500"></i> Çıkarılan Varlıklar (Entities)</h3>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
+                                    <tr>
+                                        <th class="p-3">Varlık Türü</th>
+                                        <th class="p-3">Değer</th>
+                                        <th class="p-3">Konum</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="entitiesTableBody" class="divide-y divide-slate-200 dark:divide-slate-700">
+                                    <!-- Dinamik Dolacak -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-semibold mb-3 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Eksik Alanlar</h3>
+                        <div id="missingFieldsContainer" class="space-y-2">
+                            <!-- Dinamik Dolacak -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-semibold mb-3 flex items-center gap-2"><i class="fa-solid fa-tags text-blue-500"></i> Anahtar Kelimeler</h3>
+                        <div id="keywordsContainer" class="flex flex-wrap gap-2">
+                            <!-- Dinamik Dolacak -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Mevzuat -->
+                <div id="content-legislation" class="tab-content space-y-4 hidden">
+                    <div id="legislationContainer" class="space-y-4">
+                        <!-- Dinamik Dolacak -->
+                    </div>
+                </div>
+
+                <!-- Tab 4: Yazı Taslağı -->
+                <div id="content-draft" class="tab-content space-y-4 hidden">
+                    <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-700/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <div>
+                            <span id="draftTypeBadge" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">Taslak</span>
+                            <h3 id="draftSubject" class="text-base font-bold mt-1"></h3>
+                        </div>
+                        <button id="copyDraftBtn" class="bg-white dark:bg-slate-600 hover:bg-slate-100 dark:hover:bg-slate-500 border border-slate-200 dark:border-slate-500 px-3 py-2 rounded-lg text-xs font-medium transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-regular fa-copy"></i> Kopyala
+                        </button>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700 space-y-4 font-serif text-sm leading-relaxed">
+                        <div id="draftGreeting" class="font-semibold"></div>
+                        <div id="draftBody" class="whitespace-pre-wrap text-slate-700 dark:text-slate-300"></div>
+                        <div id="draftClosing" class="pt-4 font-semibold text-right"></div>
+                    </div>
+
+                    <div id="draftToneCheckContainer" class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-xs text-blue-700 dark:text-blue-300 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info"></i> <span id="draftToneCheck"></span>
+                    </div>
+                </div>
+
+                <!-- Tab 5: Yönlendirme -->
+                <div id="content-routing" class="tab-content space-y-6 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Hedef Birim</span>
+                            <p id="targetUnit" class="mt-2 text-base font-bold text-blue-600 dark:text-blue-400"></p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Öncelik</span>
+                            <div class="mt-2">
+                                <span id="priorityBadge" class="px-3 py-1 rounded-full text-xs font-bold uppercase">Normal</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Yönlendirme Gerekçesi</span>
+                        <p id="routingReasoning" class="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Alternatif Birimler</span>
+                            <div id="altUnitsContainer" class="mt-2 flex flex-wrap gap-2"></div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Yapılacak Eylemler</span>
+                            <ul id="requiresActionContainer" class="mt-2 list-disc list-inside text-sm space-y-1 text-slate-600 dark:text-slate-300"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 6: Agent Logları -->
+                <div id="content-logs" class="tab-content hidden h-full">
+                    <div class="bg-slate-900 text-slate-100 rounded-xl p-4 font-mono text-xs overflow-y-auto h-[400px] space-y-2 border border-slate-800 shadow-inner" id="logsContainer">
+                        <!-- Dinamik Dolacak -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JS Bağlantısı -->
+    <script src="app.js"></script>
+</body>
+</html>
