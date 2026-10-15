@@ -1,0 +1,5 @@
+﻿.aider*
+.aider_task.md
+__pycache__/
+*.db
+*.sqlite3
