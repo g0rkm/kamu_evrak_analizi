@@ -147,13 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData();
                 formData.append('file', selectedFile);
 
-                response = await fetch('http://localhost:8080/api/analyze', {
+                response = await fetch('/api/analyze', {
                     method: 'POST',
                     body: formData,
                     signal: controller.signal
                 });
             } else {
-                response = await fetch('http://localhost:8080/api/analyze-text', {
+                response = await fetch('/api/analyze-text', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
