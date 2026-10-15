@@ -2,9 +2,9 @@ from functools import lru_cache
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    LLM_API_BASE: str = "http://127.0.0.1:8000/v1"
-    LLM_API_KEY: str = "dummy"
-    LLM_MODEL: str = "openai/argon-4"
+    LLM_API_BASE: str = "https://generativelanguage.googleapis.com/v1beta/openai"
+    LLM_API_KEY: str = "not-set"
+    LLM_MODEL: str = "gemini-2.5-flash"
     TESSERACT_CMD: str = "tesseract"
     UPLOAD_DIR: str = "uploads"
     MAX_FILE_SIZE_MB: int = 20

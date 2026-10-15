@@ -11,7 +11,7 @@ class LLMService:
         self.api_base = settings.LLM_API_BASE
         self.api_key = settings.LLM_API_KEY
         self.model = settings.LLM_MODEL
-        self.client = httpx.AsyncClient(timeout=120.0)
+        self.client = httpx.AsyncClient(timeout=180.0)
     
     async def chat(self, system_prompt: str, user_prompt: str) -> str:
         """Tek bir chat completion isteği gönder, yanıt metnini döndür."""
