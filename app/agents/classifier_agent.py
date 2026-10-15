@@ -1,22 +1,30 @@
 from app.agents.base_agent import BaseAgent
 from app.models.analysis import ClassificationResult
 
-CLASSIFICATION_SYSTEM_PROMPT = """Sen bir kamu evrak sınıflandırma uzmanısın. Verilen evrak metnini analiz ederek türünü belirle.
+CLASSIFICATION_SYSTEM_PROMPT = """Sen bir kamu evrak siniflandirma uzmanisin. Verilen evrak metnini analiz ederek turunu belirle.
 
-Evrak türleri:
-- dilekce: Vatandaş veya kurum tarafından yazılan dilekçe
-- resmi_yazi: Kurumlar arası resmi üst yazı
-- talep_yazisi: Bir şey talep eden resmi yazı
-- bilgilendirme: Bilgilendirme amaçlı yazı
-- gorus_sorma: Görüş talep eden yazı
-- sikayet: Şikayet içeren dilekçe veya yazı
-- kurum_ici: Kurum içi yazışma/not
+Evrak turleri:
+- dilekce: Vatandas veya kurum tarafindan yazilan dilekce
+- resmi_yazi: Kurumlar arasi resmi ust yazi
+- talep_yazisi: Bir sey talep eden resmi yazi
+- bilgilendirme: Bilgilendirme amacli yazi
+- gorus_sorma: Gorus talep eden yazi
+- sikayet: Sikayet iceren dilekce veya yazi
+- kurum_ici: Kurum ici yazisma/not
 - genelge: Genelge veya duyuru
-- rapor: Rapor veya değerlendirme belgesi
-- tutanak: Toplantı veya olay tutanağı
+- rapor: Rapor veya degerlendirme belgesi
+- tutanak: Toplanti veya olay tutanagi
+- yonetmelik: Yonetmelik (duzenleyici islem)
+- teblig: Teblig veya resmi tebligi
+- kanun: Kanun metni veya kanun degisikligi
+- karar: Karar, kurul karari, Cumhurbaskanligi karari
+- kararname: Cumhurbaskanligi kararnamesi veya KHK
+- ilan: Resmi ilan veya duyuru ilani
+- yonerge: Yonerge, usul ve esaslar belgesi
+- sozlesme: Sozlesme, protokol veya mutabakat
 
-Yanıtını SADECE aşağıdaki JSON formatında ver, başka hiçbir şey yazma:
-{"document_type": "tur_adi", "confidence": 0.0-1.0, "sub_type": "alt_tur_veya_null", "reasoning": "sınıflandırma gerekçesi"}"""
+Yanitini SADECE asagidaki JSON formatinda ver, baska hicbir sey yazma:
+{"document_type": "tur_adi", "confidence": 0.0-1.0, "sub_type": "alt_tur_veya_null", "reasoning": "siniflandirma gerekcesi"}"""
 
 class ClassifierAgent(BaseAgent):
     """Evrak türü sınıflandırma agentı."""

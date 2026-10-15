@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 class ClassificationResult(BaseModel):
-    document_type: str  # dilekçe, resmi_yazi, talep_yazisi, bilgilendirme, gorus_sorma, sikayet, kurum_ici, genelge, rapor, tutanak
+    document_type: str  # dilekçe, resmi_yazi, talep_yazisi, bilgilendirme, gorus_sorma, sikayet, kurum_ici, genelge, rapor, tutanak, yonetmelik, teblig, kanun, karar, kararname, ilan, yonerge, sozlesme
     confidence: float
     sub_type: Optional[str] = None
     reasoning: str  # Sınıflandırma gerekçesi

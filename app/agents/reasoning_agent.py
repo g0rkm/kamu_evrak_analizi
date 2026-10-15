@@ -14,7 +14,15 @@ KEYWORD_CLASSIFICATION_RULES = {
     "kurum_ici": ["hizmet içi", "personelimiz", "birimimiz", "müdürlüğümüz"],
     "genelge": ["genelge", "duyuru", "tüm birimlere", "tüm personele"],
     "rapor": ["rapor", "değerlendirme raporu", "faaliyet raporu", "inceleme sonucu"],
-    "tutanak": ["tutanak", "toplantı", "katılımcılar", "gündem", "karar altına"]
+    "tutanak": ["tutanak", "toplantı", "katılımcılar", "gündem", "karar altına"],
+    "yonetmelik": ["yönetmelik", "düzenleyici", "madde ", "hüküm", "yürürlük", "resmi gazete"],
+    "teblig": ["tebliğ", "tebliği", "usul ve esaslar"],
+    "kanun": ["kanun", "kanunu", "madde ", "fıkra", "bent", "yasalaş"],
+    "karar": ["karar", "kararı", "kararname", "cumhurbaşkanı kararı", "kurul kararı", "atanması"],
+    "kararname": ["cumhurbaşkanlığı kararnamesi", "kanun hükmünde kararname", "khk", "kararname"],
+    "ilan": ["ilan", "ilân", "duyuru", "başvuru tarihi", "son başvuru"],
+    "yonerge": ["yönerge", "usul ve esaslar", "çalışma esasları"],
+    "sozlesme": ["sözleşme", "protokol", "mutabakat", "taraflar", "imza altına"]
 }
 
 # Kural 2: Evrak türü -> uygun taslak türü eşleştirmesi
@@ -28,7 +36,15 @@ VALID_DRAFT_TYPES = {
     "kurum_ici": ["ic_yazisma", "bilgilendirme"],
     "genelge": ["bilgilendirme", "ic_yazisma"],
     "rapor": ["ust_yazi", "bilgilendirme"],
-    "tutanak": ["ust_yazi", "bilgilendirme", "ic_yazisma"]
+    "tutanak": ["ust_yazi", "bilgilendirme", "ic_yazisma"],
+    "yonetmelik": ["bilgilendirme", "ust_yazi"],
+    "teblig": ["bilgilendirme", "ust_yazi"],
+    "kanun": ["bilgilendirme", "ust_yazi"],
+    "karar": ["bilgilendirme", "ust_yazi", "cevap_yazisi"],
+    "kararname": ["bilgilendirme", "ust_yazi"],
+    "ilan": ["bilgilendirme"],
+    "yonerge": ["bilgilendirme", "ic_yazisma"],
+    "sozlesme": ["ust_yazi", "cevap_yazisi"]
 }
 
 # Kural 3: Anahtar kelime -> birim yönlendirme tablosu
@@ -53,7 +69,15 @@ PRIORITY_RULES = {
     "resmi_yazi": "normal",
     "bilgilendirme": "dusuk",
     "kurum_ici": "dusuk",
-    "rapor": "normal"
+    "rapor": "normal",
+    "yonetmelik": "normal",
+    "teblig": "normal",
+    "kanun": "yuksek",
+    "karar": "yuksek",
+    "kararname": "yuksek",
+    "ilan": "dusuk",
+    "yonerge": "normal",
+    "sozlesme": "normal"
 }
 
 # Acil anahtar kelimeler
