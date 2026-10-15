@@ -3,7 +3,7 @@ import os
 import sys
 import asyncio
 import tempfile
-import fitz  # pymupdf
+import pymupdf
 from datetime import datetime
 from playwright.async_api import async_playwright
 
@@ -67,24 +67,30 @@ class ResmiGazeteScraper:
 
     async def scrape_pdf_document(self, page, url):
         try:
-            response = await page.goto(url, timeout=30000)
-            if response and response.ok:
-                body = await response.body()
-                with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-                    tmp.write(body)
-                    tmp_path = tmp.name
-                
-                doc = fitz.open(tmp_path)
-                text = ""
-                for p in doc:
-                    text += p.get_text()
-                doc.close()
-                os.unlink(tmp_path)
-                
-                text = text.strip()
-                if len(text) < 100:
-                    return None
-                return text[:50000]
+            async with page.expect_download(timeout=30000) as download_info:
+                await page.goto(url)
+            download = await download_info.value
+            tmp_path = download.path()
+            if tmp_path is None:
+                # Bazi durumlarda save_as kullanmak gerekir
+                import tempfile
+                tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
+                tmp_path = tmp_file.name
+                tmp_file.close()
+                await download.save_as(tmp_path)
+
+            import pymupdf
+            doc = pymupdf.open(tmp_path)
+            text = ""
+            for p in doc:
+                text += p.get_text()
+            doc.close()
+            os.unlink(tmp_path)
+
+            text = text.strip()
+            if len(text) < 100:
+                return None
+            return text[:50000]
         except Exception as e:
             print(f"  [RG] PDF hata ({url}): {e}")
             return None
@@ -146,7 +152,7 @@ class MevzuatScraper:
         try:
             url = f"{self.base_url}/anasayfa/MevzuatFihristDetayIframe?MevzuatTur={mevzuat_tur}&MevzuatNo={mevzuat_no}&MevzuatTertip={mevzuat_tertip}"
             await page.goto(url, timeout=30000)
-            await page.wait_for_timeout(5000)
+            await page.wait_for_timeout(8000)
             
             full_text = await page.inner_text("body")
             if not full_text:
@@ -195,7 +201,8 @@ async def main():
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(headless=True)
-        page = await browser.new_page()
+        context = await browser.new_context(accept_downloads=True)
+        page = await context.new_page()
 
         rg_scraper = ResmiGazeteScraper()
         mv_scraper = MevzuatScraper()
@@ -221,6 +228,7 @@ async def main():
             except Exception as e:
                 print(f"  -> HATA: {e}")
 
+        await context.close()
         await browser.close()
 
         output_path = os.path.join(rg_scraper.output_dir, "documents.json")
