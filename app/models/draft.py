@@ -18,6 +18,13 @@ class RoutingDecision(BaseModel):
     alternative_units: list[str] = []
     requires_action: list[str] = []  # Birimden beklenen eylemler
 
+class ValidationEntry(BaseModel):
+    field: str
+    original_value: str
+    corrected_value: Optional[str] = None
+    rule: str
+    severity: str = "info"  # info, warning, correction
+
 class PipelineResult(BaseModel):
     document_id: str
     analysis: AnalysisResult
@@ -26,3 +33,5 @@ class PipelineResult(BaseModel):
     processing_time: float = 0.0
     agent_logs: list[str] = []  # Her agent'ın işlem kaydı
     status: str = "completed"
+    validation: list[ValidationEntry] = []  # YENİ: Muhakeme ajanı çıktısı
+    confidence_score: float = 0.0  # YENİ: Genel güven skoru (0-1)

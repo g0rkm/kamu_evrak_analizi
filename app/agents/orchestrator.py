@@ -7,9 +7,10 @@ from app.agents.legislation_agent import LegislationAgent
 from app.agents.summary_agent import SummaryAgent
 from app.agents.draft_agent import DraftAgent
 from app.agents.routing_agent import RoutingAgent
+from app.agents.reasoning_agent import ReasoningAgent
 from app.services.llm_service import LLMService
 from app.models.analysis import AnalysisResult, ClassificationResult
-from app.models.draft import PipelineResult
+from app.models.draft import PipelineResult, ValidationEntry
 
 class OrchestratorAgent(BaseAgent):
     """Tüm agentları koordine eden orkestratör."""
@@ -26,6 +27,7 @@ class OrchestratorAgent(BaseAgent):
         self.summary = SummaryAgent(llm_service=self.llm_service)
         self.drafter = DraftAgent(llm_service=self.llm_service)
         self.router = RoutingAgent(llm_service=self.llm_service)
+        self.reasoner = ReasoningAgent()
     
     async def execute(self, file_path: str) -> PipelineResult:
         """Uçtan uca evrak işleme pipeline'ı çalıştır."""
@@ -35,7 +37,7 @@ class OrchestratorAgent(BaseAgent):
         self.log(f"Pipeline başlatılıyor: {file_path}")
         
         # Adım 1: OCR / Metin Çıkarma
-        self.log("Adım 1/6: Metin çıkarma...")
+        self.log("Adım 1/7: Metin çıkarma...")
         extracted = await self.ocr_agent.execute(file_path=file_path)
         all_logs.extend(self.ocr_agent.get_logs())
         text = extracted.cleaned_text
@@ -53,22 +55,22 @@ class OrchestratorAgent(BaseAgent):
             )
         
         # Adım 2: Sınıflandırma
-        self.log("Adım 2/6: Evrak sınıflandırma...")
+        self.log("Adım 2/7: Evrak sınıflandırma...")
         classification = await self.classifier.execute(text=text)
         all_logs.extend(self.classifier.get_logs())
         
         # Adım 3: İçerik Analizi
-        self.log("Adım 3/6: İçerik analizi...")
+        self.log("Adım 3/7: İçerik analizi...")
         analysis_data = await self.analyzer.execute(text=text)
         all_logs.extend(self.analyzer.get_logs())
         
         # Adım 4: Mevzuat Eşleştirme
-        self.log("Adım 4/6: Mevzuat eşleştirme...")
+        self.log("Adım 4/7: Mevzuat eşleştirme...")
         legislation_matches = await self.legislation.execute(text=text, document_type=classification.document_type)
         all_logs.extend(self.legislation.get_logs())
         
         # Adım 5: Özet Oluşturma
-        self.log("Adım 5/6: Özet oluşturma...")
+        self.log("Adım 5/7: Özet oluşturma...")
         summary_text = await self.summary.execute(text=text, document_type=classification.document_type)
         all_logs.extend(self.summary.get_logs())
         
@@ -83,7 +85,7 @@ class OrchestratorAgent(BaseAgent):
         )
         
         # Adım 6: Yazı Taslağı + Birim Yönlendirme
-        self.log("Adım 6/6: Yazı taslağı ve yönlendirme...")
+        self.log("Adım 6/7: Yazı taslağı ve yönlendirme...")
         draft = await self.drafter.execute(
             text=text,
             document_type=classification.document_type,
@@ -100,6 +102,22 @@ class OrchestratorAgent(BaseAgent):
         )
         all_logs.extend(self.router.get_logs())
         
+        # Adım 7: Muhakeme ve Doğrulama
+        self.log("Adım 7/7: Muhakeme ve doğrulama...")
+        reasoning_result = await self.reasoner.execute(
+            text=text,
+            analysis=analysis,
+            draft=draft,
+            routing=routing
+        )
+        all_logs.extend(self.reasoner.get_logs())
+
+        analysis = reasoning_result["analysis"]
+        draft = reasoning_result["draft"]
+        routing = reasoning_result["routing"]
+        validation = reasoning_result["validation"]
+        confidence_score = reasoning_result["confidence_score"]
+        
         processing_time = time.time() - start_time
         self.log(f"Pipeline tamamlandı: {processing_time:.2f} saniye")
         all_logs.extend(self.get_logs())
@@ -111,7 +129,9 @@ class OrchestratorAgent(BaseAgent):
             routing=routing,
             processing_time=processing_time,
             agent_logs=all_logs,
-            status="completed"
+            status="completed",
+            validation=validation,
+            confidence_score=confidence_score
         )
     
     async def close(self):
