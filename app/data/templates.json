@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ust_yazi",
+    "name": "Üst Yazı Şablonu",
+    "template": "T.C.\n{kurum_adi}\n{birim_adi}\n\nSayı: {sayi}\nKonu: {konu}\n\n{alici}\n\nİlgi: {ilgi}\n\n{govde}\n\nBilgilerinize arz ederim.\n\n{imza_adi}\n{unvan}"
+  },
+  {
+    "id": "cevap_yazisi",
+    "name": "Cevap Yazısı Şablonu",
+    "template": "T.C.\n{kurum_adi}\n{birim_adi}\n\nSayı: {sayi}\nKonu: {konu}\n\n{alici}\n\nİlgi: {ilgi_tarih} tarihli ve {ilgi_sayi} sayılı yazınız.\n\n{govde}\n\nBilgilerinize arz ederim.\n\n{imza_adi}\n{unvan}"
+  },
+  {
+    "id": "bilgilendirme",
+    "name": "Bilgilendirme Yazısı Şablonu",
+    "template": "T.C.\n{kurum_adi}\n{birim_adi}\n\nSayı: {sayi}\nKonu: {konu}\n\n{alici}\n\n{govde}\n\nBilgilerinize rica ederim.\n\n{imza_adi}\n{unvan}"
+  },
+  {
+    "id": "ic_yazisma",
+    "name": "Kurum İçi Yazışma Şablonu",
+    "template": "{kurum_adi}\n{birim_adi}\n\nSayı: {sayi}\nKonu: {konu}\n\n{alici_birim}\n\n{govde}\n\nGereğini arz/rica ederim.\n\n{imza_adi}\n{unvan}"
+  }
+]

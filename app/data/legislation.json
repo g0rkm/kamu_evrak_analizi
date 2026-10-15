@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "7201 sayılı Tebligat Kanunu",
+    "category": "genel",
+    "description": "Resmî tebligat usul ve esasları",
+    "relevant_for": ["resmi_yazi", "bilgilendirme", "talep_yazisi"]
+  },
+  {
+    "id": 2,
+    "name": "4982 sayılı Bilgi Edinme Hakkı Kanunu",
+    "category": "bilgi_edinme",
+    "description": "Vatandaşların bilgi edinme başvuruları",
+    "relevant_for": ["dilekce", "talep_yazisi", "bilgilendirme"]
+  },
+  {
+    "id": 3,
+    "name": "3071 sayılı Dilekçe Hakkının Kullanılmasına Dair Kanun",
+    "category": "dilekce",
+    "description": "Dilekçe hakkı ve başvuru usulleri",
+    "relevant_for": ["dilekce", "sikayet"]
+  },
+  {
+    "id": 4,
+    "name": "Resmî Yazışmalarda Uygulanacak Usul dan Esaslar Hakkında Yönetmelik (2020/22)",
+    "category": "yazisma",
+    "description": "Resmî yazışma formatı, standartları ve kuralları",
+    "relevant_for": ["resmi_yazi", "ust_yazi", "cevap_yazisi", "bilgilendirme", "ic_yazisma", "genelge"]
+  },
+  {
+    "id": 5,
+    "name": "657 sayılı Devlet Memurları Kanunu",
+    "category": "personel",
+    "description": "Devlet memurlarının hakları, ödevleri ve disiplin işlemleri",
+    "relevant_for": ["talep_yazisi", "kurum_ici", "rapor", "tutanak"]
+  },
+  {
+    "id": 6,
+    "name": "5018 sayılı Kamu Mali Yönetimi ve Kontrol Kanunu",
+    "category": "mali",
+    "description": "Kamu harcamaları, bütçe ve mali yönetim",
+    "relevant_for": ["talep_yazisi", "rapor", "kurum_ici"]
+  },
+  {
+    "id": 7,
+    "name": "4734 sayılı Kamu İhale Kanunu",
+    "category": "ihale",
+    "description": "Kamu alım ve ihale süreçleri",
+    "relevant_for": ["talep_yazisi", "rapor", "tutanak"]
+  },
+  {
+    "id": 8,
+    "name": "6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK)",
+    "category": "veri_koruma",
+    "description": "Kişisel veri işleme ve koruma yükümlülükleri",
+    "relevant_for": ["bilgilendirme", "sikayet", "gorus_sorma"]
+  },
+  {
+    "id": 9,
+    "name": "2577 sayılı İdari Yargılama Usulü Kanunu",
+    "category": "hukuk",
+    "description": "İdari işlemlere itiraz ve dava süreçleri",
+    "relevant_for": ["sikayet", "gorus_sorma", "rapor"]
+  },
+  {
+    "id": 10,
+    "name": "5070 sayılı Elektronik İmza Kanunu",
+    "category": "elektronik",
+    "description": "E-imza geçerliliği ve elektronik belge düzeni",
+    "relevant_for": ["resmi_yazi", "genelge", "kurum_ici"]
+  }
+]
