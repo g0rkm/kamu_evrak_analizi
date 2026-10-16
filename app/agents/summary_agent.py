@@ -17,6 +17,6 @@ Yanıtını düz metin olarak ver, JSON formatında DEĞİL."""
 
     async def execute(self, text: str, document_type: str = "") -> str:
         self.log("Özet oluşturma başlatılıyor...")
-        summary = await self.ask_text(f"Evrak türü: {document_type}\n\nEvrak metni:\n{self.truncate(text)}")
+        summary = await self.ask_text(f"Evrak türü: {document_type}\n\nEvrak metni:\n{self.document(text)}")
         self.log(f"Özet oluşturuldu: {len(summary)} karakter")
         return summary

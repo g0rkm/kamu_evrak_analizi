@@ -84,7 +84,7 @@ class LegislationAgent(LLMAgent):
             self.log("RAG indeksi mevcut değil, yalnızca metadata kullanılıyor")
         self._rag_context = self.format_rag_context(hits)
 
-        data = await self.ask_json(f"Evrak türü: {document_type}\n\nEvrak metni:\n{self.truncate(text)}")
+        data = await self.ask_json(f"Evrak türü: {document_type}\n\nEvrak metni:\n{self.document(text)}")
         matches = self.parse_items(LegislationMatch, data.get("matches"))
         matches.sort(key=lambda m: m.relevance_score, reverse=True)
         matches = matches[: self.MAX_MATCHES]
