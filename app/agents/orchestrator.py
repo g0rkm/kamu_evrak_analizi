@@ -71,7 +71,7 @@ class OrchestratorAgent(BaseAgent):
         # Adım 4: Mevzuat Eşleştirme
         self.log("Adım 4/7: Mevzuat eşleştirme...")
         try:
-            legislation_matches = await self.legislation.execute(text=text, document_type=classification.document_type)
+            legislation_matches = await self.legislation.execute(text=text, document_type=classification.document_type, keywords=analysis_data.get("keywords", []))
             all_logs.extend(self.legislation.get_logs())
         except Exception as e:
             self.log(f"Mevzuat eşleştirme hatası (varsayılan kullanılıyor): {e}")
