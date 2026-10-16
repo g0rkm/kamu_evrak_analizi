@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from pydantic import BaseModel
 
 from app import __version__
 from app.agents.orchestrator import PIPELINE_STEPS
@@ -6,6 +7,7 @@ from app.api.dependencies import get_container
 from app.container import ServiceContainer
 from app.core.taxonomy import DOCUMENT_TYPES, DRAFT_TYPES, ORG_UNITS, PRIORITIES, UNKNOWN_DOCUMENT_TYPE
 from app.models.api import HealthStatus
+from app.services.pii_detector import PIIDetector
 from app.services.upload_storage import ALLOWED_EXTENSIONS
 
 router = APIRouter(tags=["sistem"])
@@ -46,3 +48,20 @@ async def meta(container: ServiceContainer = Depends(get_container)):
             "keep_uploads": settings.KEEP_UPLOADS,
         },
     }
+
+
+class MaskRequest(BaseModel):
+    text: str
+
+
+class MaskResponse(BaseModel):
+    masked_text: str
+    pii_count: int
+
+
+@router.post("/mask-pii", response_model=MaskResponse, summary="Metindeki kişisel verileri maskele")
+async def mask_pii(body: MaskRequest):
+    detector = PIIDetector()
+    findings = detector.detect(body.text)
+    masked = detector.mask_text(body.text)
+    return MaskResponse(masked_text=masked, pii_count=len(findings))
