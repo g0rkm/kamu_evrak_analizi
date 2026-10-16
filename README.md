@@ -6,11 +6,19 @@ Kamu kurumlarına gelen evrakların yapay zeka ile otomatik sınıflandırılmas
 
 - **Evrak Sınıflandırma**: 18 farklı evrak türü (dilekçe, resmi yazı, kanun, yönetmelik, kararname vb.)
 - **İçerik Analizi**: Varlık çıkarma (tarih, kurum, kişi, referans no), eksik alan tespiti, anahtar kelime belirleme
-- **Mevzuat Eşleştirme**: 38 temel mevzuat kaydı ile otomatik ilişkilendirme
+- **RAG Destekli Mevzuat Eşleştirme**: TF-IDF tabanlı retrieval sistemi ile 956 belgeden 3056 chunk üzerinde arama (scikit-learn)
+- **PII/KVKK Tespiti**: TC Kimlik (Luhn checksum doğrulamalı), IBAN, telefon, e-posta otomatik tespiti ve maskeleme
+- **Human-in-the-Loop**: Taslak yazı ve yönlendirme kararları için Onayla/Düzenle/Reddet mekanizması
 - **Yazı Taslağı**: Evrak türüne uygun resmî cevap/işlem yazısı taslağı
 - **Birim Yönlendirme**: 8 kamu birimi arasında otomatik yönlendirme ve önceliklendirme
-- **Kural Tabanlı Doğrulama**: LLM çıktılarını deterministik kurallarla kontrol eden ReasoningAgent
+- **Kural Tabanlı Doğrulama**: LLM çıktılarını deterministik kurallarla kontrol eden ReasoningAgent (6 kural)
 - **OCR Desteği**: PDF ve görüntü dosyalarından Tesseract ile metin çıkarma
+- **Analiz Geçmişi**: JSON tabanlı sonuç depolama, geçmiş listeleme ve istatistik paneli
+- **Toplu İşleme**: Birden fazla evrak için batch analiz API'si
+- **Evrak Karşılaştırma**: İki evrak arasındaki benzerlik ve fark analizi
+- **Pipeline Süre Ölçümü**: Her agent adımı için detaylı zamanlama ve görselleştirme
+- **LLM Retry Mekanizması**: Rate limit ve timeout durumlarında exponential backoff ile otomatik yeniden deneme
+- **JSON Dışa Aktarma**: Analiz sonuçlarını JSON olarak indirme
 
 ## Mimari
 
@@ -80,7 +88,13 @@ Tarayıcıda `http://127.0.0.1:8080` adresini aç.
 |----------|--------|----------|
 | `/api/analyze` | POST | Dosya yükleyerek analiz (multipart/form-data) |
 | `/api/analyze-text` | POST | Metin göndererek analiz (JSON body) |
-| `/api/health` | GET | Sistem sağlık kontrolü |
+| `/api/analyze-batch` | POST | Toplu dosya analizi (multipart/form-data, maks. 10) |
+| `/api/compare` | POST | İki evrak metni karşılaştırma (JSON body) |
+| `/api/history` | GET | Analiz geçmişi listesi |
+| `/api/history/stats` | GET | Analiz istatistikleri |
+| `/api/history/{id}` | GET | Belirli bir analiz kaydı |
+| `/api/export/{id}` | GET | Analiz sonucunu JSON olarak indir |
+| `/api/health` | GET | Sistem sağlık kontrolü (RAG durumu, istatistikler) |
 
 API dokümantasyonu: `http://127.0.0.1:8080/docs`
 
@@ -93,12 +107,13 @@ kamu_evrak_analizi/
 │   ├── config.py                # Yapılandırma (pydantic-settings)
 │   ├── agents/                  # 9 ajan modülü
 │   ├── models/                  # Pydantic veri modelleri
-│   ├── services/                # LLM ve OCR servisleri
+│   ├── services/                # LLM, OCR, RAG ve geçmiş servisleri
 │   ├── api/                     # REST API route'ları
 │   └── data/                    # Mevzuat DB ve şablonlar
 ├── frontend/                    # HTML/CSS/JS arayüz
 ├── scripts/
 │   ├── scraper.py               # Resmi Gazete ve mevzuat scraper
+│   ├── build_index.py           # RAG TF-IDF indeks oluşturma
 │   └── evaluate_f1.py           # Sınıflandırma F1 değerlendirme
 ├── requirements.txt
 ├── .env.example
@@ -121,7 +136,8 @@ Scraper çıktısı `app/data/scraped/documents.json` dosyasına kaydedilir (git
 
 - **Backend**: FastAPI, Pydantic, httpx
 - **Frontend**: Vanilla JS, Tailwind CSS, Font Awesome
-- **LLM**: Gemini API (OpenAI-uyumlu endpoint)
+- **LLM**: Gemini API (OpenAI-uyumlu endpoint, retry mekanizmalı)
+- **RAG**: scikit-learn TF-IDF, cosine similarity
 - **OCR**: Tesseract, PyMuPDF, Pillow
 - **Scraping**: Playwright (Chromium)
 
