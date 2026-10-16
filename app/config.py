@@ -1,22 +1,75 @@
+"""Uygulama yapılandırması (.env ve ortam değişkenlerinden okunur)."""
 from functools import lru_cache
-from pydantic_settings import BaseSettings
+from pathlib import Path
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    # Uygulama
+    APP_NAME: str = "Kamu Evrak Analizi Sistemi"
+    APP_HOST: str = "127.0.0.1"
+    APP_PORT: int = 8080
+    LOG_LEVEL: str = "INFO"
+    CORS_ORIGINS: list[str] = []
+
+    # LLM (OpenAI uyumlu uç nokta)
     LLM_API_BASE: str = "https://generativelanguage.googleapis.com/v1beta/openai"
     LLM_API_KEY: str = "not-set"
     LLM_MODEL: str = "gemini-3.5-flash"
+    LLM_TIMEOUT_SECONDS: float = 180.0
+    LLM_MAX_RETRIES: int = 3
+    LLM_TEMPERATURE: float = 0.3
+
+    # OCR
     TESSERACT_CMD: str = "tesseract"
+    OCR_LANGUAGE: str = "tur"
+
+    # Girdi sınırları ve dosya saklama
     UPLOAD_DIR: str = "uploads"
+    KEEP_UPLOADS: bool = False
     MAX_FILE_SIZE_MB: int = 20
+    MIN_TEXT_CHARS: int = 20
+    MAX_TEXT_CHARS: int = 100_000
+    MAX_BATCH_FILES: int = 10
+
+    # RAG
     RAG_INDEX_DIR: str = "app/data/rag"
     RAG_TOP_K: int = 8
     RAG_CHUNK_SIZE: int = 600
     RAG_CHUNK_OVERLAP: int = 100
-    HISTORY_DIR: str = "data/history"
 
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    # Geçmiş ve arka plan işleri
+    HISTORY_DIR: str = "data/history"
+    MAX_CONCURRENT_JOBS: int = 2
+    JOB_TTL_SECONDS: int = 3600
+
+    @staticmethod
+    def resolve(path: str) -> Path:
+        """Göreli yolları proje köküne göre çözer."""
+        candidate = Path(path)
+        return candidate if candidate.is_absolute() else BASE_DIR / candidate
+
+    @property
+    def upload_path(self) -> Path:
+        return self.resolve(self.UPLOAD_DIR)
+
+    @property
+    def history_path(self) -> Path:
+        return self.resolve(self.HISTORY_DIR)
+
+    @property
+    def rag_index_path(self) -> Path:
+        return self.resolve(self.RAG_INDEX_DIR)
+
+    @property
+    def max_file_bytes(self) -> int:
+        return self.MAX_FILE_SIZE_MB * 1024 * 1024
+
 
 @lru_cache()
 def get_settings() -> Settings:
