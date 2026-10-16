@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     RAG_TOP_K: int = 8
     RAG_CHUNK_SIZE: int = 600
     RAG_CHUNK_OVERLAP: int = 100
+    HISTORY_DIR: str = "data/history"
 
     class Config:
         env_file = ".env"
