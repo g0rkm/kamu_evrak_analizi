@@ -45,7 +45,7 @@ Evrak özeti: {summary or 'Belirtilmemiş'}
 {entity_info or '- Yok'}
 
 Orijinal evrak metni:
-{self.truncate(text)}
+{self.document(text)}
 
 Bu evraka uygun bir resmî cevap/işlem yazısı taslağı oluştur."""
 

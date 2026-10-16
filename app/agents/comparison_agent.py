@@ -21,7 +21,7 @@ Yanıtını SADECE aşağıdaki JSON formatında ver:
 
     async def execute(self, text1: str, text2: str) -> ComparisonResult:
         self.log("Evrak karşılaştırma başlatılıyor...")
-        data = await self.ask_json(f"Evrak 1:\n{self.truncate(text1)}\n\n---\n\nEvrak 2:\n{self.truncate(text2)}")
+        data = await self.ask_json(f"Evrak 1:\n{self.document(text1)}\n\n---\n\nEvrak 2:\n{self.document(text2)}")
         data["common_themes"] = [str(t) for t in data.get("common_themes") or []]
         data["differences"] = [str(d) for d in data.get("differences") or []]
         result = ComparisonResult.model_validate(data)

@@ -44,7 +44,7 @@ Evrak özeti: {summary or 'Belirtilmemiş'}
 Anahtar kelimeler: {", ".join(keywords) if keywords else "Belirtilmemiş"}
 
 Evrak metni:
-{self.truncate(text)}
+{self.document(text)}
 
 Bu evrakın hangi birime yönlendirilmesi gerektiğine karar ver."""
 
