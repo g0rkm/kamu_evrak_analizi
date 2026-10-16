@@ -93,6 +93,37 @@
             <button id="analyzeBtn" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-medium py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> Analiz Et
             </button>
+
+            <!-- Analiz Gecmisi -->
+            <div class="mt-4 border-t border-slate-200 dark:border-slate-700 pt-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-semibold flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-blue-500"></i> Gecmis
+                    </h3>
+                    <button id="refreshHistoryBtn" class="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+                <!-- Istatistik Ozet Kutucuklari -->
+                <div id="statsContainer" class="grid grid-cols-3 gap-2 mb-3">
+                    <div class="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-center">
+                        <div id="statTotal" class="text-lg font-bold text-blue-600 dark:text-blue-400">0</div>
+                        <div class="text-[10px] text-slate-500">Toplam</div>
+                    </div>
+                    <div class="p-2 rounded-lg bg-green-50 dark:bg-green-900/20 text-center">
+                        <div id="statAvgConf" class="text-lg font-bold text-green-600 dark:text-green-400">0%</div>
+                        <div class="text-[10px] text-slate-500">Ort. Guven</div>
+                    </div>
+                    <div class="p-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-center">
+                        <div id="statAvgTime" class="text-lg font-bold text-amber-600 dark:text-amber-400">0s</div>
+                        <div class="text-[10px] text-slate-500">Ort. Sure</div>
+                    </div>
+                </div>
+                <!-- Gecmis Listesi -->
+                <div id="historyList" class="space-y-2 max-h-[300px] overflow-y-auto text-xs">
+                    <p class="text-slate-400 text-center py-4">Henuz analiz yapilmadi.</p>
+                </div>
+            </div>
         </section>
 
         <!-- Sağ Panel: Sonuçlar Bölümü (8 Kolon) -->
@@ -120,6 +151,9 @@
                 </button>
                 <button data-tab="logs" class="result-tab px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 border-transparent transition whitespace-nowrap flex items-center gap-2">
                     <i class="fa-solid fa-terminal"></i> Agent Logları
+                </button>
+                <button data-tab="history" class="result-tab px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 border-transparent transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie"></i> Istatistik
                 </button>
             </div>
 
@@ -226,9 +260,14 @@
                             <span id="draftTypeBadge" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">Taslak</span>
                             <h3 id="draftSubject" class="text-base font-bold mt-1"></h3>
                         </div>
-                        <button id="copyDraftBtn" class="bg-white dark:bg-slate-600 hover:bg-slate-100 dark:hover:bg-slate-500 border border-slate-200 dark:border-slate-500 px-3 py-2 rounded-lg text-xs font-medium transition flex items-center gap-2 shadow-sm">
-                            <i class="fa-regular fa-copy"></i> Kopyala
-                        </button>
+                        <div class="flex items-center gap-3">
+                            <button id="copyDraftBtn" class="bg-white dark:bg-slate-600 hover:bg-slate-100 dark:hover:bg-slate-500 border border-slate-200 dark:border-slate-500 px-3 py-2 rounded-lg text-xs font-medium transition flex items-center gap-2 shadow-sm">
+                                <i class="fa-regular fa-copy"></i> Kopyala
+                            </button>
+                            <button id="exportJsonBtn" class="text-xs text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition flex items-center gap-1">
+                                <i class="fa-solid fa-download"></i> JSON Indir
+                            </button>
+                        </div>
                     </div>
 
                     <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700 space-y-4 font-serif text-sm leading-relaxed">
@@ -399,6 +438,30 @@
                 <div id="content-logs" class="tab-content hidden h-full">
                     <div class="bg-slate-900 text-slate-100 rounded-xl p-4 font-mono text-xs overflow-y-auto h-[400px] space-y-2 border border-slate-800 shadow-inner" id="logsContainer">
                         <!-- Dinamik Dolacak -->
+                    </div>
+                </div>
+
+                <!-- Tab: Istatistik -->
+                <div id="content-history" class="tab-content space-y-6 hidden">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Toplam Analiz</span>
+                            <p id="detailStatTotal" class="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">0</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Ortalama Guven</span>
+                            <p id="detailStatConf" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">0%</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                        <h3 class="text-sm font-semibold mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-bar text-blue-500"></i> Evrak Turu Dagilimi
+                        </h3>
+                        <div id="typeDistribution" class="space-y-2"></div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700">
+                        <h3 class="text-sm font-semibold mb-3">Ortalama Islem Suresi</h3>
+                        <p id="detailStatTime" class="text-2xl font-bold text-amber-600 dark:text-amber-400">0 sn</p>
                     </div>
                 </div>
 

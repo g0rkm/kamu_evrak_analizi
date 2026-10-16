@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedFile = null;
     let activeInputType = 'file'; // 'file' veya 'text'
     let currentPipelineResult = null;
+    let currentHistoryId = null;
 
     // Tema Yönetimi
     const initTheme = () => {
@@ -211,6 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRouting(data.routing);
         renderLogs(data.agent_logs);
         renderValidation(data.validation, data.confidence_score, data.processing_time);
+
+        currentHistoryId = data.history_id || null;
+        loadHistory();
     };
 
     const renderClassification = (analysis) => {
@@ -592,4 +596,111 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('routingChangeArea').classList.add('hidden');
         }
     });
+
+    // ── Gecmis ve Istatistik Fonksiyonlari ──
+
+    const loadHistory = async () => {
+        try {
+            const [historyRes, statsRes] = await Promise.all([
+                fetch('/api/history?limit=20'),
+                fetch('/api/history/stats')
+            ]);
+            const history = await historyRes.json();
+            const stats = await statsRes.json();
+
+            // Sol panel istatistik kutucuklari
+            document.getElementById('statTotal').textContent = stats.total || 0;
+            document.getElementById('statAvgConf').textContent = `%${Math.round((stats.avg_confidence || 0) * 100)}`;
+            document.getElementById('statAvgTime').textContent = `${(stats.avg_processing_time || 0).toFixed(1)}s`;
+
+            // Sol panel gecmis listesi
+            const listEl = document.getElementById('historyList');
+            if (!history.items || history.items.length === 0) {
+                listEl.innerHTML = '<p class="text-slate-400 text-center py-4">Henuz analiz yapilmadi.</p>';
+            } else {
+                listEl.innerHTML = '';
+                history.items.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'p-2 rounded-lg bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 cursor-pointer hover:border-blue-400 transition';
+                    const conf = Math.round((item.confidence_score || 0) * 100);
+                    const time = new Date(item.timestamp);
+                    const timeStr = time.toLocaleDateString('tr-TR') + ' ' + time.toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+                    div.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium text-blue-600 dark:text-blue-400">${item.document_type || '?'}</span>
+                            <span class="text-[10px] text-slate-400">${timeStr}</span>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 mt-1 truncate">${item.summary || 'Ozet yok'}</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-[10px] ${conf >= 70 ? 'text-green-600' : 'text-amber-600'}">Guven: %${conf}</span>
+                            <span class="text-[10px] text-slate-400">${(item.processing_time || 0).toFixed(1)}s</span>
+                        </div>
+                    `;
+                    div.addEventListener('click', () => loadHistoryRecord(item.id));
+                    listEl.appendChild(div);
+                });
+            }
+
+            // Sag panel istatistik sekmesi
+            document.getElementById('detailStatTotal').textContent = stats.total || 0;
+            document.getElementById('detailStatConf').textContent = `%${Math.round((stats.avg_confidence || 0) * 100)}`;
+            document.getElementById('detailStatTime').textContent = `${(stats.avg_processing_time || 0).toFixed(1)} saniye`;
+
+            const distEl = document.getElementById('typeDistribution');
+            distEl.innerHTML = '';
+            if (stats.by_type) {
+                const maxCount = Math.max(...Object.values(stats.by_type), 1);
+                for (const [type, count] of Object.entries(stats.by_type).sort((a,b) => b[1] - a[1])) {
+                    const pct = Math.round((count / stats.total) * 100);
+                    const barWidth = Math.round((count / maxCount) * 100);
+                    const row = document.createElement('div');
+                    row.innerHTML = `
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <span class="font-medium">${type}</span>
+                            <span class="text-slate-500">${count} (%${pct})</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-600 h-2 rounded-full overflow-hidden">
+                            <div class="bg-blue-500 h-full rounded-full" style="width: ${barWidth}%"></div>
+                        </div>
+                    `;
+                    distEl.appendChild(row);
+                }
+            }
+        } catch (e) {
+            console.error('Gecmis yuklenirken hata:', e);
+        }
+    };
+
+    const loadHistoryRecord = async (recordId) => {
+        try {
+            const res = await fetch(`/api/history/${recordId}`);
+            const record = await res.json();
+            if (record && record.result) {
+                currentPipelineResult = record.result;
+                currentHistoryId = recordId;
+                renderResults(record.result);
+            }
+        } catch (e) {
+            console.error('Kayit yuklenirken hata:', e);
+        }
+    };
+
+    // Gecmis yenile butonu
+    document.getElementById('refreshHistoryBtn')?.addEventListener('click', loadHistory);
+
+    // JSON Indir butonu
+    document.getElementById('exportJsonBtn')?.addEventListener('click', async () => {
+        if (!currentPipelineResult) return;
+        const historyId = currentHistoryId || 'export';
+        const blob = new Blob([JSON.stringify(currentPipelineResult, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `analiz_${historyId}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    // Sayfa yuklendiginde gecmisi yukle
+    loadHistory();
 });
