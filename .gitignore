@@ -44,6 +44,9 @@ app/data/scraped/
 # RAG index (regenerate with scripts/build_index.py)
 app/data/rag/
 
+# Analysis history (runtime generated)
+data/history/
+
 # OS
 .DS_Store
 Thumbs.db
