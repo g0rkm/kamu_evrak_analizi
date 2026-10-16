@@ -9,8 +9,8 @@ from app.agents.draft_agent import DraftAgent
 from app.agents.routing_agent import RoutingAgent
 from app.agents.reasoning_agent import ReasoningAgent
 from app.services.llm_service import LLMService
-from app.models.analysis import AnalysisResult, ClassificationResult
-from app.models.draft import PipelineResult, ValidationEntry
+from app.models.analysis import AnalysisResult, ClassificationResult, LegislationMatch, MissingField
+from app.models.draft import PipelineResult, ValidationEntry, DraftResponse, RoutingDecision
 
 class OrchestratorAgent(BaseAgent):
     """Tüm agentları koordine eden orkestratör."""
@@ -61,18 +61,30 @@ class OrchestratorAgent(BaseAgent):
         
         # Adım 3: İçerik Analizi
         self.log("Adım 3/7: İçerik analizi...")
-        analysis_data = await self.analyzer.execute(text=text)
-        all_logs.extend(self.analyzer.get_logs())
+        try:
+            analysis_data = await self.analyzer.execute(text=text)
+            all_logs.extend(self.analyzer.get_logs())
+        except Exception as e:
+            self.log(f"İçerik analizi hatası (varsayılan kullanılıyor): {e}")
+            analysis_data = {"entities": [], "missing_fields": [], "keywords": []}
         
         # Adım 4: Mevzuat Eşleştirme
         self.log("Adım 4/7: Mevzuat eşleştirme...")
-        legislation_matches = await self.legislation.execute(text=text, document_type=classification.document_type)
-        all_logs.extend(self.legislation.get_logs())
+        try:
+            legislation_matches = await self.legislation.execute(text=text, document_type=classification.document_type)
+            all_logs.extend(self.legislation.get_logs())
+        except Exception as e:
+            self.log(f"Mevzuat eşleştirme hatası (varsayılan kullanılıyor): {e}")
+            legislation_matches = []
         
         # Adım 5: Özet Oluşturma
         self.log("Adım 5/7: Özet oluşturma...")
-        summary_text = await self.summary.execute(text=text, document_type=classification.document_type)
-        all_logs.extend(self.summary.get_logs())
+        try:
+            summary_text = await self.summary.execute(text=text, document_type=classification.document_type)
+            all_logs.extend(self.summary.get_logs())
+        except Exception as e:
+            self.log(f"Özet oluşturma hatası (varsayılan kullanılıyor): {e}")
+            summary_text = "Özet oluşturulamadı."
         
         # AnalysisResult birleştir
         analysis = AnalysisResult(
@@ -86,37 +98,49 @@ class OrchestratorAgent(BaseAgent):
         
         # Adım 6: Yazı Taslağı + Birim Yönlendirme
         self.log("Adım 6/7: Yazı taslağı ve yönlendirme...")
-        draft = await self.drafter.execute(
-            text=text,
-            document_type=classification.document_type,
-            summary=summary_text,
-            entities=analysis_data["entities"]
-        )
-        all_logs.extend(self.drafter.get_logs())
-        
-        routing = await self.router.execute(
-            text=text,
-            document_type=classification.document_type,
-            summary=summary_text,
-            keywords=analysis_data["keywords"]
-        )
-        all_logs.extend(self.router.get_logs())
+        try:
+            draft = await self.drafter.execute(
+                text=text,
+                document_type=classification.document_type,
+                summary=summary_text,
+                entities=analysis_data["entities"]
+            )
+            all_logs.extend(self.drafter.get_logs())
+        except Exception as e:
+            self.log(f"Taslak oluşturma hatası (varsayılan kullanılıyor): {e}")
+            draft = None
+
+        try:
+            routing = await self.router.execute(
+                text=text,
+                document_type=classification.document_type,
+                summary=summary_text,
+                keywords=analysis_data["keywords"]
+            )
+            all_logs.extend(self.router.get_logs())
+        except Exception as e:
+            self.log(f"Yönlendirme hatası (varsayılan kullanılıyor): {e}")
+            routing = None
         
         # Adım 7: Muhakeme ve Doğrulama
         self.log("Adım 7/7: Muhakeme ve doğrulama...")
-        reasoning_result = await self.reasoner.execute(
-            text=text,
-            analysis=analysis,
-            draft=draft,
-            routing=routing
-        )
-        all_logs.extend(self.reasoner.get_logs())
-
-        analysis = reasoning_result["analysis"]
-        draft = reasoning_result["draft"]
-        routing = reasoning_result["routing"]
-        validation = reasoning_result["validation"]
-        confidence_score = reasoning_result["confidence_score"]
+        try:
+            reasoning_result = await self.reasoner.execute(
+                text=text,
+                analysis=analysis,
+                draft=draft,
+                routing=routing
+            )
+            all_logs.extend(self.reasoner.get_logs())
+            analysis = reasoning_result["analysis"]
+            draft = reasoning_result["draft"]
+            routing = reasoning_result["routing"]
+            validation = reasoning_result["validation"]
+            confidence_score = reasoning_result["confidence_score"]
+        except Exception as e:
+            self.log(f"Muhakeme hatası (varsayılan kullanılıyor): {e}")
+            validation = []
+            confidence_score = analysis.classification.confidence
         
         processing_time = time.time() - start_time
         self.log(f"Pipeline tamamlandı: {processing_time:.2f} saniye")
