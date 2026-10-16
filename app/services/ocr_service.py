@@ -1,89 +1,145 @@
-import os
-import pymupdf  # PyMuPDF - fitz yerine pymupdf olarak import et
-import pytesseract
-from PIL import Image
+"""Dosyalardan metin çıkarma servisi (strateji deseni).
+
+Her dosya türü için bir `TextExtractor` alt sınıfı vardır; `OCRService` uzantıya
+göre uygun çıkarıcıyı seçen bir cephedir (facade).
+"""
+from __future__ import annotations
+
+import re
+from abc import ABC, abstractmethod
 from io import BytesIO
-from app.config import get_settings
+from pathlib import Path
+from typing import ClassVar, Sequence
+
+import pymupdf
+import pytesseract
+from PIL import Image, UnidentifiedImageError
+
+from app.config import Settings, get_settings
+from app.core.exceptions import TextExtractionError, UnsupportedFileTypeError
 from app.models.document import ExtractedText
 
-class OCRService:
-    """PDF ve görüntü dosyalarından metin çıkarma servisi."""
-    
-    def __init__(self):
-        settings = get_settings()
-        pytesseract.pytesseract.tesseract_cmd = settings.TESSERACT_CMD
-    
-    def extract_from_pdf(self, file_path: str) -> ExtractedText:
-        """PDF dosyasından metin çıkar. Önce doğrudan metin, başarısızsa OCR."""
-        doc = pymupdf.open(file_path)
-        text_parts = []
-        ocr_used = False
-        
-        for page in doc:
-            text = page.get_text()
-            if text.strip():
-                text_parts.append(text)
-            else:
-                # Sayfa metin içermiyor, OCR dene
-                ocr_used = True
-                pix = page.get_pixmap(dpi=300)
-                img = Image.open(BytesIO(pix.tobytes("png")))
-                ocr_text = pytesseract.image_to_string(img, lang="tur")
-                text_parts.append(ocr_text)
-        
-        doc.close()
-        raw_text = "\n\n".join(text_parts)
-        cleaned = self._clean_text(raw_text)
-        
-        return ExtractedText(
-            raw_text=raw_text,
-            cleaned_text=cleaned,
-            language="tr",
-            confidence=0.85 if not ocr_used else 0.65
-        )
-    
-    def extract_from_image(self, file_path: str) -> ExtractedText:
-        """Görüntü dosyasından OCR ile metin çıkar."""
-        img = Image.open(file_path)
-        raw_text = pytesseract.image_to_string(img, lang="tur")
-        cleaned = self._clean_text(raw_text)
-        
-        return ExtractedText(
-            raw_text=raw_text,
-            cleaned_text=cleaned,
-            language="tr",
-            confidence=0.65
-        )
-    
-    def extract_from_text_file(self, file_path: str) -> ExtractedText:
-        """Düz metin dosyasından içerik oku."""
-        with open(file_path, "r", encoding="utf-8") as f:
-            raw_text = f.read()
-        
-        return ExtractedText(
-            raw_text=raw_text,
-            cleaned_text=self._clean_text(raw_text),
-            language="tr",
-            confidence=1.0
-        )
-    
-    def extract(self, file_path: str) -> ExtractedText:
-        """Dosya türüne göre otomatik metin çıkar."""
-        ext = os.path.splitext(file_path)[1].lower()
-        if ext == ".pdf":
-            return self.extract_from_pdf(file_path)
-        elif ext in (".png", ".jpg", ".jpeg", ".tiff", ".bmp"):
-            return self.extract_from_image(file_path)
-        elif ext in (".txt", ".md"):
-            return self.extract_from_text_file(file_path)
-        else:
-            raise ValueError(f"Desteklenmeyen dosya türü: {ext}")
-    
+
+class TextCleaner:
     @staticmethod
-    def _clean_text(text: str) -> str:
-        """Metni temizle: fazla boşlukları kaldır, satır sonlarını düzenle."""
-        import re
-        text = re.sub(r'\n{3,}', '\n\n', text)
-        text = re.sub(r'[ \t]+', ' ', text)
-        lines = [line.strip() for line in text.split('\n')]
-        return '\n'.join(lines).strip()
+    def clean(text: str) -> str:
+        """Fazla boşlukları kaldırır, satır sonlarını düzenler."""
+        text = re.sub(r"\n{3,}", "\n\n", text)
+        text = re.sub(r"[ \t]+", " ", text)
+        return "\n".join(line.strip() for line in text.split("\n")).strip()
+
+
+class TesseractEngine:
+    """pytesseract üzerinde ince bir sarmalayıcı; kurulum hatalarını anlaşılır kılar."""
+
+    def __init__(self, command: str, language: str) -> None:
+        pytesseract.pytesseract.tesseract_cmd = command
+        self.language = language
+
+    def image_to_text(self, image: Image.Image) -> str:
+        try:
+            return pytesseract.image_to_string(image, lang=self.language)
+        except pytesseract.TesseractNotFoundError as exc:
+            raise TextExtractionError(
+                "Görüntüden metin okumak için sunucuda Tesseract OCR kurulu olmalıdır."
+            ) from exc
+        except pytesseract.TesseractError as exc:
+            raise TextExtractionError(f"OCR işlemi başarısız oldu: {exc}") from exc
+
+
+class TextExtractor(ABC):
+    extensions: ClassVar[frozenset[str]] = frozenset()
+
+    def supports(self, extension: str) -> bool:
+        return extension in self.extensions
+
+    @abstractmethod
+    def extract(self, path: Path) -> ExtractedText:
+        ...
+
+    @staticmethod
+    def _result(raw_text: str, confidence: float) -> ExtractedText:
+        return ExtractedText(raw_text=raw_text, cleaned_text=TextCleaner.clean(raw_text), language="tr", confidence=confidence)
+
+
+class PlainTextExtractor(TextExtractor):
+    extensions = frozenset({".txt", ".md"})
+    _ENCODINGS = ("utf-8-sig", "cp1254", "latin-1")
+
+    def extract(self, path: Path) -> ExtractedText:
+        data = path.read_bytes()
+        for encoding in self._ENCODINGS:
+            try:
+                return self._result(data.decode(encoding), confidence=1.0)
+            except UnicodeDecodeError:
+                continue
+        raise TextExtractionError("Metin dosyasının karakter kodlaması çözülemedi.")
+
+
+class ImageExtractor(TextExtractor):
+    extensions = frozenset({".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"})
+
+    def __init__(self, engine: TesseractEngine) -> None:
+        self.engine = engine
+
+    def extract(self, path: Path) -> ExtractedText:
+        try:
+            with Image.open(path) as image:
+                raw_text = self.engine.image_to_text(image)
+        except UnidentifiedImageError as exc:
+            raise TextExtractionError("Görüntü dosyası okunamadı veya bozuk.") from exc
+        return self._result(raw_text, confidence=0.65)
+
+
+class PdfExtractor(TextExtractor):
+    """Önce gömülü metni okur; metin içermeyen (taranmış) sayfalarda OCR'a düşer."""
+
+    extensions = frozenset({".pdf"})
+    OCR_DPI = 300
+
+    def __init__(self, engine: TesseractEngine) -> None:
+        self.engine = engine
+
+    def extract(self, path: Path) -> ExtractedText:
+        try:
+            document = pymupdf.open(path)
+        except Exception as exc:  # pymupdf bozuk dosyada farklı hata türleri fırlatabilir
+            raise TextExtractionError("PDF dosyası açılamadı veya bozuk.") from exc
+
+        parts: list[str] = []
+        ocr_used = False
+        with document:
+            for page in document:
+                text = page.get_text()
+                if text.strip():
+                    parts.append(text)
+                    continue
+                ocr_used = True
+                pixmap = page.get_pixmap(dpi=self.OCR_DPI)
+                with Image.open(BytesIO(pixmap.tobytes("png"))) as image:
+                    parts.append(self.engine.image_to_text(image))
+
+        return self._result("\n\n".join(parts), confidence=0.65 if ocr_used else 0.85)
+
+
+class OCRService:
+    """Uzantıya göre uygun çıkarıcıyı seçen cephe."""
+
+    def __init__(self, settings: Settings | None = None, extractors: Sequence[TextExtractor] | None = None) -> None:
+        if extractors is None:
+            settings = settings or get_settings()
+            engine = TesseractEngine(settings.TESSERACT_CMD, settings.OCR_LANGUAGE)
+            extractors = (PdfExtractor(engine), ImageExtractor(engine), PlainTextExtractor())
+        self.extractors = tuple(extractors)
+
+    @property
+    def supported_extensions(self) -> frozenset[str]:
+        return frozenset().union(*(e.extensions for e in self.extractors))
+
+    def extract(self, file_path: str | Path) -> ExtractedText:
+        path = Path(file_path)
+        extension = path.suffix.lower()
+        for extractor in self.extractors:
+            if extractor.supports(extension):
+                return extractor.extract(path)
+        raise UnsupportedFileTypeError(f"Desteklenmeyen dosya türü: {extension or 'uzantısız'}")
