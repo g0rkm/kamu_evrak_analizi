@@ -210,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDraft(data.draft);
         renderRouting(data.routing);
         renderLogs(data.agent_logs);
+        renderValidation(data.validation, data.confidence_score, data.processing_time);
     };
 
     const renderClassification = (analysis) => {
@@ -389,6 +390,68 @@ document.addEventListener('DOMContentLoaded', () => {
             div.className = "py-0.5 border-b border-slate-800/50 last:border-none";
             div.textContent = log;
             logsContainer.appendChild(div);
+        });
+    };
+
+    const renderValidation = (validation, confidenceScore, processingTime) => {
+        // Genel Guven Skoru
+        const score = Math.round((confidenceScore || 0) * 100);
+        const bar = document.getElementById('overallConfidenceBar');
+        const text = document.getElementById('overallConfidenceText');
+        const label = document.getElementById('overallConfidenceLabel');
+        
+        bar.style.width = `${score}%`;
+        text.textContent = `%${score}`;
+        
+        if (score >= 80) {
+            bar.className = "h-full rounded-full transition-all duration-500 bg-green-500";
+            label.textContent = "Yuksek guvenilirlik - Sonuclar tutarli.";
+        } else if (score >= 50) {
+            bar.className = "h-full rounded-full transition-all duration-500 bg-amber-500";
+            label.textContent = "Orta guvenilirlik - Bazi duzeltmeler yapildi.";
+        } else {
+            bar.className = "h-full rounded-full transition-all duration-500 bg-red-500";
+            label.textContent = "Dusuk guvenilirlik - Sonuclari manuel kontrol edin.";
+        }
+        
+        // Islem suresi
+        document.getElementById('processingTimeText').textContent = processingTime
+            ? `${processingTime.toFixed(2)} saniye`
+            : 'Bilgi yok';
+        
+        // Dogrulama tablosu
+        const tbody = document.getElementById('validationTableBody');
+        tbody.innerHTML = '';
+        
+        if (!validation || validation.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-400">Dogrulama kaydi bulunamadi.</td></tr>';
+            return;
+        }
+        
+        validation.forEach(entry => {
+            const tr = document.createElement('tr');
+            let severityIcon = '';
+            let severityClass = '';
+            
+            if (entry.severity === 'correction') {
+                severityIcon = '<i class="fa-solid fa-wrench text-amber-500"></i>';
+                severityClass = 'text-amber-600 dark:text-amber-400';
+            } else if (entry.severity === 'warning') {
+                severityIcon = '<i class="fa-solid fa-triangle-exclamation text-red-500"></i>';
+                severityClass = 'text-red-600 dark:text-red-400';
+            } else {
+                severityIcon = '<i class="fa-solid fa-circle-info text-blue-500"></i>';
+                severityClass = 'text-blue-600 dark:text-blue-400';
+            }
+            
+            tr.innerHTML = `
+                <td class="p-3 ${severityClass}">${severityIcon} <span class="text-xs font-medium uppercase">${entry.severity || 'info'}</span></td>
+                <td class="p-3 font-medium">${entry.field || '-'}</td>
+                <td class="p-3 text-slate-600 dark:text-slate-300">${entry.original_value || '-'}</td>
+                <td class="p-3 text-slate-600 dark:text-slate-300">${entry.corrected_value || '<span class="text-slate-400 italic">Degisiklik yok</span>'}</td>
+                <td class="p-3 text-xs text-slate-500 dark:text-slate-400">${entry.rule || '-'}</td>
+            `;
+            tbody.appendChild(tr);
         });
     };
 });
