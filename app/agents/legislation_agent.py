@@ -1,93 +1,92 @@
-import json
-import os
-from app.agents.base_agent import BaseAgent
+import asyncio
+
+from app.agents.base_agent import LLMAgent
 from app.models.analysis import LegislationMatch
-from app.services.rag_service import RAGService
+from app.services.legislation_catalog import LegislationCatalog
+from app.services.llm_service import LLMService
+from app.services.rag_service import RAGService, RetrievedChunk
 
-LEGISLATION_SYSTEM_PROMPT = """Sen bir kamu hukuku ve mevzuat uzmanisin. Verilen evrak metnine ve ilgili mevzuat parcalarina bakarak mevzuat eslestirmesi yap.
+LEGISLATION_SYSTEM_PROMPT = """Sen bir kamu hukuku ve mevzuat uzmanısın. Verilen evrak metnine ve ilgili mevzuat parçalarına bakarak mevzuat eşleştirmesi yap.
 
-Asagida evrakla ilgili olabilecek mevzuat parcalari verilmistir:
+Aşağıda evrakla ilgili olabilecek mevzuat parçaları verilmiştir:
 __RAG_CONTEXT__
 
-Ayrica mevzuat metadata veritabani:
+Ayrıca mevzuat metadata veritabanı:
 __LEGISLATION_DB__
 
-Yanitini SADECE asagidaki JSON formatinda ver:
+Yanıtını SADECE aşağıdaki JSON formatında ver:
 {
   "matches": [
-    {"legislation_name": "mevzuat adi", "article": "madde numarasi veya null", "relevance_score": 0.0-1.0, "summary": "ilgi aciklamasi"}
+    {"legislation_name": "mevzuat adı", "article": "madde numarası veya null", "relevance_score": 0.0-1.0, "summary": "ilgi açıklaması"}
   ]
 }
 
-En fazla 5 ilgili mevzuat dondur, relevance_score'a gore sirala."""
+En fazla 5 ilgili mevzuat döndür, relevance_score'a göre sırala."""
 
 
-class LegislationAgent(BaseAgent):
-    """Mevzuat eslestirme agenti - RAG destekli."""
+class LegislationAgent(LLMAgent):
+    """Mevzuat eşleştirme agentı — RAG destekli."""
 
-    def __init__(self, llm_service):
-        super().__init__(name="LegislationAgent", llm_service=llm_service)
-        self.rag_service = RAGService()
-        self.legislation_db = self._load_legislation()
+    name = "LegislationAgent"
+    max_input_chars = 3000
+    MAX_MATCHES = 5
+    RAG_TOP_K = 8
+    RAG_SNIPPET_CHARS = 1200
 
-    def _load_legislation(self) -> str:
-        db_path = os.path.join(os.path.dirname(__file__), "..", "data", "legislation.json")
-        db_path = os.path.normpath(db_path)
-        try:
-            with open(db_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            return json.dumps(data, ensure_ascii=False, indent=2)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return "[]"
+    def __init__(
+        self,
+        llm_service: LLMService,
+        rag_service: RAGService | None = None,
+        catalog: LegislationCatalog | None = None,
+    ) -> None:
+        super().__init__(llm_service)
+        self.rag_service = rag_service or RAGService.shared()
+        self.catalog = catalog or LegislationCatalog.load()
+        self._rag_context = ""
 
-    def _build_query(self, text: str, document_type: str, keywords: list[str]) -> str:
-        """Evrak metninden RAG arama sorgusu olustur."""
-        parts = []
-        if document_type:
-            parts.append(document_type)
+    def build_system_prompt(self) -> str:
+        return (LEGISLATION_SYSTEM_PROMPT
+                .replace("__RAG_CONTEXT__", self._rag_context)
+                .replace("__LEGISLATION_DB__", self.catalog.to_prompt()))
+
+    @staticmethod
+    def build_queries(text: str, document_type: str, keywords: list[str]) -> list[str]:
+        parts = [document_type] if document_type else []
         if keywords:
             parts.append(" ".join(keywords[:10]))
         parts.append(text[:500])
-        return " ".join(parts)
+        queries = [" ".join(parts)]
+        if keywords:
+            queries.append(" ".join(keywords[:5]))
+        return queries
 
-    def _format_rag_context(self, rag_results: list[dict]) -> str:
-        """RAG sonuclarini LLM prompt'una uygun formata cevir."""
-        if not rag_results:
-            return "Ilgili mevzuat parcasi bulunamadi."
-        lines = []
-        for i, r in enumerate(rag_results, 1):
-            lines.append(f"--- Mevzuat Parcasi {i} (skor: {r['score']:.2f}) ---")
-            lines.append(f"Kaynak: {r['title']} ({r['type']})")
-            lines.append(r["text"][:1200])
-            lines.append("")
-        return "\n".join(lines)
+    def format_rag_context(self, hits: list[RetrievedChunk]) -> str:
+        if not hits:
+            return "İlgili mevzuat parçası bulunamadı."
+        blocks = [
+            f"--- Mevzuat Parçası {i} (skor: {hit.score:.2f}) ---\n"
+            f"Kaynak: {hit.title} ({hit.type})\n"
+            f"{hit.text[: self.RAG_SNIPPET_CHARS]}\n"
+            for i, hit in enumerate(hits, 1)
+        ]
+        return "\n".join(blocks)
 
-    async def execute(self, text: str, document_type: str = "", keywords: list[str] = None) -> list[LegislationMatch]:
-        """Evrak metni icin ilgili mevzuatlari bul (RAG destekli)."""
-        if keywords is None:
-            keywords = []
-        self.log("Mevzuat eslestirme baslatiliyor...")
+    async def execute(self, text: str, document_type: str = "", keywords: list[str] | None = None) -> list[LegislationMatch]:
+        keywords = keywords or []
+        self.log("Mevzuat eşleştirme başlatılıyor...")
 
-        # RAG ile ilgili mevzuat parcalarini bul
         if self.rag_service.available:
-            query = self._build_query(text, document_type, keywords)
-            queries = [query]
-            if keywords:
-                queries.append(" ".join(keywords[:5]))
-            rag_results = self.rag_service.search_multi(queries, top_k=8)
-            self.log(f"RAG: {len(rag_results)} ilgili parca bulundu")
+            queries = self.build_queries(text, document_type, keywords)
+            hits = await asyncio.to_thread(self.rag_service.search_multi, queries, self.RAG_TOP_K)
+            self.log(f"RAG: {len(hits)} ilgili parça bulundu")
         else:
-            rag_results = []
-            self.log("RAG indeksi mevcut degil, sadece metadata kullaniliyor")
+            hits = []
+            self.log("RAG indeksi mevcut değil, yalnızca metadata kullanılıyor")
+        self._rag_context = self.format_rag_context(hits)
 
-        rag_context = self._format_rag_context(rag_results)
-
-        system = LEGISLATION_SYSTEM_PROMPT.replace("__RAG_CONTEXT__", rag_context)
-        system = system.replace("__LEGISLATION_DB__", self.legislation_db)
-
-        user_msg = f"Evrak turu: {document_type}\n\nEvrak metni:\n{text[:3000]}"
-        data = await self.llm_service.chat_json(system, user_msg)
-
-        matches = [LegislationMatch(**m) for m in data.get("matches", [])]
-        self.log(f"Mevzuat eslestirme tamamlandi: {len(matches)} esleme")
+        data = await self.ask_json(f"Evrak türü: {document_type}\n\nEvrak metni:\n{self.truncate(text)}")
+        matches = self.parse_items(LegislationMatch, data.get("matches"))
+        matches.sort(key=lambda m: m.relevance_score, reverse=True)
+        matches = matches[: self.MAX_MATCHES]
+        self.log(f"Mevzuat eşleştirme tamamlandı: {len(matches)} eşleşme")
         return matches

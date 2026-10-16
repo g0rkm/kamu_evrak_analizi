@@ -1,49 +1,59 @@
-from app.agents.base_agent import BaseAgent
+from app.agents.base_agent import LLMAgent
+from app.core.taxonomy import DEFAULT_PRIORITY, ORG_UNITS, PRIORITIES
 from app.models.draft import RoutingDecision
 
-ROUTING_SYSTEM_PROMPT = """Sen bir kamu kurumu evrak yönlendirme uzmanısın. Verilen evrak bilgilerine göre evrakın hangi birime yönlendirilmesi gerektiğine karar ver.
+
+def _build_prompt() -> str:
+    unit_lines = "\n".join(f"- {u.label}: {u.description}" for u in ORG_UNITS)
+    priorities = "/".join(PRIORITIES.codes())
+    return f"""Sen bir kamu kurumu evrak yönlendirme uzmanısın. Verilen evrak bilgilerine göre evrakın hangi birime yönlendirilmesi gerektiğine karar ver.
 
 Mevcut birimler:
-- Hukuk Müşavirliği: Hukuki konular, davalar, sözleşmeler, mevzuat yorumu
-- İnsan Kaynakları Daire Başkanlığı: Personel işlemleri, atama, izin, özlük
-- Strateji Geliştirme Daire Başkanlığı: Bütçe, planlama, performans, istatistik
-- Bilgi Teknolojileri Daire Başkanlığı: IT altyapı, yazılım, siber güvenlik
-- İdari ve Mali İşler Daire Başkanlığı: Satın alma, ihale, lojistik, taşınır
-- Basın ve Halkla İlişkiler Müdürlüğü: Medya, CİMER, halkla ilişkiler
-- Teftiş Kurulu Başkanlığı: Denetim, soruşturma, teftiş
-- Genel Müdürlük (ilgili): Kurumun ana faaliyet alanına göre
+{unit_lines}
 
-Öncelik seviyeleri: acil, yuksek, normal, dusuk
+Öncelik seviyeleri: {", ".join(PRIORITIES.codes())}
 
-Yanıtını SADECE aşağıdaki JSON formatında ver:
-{
+Yanıtını SADECE aşağıdaki JSON formatında ver (birim adlarını listedeki gibi aynen yaz):
+{{
   "target_unit": "birim adı",
   "reasoning": "yönlendirme gerekçesi",
-  "priority": "acil/yuksek/normal/dusuk",
+  "priority": "{priorities}",
   "alternative_units": ["alternatif birim 1"],
   "requires_action": ["birimden beklenen eylem 1", "eylem 2"]
-}"""
+}}"""
 
-class RoutingAgent(BaseAgent):
+
+class RoutingAgent(LLMAgent):
     """Birim yönlendirme agentı."""
-    
-    def __init__(self, llm_service):
-        super().__init__(name="RoutingAgent", llm_service=llm_service)
-    
-    async def execute(self, text: str, document_type: str, summary: str, keywords: list = None) -> RoutingDecision:
-        """Evrakı uygun birime yönlendir."""
+
+    name = "RoutingAgent"
+    system_prompt = _build_prompt()
+    max_input_chars = 2000
+
+    @staticmethod
+    def canonical_unit(name: str) -> str:
+        code = ORG_UNITS.resolve(name)
+        return ORG_UNITS.label(code) if code else name.strip()
+
+    async def execute(
+        self, text: str, document_type: str, summary: str, keywords: list[str] | None = None
+    ) -> RoutingDecision:
         self.log("Birim yönlendirme başlatılıyor...")
-        kw_str = ", ".join(keywords) if keywords else "Belirtilmemiş"
         user_msg = f"""Evrak türü: {document_type}
-Evrak özeti: {summary}
-Anahtar kelimeler: {kw_str}
+Evrak özeti: {summary or 'Belirtilmemiş'}
+Anahtar kelimeler: {", ".join(keywords) if keywords else "Belirtilmemiş"}
 
 Evrak metni:
-{text[:2000]}
+{self.truncate(text)}
 
 Bu evrakın hangi birime yönlendirilmesi gerektiğine karar ver."""
-        
-        data = await self.llm_service.chat_json(ROUTING_SYSTEM_PROMPT, user_msg)
-        result = RoutingDecision(**data)
+
+        data = await self.ask_json(user_msg)
+        data["target_unit"] = self.canonical_unit(str(data.get("target_unit") or ""))
+        data["priority"] = PRIORITIES.resolve(str(data.get("priority") or "")) or DEFAULT_PRIORITY
+        data["alternative_units"] = [self.canonical_unit(str(u)) for u in data.get("alternative_units") or []]
+        data["requires_action"] = [str(a) for a in data.get("requires_action") or []]
+
+        result = RoutingDecision.model_validate(data)
         self.log(f"Yönlendirme: {result.target_unit} (öncelik: {result.priority})")
         return result

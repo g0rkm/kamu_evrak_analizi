@@ -1,7 +1,12 @@
-from app.agents.base_agent import BaseAgent
-from app.models.analysis import ExtractedEntity, MissingField
+from app.agents.base_agent import LLMAgent
+from app.models.analysis import ContentAnalysis, ExtractedEntity, MissingField
 
-ANALYSIS_SYSTEM_PROMPT = """Sen bir kamu evrak analiz uzmanısın. Verilen evrak metnindeki önemli bilgileri çıkar ve eksik bilgileri tespit et.
+
+class AnalyzerAgent(LLMAgent):
+    """İçerik analizi ve bilgi çıkarma agentı."""
+
+    name = "AnalyzerAgent"
+    system_prompt = """Sen bir kamu evrak analiz uzmanısın. Verilen evrak metnindeki önemli bilgileri çıkar ve eksik bilgileri tespit et.
 
 Yanıtını SADECE aşağıdaki JSON formatında ver:
 {
@@ -16,21 +21,14 @@ Yanıtını SADECE aşağıdaki JSON formatında ver:
 
 Olası eksik alanlar: tarih, sayı/referans numarası, imza, gönderen kurum, alıcı kurum, konu başlığı, ek bilgisi."""
 
-class AnalyzerAgent(BaseAgent):
-    """İçerik analizi ve bilgi çıkarma agentı."""
-    
-    def __init__(self, llm_service):
-        super().__init__(name="AnalyzerAgent", llm_service=llm_service)
-    
-    async def execute(self, text: str) -> dict:
-        """Evrak metnini analiz et: entity çıkar, eksik alanları bul."""
+    async def execute(self, text: str) -> ContentAnalysis:
         self.log("İçerik analizi başlatılıyor...")
-        data = await self.llm_service.chat_json(
-            ANALYSIS_SYSTEM_PROMPT,
-            f"Aşağıdaki evrak metnini analiz et:\n\n{text[:4000]}"
+        data = await self.ask_json(f"Aşağıdaki evrak metnini analiz et:\n\n{self.truncate(text)}")
+
+        result = ContentAnalysis(
+            entities=self.parse_items(ExtractedEntity, data.get("entities")),
+            missing_fields=self.parse_items(MissingField, data.get("missing_fields")),
+            keywords=[str(k).strip() for k in data.get("keywords") or [] if str(k).strip()],
         )
-        entities = [ExtractedEntity(**e) for e in data.get("entities", [])]
-        missing = [MissingField(**m) for m in data.get("missing_fields", [])]
-        keywords = data.get("keywords", [])
-        self.log(f"Analiz tamamlandı: {len(entities)} varlık, {len(missing)} eksik alan")
-        return {"entities": entities, "missing_fields": missing, "keywords": keywords}
+        self.log(f"Analiz tamamlandı: {len(result.entities)} varlık, {len(result.missing_fields)} eksik alan")
+        return result

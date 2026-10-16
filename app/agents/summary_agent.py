@@ -1,6 +1,11 @@
-from app.agents.base_agent import BaseAgent
+from app.agents.base_agent import LLMAgent
 
-SUMMARY_SYSTEM_PROMPT = """Sen bir kamu evrak özetleme uzmanısın. Verilen evrak metninin kısa ve öz bir özetini oluştur.
+
+class SummaryAgent(LLMAgent):
+    """Evrak özetleme agentı."""
+
+    name = "SummaryAgent"
+    system_prompt = """Sen bir kamu evrak özetleme uzmanısın. Verilen evrak metninin kısa ve öz bir özetini oluştur.
 
 Kurallar:
 - Özet en fazla 3-4 cümle olmalı
@@ -10,16 +15,8 @@ Kurallar:
 
 Yanıtını düz metin olarak ver, JSON formatında DEĞİL."""
 
-class SummaryAgent(BaseAgent):
-    """Evrak özetleme agentı."""
-    
-    def __init__(self, llm_service):
-        super().__init__(name="SummaryAgent", llm_service=llm_service)
-    
     async def execute(self, text: str, document_type: str = "") -> str:
-        """Evrak metninin özetini oluştur."""
         self.log("Özet oluşturma başlatılıyor...")
-        user_msg = f"Evrak türü: {document_type}\n\nEvrak metni:\n{text[:4000]}"
-        summary = await self._call_llm(SUMMARY_SYSTEM_PROMPT, user_msg)
+        summary = await self.ask_text(f"Evrak türü: {document_type}\n\nEvrak metni:\n{self.truncate(text)}")
         self.log(f"Özet oluşturuldu: {len(summary)} karakter")
-        return summary.strip()
+        return summary
