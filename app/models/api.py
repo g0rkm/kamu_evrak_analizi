@@ -108,3 +108,4 @@ class HealthStatus(BaseModel):
     rag_chunks: int
     total_analyses: int
     avg_confidence: float
+    llm_usage: dict = Field(default_factory=dict)

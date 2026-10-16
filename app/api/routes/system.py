@@ -26,6 +26,7 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
         rag_chunks=container.rag.chunk_count,
         total_analyses=stats["total"],
         avg_confidence=stats["avg_confidence"],
+        llm_usage=container.llm.get_usage_stats(),
     )
 
 
