@@ -41,6 +41,9 @@ uploads/
 # Scraped data (too large for git, regenerate with scraper)
 app/data/scraped/
 
+# RAG index (regenerate with scripts/build_index.py)
+app/data/rag/
+
 # OS
 .DS_Store
 Thumbs.db
