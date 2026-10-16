@@ -76,6 +76,49 @@ async def analyze_text(body: dict):
         await orchestrator.close()
 
 
+@router.post("/analyze-batch")
+async def analyze_batch(files: list[UploadFile] = File(...)):
+    """Birden fazla evrak yukle ve toplu analiz et."""
+    settings = get_settings()
+    allowed_extensions = {".pdf", ".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".txt", ".md"}
+
+    results = []
+    for file in files[:10]:
+        ext = os.path.splitext(file.filename)[1].lower()
+        if ext not in allowed_extensions:
+            results.append({"filename": file.filename, "status": "error", "detail": f"Desteklenmeyen dosya turu: {ext}"})
+            continue
+
+        content = await file.read()
+        if len(content) > settings.MAX_FILE_SIZE_MB * 1024 * 1024:
+            results.append({"filename": file.filename, "status": "error", "detail": "Dosya boyutu cok buyuk"})
+            continue
+
+        upload_dir = settings.UPLOAD_DIR
+        os.makedirs(upload_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        safe_filename = f"{timestamp}_{file.filename}"
+        file_path = os.path.join(upload_dir, safe_filename)
+
+        with open(file_path, "wb") as f_out:
+            f_out.write(content)
+
+        orchestrator = OrchestratorAgent()
+        try:
+            result = await orchestrator.execute(file_path=file_path)
+            result_dict = result.model_dump()
+            record_id = history_service.save(result_dict)
+            result_dict["history_id"] = record_id
+            result_dict["filename"] = file.filename
+            results.append(result_dict)
+        except Exception as e:
+            results.append({"filename": file.filename, "status": "error", "detail": str(e)})
+        finally:
+            await orchestrator.close()
+
+    return {"total": len(results), "results": results}
+
+
 @router.get("/history")
 async def list_history(limit: int = 50, offset: int = 0):
     """Analiz gecmisini listele."""

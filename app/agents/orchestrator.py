@@ -12,14 +12,14 @@ from app.services.llm_service import LLMService
 from app.models.analysis import AnalysisResult, ClassificationResult, LegislationMatch, MissingField
 from app.models.draft import PipelineResult, ValidationEntry, DraftResponse, RoutingDecision
 
+
 class OrchestratorAgent(BaseAgent):
-    """Tüm agentları koordine eden orkestratör."""
-    
+    """Tum agentlari koordine eden orkestrator."""
+
     def __init__(self):
         self.llm_service = LLMService()
         super().__init__(name="Orchestrator", llm_service=self.llm_service)
-        
-        # Alt agentları başlat
+
         self.ocr_agent = OCRAgent(llm_service=self.llm_service)
         self.classifier = ClassifierAgent(llm_service=self.llm_service)
         self.analyzer = AnalyzerAgent(llm_service=self.llm_service)
@@ -28,65 +28,81 @@ class OrchestratorAgent(BaseAgent):
         self.drafter = DraftAgent(llm_service=self.llm_service)
         self.router = RoutingAgent(llm_service=self.llm_service)
         self.reasoner = ReasoningAgent()
-    
+
+    def _timed_step(self, step_name, agent_name, t0):
+        """Adim suresini hesapla ve dict dondur."""
+        return {"step": step_name, "agent": agent_name, "duration": round(time.time() - t0, 2)}
+
     async def execute(self, file_path: str) -> PipelineResult:
-        """Uçtan uca evrak işleme pipeline'ı çalıştır."""
+        """Uctan uca evrak isleme pipeline'i calistir."""
         start_time = time.time()
         all_logs = []
-        
-        self.log(f"Pipeline başlatılıyor: {file_path}")
-        
-        # Adım 1: OCR / Metin Çıkarma
-        self.log("Adım 1/7: Metin çıkarma...")
+        step_timings = []
+
+        self.log(f"Pipeline baslatiliyor: {file_path}")
+
+        # Adim 1: OCR / Metin Cikarma
+        self.log("Adim 1/7: Metin cikarma...")
+        t0 = time.time()
         extracted = await self.ocr_agent.execute(file_path=file_path)
+        step_timings.append(self._timed_step("Metin Cikarma", "OCRAgent", t0))
         all_logs.extend(self.ocr_agent.get_logs())
         text = extracted.cleaned_text
-        
+
         if not text.strip():
-            self.log("HATA: Evraktan metin çıkarılamadı!")
+            self.log("HATA: Evraktan metin cikarilamadi!")
             return PipelineResult(
                 document_id="error",
                 analysis=AnalysisResult(
-                    classification=ClassificationResult(document_type="bilinmiyor", confidence=0.0, reasoning="Metin çıkarılamadı")
+                    classification=ClassificationResult(document_type="bilinmiyor", confidence=0.0, reasoning="Metin cikarilamadi")
                 ),
                 status="error",
                 processing_time=time.time() - start_time,
-                agent_logs=all_logs
+                agent_logs=all_logs,
+                step_timings=step_timings
             )
-        
-        # Adım 2: Sınıflandırma
-        self.log("Adım 2/7: Evrak sınıflandırma...")
+
+        # Adim 2: Siniflandirma
+        self.log("Adim 2/7: Evrak siniflandirma...")
+        t0 = time.time()
         classification = await self.classifier.execute(text=text)
+        step_timings.append(self._timed_step("Siniflandirma", "ClassifierAgent", t0))
         all_logs.extend(self.classifier.get_logs())
-        
-        # Adım 3: İçerik Analizi
-        self.log("Adım 3/7: İçerik analizi...")
+
+        # Adim 3: Icerik Analizi
+        self.log("Adim 3/7: Icerik analizi...")
+        t0 = time.time()
         try:
             analysis_data = await self.analyzer.execute(text=text)
             all_logs.extend(self.analyzer.get_logs())
         except Exception as e:
-            self.log(f"İçerik analizi hatası (varsayılan kullanılıyor): {e}")
+            self.log(f"Icerik analizi hatasi (varsayilan kullaniliyor): {e}")
             analysis_data = {"entities": [], "missing_fields": [], "keywords": []}
-        
-        # Adım 4: Mevzuat Eşleştirme
-        self.log("Adım 4/7: Mevzuat eşleştirme...")
+        step_timings.append(self._timed_step("Icerik Analizi", "AnalyzerAgent", t0))
+
+        # Adim 4: Mevzuat Eslestirme
+        self.log("Adim 4/7: Mevzuat eslestirme...")
+        t0 = time.time()
         try:
             legislation_matches = await self.legislation.execute(text=text, document_type=classification.document_type, keywords=analysis_data.get("keywords", []))
             all_logs.extend(self.legislation.get_logs())
         except Exception as e:
-            self.log(f"Mevzuat eşleştirme hatası (varsayılan kullanılıyor): {e}")
+            self.log(f"Mevzuat eslestirme hatasi (varsayilan kullaniliyor): {e}")
             legislation_matches = []
-        
-        # Adım 5: Özet Oluşturma
-        self.log("Adım 5/7: Özet oluşturma...")
+        step_timings.append(self._timed_step("Mevzuat Eslestirme", "LegislationAgent", t0))
+
+        # Adim 5: Ozet Olusturma
+        self.log("Adim 5/7: Ozet olusturma...")
+        t0 = time.time()
         try:
             summary_text = await self.summary.execute(text=text, document_type=classification.document_type)
             all_logs.extend(self.summary.get_logs())
         except Exception as e:
-            self.log(f"Özet oluşturma hatası (varsayılan kullanılıyor): {e}")
-            summary_text = "Özet oluşturulamadı."
-        
-        # AnalysisResult birleştir
+            self.log(f"Ozet olusturma hatasi (varsayilan kullaniliyor): {e}")
+            summary_text = "Ozet olusturulamadi."
+        step_timings.append(self._timed_step("Ozet Olusturma", "SummaryAgent", t0))
+
+        # AnalysisResult birlestir
         analysis = AnalysisResult(
             classification=classification,
             entities=analysis_data["entities"],
@@ -95,9 +111,10 @@ class OrchestratorAgent(BaseAgent):
             summary=summary_text,
             keywords=analysis_data["keywords"]
         )
-        
-        # Adım 6: Yazı Taslağı + Birim Yönlendirme
-        self.log("Adım 6/7: Yazı taslağı ve yönlendirme...")
+
+        # Adim 6: Yazi Taslagi + Birim Yonlendirme
+        self.log("Adim 6/7: Yazi taslagi ve yonlendirme...")
+        t0 = time.time()
         try:
             draft = await self.drafter.execute(
                 text=text,
@@ -107,7 +124,7 @@ class OrchestratorAgent(BaseAgent):
             )
             all_logs.extend(self.drafter.get_logs())
         except Exception as e:
-            self.log(f"Taslak oluşturma hatası (varsayılan kullanılıyor): {e}")
+            self.log(f"Taslak olusturma hatasi (varsayilan kullaniliyor): {e}")
             draft = None
 
         try:
@@ -119,11 +136,13 @@ class OrchestratorAgent(BaseAgent):
             )
             all_logs.extend(self.router.get_logs())
         except Exception as e:
-            self.log(f"Yönlendirme hatası (varsayılan kullanılıyor): {e}")
+            self.log(f"Yonlendirme hatasi (varsayilan kullaniliyor): {e}")
             routing = None
-        
-        # Adım 7: Muhakeme ve Doğrulama
-        self.log("Adım 7/7: Muhakeme ve doğrulama...")
+        step_timings.append(self._timed_step("Taslak & Yonlendirme", "DraftAgent+RoutingAgent", t0))
+
+        # Adim 7: Muhakeme ve Dogrulama
+        self.log("Adim 7/7: Muhakeme ve dogrulama...")
+        t0 = time.time()
         try:
             reasoning_result = await self.reasoner.execute(
                 text=text,
@@ -138,14 +157,15 @@ class OrchestratorAgent(BaseAgent):
             validation = reasoning_result["validation"]
             confidence_score = reasoning_result["confidence_score"]
         except Exception as e:
-            self.log(f"Muhakeme hatası (varsayılan kullanılıyor): {e}")
+            self.log(f"Muhakeme hatasi (varsayilan kullaniliyor): {e}")
             validation = []
             confidence_score = analysis.classification.confidence
-        
+        step_timings.append(self._timed_step("Muhakeme & Dogrulama", "ReasoningAgent", t0))
+
         processing_time = time.time() - start_time
-        self.log(f"Pipeline tamamlandı: {processing_time:.2f} saniye")
+        self.log(f"Pipeline tamamlandi: {processing_time:.2f} saniye")
         all_logs.extend(self.get_logs())
-        
+
         return PipelineResult(
             document_id=file_path,
             analysis=analysis,
@@ -155,9 +175,10 @@ class OrchestratorAgent(BaseAgent):
             agent_logs=all_logs,
             status="completed",
             validation=validation,
-            confidence_score=confidence_score
+            confidence_score=confidence_score,
+            step_timings=step_timings
         )
-    
+
     async def close(self):
-        """Kaynakları temizle."""
+        """Kaynaklari temizle."""
         await self.llm_service.close()

@@ -32,6 +32,7 @@ class PipelineResult(BaseModel):
     routing: Optional[RoutingDecision] = None
     processing_time: float = 0.0
     agent_logs: list[str] = []  # Her agent'ın işlem kaydı
+    step_timings: list[dict] = []  # Her adimin suresi: [{step, agent, duration}]
     status: str = "completed"
     validation: list[ValidationEntry] = []  # YENİ: Muhakeme ajanı çıktısı
     confidence_score: float = 0.0  # YENİ: Genel güven skoru (0-1)
