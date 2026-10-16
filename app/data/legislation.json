@@ -4,7 +4,7 @@
     "name": "7201 sayılı Tebligat Kanunu",
     "category": "genel",
     "description": "Resmî tebligat usul ve esasları",
-    "relevant_for": ["resmi_yazi", "bilgilendirme", "talep_yazisi"]
+    "relevant_for": ["resmi_yazi", "bilgilendirme", "talep_yazisi", "teblig"]
   },
   {
     "id": 2,
@@ -22,45 +22,45 @@
   },
   {
     "id": 4,
-    "name": "Resmî Yazışmalarda Uygulanacak Usul dan Esaslar Hakkında Yönetmelik (2020/22)",
+    "name": "Resmî Yazışmalarda Uygulanacak Usul ve Esaslar Hakkında Yönetmelik (2020/22)",
     "category": "yazisma",
     "description": "Resmî yazışma formatı, standartları ve kuralları",
-    "relevant_for": ["resmi_yazi", "ust_yazi", "cevap_yazisi", "bilgilendirme", "ic_yazisma", "genelge"]
+    "relevant_for": ["resmi_yazi", "bilgilendirme", "genelge", "kurum_ici", "yonerge"]
   },
   {
     "id": 5,
     "name": "657 sayılı Devlet Memurları Kanunu",
     "category": "personel",
-    "description": "Devlet memurlarının hakları, ödevleri ve disiplin işlemleri",
-    "relevant_for": ["talep_yazisi", "kurum_ici", "rapor", "tutanak"]
+    "description": "Devlet memurlarının hakları, ödevleri, atanma, izin ve disiplin işlemleri",
+    "relevant_for": ["talep_yazisi", "kurum_ici", "rapor", "tutanak", "karar"]
   },
   {
     "id": 6,
-    "name": "5018 sayılı Kamu Mali Yönetimi ve Kontrol Kanunu",
+    "name": "5018 sayılı Kamu Malî Yönetimi ve Kontrol Kanunu",
     "category": "mali",
-    "description": "Kamu harcamaları, bütçe ve mali yönetim",
-    "relevant_for": ["talep_yazisi", "rapor", "kurum_ici"]
+    "description": "Kamu harcamaları, bütçe, mali yönetim ve iç kontrol",
+    "relevant_for": ["talep_yazisi", "rapor", "kurum_ici", "karar"]
   },
   {
     "id": 7,
     "name": "4734 sayılı Kamu İhale Kanunu",
     "category": "ihale",
-    "description": "Kamu alım ve ihale süreçleri",
-    "relevant_for": ["talep_yazisi", "rapor", "tutanak"]
+    "description": "Kamu alım ve ihale süreçleri, şartname düzenleme, teklif değerlendirme",
+    "relevant_for": ["talep_yazisi", "rapor", "tutanak", "sozlesme", "ilan"]
   },
   {
     "id": 8,
     "name": "6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK)",
     "category": "veri_koruma",
-    "description": "Kişisel veri işleme ve koruma yükümlülükleri",
-    "relevant_for": ["bilgilendirme", "sikayet", "gorus_sorma"]
+    "description": "Kişisel veri işleme, koruma yükümlülükleri ve KVKK Kurul kararları",
+    "relevant_for": ["bilgilendirme", "sikayet", "gorus_sorma", "karar"]
   },
   {
     "id": 9,
     "name": "2577 sayılı İdari Yargılama Usulü Kanunu",
     "category": "hukuk",
-    "description": "İdari işlemlere itiraz ve dava süreçleri",
-    "relevant_for": ["sikayet", "gorus_sorma", "rapor"]
+    "description": "İdari işlemlere itiraz, iptal davaları ve yargılama usulü",
+    "relevant_for": ["sikayet", "gorus_sorma", "rapor", "karar"]
   },
   {
     "id": 10,
@@ -68,5 +68,201 @@
     "category": "elektronik",
     "description": "E-imza geçerliliği ve elektronik belge düzeni",
     "relevant_for": ["resmi_yazi", "genelge", "kurum_ici"]
+  },
+  {
+    "id": 11,
+    "name": "2709 sayılı Türkiye Cumhuriyeti Anayasası",
+    "category": "anayasa",
+    "description": "Temel haklar, devlet yapısı, yasama-yürütme-yargı düzeni",
+    "relevant_for": ["kanun", "kararname", "karar", "gorus_sorma"]
+  },
+  {
+    "id": 12,
+    "name": "2886 sayılı Devlet İhale Kanunu",
+    "category": "ihale",
+    "description": "Devlet taşınmazlarının satışı, kiraya verilmesi ve yapım ihalesi",
+    "relevant_for": ["talep_yazisi", "sozlesme", "rapor", "ilan"]
+  },
+  {
+    "id": 13,
+    "name": "5393 sayılı Belediye Kanunu",
+    "category": "yerel_yonetim",
+    "description": "Belediye kuruluşu, organları, görev ve yetkileri",
+    "relevant_for": ["karar", "genelge", "rapor", "yonetmelik"]
+  },
+  {
+    "id": 14,
+    "name": "5302 sayılı İl Özel İdaresi Kanunu",
+    "category": "yerel_yonetim",
+    "description": "İl özel idaresi organları, görev ve yetkileri",
+    "relevant_for": ["karar", "genelge", "rapor"]
+  },
+  {
+    "id": 15,
+    "name": "5216 sayılı Büyükşehir Belediyesi Kanunu",
+    "category": "yerel_yonetim",
+    "description": "Büyükşehir belediyesi yönetimi, görev dağılımı ve mali yapı",
+    "relevant_for": ["karar", "genelge", "rapor", "yonetmelik"]
+  },
+  {
+    "id": 16,
+    "name": "6085 sayılı Sayıştay Kanunu",
+    "category": "denetim",
+    "description": "Sayıştay denetimi, rapor düzenleme ve hesap yargılaması",
+    "relevant_for": ["rapor", "tutanak", "karar", "gorus_sorma"]
+  },
+  {
+    "id": 17,
+    "name": "5237 sayılı Türk Ceza Kanunu",
+    "category": "ceza_hukuku",
+    "description": "Suç tanımları, cezalar, zimmet, rüşvet, görevi kötüye kullanma",
+    "relevant_for": ["sikayet", "rapor", "tutanak", "karar"]
+  },
+  {
+    "id": 18,
+    "name": "5271 sayılı Ceza Muhakemesi Kanunu",
+    "category": "ceza_hukuku",
+    "description": "Ceza yargılama usulü, soruşturma ve kovuşturma",
+    "relevant_for": ["sikayet", "rapor", "tutanak"]
+  },
+  {
+    "id": 19,
+    "name": "4721 sayılı Türk Medenî Kanunu",
+    "category": "medeni_hukuk",
+    "description": "Kişiler, aile, miras ve eşya hukuku",
+    "relevant_for": ["dilekce", "gorus_sorma", "karar"]
+  },
+  {
+    "id": 20,
+    "name": "6098 sayılı Türk Borçlar Kanunu",
+    "category": "borçlar_hukuku",
+    "description": "Sözleşme, haksız fiil, sebepsiz zenginleşme ve borç ilişkileri",
+    "relevant_for": ["sozlesme", "gorus_sorma", "talep_yazisi", "karar"]
+  },
+  {
+    "id": 21,
+    "name": "6100 sayılı Hukuk Muhakemeleri Kanunu",
+    "category": "hukuk",
+    "description": "Hukuk davaları yargılama usulü, delil ve ispat kuralları",
+    "relevant_for": ["gorus_sorma", "rapor", "karar"]
+  },
+  {
+    "id": 22,
+    "name": "6102 sayılı Türk Ticaret Kanunu",
+    "category": "ticaret_hukuku",
+    "description": "Ticari işletme, şirketler, kıymetli evrak ve deniz ticareti",
+    "relevant_for": ["sozlesme", "gorus_sorma", "rapor"]
+  },
+  {
+    "id": 23,
+    "name": "2004 sayılı İcra ve İflas Kanunu",
+    "category": "icra_hukuku",
+    "description": "İcra takibi, haciz, iflas ve konkordato işlemleri",
+    "relevant_for": ["talep_yazisi", "gorus_sorma", "karar"]
+  },
+  {
+    "id": 24,
+    "name": "4688 sayılı Kamu Görevlileri Sendikaları ve Toplu Sözleşme Kanunu",
+    "category": "personel",
+    "description": "Kamu görevlilerinin sendika ve toplu sözleşme hakları",
+    "relevant_for": ["sozlesme", "karar", "talep_yazisi"]
+  },
+  {
+    "id": 25,
+    "name": "6245 sayılı Harcırah Kanunu",
+    "category": "mali",
+    "description": "Yolluk ve gündelik ödemeleri, geçici ve sürekli görev harcırahı",
+    "relevant_for": ["talep_yazisi", "kurum_ici", "karar"]
+  },
+  {
+    "id": 26,
+    "name": "4857 sayılı İş Kanunu",
+    "category": "is_hukuku",
+    "description": "İş sözleşmesi, çalışma koşulları, izin ve fesih hakları",
+    "relevant_for": ["sozlesme", "sikayet", "talep_yazisi", "karar"]
+  },
+  {
+    "id": 27,
+    "name": "5510 sayılı Sosyal Sigortalar ve Genel Sağlık Sigortası Kanunu",
+    "category": "sosyal_guvenlik",
+    "description": "Sigorta primleri, emeklilik, sağlık sigortası ve iş kazası",
+    "relevant_for": ["talep_yazisi", "rapor", "sikayet"]
+  },
+  {
+    "id": 28,
+    "name": "2547 sayılı Yükseköğretim Kanunu",
+    "category": "egitim",
+    "description": "Üniversite yönetimi, akademik personel ve öğrenci işleri",
+    "relevant_for": ["karar", "genelge", "talep_yazisi", "yonetmelik"]
+  },
+  {
+    "id": 29,
+    "name": "3628 sayılı Mal Bildiriminde Bulunulması, Rüşvet ve Yolsuzluklarla Mücadele Kanunu",
+    "category": "denetim",
+    "description": "Mal bildirimi yükümlülüğü ve yolsuzlukla mücadele",
+    "relevant_for": ["rapor", "tutanak", "sikayet"]
+  },
+  {
+    "id": 30,
+    "name": "5176 sayılı Kamu Görevlileri Etik Kurulu Kurulması Kanunu",
+    "category": "etik",
+    "description": "Kamu görevlileri etik ilkeleri ve etik kurul işleyişi",
+    "relevant_for": ["sikayet", "rapor", "gorus_sorma"]
+  },
+  {
+    "id": 31,
+    "name": "3065 sayılı Katma Değer Vergisi Kanunu",
+    "category": "vergi",
+    "description": "KDV hesaplama, istisna ve muafiyetler",
+    "relevant_for": ["talep_yazisi", "gorus_sorma", "rapor"]
+  },
+  {
+    "id": 32,
+    "name": "6325 sayılı Hukuk Uyuşmazlıklarında Arabuluculuk Kanunu",
+    "category": "hukuk",
+    "description": "Hukuk uyuşmazlıklarında arabuluculuk süreci ve zorunlu arabuluculuk",
+    "relevant_for": ["sozlesme", "gorus_sorma", "karar"]
+  },
+  {
+    "id": 33,
+    "name": "1 sayılı Cumhurbaşkanlığı Teşkilatı Hakkında Cumhurbaşkanlığı Kararnamesi",
+    "category": "teskilat",
+    "description": "Bakanlık ve bağlı kuruluşların teşkilat yapısı, görev ve yetkileri",
+    "relevant_for": ["kararname", "karar", "genelge", "yonetmelik"]
+  },
+  {
+    "id": 34,
+    "name": "2 sayılı Genel Kadro ve Usulü Hakkında Cumhurbaşkanlığı Kararnamesi",
+    "category": "personel",
+    "description": "Kamu kurumları kadro cetvelleri ve kadro ihdas usulü",
+    "relevant_for": ["kararname", "karar", "talep_yazisi"]
+  },
+  {
+    "id": 35,
+    "name": "3 sayılı Üst Kademe Kamu Yöneticileri Atama Kararnamesi",
+    "category": "personel",
+    "description": "Üst kademe yöneticilerin atanma usul ve esasları",
+    "relevant_for": ["kararname", "karar"]
+  },
+  {
+    "id": 36,
+    "name": "4 sayılı Bakanlıklara Bağlı Kurum ve Kuruluşlar Kararnamesi",
+    "category": "teskilat",
+    "description": "Bakanlıklara bağlı, ilgili ve ilişkili kuruluşlar listesi",
+    "relevant_for": ["kararname", "karar", "genelge"]
+  },
+  {
+    "id": 37,
+    "name": "5 sayılı Devlet Denetleme Kurulu Hakkında Cumhurbaşkanlığı Kararnamesi",
+    "category": "denetim",
+    "description": "DDK görev ve yetkileri, denetim usulü",
+    "relevant_for": ["kararname", "rapor", "tutanak"]
+  },
+  {
+    "id": 38,
+    "name": "7253 sayılı Çarşı ve Mahalle Bekçileri Kanunu",
+    "category": "guvenlik",
+    "description": "Çarşı ve mahalle bekçilerinin görev, yetki ve sorumlulukları",
+    "relevant_for": ["karar", "genelge"]
   }
 ]
