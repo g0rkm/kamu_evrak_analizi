@@ -23,7 +23,7 @@ class ClassifierAgent(LLMAgent):
 
     async def execute(self, text: str) -> ClassificationResult:
         self.log("Evrak sınıflandırma başlatılıyor...")
-        data = await self.ask_json(f"Aşağıdaki evrak metnini sınıflandır:\n\n{self.truncate(text)}")
+        data = await self.ask_json(f"Aşağıdaki evrak metnini sınıflandır:\n\n{self.document(text)}")
 
         raw_type = str(data.get("document_type") or "")
         code = DOCUMENT_TYPES.resolve(raw_type)

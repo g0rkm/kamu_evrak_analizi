@@ -23,7 +23,7 @@ Olası eksik alanlar: tarih, sayı/referans numarası, imza, gönderen kurum, al
 
     async def execute(self, text: str) -> ContentAnalysis:
         self.log("İçerik analizi başlatılıyor...")
-        data = await self.ask_json(f"Aşağıdaki evrak metnini analiz et:\n\n{self.truncate(text)}")
+        data = await self.ask_json(f"Aşağıdaki evrak metnini analiz et:\n\n{self.document(text)}")
 
         result = ContentAnalysis(
             entities=self.parse_items(ExtractedEntity, data.get("entities")),
