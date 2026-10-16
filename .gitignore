@@ -1,6 +1,55 @@
-﻿.aider*
+﻿# Aider & dev tools
+.aider*
 .aider_task.md
+CLAUDE.md
+PLAN.md
+
+# Python
 __pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment & secrets
+.env
+.env.local
+.env.production
+
+# Database
 *.db
 *.sqlite3
-.env
+
+# Uploads (runtime generated)
+uploads/
+
+# Scraped data (too large for git, regenerate with scraper)
+app/data/scraped/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Test artifacts
+htmlcov/
+.coverage
+.pytest_cache/
