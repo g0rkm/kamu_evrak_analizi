@@ -15,6 +15,7 @@ class ReviewState(BaseModel):
     routing_status: RoutingReviewStatus = "pending"
     routing_unit: Optional[str] = None  # Memurun seçtiği birim
     updated_at: Optional[datetime] = None
+    audit_log: list[dict] = Field(default_factory=list)
 
 
 class ReviewUpdate(BaseModel):

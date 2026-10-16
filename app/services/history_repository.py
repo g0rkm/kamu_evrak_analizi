@@ -54,6 +54,12 @@ class HistoryRepository:
             current = ReviewState.model_validate(record.get("review") or {})
             changes = update.model_dump(exclude_unset=True)
             review = current.model_copy(update={**changes, "updated_at": datetime.now(timezone.utc)})
+            audit_entry = {
+                "action": next((k for k in changes if k.endswith("_status")), "update"),
+                "changes": changes,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+            review = review.model_copy(update={"audit_log": [*current.audit_log, audit_entry]})
             record["review"] = review.model_dump(mode="json")
             self._write(record_id, record, locked=True)
         return review
