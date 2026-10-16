@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLegislation(data.analysis);
         renderDraft(data.draft);
         renderRouting(data.routing);
-        renderLogs(data.agent_logs);
+        renderLogs(data.agent_logs, data.step_timings);
         renderValidation(data.validation, data.confidence_score, data.processing_time);
 
         currentHistoryId = data.history_id || null;
@@ -404,7 +404,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const renderLogs = (logs) => {
+    const renderLogs = (logs, stepTimings) => {
+        // Pipeline Adim Sureleri
+        const timingsContainer = document.getElementById('stepTimingsContainer');
+        const timingsBars = document.getElementById('stepTimingsBars');
+        const timings = currentPipelineResult?.step_timings || [];
+        
+        if (timings.length > 0) {
+            timingsContainer.classList.remove('hidden');
+            timingsBars.innerHTML = '';
+            const maxDuration = Math.max(...timings.map(t => t.duration), 0.1);
+            const colors = ['bg-blue-500', 'bg-green-500', 'bg-amber-500', 'bg-purple-500', 'bg-red-500', 'bg-cyan-500', 'bg-pink-500'];
+            
+            timings.forEach((timing, i) => {
+                const pct = Math.round((timing.duration / maxDuration) * 100);
+                const row = document.createElement('div');
+                row.innerHTML = `
+                    <div class="flex items-center justify-between text-xs mb-1">
+                        <span class="font-medium">${timing.step}</span>
+                        <span class="text-slate-500">${timing.duration}s <span class="text-[10px] text-slate-400">(${timing.agent})</span></span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-slate-600 h-2.5 rounded-full overflow-hidden">
+                        <div class="${colors[i % colors.length]} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                    </div>
+                `;
+                timingsBars.appendChild(row);
+            });
+        } else {
+            timingsContainer.classList.add('hidden');
+        }
+
         const logsContainer = document.getElementById('logsContainer');
         logsContainer.innerHTML = '';
         if (!logs || logs.length === 0) {
