@@ -59,3 +59,15 @@ class PIIDetector:
     @staticmethod
     def mask(value: str) -> str:
         return f"{value[:3]}***{value[-2:]}" if len(value) > 5 else "***"
+
+    def mask_text(self, text: str) -> str:
+        """Metindeki tüm kişisel verileri maskelenmiş halleriyle değiştirir."""
+        result = text
+        for pattern in self.patterns:
+            def _replacer(m: re.Match, p: PIIPattern = pattern) -> str:
+                value = m.group()
+                if p.validator and not p.validator(value):
+                    return value
+                return self.mask(value)
+            result = pattern.regex.sub(_replacer, result)
+        return result
