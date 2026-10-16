@@ -8,6 +8,10 @@ class Settings(BaseSettings):
     TESSERACT_CMD: str = "tesseract"
     UPLOAD_DIR: str = "uploads"
     MAX_FILE_SIZE_MB: int = 20
+    RAG_INDEX_DIR: str = "app/data/rag"
+    RAG_TOP_K: int = 8
+    RAG_CHUNK_SIZE: int = 600
+    RAG_CHUNK_OVERLAP: int = 100
 
     class Config:
         env_file = ".env"
