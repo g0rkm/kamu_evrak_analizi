@@ -115,6 +115,7 @@ Tarayıcıda `http://127.0.0.1:8080` adresini açın. Tüm ayarlar `.env.example
 | `/api/history/{id}` | GET / DELETE | Kaydı getir / sil |
 | `/api/history/{id}/review` | PATCH | Memur kararını kaydet (taslak ve yönlendirme) |
 | `/api/export/{id}` | GET | Analiz sonucunu JSON olarak indir |
+| `/api/mask-pii` | POST | Metindeki kişisel verileri maskele |
 | `/api/meta` | GET | Arayüz sözlüğü ve girdi sınırları |
 | `/api/health` | GET | Sağlık kontrolü (LLM yapılandırması, RAG durumu) |
 
