@@ -14,6 +14,7 @@ from app.api.errors import register_exception_handlers
 from app.config import BASE_DIR, Settings, get_settings
 from app.container import ServiceContainer
 from app.core.logging import configure_logging, new_request_id, request_id_var
+from app.core.rate_limit import RateLimitMiddleware
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -48,6 +49,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             allow_methods=["GET", "POST", "PATCH", "DELETE"],
             allow_headers=["Content-Type"],
         )
+
+    app.add_middleware(RateLimitMiddleware, max_requests=60, window=60)
 
     @app.middleware("http")
     async def inject_request_id(request: Request, call_next):
