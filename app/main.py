@@ -13,7 +13,7 @@ from app.api import router
 from app.api.errors import register_exception_handlers
 from app.config import BASE_DIR, Settings, get_settings
 from app.container import ServiceContainer
-from app.core.logging import configure_logging
+from app.core.logging import configure_logging, new_request_id, request_id_var
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -48,6 +48,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             allow_methods=["GET", "POST", "PATCH", "DELETE"],
             allow_headers=["Content-Type"],
         )
+
+    @app.middleware("http")
+    async def inject_request_id(request: Request, call_next):
+        rid = request.headers.get("X-Request-ID") or new_request_id()
+        request_id_var.set(rid)
+        response = await call_next(request)
+        response.headers["X-Request-ID"] = rid
+        return response
 
     @app.middleware("http")
     async def add_security_headers(request: Request, call_next):
