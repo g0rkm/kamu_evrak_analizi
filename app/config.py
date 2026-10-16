@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     LLM_TIMEOUT_SECONDS: float = 180.0
     LLM_MAX_RETRIES: int = 3
     LLM_TEMPERATURE: float = 0.3
+    LLM_CACHE_TTL_SECONDS: int = 3600
 
     # OCR
     TESSERACT_CMD: str = "tesseract"
