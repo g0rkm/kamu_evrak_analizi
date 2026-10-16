@@ -24,7 +24,7 @@ app.include_router(router)
 # Frontend static dosyaları
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 if os.path.exists(frontend_dir):
-    app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+    app.mount("/", StaticFiles(directory=frontend_dir), name="static")
 
 @app.get("/")
 async def root():
