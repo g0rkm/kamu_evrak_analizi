@@ -1,0 +1,48 @@
+from fastapi import APIRouter, Depends
+
+from app import __version__
+from app.agents.orchestrator import PIPELINE_STEPS
+from app.api.dependencies import get_container
+from app.container import ServiceContainer
+from app.core.taxonomy import DOCUMENT_TYPES, DRAFT_TYPES, ORG_UNITS, PRIORITIES, UNKNOWN_DOCUMENT_TYPE
+from app.models.api import HealthStatus
+from app.services.upload_storage import ALLOWED_EXTENSIONS
+
+router = APIRouter(tags=["sistem"])
+
+
+@router.get("/health", response_model=HealthStatus, summary="Sistem sağlık kontrolü")
+async def health_check(container: ServiceContainer = Depends(get_container)):
+    stats = container.history.stats()
+    return HealthStatus(
+        status="ok",
+        service=container.settings.APP_NAME,
+        version=__version__,
+        llm_configured=container.llm.is_configured,
+        llm_model=container.llm.model,
+        rag_available=container.rag.available,
+        rag_chunks=container.rag.chunk_count,
+        total_analyses=stats["total"],
+        avg_confidence=stats["avg_confidence"],
+    )
+
+
+@router.get("/meta", summary="Arayüzün kullandığı sözlük ve sınırlar")
+async def meta(container: ServiceContainer = Depends(get_container)):
+    settings = container.settings
+    return {
+        "version": __version__,
+        "document_types": [{"code": t.code, "label": t.label} for t in DOCUMENT_TYPES]
+        + [{"code": UNKNOWN_DOCUMENT_TYPE, "label": "Belirlenemedi"}],
+        "units": [{"code": u.code, "label": u.label, "description": u.description} for u in ORG_UNITS],
+        "draft_types": [{"code": d.code, "label": d.label} for d in DRAFT_TYPES],
+        "priorities": [{"code": p.code, "label": p.label, "rank": p.rank} for p in PRIORITIES],
+        "pipeline_steps": [{"key": s.key, "label": s.label} for s in PIPELINE_STEPS],
+        "limits": {
+            "max_file_mb": settings.MAX_FILE_SIZE_MB,
+            "min_text_chars": settings.MIN_TEXT_CHARS,
+            "max_text_chars": settings.MAX_TEXT_CHARS,
+            "allowed_extensions": sorted(ALLOWED_EXTENSIONS),
+            "keep_uploads": settings.KEEP_UPLOADS,
+        },
+    }
