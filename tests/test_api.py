@@ -133,3 +133,26 @@ def test_security_headers(client):
     response = client.get("/api/health")
     assert response.headers["x-content-type-options"] == "nosniff"
     assert response.headers["cache-control"] == "no-store"
+
+
+def test_request_id_header(client):
+    """Her API yanıtında X-Request-ID başlığı olmalı."""
+    resp = client.get("/api/health")
+    assert "X-Request-ID" in resp.headers
+    rid = resp.headers["X-Request-ID"]
+    assert len(rid) == 12
+
+    # Gönderilen ID geri dönmeli
+    resp2 = client.get("/api/health", headers={"X-Request-ID": "custom-id-abc"})
+    assert resp2.headers["X-Request-ID"] == "custom-id-abc"
+
+
+def test_mask_pii_endpoint(client):
+    """PII maskeleme endpoint'i kişisel verileri maskelemeli."""
+    text = "TC: 10000000146, Tel: 0532 123 45 67, Mail: test@example.com"
+    resp = client.post("/api/mask-pii", json={"text": text})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["pii_count"] >= 2
+    assert "10000000146" not in data["masked_text"]
+    assert "***" in data["masked_text"]
