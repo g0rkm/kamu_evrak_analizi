@@ -83,12 +83,69 @@ PRIORITY_RULES = {
 # Acil anahtar kelimeler
 URGENT_KEYWORDS = ["acil", "ivedi", "derhal", "süre dolmak üzere", "son gün", "zamanaşımı", "mahkeme süresi"]
 
+# PII/KVKK tespit kalıpları
+PII_PATTERNS = {
+    "tc_kimlik": {
+        "pattern": r'\b[1-9]\d{10}\b',
+        "label": "TC Kimlik Numarasi",
+        "validate": "_validate_tc_kimlik",
+        "severity": "warning"
+    },
+    "iban": {
+        "pattern": r'\bTR\s?\d{2}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{2}\b',
+        "label": "IBAN",
+        "severity": "warning"
+    },
+    "telefon": {
+        "pattern": r'\b(?:\+90|0)\s?[5]\d{2}\s?\d{3}\s?\d{2}\s?\d{2}\b',
+        "label": "Telefon Numarasi",
+        "severity": "info"
+    },
+    "eposta": {
+        "pattern": r'\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b',
+        "label": "E-posta Adresi",
+        "severity": "info"
+    }
+}
+
 
 class ReasoningAgent(BaseAgent):
     """Kural tabanlı muhakeme ajanı. LLM çağırmaz, deterministik çalışır."""
 
     def __init__(self):
         super().__init__(name="ReasoningAgent", llm_service=None)
+
+    @staticmethod
+    def _validate_tc_kimlik(value: str) -> bool:
+        """TC Kimlik numarası checksum doğrulaması."""
+        if len(value) != 11 or value[0] == '0':
+            return False
+        digits = [int(d) for d in value]
+        odd_sum = sum(digits[0:9:2])
+        even_sum = sum(digits[1:8:2])
+        check1 = (odd_sum * 7 - even_sum) % 10
+        check2 = sum(digits[0:10]) % 10
+        return check1 == digits[9] and check2 == digits[10]
+
+    def _detect_pii(self, text: str) -> list[dict]:
+        """Metinde kişisel veri tespiti yap."""
+        findings = []
+        for pii_type, config in PII_PATTERNS.items():
+            matches = re.finditer(config["pattern"], text)
+            for match in matches:
+                value = match.group()
+                if pii_type == "tc_kimlik":
+                    clean = re.sub(r'\s', '', value)
+                    if not self._validate_tc_kimlik(clean):
+                        continue
+                masked = value[:3] + "***" + value[-2:] if len(value) > 5 else "***"
+                findings.append({
+                    "type": pii_type,
+                    "label": config["label"],
+                    "masked_value": masked,
+                    "severity": config["severity"]
+                })
+        return findings
 
     async def execute(self, text: str, analysis: AnalysisResult,
                       draft: DraftResponse = None,
@@ -227,6 +284,26 @@ class ReasoningAgent(BaseAgent):
                     field=f"missing_fields.{field_name}",
                     original_value="not_detected",
                     rule="pattern_missing_field",
+                    severity="warning"
+                ))
+
+        # -- KURAL 6: PII/KVKK Tespiti --
+        pii_findings = self._detect_pii(text)
+        for finding in pii_findings:
+            validation.append(ValidationEntry(
+                field=f"pii.{finding['type']}",
+                original_value=finding['masked_value'],
+                rule="pii_detection",
+                severity=finding['severity']
+            ))
+
+        if draft and draft.body:
+            draft_pii = self._detect_pii(draft.body)
+            for finding in draft_pii:
+                validation.append(ValidationEntry(
+                    field=f"draft_pii_leak.{finding['type']}",
+                    original_value=finding['masked_value'],
+                    rule="draft_pii_leak",
                     severity="warning"
                 ))
 
