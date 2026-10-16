@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import logging
 import re
+import time as _time
 from dataclasses import asdict, dataclass
 from typing import Any
 
@@ -19,10 +21,59 @@ _RETRYABLE_STATUS = frozenset({408, 409, 425, 429, 500, 502, 503, 504})
 _FENCE_PATTERN = re.compile(r"```(?:json)?\s*\n?(.*?)\n?\s*```", re.DOTALL)
 
 
+class _LLMCache:
+    """Basit TTL tabanlı bellek-içi LLM yanıt önbelleği."""
+
+    def __init__(self, ttl: int = 3600) -> None:
+        self._ttl = ttl
+        self._store: dict[str, tuple[float, str]] = {}
+        self._hits = 0
+        self._misses = 0
+
+    @property
+    def enabled(self) -> bool:
+        return self._ttl > 0
+
+    @staticmethod
+    def _key(model: str, system: str, user: str, temperature: float) -> str:
+        raw = f"{model}|{temperature}|{system}|{user}"
+        return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+    def get(self, model: str, system: str, user: str, temperature: float) -> str | None:
+        if not self.enabled:
+            return None
+        key = self._key(model, system, user, temperature)
+        entry = self._store.get(key)
+        if entry is None:
+            self._misses += 1
+            return None
+        ts, value = entry
+        if (_time.monotonic() - ts) > self._ttl:
+            del self._store[key]
+            self._misses += 1
+            return None
+        self._hits += 1
+        return value
+
+    def put(self, model: str, system: str, user: str, temperature: float, value: str) -> None:
+        if not self.enabled:
+            return
+        key = self._key(model, system, user, temperature)
+        self._store[key] = (_time.monotonic(), value)
+
+    def stats(self) -> dict:
+        return {"cache_hits": self._hits, "cache_misses": self._misses, "cache_size": len(self._store)}
+
+    def clear(self) -> None:
+        self._store.clear()
+
+
 @dataclass
 class UsageStats:
     total_requests: int = 0
     total_tokens: int = 0
+    cache_hits: int = 0
+    cache_misses: int = 0
 
 
 class LLMService:
@@ -45,6 +96,7 @@ class LLMService:
         self._owns_client = client is None
         self.client = client or httpx.AsyncClient(timeout=settings.LLM_TIMEOUT_SECONDS)
         self.usage = UsageStats()
+        self._cache = _LLMCache(ttl=settings.LLM_CACHE_TTL_SECONDS)
 
     @property
     def is_configured(self) -> bool:
@@ -52,6 +104,12 @@ class LLMService:
 
     async def chat(self, system_prompt: str, user_prompt: str, *, temperature: float | None = None) -> str:
         """Tek bir sohbet isteği gönderir, yanıt metnini döndürür."""
+        temp = self.temperature if temperature is None else temperature
+        cached = self._cache.get(self.model, system_prompt, user_prompt, temp)
+        if cached is not None:
+            self.usage.cache_hits += 1
+            return cached
+
         url = f"{self.api_base}/chat/completions"
         payload = {
             "model": self.model,
@@ -59,7 +117,7 @@ class LLMService:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            "temperature": self.temperature if temperature is None else temperature,
+            "temperature": temp,
         }
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
@@ -82,7 +140,10 @@ class LLMService:
                 elif response.is_error:
                     raise LLMError(f"Yapay zekâ servisi isteği reddetti (HTTP {status}). {self._error_snippet(response)}".strip())
                 else:
-                    return self._parse_completion(response)
+                    result = self._parse_completion(response)
+                    self._cache.put(self.model, system_prompt, user_prompt, temp, result)
+                    self.usage.cache_misses += 1
+                    return result
 
             if attempt < self.max_retries:
                 wait = retry_after if retry_after is not None else float(self.RETRY_BACKOFF_BASE ** attempt)
@@ -129,9 +190,12 @@ class LLMService:
             raise LLMResponseError() from exc
 
     def get_usage_stats(self) -> dict:
-        return asdict(self.usage)
+        result = asdict(self.usage)
+        result.update(self._cache.stats())
+        return result
 
     async def close(self) -> None:
+        self._cache.clear()
         if self._owns_client:
             await self.client.aclose()
 
