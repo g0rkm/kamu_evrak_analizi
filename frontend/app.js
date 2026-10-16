@@ -320,6 +320,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             document.getElementById('draftToneCheckContainer').classList.add('hidden');
         }
+
+        // Human-in-the-loop: Aksyon panelini goster
+        const draftActionPanel = document.getElementById('draftActionPanel');
+        if (draftActionPanel) {
+            draftActionPanel.classList.remove('hidden');
+            // Durumlari sifirla
+            document.getElementById('draftStatusBadge').textContent = 'Beklemede';
+            document.getElementById('draftStatusBadge').className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300';
+            document.getElementById('draftActionButtons').classList.remove('hidden');
+            document.getElementById('draftEditArea').classList.add('hidden');
+            document.getElementById('draftRejectArea').classList.add('hidden');
+        }
     };
 
     copyDraftBtn.addEventListener('click', () => {
@@ -376,6 +388,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 actionContainer.appendChild(li);
             });
         }
+
+        // Human-in-the-loop: Yonlendirme aksyon panelini goster
+        const routingActionPanel = document.getElementById('routingActionPanel');
+        if (routingActionPanel) {
+            routingActionPanel.classList.remove('hidden');
+            document.getElementById('routingStatusBadge').textContent = 'Beklemede';
+            document.getElementById('routingStatusBadge').className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300';
+            document.getElementById('routingActionButtons').classList.remove('hidden');
+            document.getElementById('routingChangeArea').classList.add('hidden');
+        }
     };
 
     const renderLogs = (logs) => {
@@ -394,6 +416,40 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const renderValidation = (validation, confidenceScore, processingTime) => {
+        // PII/KVKK Ozet Kutusu
+        const piiSummaryBox = document.getElementById('piiSummaryBox');
+        const piiEntries = (validation || []).filter(v => v.field && v.field.startsWith('pii.'));
+        const draftPiiEntries = (validation || []).filter(v => v.field && v.field.startsWith('draft_pii_leak.'));
+        
+        if (piiEntries.length > 0 || draftPiiEntries.length > 0) {
+            piiSummaryBox.classList.remove('hidden');
+            document.getElementById('piiTotalCount').textContent = piiEntries.length + draftPiiEntries.length;
+            
+            const breakdown = document.getElementById('piiBreakdown');
+            breakdown.innerHTML = '';
+            const typeCounts = {};
+            piiEntries.forEach(e => {
+                const piiType = e.field.replace('pii.', '');
+                typeCounts[piiType] = (typeCounts[piiType] || 0) + 1;
+            });
+            const typeLabels = {tc_kimlik: 'TC Kimlik', iban: 'IBAN', telefon: 'Telefon', eposta: 'E-posta'};
+            for (const [type, count] of Object.entries(typeCounts)) {
+                const span = document.createElement('span');
+                span.className = 'px-2 py-1 rounded-md text-xs font-medium bg-purple-100 dark:bg-purple-800/50 text-purple-700 dark:text-purple-300';
+                span.textContent = `${typeLabels[type] || type}: ${count}`;
+                breakdown.appendChild(span);
+            }
+            
+            const leakWarning = document.getElementById('piiLeakWarning');
+            if (draftPiiEntries.length > 0) {
+                leakWarning.classList.remove('hidden');
+            } else {
+                leakWarning.classList.add('hidden');
+            }
+        } else {
+            piiSummaryBox.classList.add('hidden');
+        }
+
         // Genel Guven Skoru
         const score = Math.round((confidenceScore || 0) * 100);
         const bar = document.getElementById('overallConfidenceBar');
@@ -433,7 +489,15 @@ document.addEventListener('DOMContentLoaded', () => {
             let severityIcon = '';
             let severityClass = '';
             
-            if (entry.severity === 'correction') {
+            const isPii = entry.field && (entry.field.startsWith('pii.') || entry.field.startsWith('draft_pii_leak.'));
+            
+            if (isPii && entry.field.startsWith('draft_pii_leak.')) {
+                severityIcon = '<i class="fa-solid fa-shield-halved text-red-500"></i>';
+                severityClass = 'text-red-600 dark:text-red-400';
+            } else if (isPii) {
+                severityIcon = '<i class="fa-solid fa-shield-halved text-purple-500"></i>';
+                severityClass = 'text-purple-600 dark:text-purple-400';
+            } else if (entry.severity === 'correction') {
                 severityIcon = '<i class="fa-solid fa-wrench text-amber-500"></i>';
                 severityClass = 'text-amber-600 dark:text-amber-400';
             } else if (entry.severity === 'warning') {
@@ -454,4 +518,78 @@ document.addEventListener('DOMContentLoaded', () => {
             tbody.appendChild(tr);
         });
     };
+
+    // ── Human-in-the-Loop Event Handler'lar ──
+    
+    // Taslak: Onayla
+    document.getElementById('approveDraftBtn')?.addEventListener('click', () => {
+        const badge = document.getElementById('draftStatusBadge');
+        badge.textContent = 'Onaylandi';
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300';
+        document.getElementById('draftActionButtons').classList.add('hidden');
+    });
+    
+    // Taslak: Duzenle
+    document.getElementById('editDraftBtn')?.addEventListener('click', () => {
+        const editArea = document.getElementById('draftEditArea');
+        const textarea = document.getElementById('draftEditTextarea');
+        textarea.value = document.getElementById('draftBody').textContent || '';
+        editArea.classList.remove('hidden');
+    });
+    
+    // Taslak: Duzenlemeyi Kaydet
+    document.getElementById('saveDraftEditBtn')?.addEventListener('click', () => {
+        const textarea = document.getElementById('draftEditTextarea');
+        document.getElementById('draftBody').textContent = textarea.value;
+        document.getElementById('draftEditArea').classList.add('hidden');
+        const badge = document.getElementById('draftStatusBadge');
+        badge.textContent = 'Duzenlendi';
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300';
+        document.getElementById('draftActionButtons').classList.add('hidden');
+    });
+    
+    // Taslak: Duzenlemeyi Iptal
+    document.getElementById('cancelDraftEditBtn')?.addEventListener('click', () => {
+        document.getElementById('draftEditArea').classList.add('hidden');
+    });
+    
+    // Taslak: Reddet
+    document.getElementById('rejectDraftBtn')?.addEventListener('click', () => {
+        document.getElementById('draftRejectArea').classList.remove('hidden');
+    });
+    
+    // Taslak: Reddi Onayla
+    document.getElementById('confirmRejectBtn')?.addEventListener('click', () => {
+        const badge = document.getElementById('draftStatusBadge');
+        badge.textContent = 'Reddedildi';
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300';
+        document.getElementById('draftActionButtons').classList.add('hidden');
+        document.getElementById('draftRejectArea').classList.add('hidden');
+    });
+    
+    // Yonlendirme: Onayla
+    document.getElementById('approveRoutingBtn')?.addEventListener('click', () => {
+        const badge = document.getElementById('routingStatusBadge');
+        badge.textContent = 'Onaylandi';
+        badge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300';
+        document.getElementById('routingActionButtons').classList.add('hidden');
+    });
+    
+    // Yonlendirme: Birimi Degistir
+    document.getElementById('changeRoutingBtn')?.addEventListener('click', () => {
+        document.getElementById('routingChangeArea').classList.remove('hidden');
+    });
+    
+    // Yonlendirme: Degisikligi Kaydet
+    document.getElementById('confirmRoutingChangeBtn')?.addEventListener('click', () => {
+        const select = document.getElementById('routingUnitSelect');
+        if (select.value) {
+            document.getElementById('targetUnit').textContent = select.value;
+            const badge = document.getElementById('routingStatusBadge');
+            badge.textContent = 'Degistirildi';
+            badge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300';
+            document.getElementById('routingActionButtons').classList.add('hidden');
+            document.getElementById('routingChangeArea').classList.add('hidden');
+        }
+    });
 });
