@@ -18,6 +18,11 @@ Kamu kurumlarına gelen evrakların yapay zekâ ile otomatik sınıflandırılma
 - **Analiz Geçmişi**: Arama, türe göre filtreleme, istatistik paneli, JSON dışa aktarma
 - **Toplu İşleme ve Karşılaştırma**: Batch analiz API'si, iki evrak arasında benzerlik/fark analizi
 - **Çevrimdışı Çalışan Arayüz**: CDN bağımlılığı yok; kurum içi / internetsiz ağlarda da çalışır. Açık/koyu tema, mobil uyumlu, klavye ve ekran okuyucu erişilebilirliği
+- **Prompt Injection Koruması**: Evrak metni etiketler arasına alınır
+- **LLM Yanıt Önbelleği**: SHA-256 hash tabanlı önbellek
+- **Rate Limiting**: IP tabanlı istek sınırlama
+- **Request ID İzleme**: Her API yanıtında X-Request-ID
+- **Docker Desteği**: Tek komutla production dağıtımı
 
 ## Mimari
 
