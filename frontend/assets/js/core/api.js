@@ -84,4 +84,5 @@ export class ApiClient {
     }
 
     compare(text1, text2) { return this.request('/compare', { method: 'POST', json: { text1, text2 } }); }
+    maskPii(text) { return this.request('/mask-pii', { method: 'POST', json: { text } }); }
 }

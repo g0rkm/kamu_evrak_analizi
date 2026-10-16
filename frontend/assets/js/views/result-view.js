@@ -310,6 +310,7 @@ export class ResultView {
             h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', title: 'Kopyala', 'aria-label': 'Taslağı kopyala', onClick: () => this.copyDraft() }, icon('copy')),
             h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', title: 'Metin olarak indir', 'aria-label': 'Taslağı metin olarak indir', onClick: () => downloadBlob(this.draftPlainText(), `taslak_${this.historyId || 'yazi'}.txt`, 'text/plain;charset=utf-8') }, icon('download')),
             h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', title: 'Yazdır', 'aria-label': 'Taslağı yazdır', onClick: () => window.print() }, icon('printer')),
+            h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', title: 'PII Maskele', 'aria-label': 'Taslaktaki kişisel verileri maskele', onClick: () => this.maskDraftPii(letter) }, icon('shield')),
         );
         return controls;
     }
@@ -358,6 +359,20 @@ export class ResultView {
             this.toaster.success('Taslak panoya kopyalandı.');
         } catch {
             this.toaster.error('Panoya erişilemedi. Metni seçip elle kopyalayın.');
+        }
+    }
+
+    async maskDraftPii(letter) {
+        try {
+            const currentBody = this.draftBody();
+            const { masked_text, pii_count } = await this.api.maskPii(currentBody);
+            if (pii_count === 0) {
+                this.toaster.info('Taslakta kişisel veri bulunamadı.');
+                return;
+            }
+            await this.review.update({ draft_status: 'edited', draft_body: masked_text }, `${pii_count} kişisel veri maskelendi.`);
+        } catch (error) {
+            this.toaster.error(`PII maskeleme başarısız: ${error.message}`);
         }
     }
 
