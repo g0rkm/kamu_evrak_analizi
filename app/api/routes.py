@@ -119,6 +119,36 @@ async def analyze_batch(files: list[UploadFile] = File(...)):
     return {"total": len(results), "results": results}
 
 
+@router.post("/compare")
+async def compare_documents(body: dict):
+    """Iki evrak metnini karsilastir: benzerlik, farklar, ortak temalar."""
+    text1 = body.get("text1", "").strip()
+    text2 = body.get("text2", "").strip()
+    if not text1 or not text2:
+        raise HTTPException(status_code=400, detail="Her iki metin de gereklidir")
+
+    orchestrator = OrchestratorAgent()
+    try:
+        compare_prompt = """Sen bir kamu evrak karsilastirma uzmanisin. Iki evrak metnini karsilastir.
+
+Yanitini SADECE asagidaki JSON formatinda ver:
+{
+  "similarity_score": 0.0-1.0,
+  "common_themes": ["ortak tema 1", "ortak tema 2"],
+  "differences": ["fark 1", "fark 2"],
+  "text1_unique": "birinci evraga ozgu konular",
+  "text2_unique": "ikinci evraga ozgu konular",
+  "recommendation": "karsilastirma ozeti ve oneri"
+}"""
+        user_msg = f"Evrak 1:\n{text1[:3000]}\n\n---\n\nEvrak 2:\n{text2[:3000]}"
+        data = await orchestrator.llm_service.chat_json(compare_prompt, user_msg)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        await orchestrator.close()
+
+
 @router.get("/history")
 async def list_history(limit: int = 50, offset: int = 0):
     """Analiz gecmisini listele."""
@@ -162,5 +192,16 @@ async def export_result(record_id: str):
 
 @router.get("/health")
 async def health_check():
-    """Sistem saglik kontrolu."""
-    return {"status": "ok", "service": "Kamu Evrak Analizi Sistemi"}
+    """Sistem saglik kontrolu ve durum bilgisi."""
+    from app.services.rag_service import RAGService
+    rag = RAGService()
+
+    stats = history_service.get_stats()
+    return {
+        "status": "ok",
+        "service": "Kamu Evrak Analizi Sistemi",
+        "rag_available": rag.available,
+        "rag_chunks": len(rag.chunks) if rag.available else 0,
+        "total_analyses": stats.get("total", 0),
+        "avg_confidence": stats.get("avg_confidence", 0),
+    }
