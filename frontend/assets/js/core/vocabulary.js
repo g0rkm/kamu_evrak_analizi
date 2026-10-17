@@ -127,6 +127,18 @@ export const fmt = {
         if (s < 60) return `${s.toLocaleString('tr-TR', { maximumFractionDigits: 1 })} sn`;
         return `${Math.floor(s / 60)} dk ${String(Math.round(s % 60)).padStart(2, '0')} sn`;
     },
+    relativeTime(isoString) {
+        if (!isoString) return '—';
+        const diff = Date.now() - new Date(isoString).getTime();
+        const mins = Math.round(diff / 60000);
+        if (mins < 1) return 'az önce';
+        if (mins < 60) return `${mins} dk önce`;
+        const hours = Math.round(mins / 60);
+        if (hours < 24) return `${hours} saat önce`;
+        const days = Math.round(hours / 24);
+        if (days < 30) return `${days} gün önce`;
+        return this.date(isoString);
+    },
     date(iso) {
         if (!iso) return '—';
         const date = new Date(iso);

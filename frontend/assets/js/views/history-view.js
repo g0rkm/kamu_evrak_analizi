@@ -140,7 +140,7 @@ export class HistoryView {
                 onClick: (e) => { e.stopPropagation(); this.remove(item); },
             }, icon('trash'));
             return h('tr', { class: 'is-clickable', tabindex: 0, onClick: open, onKeydown: (e) => { if (e.key === 'Enter') open(); } },
-                h('td', { class: 'small muted', style: { whiteSpace: 'nowrap' }, 'data-optional': true }, fmt.date(item.timestamp)),
+                h('td', { class: 'small muted', style: { whiteSpace: 'nowrap' }, 'data-optional': true, title: fmt.date(item.timestamp) }, fmt.relativeTime(item.timestamp)),
                 h('td', null,
                     h('div', { style: { fontWeight: 600, overflowWrap: 'anywhere' } }, item.source_name || 'Adsız analiz'),
                     item.summary ? h('div', { class: 'small muted', style: { maxWidth: '520px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, item.summary) : null),
