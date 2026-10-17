@@ -109,6 +109,7 @@ export class ResultView {
         const unitValue = h('div', { class: 'kpi__value' }, this.currentUnit() || '—');
         this.review.subscribe(() => { unitValue.textContent = this.currentUnit() || '—'; });
 
+        const printButton = h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => window.print(), title: 'Sayfayı yazdır' }, icon('printer'), 'Yazdır');
         const exportButton = h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.exportJson() }, icon('download'), 'JSON indir');
         const newButton = h('button', { type: 'button', class: 'btn btn--primary btn--sm', onClick: () => this.onNewAnalysis?.() }, icon('plus'), 'Yeni analiz');
 
@@ -122,7 +123,7 @@ export class ResultView {
                         h('span', null, icon('refresh'), `${fmt.seconds(result.processing_time)} sürdü`),
                     ),
                 ),
-                h('div', { class: 'result-hero__actions' }, exportButton, newButton),
+                h('div', { class: 'result-hero__actions' }, printButton, exportButton, newButton),
             ),
             h('div', { class: 'kpis' },
                 h('div', { class: 'kpi' }, h('div', { class: 'kpi__label' }, 'Evrak türü'),
