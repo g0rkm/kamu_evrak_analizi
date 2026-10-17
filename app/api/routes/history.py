@@ -42,7 +42,7 @@ async def list_history(
     return result
 
 
-@router.get("/history/stats", response_model=HistoryStats)
+@router.get("/history/stats", summary="Analiz istatistikleri")
 async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
 

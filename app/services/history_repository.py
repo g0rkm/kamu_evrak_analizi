@@ -177,7 +177,7 @@ class HistoryRepository:
         items = self._summaries()
         total = len(items)
         if total == 0:
-            return {"total": 0, "avg_confidence": 0, "avg_processing_time": 0, "by_type": {}, "by_draft_status": {}}
+            return {"total": 0, "avg_confidence": 0, "avg_processing_time": 0, "by_type": {}, "by_draft_status": {}, "favorites_count": 0}
         confidences = [i["confidence_score"] for i in items]
         times = [i["processing_time"] for i in items]
         return {
@@ -190,6 +190,7 @@ class HistoryRepository:
             "max_processing_time": round(max(times), 2),
             "by_type": dict(Counter(i["document_type"] for i in items).most_common()),
             "by_draft_status": dict(Counter(i["draft_status"] for i in items)),
+            "favorites_count": sum(1 for i in items if i.get("favorite", False)),
         }
 
     # ── Yardımcılar ───────────────────────────────────────
