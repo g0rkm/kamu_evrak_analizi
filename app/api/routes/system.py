@@ -25,8 +25,15 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
         disk_free_mb = round(disk.free / (1024 * 1024), 1)
     except OSError:
         disk_free_mb = None
+
+    status = "ok"
+    if not container.llm.is_configured:
+        status = "degraded"
+    elif disk_free_mb is not None and disk_free_mb < 50:
+        status = "warning"
+
     return HealthStatus(
-        status="ok",
+        status=status,
         service=container.settings.APP_NAME,
         version=__version__,
         llm_configured=container.llm.is_configured,
@@ -40,6 +47,16 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
         active_jobs=len(container.jobs._tasks),
         disk_free_mb=disk_free_mb,
     )
+
+
+@router.get("/ready", summary="Hazırlık kontrolü (readiness probe)")
+async def readiness_check(container: ServiceContainer = Depends(get_container)):
+    checks = {
+        "llm_configured": container.llm.is_configured,
+        "history_writable": container.settings.history_path.exists(),
+    }
+    all_ok = all(checks.values())
+    return {"ready": all_ok, "checks": checks}
 
 
 @router.get("/meta", summary="Arayüzün kullandığı sözlük ve sınırlar")

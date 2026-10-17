@@ -45,12 +45,16 @@ class AnalysisService:
         return text
 
     async def analyze_text(self, text: str, title: str | None = None, observer: PipelineObserver | None = None) -> dict:
+        if not self.llm.is_configured:
+            raise InvalidInputError("Yapay zekâ servisi yapılandırılmamış. Analiz yapılamaz. Sistem yöneticinize başvurun.")
         text = self.validate_text(text)
         source_name = (title or "").strip() or self.default_title(text)
         return await self._run(DocumentInput.from_text(text, source_name), observer)
 
     async def analyze_file(self, stored: StoredFile, observer: PipelineObserver | None = None) -> dict:
         try:
+            if not self.llm.is_configured:
+                raise InvalidInputError("Yapay zekâ servisi yapılandırılmamış. Analiz yapılamaz. Sistem yöneticinize başvurun.")
             return await self._run(DocumentInput.from_file(stored.path, stored.original_name), observer)
         finally:
             self.storage.release(stored)

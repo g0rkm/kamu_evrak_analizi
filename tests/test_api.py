@@ -298,3 +298,28 @@ def test_rate_limit_config():
     s = Settings(LLM_API_KEY="test", RATE_LIMIT_REQUESTS=10, RATE_LIMIT_WINDOW=30)
     assert s.RATE_LIMIT_REQUESTS == 10
     assert s.RATE_LIMIT_WINDOW == 30
+
+
+def test_readiness_probe(client):
+    """Readiness probe endpoint'i çalışmalı."""
+    resp = client.get("/api/ready")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "ready" in data
+    assert "checks" in data
+    assert "llm_configured" in data["checks"]
+
+
+def test_unconfigured_llm_blocks_analysis(client):
+    """LLM yapılandırılmamışken analiz reddedilmeli."""
+    # fake_llm fixture'ı kullanmadan test et (LLM_API_KEY="not-set")
+    from app.config import Settings
+    from app.main import create_app
+    from starlette.testclient import TestClient
+
+    settings = Settings(LLM_API_KEY="not-set")
+    test_app = create_app(settings)
+    with TestClient(test_app) as c:
+        resp = c.post("/api/analyze-text", json={"text": "T.C. Dilekçe — test metin " * 5})
+        assert resp.status_code == 400
+        assert "yapılandırılmamış" in resp.json()["detail"].lower()

@@ -64,6 +64,12 @@ class App {
         } catch (error) {
             this.toaster.error(`Sistem bilgileri yüklenemedi: ${error.message}`);
         }
+        try {
+            const health = await this.api.health();
+            if (health.status === 'degraded') {
+                this.toaster.warn('Yapay zekâ servisi yapılandırılmamış. Analizler çalışmayacak.');
+            }
+        } catch {}
         const context = {
             api: this.api,
             vocab: new Vocabulary(meta || undefined),
