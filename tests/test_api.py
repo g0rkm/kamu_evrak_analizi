@@ -960,3 +960,10 @@ def test_search_history(client):
 def test_history_sort_by_name(client):
     response = client.get('/api/history', params={'sort': 'name_asc'});
     assert response.status_code == 200
+
+
+def test_query_logs_endpoint(client):
+    response = client.post('/api/logs/query', json={})
+    assert response.status_code == 200
+    data = response.json()
+    assert 'logs' in data

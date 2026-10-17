@@ -1,7 +1,7 @@
 import shutil
 import time
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 
 from app import __version__
@@ -337,3 +337,22 @@ async def clear_cache(container: ServiceContainer = Depends(get_container)):
         "cleared": True,
         "entries_removed": stats_before.get("cache_size", 0),
     }
+
+
+@router.post('/logs/query', tags=['Sistem'], summary='Log sorgulama')
+async def query_logs(level: str = Query('INFO'), limit: int = Query(50, ge=1, le=500), _admin=Depends(require_admin)):
+    import logging
+    logger = logging.getLogger()
+    handlers = [h for h in logger.handlers if hasattr(h, 'baseFilename')]
+    if not handlers:
+        return {'logs': [], 'message': 'Dosya log handler bulunamadi'}
+    import os
+    filepath = handlers[0].baseFilename
+    if not os.path.exists(filepath):
+        return {'logs': [], 'message': 'Log dosyasi bulunamadi'}
+    lines = []
+    with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+        for line in f:
+            if level.upper() in line.upper():
+                lines.append(line.strip())
+    return {'logs': lines[-limit:], 'total_matched': len(lines), 'level_filter': level}
