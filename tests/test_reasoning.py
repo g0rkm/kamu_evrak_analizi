@@ -352,5 +352,5 @@ def test_pii_detector_ehliyet():
     detector = PIIDetector()
     text = "Ehliyet no: 123456 numaralı belge"
     findings = detector.detect(text)
-    types = [f["type"] for f in findings]
+    types = [f.type for f in findings]
     assert "ehliyet" in types

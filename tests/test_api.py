@@ -264,14 +264,21 @@ def test_empty_text_rejected(client):
     """Boş metin analiz isteği reddedilmeli."""
     resp = client.post("/api/analyze-text", json={"text": ""})
     assert resp.status_code == 422
+    data = resp.json()
+    assert "detail" in data
 
     resp = client.post("/api/analyze-text", json={"text": "   "})
     assert resp.status_code == 422
+    data = resp.json()
+    assert "detail" in data
 
 
 def test_empty_compare_rejected(client):
     """Boş karşılaştırma metinleri reddedilmeli."""
     resp = client.post("/api/compare", json={"text1": "", "text2": "test"})
+    assert resp.status_code == 422
+
+    resp = client.post("/api/compare", json={"text1": "test", "text2": ""})
     assert resp.status_code == 422
 
 
