@@ -22,9 +22,12 @@ def register_exception_handlers(app: FastAPI) -> None:
         rid = request_id_var.get("")
         if exc.status_code >= 500:
             logger.warning("%s %s -> %s: %s [request_id=%s]", request.method, request.url.path, exc.code, exc.message, rid)
+        
+        headers = {"Retry-After": "60"} if exc.status_code == 429 else None
         return JSONResponse(
             status_code=exc.status_code,
             content={"detail": exc.message, "code": exc.code, "request_id": rid},
+            headers=headers,
         )
 
     @app.exception_handler(RequestValidationError)
@@ -43,9 +46,11 @@ def register_exception_handlers(app: FastAPI) -> None:
     async def handle_http_error(request: Request, exc: StarletteHTTPException) -> JSONResponse:
         from app.core.logging import request_id_var
         rid = request_id_var.get("")
+        headers = {"Retry-After": "60"} if exc.status_code == 429 else None
         return JSONResponse(
             status_code=exc.status_code,
             content={"detail": str(exc.detail), "code": "http_error", "request_id": rid},
+            headers=headers,
         )
 
     @app.exception_handler(Exception)
