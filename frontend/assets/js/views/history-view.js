@@ -15,6 +15,7 @@ export class HistoryView {
         this.items = [];
         this.total = 0;
         this.hasMore = false;
+        this.selectedIds = new Set();
         this.element = this.build();
     }
 
@@ -23,6 +24,13 @@ export class HistoryView {
         this.distributionRoot = h('div');
         this.tableRoot = h('div');
         this.moreRoot = h('div', { class: 'row', style: { justifyContent: 'center' } });
+
+        this.bulkDeleteBtn = h('button', {
+            type: 'button',
+            class: 'btn btn--danger btn--sm',
+            style: { display: 'none' },
+            onClick: () => this.bulkDelete(),
+        }, icon('trash-2'), ' Seçilenleri sil');
 
         this.search = h('input', { class: 'input', type: 'search', id: 'historySearch', placeholder: 'Özet, başlık, tür veya anahtar kelimede ara…', 'aria-label': 'Arama',
             onInput: debounce(() => this.load(), 300) });
@@ -48,6 +56,7 @@ export class HistoryView {
                 h('div', null, h('h1', null, 'Analiz geçmişi'), h('p', null, 'Önceki analizleri arayın, açın ve memur kararlarını takip edin.')),
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportAll() }, icon('download'), 'Tümünü dışa aktar'),
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportCsv() }, icon('download'), 'CSV indir'),
+                this.bulkDeleteBtn,
                 h('button', { type: 'button', class: 'btn btn--danger-ghost btn--sm', onClick: () => this.clearAll() }, icon('trash'), 'Tümünü sil'),
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.importRecords() }, icon('upload'), 'İçe aktar'),
                 h('button', { type: 'button', class: 'btn btn--secondary', onClick: () => this.refresh() }, icon('refresh'), 'Yenile')),
@@ -179,6 +188,20 @@ export class HistoryView {
             this.hasMore
                 ? h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.load({ append: true }) }, 'Daha fazla yükle')
                 : null);
+    }
+
+    async bulkDelete() {
+        if (this.selectedIds.size === 0) return;
+        if (!confirm(`${this.selectedIds.size} kaydı silmek istediğinizden emin misiniz?`)) return;
+        try {
+            const result = await this.api.bulkDelete([...this.selectedIds]);
+            this.toaster.success(`${result.deleted} kayıt silindi.`);
+            this.selectedIds.clear();
+            this.bulkDeleteBtn.style.display = 'none';
+            this.load();
+        } catch (e) {
+            this.toaster.error(`Silme başarısız: ${e.message}`);
+        }
     }
 
     async remove(item) {

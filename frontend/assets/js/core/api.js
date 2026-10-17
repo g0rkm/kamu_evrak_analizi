@@ -169,4 +169,12 @@ export class ApiClient {
     configExportData() {
         return this.request('/config/export');
     }
+
+    bulkDelete(ids) {
+        return this.request('/history/bulk-delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids }),
+        });
+    }
 }
