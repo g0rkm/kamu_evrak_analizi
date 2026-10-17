@@ -23,6 +23,7 @@ SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "same-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
 }
 
 
@@ -52,7 +53,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             allow_headers=["Content-Type"],
         )
 
-    app.add_middleware(RateLimitMiddleware, max_requests=60, window=60)
+    app.add_middleware(RateLimitMiddleware, max_requests=settings.RATE_LIMIT_REQUESTS, window=settings.RATE_LIMIT_WINDOW)
 
     @app.middleware("http")
     async def inject_request_id(request: Request, call_next):
@@ -102,6 +103,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             response.headers.setdefault(name, value)
         if request.url.path.startswith("/api/"):
             response.headers.setdefault("Cache-Control", "no-store")
+
+        if not request.url.path.startswith("/api/"):
+            csp = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+            header_name = "Content-Security-Policy-Report-Only" if settings.CSP_REPORT_ONLY else "Content-Security-Policy"
+            response.headers.setdefault(header_name, csp)
+
         return response
 
     @app.middleware("http")

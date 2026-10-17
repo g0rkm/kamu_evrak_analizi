@@ -52,6 +52,12 @@ class Settings(BaseSettings):
     JOB_TTL_SECONDS: int = 3600
     PIPELINE_TIMEOUT_SECONDS: float = 300.0
 
+    # Güvenlik
+    RATE_LIMIT_REQUESTS: int = 60
+    RATE_LIMIT_WINDOW: int = 60
+    TRUSTED_PROXIES: list[str] = []
+    CSP_REPORT_ONLY: bool = True
+
     @field_validator("LOG_FORMAT")
     @classmethod
     def _validate_log_format(cls, v: str) -> str:

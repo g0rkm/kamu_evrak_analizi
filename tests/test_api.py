@@ -273,3 +273,28 @@ def test_empty_compare_rejected(client):
     """Boş karşılaştırma metinleri reddedilmeli."""
     resp = client.post("/api/compare", json={"text1": "", "text2": "test"})
     assert resp.status_code == 422
+
+
+def test_csp_header_on_html(client):
+    """Frontend sayfalarında CSP header'ı bulunmalı."""
+    resp = client.get("/")
+    # Frontend mount'lu değilse skip
+    if resp.status_code == 404:
+        return
+    csp = resp.headers.get("Content-Security-Policy-Report-Only") or resp.headers.get("Content-Security-Policy")
+    assert csp is not None
+    assert "default-src 'self'" in csp
+
+
+def test_permissions_policy_header(client):
+    """API yanıtlarında Permissions-Policy header'ı bulunmalı."""
+    resp = client.get("/api/health")
+    assert resp.headers.get("Permissions-Policy") == "camera=(), microphone=(), geolocation=()"
+
+
+def test_rate_limit_config():
+    """Rate limit ayarları config'den okunmalı."""
+    from app.config import Settings
+    s = Settings(LLM_API_KEY="test", RATE_LIMIT_REQUESTS=10, RATE_LIMIT_WINDOW=30)
+    assert s.RATE_LIMIT_REQUESTS == 10
+    assert s.RATE_LIMIT_WINDOW == 30
