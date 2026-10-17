@@ -179,3 +179,31 @@ async def llm_health(container: ServiceContainer = Depends(get_container)):
         "model": container.llm.model,
         "api_base": container.llm.api_base,
     }
+
+
+@router.get("/config/export", summary="Çalışma zamanı yapılandırma dışa aktarımı")
+async def config_export(container: ServiceContainer = Depends(get_container)):
+    """Hassas olmayan yapılandırma değerlerini dışa aktarır (sorun giderme için)."""
+    settings = container.settings
+    return {
+        "app_name": settings.APP_NAME,
+        "version": __version__,
+        "log_level": settings.LOG_LEVEL,
+        "log_format": settings.LOG_FORMAT,
+        "llm_model": settings.LLM_MODEL,
+        "llm_configured": container.llm.is_configured,
+        "llm_timeout": settings.LLM_TIMEOUT_SECONDS,
+        "llm_max_retries": settings.LLM_MAX_RETRIES,
+        "llm_cache_ttl": settings.LLM_CACHE_TTL_SECONDS,
+        "llm_token_budget": settings.LLM_TOKEN_BUDGET,
+        "pipeline_timeout": settings.PIPELINE_TIMEOUT_SECONDS,
+        "max_file_mb": settings.MAX_FILE_SIZE_MB,
+        "min_text_chars": settings.MIN_TEXT_CHARS,
+        "max_text_chars": settings.MAX_TEXT_CHARS,
+        "max_batch_files": settings.MAX_BATCH_FILES,
+        "rag_available": container.rag.available,
+        "rag_chunks": container.rag.chunk_count,
+        "rate_limit": f"{settings.RATE_LIMIT_REQUESTS}/{settings.RATE_LIMIT_WINDOW}s",
+        "csp_report_only": settings.CSP_REPORT_ONLY,
+        "keep_uploads": settings.KEEP_UPLOADS,
+    }

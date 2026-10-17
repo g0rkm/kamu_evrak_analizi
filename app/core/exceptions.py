@@ -78,3 +78,9 @@ class CircuitBreakerOpenError(LLMUnavailableError):
     """Devre kesici açık — LLM servisi geçici olarak devre dışı."""
     code = "circuit_breaker_open"
     default_message = "Yapay zekâ servisi art arda hatalar nedeniyle geçici olarak devre dışı bırakıldı. Lütfen birkaç dakika sonra tekrar deneyin."
+
+
+class RateLimitError(AppError):
+    status_code = 429
+    code = "rate_limit_exceeded"
+    default_message = "İstek sınırı aşıldı. Lütfen biraz bekleyin."
