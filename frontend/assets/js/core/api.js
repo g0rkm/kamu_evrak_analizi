@@ -136,4 +136,20 @@ export class ApiClient {
     llmStats() {
         return this.request('/stats/llm');
     }
+
+    configExport() {
+        return this.request('/config/export');
+    }
+
+    clearCache() {
+        return this.request('/cache/clear', { method: 'POST', json: {} });
+    }
+
+    readinessCheck() {
+        return this.request('/ready');
+    }
+
+    requestStats() {
+        return this.request('/stats/requests');
+    }
 }
