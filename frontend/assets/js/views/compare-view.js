@@ -54,6 +54,13 @@ export class CompareView {
             (text1.length < min ? this.first : this.second).textarea.focus();
             return;
         }
+        const max = this.vocab.limits.max_text_chars;
+        if (text1.length > max || text2.length > max) {
+            this.error.hidden = false;
+            replace(this.error, icon('alert'), `Her iki metin de en fazla ${fmt.number(max)} karakter olabilir.`);
+            (text1.length > max ? this.first : this.second).textarea.focus();
+            return;
+        }
         this.error.hidden = true;
         this.button.disabled = true;
         replace(this.button, icon('loader', 'spin'), 'Karşılaştırılıyor…');

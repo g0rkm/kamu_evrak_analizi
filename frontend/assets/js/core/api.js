@@ -30,6 +30,13 @@ export class ApiClient {
         return typeof navigator.onLine === 'boolean' ? navigator.onLine : true;
     }
 
+    requestWithTimeout(path, options = {}, timeoutMs = 30000) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        return this.request(path, { ...options, signal: controller.signal })
+            .finally(() => clearTimeout(timer));
+    }
+
     async requestWithRetry(path, options = {}, { retries = 2, retryDelay = 1000 } = {}) {
         for (let attempt = 0; attempt <= retries; attempt++) {
             try {
