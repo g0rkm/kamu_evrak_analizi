@@ -39,6 +39,7 @@ const PII_LABELS = {
     tc_kimlik: 'TC Kimlik No', iban: 'IBAN', telefon: 'Telefon', eposta: 'E-posta',
     sabit_tel: 'Sabit Telefon', plaka: 'Araç Plakası', pasaport: 'Pasaport No',
     vergi_no: 'Vergi No', sgk_no: 'SGK Sicil No', kredi_kart: 'Kredi Kartı', saglik_no: 'Sağlık Provizyon No',
+    ehliyet: 'Ehliyet No',
 };
 
 export const SEVERITY = {

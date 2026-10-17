@@ -46,6 +46,7 @@ DEFAULT_PATTERNS: tuple[PIIPattern, ...] = (
     PIIPattern("sgk_no", "SGK Sicil Numarası", re.compile(r"\b\d{7,9}[-/]\d{2,4}\b"), "info"),
     PIIPattern("kredi_kart", "Kredi Kartı Numarası", re.compile(r"\b(?:4\d{3}|5[1-5]\d{2}|6011)\s?\d{4}\s?\d{4}\s?\d{4}\b"), "warning"),
     PIIPattern("saglik_no", "Sağlık Provizyon No", re.compile(r"\bPRV[-/]?\d{8,12}\b", re.IGNORECASE), "info"),
+    PIIPattern("ehliyet", "Ehliyet Numarası", re.compile(r"(?i)ehliyet\s*(?:no|numaras[ıi])?\s*:?\s*(\d{6,8})"), "info"),
 )
 
 
