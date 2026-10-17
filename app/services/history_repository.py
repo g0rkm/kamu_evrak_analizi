@@ -116,7 +116,7 @@ class HistoryRepository:
         except (json.JSONDecodeError, OSError):
             return None
 
-    def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None, sort: str | None = None, date_from: str | None = None, date_to: str | None = None) -> dict:
+    def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None, sort: str | None = None, date_from: str | None = None, date_to: str | None = None, min_confidence: float | None = None) -> dict:
         items = self._summaries()
         if document_type:
             items = [i for i in items if i["document_type"] == document_type]
@@ -135,6 +135,8 @@ class HistoryRepository:
             items = [i for i in items if i.get("timestamp", "") >= date_from]
         if date_to:
             items = [i for i in items if i.get("timestamp", "")[:10] <= date_to]
+        if min_confidence is not None:
+            items = [i for i in items if i.get("confidence_score", 0) >= min_confidence]
         if sort == "oldest":
             items.sort(key=lambda i: i["timestamp"])
         elif sort == "confidence_desc":
