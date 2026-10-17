@@ -976,3 +976,8 @@ def test_list_document_types(client):
     assert 'types' in data
     assert isinstance(data['types'], list)
     assert 'total_types' in data
+
+
+def test_audit_log_not_found(client):
+    response = client.get('/api/history/nonexistent/audit')
+    assert response.status_code == 404

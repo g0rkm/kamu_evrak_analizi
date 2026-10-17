@@ -239,11 +239,14 @@ async def export_result(record_id: str, history: HistoryRepository = Depends(get
     )
 
 
-@router.get("/history/{record_id}/audit", summary="Denetim kaydını getir")
-async def get_audit_log(record_id: str, history: HistoryRepository = Depends(get_history)):
-    record = _require(history, record_id)
-    review = record.get("review") or {}
-    return {"record_id": record_id, "audit_log": review.get("audit_log", [])}
+@router.get("/history/{record_id}/audit", summary="Kayıt denetim geçmişi")
+async def get_audit_log(record_id: str, container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if record is None:
+        raise NotFoundError("Analiz kaydı bulunamadı.")
+    review = record.get("review", {})
+    audit_log = review.get("audit_log", [])
+    return {"record_id": record_id, "audit_log": audit_log, "total_entries": len(audit_log)}
 
 
 @router.post("/history/import", summary="Dışa aktarılmış kayıtları içe aktar")
