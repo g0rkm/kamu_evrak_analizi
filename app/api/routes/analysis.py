@@ -1,9 +1,12 @@
 """Senkron analiz uç noktaları (API istemcileri ve betikler için)."""
+import asyncio
+import logging
+import time
 from fastapi import APIRouter, Depends, File, UploadFile
 
 from app.api.dependencies import get_analysis_service, get_container, get_storage
 from app.container import ServiceContainer
-from app.core.exceptions import AppError, InvalidInputError
+from app.core.exceptions import AppError, InvalidInputError, PipelineTimeoutError
 from app.models.api import (
     AnalysisResponse, BatchItem, BatchResponse, CompareRequest, ComparisonResult, TextAnalysisRequest,
 )
@@ -11,6 +14,7 @@ from app.services.analysis_service import AnalysisService
 from app.services.upload_storage import UploadStorage
 
 router = APIRouter(tags=["analiz"])
+logger = logging.getLogger(__name__)
 
 
 @router.post("/analyze", response_model=AnalysisResponse, summary="Dosya yükleyerek analiz et")
@@ -20,7 +24,11 @@ async def analyze_document(
     service: AnalysisService = Depends(get_analysis_service),
 ):
     stored = await storage.save(file)
-    return await service.analyze_file(stored)
+    try:
+        return await asyncio.wait_for(service.analyze_file(stored), timeout=60.0)
+    except (asyncio.TimeoutError, TimeoutError):
+        logger.warning("Analiz pipeline süresi aşıldı (dosya: %s)", getattr(stored, "filename", "bilinmiyor"))
+        raise PipelineTimeoutError()
 
 
 @router.post("/analyze-text", response_model=AnalysisResponse, summary="Düz metin olarak analiz et")
@@ -37,7 +45,6 @@ async def analyze_batch(
     if len(files) > limit:
         raise InvalidInputError(f"Tek seferde en fazla {limit} dosya yüklenebilir.")
 
-    import logging
     batch_logger = logging.getLogger("api.batch")
     batch_logger.info("Toplu analiz başlatıldı: %d dosya", len(files))
 

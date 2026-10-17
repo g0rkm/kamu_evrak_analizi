@@ -8,7 +8,7 @@ kodunu ve istemcinin programatik olarak ayırt edebileceği bir `code` taşır.
 class AppError(Exception):
     status_code: int = 500
     code: str = "internal_error"
-    default_message: str = "Beklenmeyen bir hata oluştu."
+    default_message: "Beklenmeyen bir hata oluştu."
 
     def __init__(self, message: str | None = None) -> None:
         self.message = message or self.default_message
@@ -84,3 +84,10 @@ class RateLimitError(AppError):
     status_code = 429
     code = "rate_limit_exceeded"
     default_message = "İstek sınırı aşıldı. Lütfen biraz bekleyin."
+
+
+class MaintenanceModeError(AppError):
+    """Sistem bakım modundayken gelen istekler için."""
+    status_code = 503
+    code = "maintenance_mode"
+    default_message = "Sistem şu anda bakım modundadır. Lütfen daha sonra tekrar deneyin."
