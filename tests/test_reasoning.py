@@ -43,11 +43,24 @@ def test_confidence_penalties():
 
 
 def test_pii_detector():
-    assert is_valid_tc_kimlik("10000000146")
-    assert not is_valid_tc_kimlik("12345678901")
-    findings = PIIDetector().detect("TC: 10000000146, e-posta: ornek@kurum.gov.tr")
-    assert {f.type for f in findings} == {"tc_kimlik", "eposta"}
+    from app.services.pii_detector import PIIDetector
+    d = PIIDetector()
+    text = "TC: 10000000146, Tel: 0532 123 45 67, Mail: test@example.com, Geçersiz TC: 12345678901, Sabit: 0312 456 78 90"
+    findings = d.detect(text)
+    types = {f.type for f in findings}
+    assert "tc_kimlik" in types
+    assert "telefon" in types
+    assert "eposta" in types
+    assert "sabit_tel" in types
     assert all("***" in f.masked_value for f in findings)
+    # Geçersiz TC atlanmalı (sağlama başarısız)
+    assert sum(1 for f in findings if f.type == "tc_kimlik") == 1
+
+    # mask_text metodu calismali
+    masked = d.mask_text(text)
+    assert "10000000146" not in masked
+    assert "0532 123 45 67" not in masked
+    assert "***" in masked
 
 
 def test_llm_json_parsing():
