@@ -49,7 +49,8 @@ class UploadStorage:
 
     @staticmethod
     def display_name(filename: str | None) -> str:
-        name = PurePath((filename or "").replace("\\", "/")).name.strip()
+        raw = (filename or "").replace("\x00", "").replace("\\", "/")
+        name = PurePath(raw).name.strip()
         return name[:200] or "adsiz_dosya"
 
     def validate_name(self, filename: str | None) -> tuple[str, str]:

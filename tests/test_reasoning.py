@@ -204,3 +204,37 @@ def test_config_validators():
     s = Settings(LLM_API_KEY="test", MIN_TEXT_CHARS=5, MAX_TEXT_CHARS=500)
     assert s.MIN_TEXT_CHARS == 5
     assert s.MAX_TEXT_CHARS == 500
+
+
+def test_upload_display_name_sanitizes():
+    """Dosya adı sanitize edilmeli."""
+    from app.services.upload_storage import UploadStorage
+
+    assert UploadStorage.display_name(None) == "adsiz_dosya"
+    assert UploadStorage.display_name("") == "adsiz_dosya"
+    assert UploadStorage.display_name("../../etc/passwd") == "passwd"
+    assert UploadStorage.display_name("dosya\x00.pdf") == "dosya.pdf"
+    assert UploadStorage.display_name("normal_dosya.pdf") == "normal_dosya.pdf"
+    assert UploadStorage.display_name("a" * 300 + ".pdf") == ("a" * 196 + ".pdf")
+
+
+def test_metrics_snapshot():
+    """Metrik snapshot'ı çalışmalı."""
+    from app.core.metrics import Metrics
+
+    m = Metrics()
+    m.record_request(200)
+    m.record_request(200)
+    m.record_request(404)
+    m.record_request(500)
+
+    snap = m.snapshot()
+    assert snap["total_requests"] == 4
+    assert snap["total_errors"] == 2
+    assert snap["error_rate"] == 0.5
+    assert snap["status_codes"][200] == 2
+    assert snap["status_codes"][500] == 1
+
+    m.reset()
+    snap = m.snapshot()
+    assert snap["total_requests"] == 0

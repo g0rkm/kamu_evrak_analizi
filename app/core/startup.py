@@ -57,4 +57,15 @@ def verify_environment(settings: Settings) -> list[str]:
     if not warnings:
         logger.info("Ortam doğrulaması tamamlandı — tüm kontroller başarılı.")
 
+    # Önceki çalışmadan kalan geçici dosyaları temizle
+    tmp_count = 0
+    for tmp_file in settings.resolve(settings.HISTORY_DIR).glob("*.json.tmp"):
+        try:
+            tmp_file.unlink()
+            tmp_count += 1
+        except OSError:
+            pass
+    if tmp_count:
+        logger.info("Geçici dosya temizliği: %d dosya silindi.", tmp_count)
+
     return warnings
