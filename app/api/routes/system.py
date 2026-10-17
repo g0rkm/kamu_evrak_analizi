@@ -200,6 +200,8 @@ async def config_export(container: ServiceContainer = Depends(get_container)):
     return {
         "app_name": settings.APP_NAME,
         "version": __version__,
+        "environment": container.settings.ENVIRONMENT,
+        "maintenance_mode": container.settings.MAINTENANCE_MODE,
         "log_level": settings.LOG_LEVEL,
         "log_format": settings.LOG_FORMAT,
         "llm_model": settings.LLM_MODEL,
