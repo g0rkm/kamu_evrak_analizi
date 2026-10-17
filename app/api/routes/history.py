@@ -58,3 +58,10 @@ async def export_result(record_id: str, history: HistoryRepository = Depends(get
         content=content,
         headers={"Content-Disposition": f'attachment; filename="analiz_{record_id}.json"'},
     )
+
+
+@router.get("/history/{record_id}/audit", summary="Denetim kaydını getir")
+async def get_audit_log(record_id: str, history: HistoryRepository = Depends(get_history)):
+    record = _require(history, record_id)
+    review = record.get("review") or {}
+    return {"record_id": record_id, "audit_log": review.get("audit_log", [])}
