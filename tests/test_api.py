@@ -880,3 +880,21 @@ def test_redoc_available(client):
     """ReDoc endpoint'i erişilebilir olmalı."""
     response = client.get("/redoc")
     assert response.status_code == 200
+
+
+def test_history_stats_includes_favorites(client):
+    """History stats favorites_count alanını içermeli."""
+    response = client.get("/api/history/stats")
+    assert response.status_code == 200
+    data = response.json()
+    assert "favorites_count" in data
+    assert data["favorites_count"] >= 0
+
+
+def test_history_trends_default_30_days(client):
+    """Trends endpoint varsayılan olarak 30 günlük veri döndürmeli."""
+    response = client.get("/api/history/trends")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["days"] == 30
+    assert len(data["trends"]) == 30

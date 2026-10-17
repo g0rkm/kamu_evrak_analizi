@@ -460,3 +460,14 @@ def test_metrics_endpoint_tracking():
     snap = m.snapshot()
     assert snap["top_endpoints"]["/api/health"] == 2
     assert snap["top_endpoints"]["/api/meta"] == 1
+
+
+def test_history_repository_stats_favorites_count():
+    """History stats boş depoda favorites_count 0 olmalı."""
+    from app.services.history_repository import HistoryRepository
+    from pathlib import Path
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = HistoryRepository(Path(tmp))
+        stats = repo.stats()
+        assert stats["favorites_count"] == 0
