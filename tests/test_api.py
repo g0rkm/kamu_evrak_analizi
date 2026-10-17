@@ -667,7 +667,7 @@ def test_api_version_header(client):
 def test_admin_endpoint_without_token(client):
     """Admin token yokken hassas endpoint'ler erişilebilir olmalı."""
     # ADMIN_TOKEN boş olduğunda kontrol atlanır
-    response = client.post("/api/cache/clear")
+    response = client.post("/api/cache/clear", json={})
     assert response.status_code == 200
 
 
@@ -679,7 +679,7 @@ def test_admin_endpoint_with_wrong_token():
     settings = Settings(ADMIN_TOKEN="test-secret-token")
     app = create_app(settings=settings)
     with TestClient(app) as mc:
-        response = mc.post("/api/cache/clear", headers={"Authorization": "Bearer wrong-token"})
+        response = mc.post("/api/cache/clear", json={}, headers={"Authorization": "Bearer wrong-token"})
         assert response.status_code == 401
 
 
@@ -691,5 +691,5 @@ def test_admin_endpoint_with_correct_token():
     settings = Settings(ADMIN_TOKEN="test-secret-token")
     app = create_app(settings=settings)
     with TestClient(app) as mc:
-        response = mc.post("/api/cache/clear", headers={"Authorization": "Bearer test-secret-token"})
+        response = mc.post("/api/cache/clear", json={}, headers={"Authorization": "Bearer test-secret-token"})
         assert response.status_code == 200
