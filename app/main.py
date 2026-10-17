@@ -85,6 +85,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             response.headers.setdefault("Cache-Control", "no-store")
         return response
 
+    @app.middleware("http")
+    async def limit_request_body(request: Request, call_next):
+        content_length = request.headers.get("content-length")
+        if content_length and request.url.path.startswith("/api/"):
+            max_body = settings.max_file_bytes + 1024  # dosya limiti + header overhead
+            if int(content_length) > max_body:
+                from fastapi.responses import JSONResponse
+                return JSONResponse(
+                    status_code=413,
+                    content={"detail": "İstek gövdesi çok büyük.", "code": "body_too_large"},
+                )
+        return await call_next(request)
+
     register_exception_handlers(app)
     app.include_router(router)
 
