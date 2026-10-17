@@ -528,7 +528,7 @@ def test_analysis_timeout_config_validation():
 def test_pii_mask_text():
     from app.services.pii_detector import PIIDetector
     d = PIIDetector()
-    result = d.mask_text('Email: test@test.com ve tel: +905551234567')
+    result = d.mask_text('Email: test@test.com ve tel: 05551234567')
     assert '[***EPOSTA***]' in result
     assert '[***TELEFON***]' in result
     assert 'test@test.com' not in result
