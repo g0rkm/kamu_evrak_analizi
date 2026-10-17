@@ -34,6 +34,8 @@ export class CompareView {
                 h('div', null, h('h1', null, 'Evrak karşılaştırma'), h('p', null, 'İki evrak arasındaki benzerlikleri, farkları ve ortak temaları görün.'))),
             h('section', { class: 'card card__body stack' },
                 h('div', { class: 'compare-grid' }, this.first.element, this.second.element),
+                h('div', { class: 'row', style: { justifyContent: 'center' } },
+                    h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.swap(), title: 'Metinleri yer değiştir' }, icon('refresh'), 'Yer değiştir')),
                 this.error,
                 h('div', { class: 'row' }, this.button, h('span', { class: 'field__hint' }, h('span', { class: 'kbd' }, 'Ctrl'), ' + ', h('span', { class: 'kbd' }, 'Enter')))),
             this.resultRoot,
@@ -89,5 +91,13 @@ export class CompareView {
                 }}, icon('copy'), 'Sonucu kopyala'),
             ),
         ));
+    }
+
+    swap() {
+        const tmp = this.first.textarea.value;
+        this.first.textarea.value = this.second.textarea.value;
+        this.second.textarea.value = tmp;
+        this.first.textarea.dispatchEvent(new Event('input'));
+        this.second.textarea.dispatchEvent(new Event('input'));
     }
 }

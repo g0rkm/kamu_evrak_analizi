@@ -28,6 +28,12 @@ export class HistoryView {
         this.typeFilter = h('select', { class: 'select', 'aria-label': 'Evrak türüne göre filtrele', onChange: () => this.load() },
             h('option', { value: '' }, 'Tüm evrak türleri'),
             [...this.vocab.documentTypes.values()].map((t) => h('option', { value: t.code }, t.label)));
+        this.statusFilter = h('select', { class: 'select', 'aria-label': 'Taslak durumuna göre filtrele', onChange: () => this.load() },
+            h('option', { value: '' }, 'Tüm durumlar'),
+            h('option', { value: 'pending' }, 'Bekliyor'),
+            h('option', { value: 'approved' }, 'Onaylandı'),
+            h('option', { value: 'rejected' }, 'Reddedildi'),
+            h('option', { value: 'edited' }, 'Düzenlendi'));
 
         return h('div', { class: 'stack' },
             h('div', { class: 'view-header' },
@@ -43,7 +49,8 @@ export class HistoryView {
                 h('div', { class: 'card__body stack' },
                     h('div', { class: 'toolbar' },
                         h('label', { class: 'input-icon' }, h('span', { class: 'sr-only' }, 'Geçmişte ara'), icon('search'), this.search),
-                        this.typeFilter),
+                        this.typeFilter,
+                        this.statusFilter),
                     this.tableRoot,
                     this.moreRoot)),
         );
@@ -89,9 +96,11 @@ export class HistoryView {
 
     async load({ append = false } = {}) {
         const query = { q: this.search.value.trim(), documentType: this.typeFilter.value, limit: PAGE_SIZE, offset: append ? this.items.length : 0 };
+        const statusValue = this.statusFilter.value;
         if (!append) replace(this.tableRoot, emptyState({ iconName: 'loader', title: 'Yükleniyor…', compact: true }));
         try {
             const page = await this.api.history(query);
+            if (statusValue) { page.items = page.items.filter(i => i.draft_status === statusValue); page.total = page.items.length; }
             this.items = append ? [...this.items, ...page.items] : page.items;
             this.total = page.total;
             this.renderTable();
@@ -101,7 +110,7 @@ export class HistoryView {
     }
 
     renderTable() {
-        const filtered = this.search.value.trim() || this.typeFilter.value;
+        const filtered = this.search.value.trim() || this.typeFilter.value || this.statusFilter.value;
         if (!this.items.length) {
             replace(this.tableRoot, filtered
                 ? emptyState({ iconName: 'search', title: 'Sonuç bulunamadı', text: 'Arama ölçütlerini değiştirip tekrar deneyin.', compact: true })
