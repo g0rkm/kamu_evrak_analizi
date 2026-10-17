@@ -83,12 +83,12 @@ export class HistoryView {
 
     renderStats(stats) {
         const reviewed = (stats.by_draft_status?.approved || 0) + (stats.by_draft_status?.edited || 0);
-        const tile = (iconName, label, value) => h('div', { class: 'stat' }, h('div', { class: 'stat__label' }, icon(iconName), label), h('div', { class: 'stat__value' }, value));
+        const tile = (iconName, label, value, title = '') => h('div', { class: 'stat', title }, h('div', { class: 'stat__label' }, icon(iconName), label), h('div', { class: 'stat__value' }, value));
         replace(this.statsRoot,
-            tile('file', 'Toplam analiz', fmt.number(stats.total)),
-            tile('shieldCheck', 'Ortalama güven', fmt.percent(stats.avg_confidence)),
-            tile('clock', 'Ortalama süre', fmt.seconds(stats.avg_processing_time)),
-            tile('userCheck', 'Onaylanan taslak', fmt.number(reviewed)));
+            tile('file', 'Toplam analiz', fmt.number(stats.total), `${stats.total} analiz kaydı`),
+            tile('shieldCheck', 'Ortalama güven', fmt.percent(stats.avg_confidence), `Ortalama güven skoru: %${Math.round(stats.avg_confidence * 100)}`),
+            tile('clock', 'Ortalama süre', fmt.seconds(stats.avg_processing_time), `Ortalama işlem süresi: ${stats.avg_processing_time.toFixed(1)} saniye`),
+            tile('userCheck', 'Onaylanan taslak', fmt.number(reviewed), `Onaylanmış: ${stats.by_draft_status?.approved || 0}, Düzenlenmiş: ${stats.by_draft_status?.edited || 0}`));
 
         const entries = Object.entries(stats.by_type || {}).sort((a, b) => b[1] - a[1]);
         if (!entries.length) {

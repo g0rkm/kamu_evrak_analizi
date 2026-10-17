@@ -88,6 +88,11 @@ class App {
             const health = await this.api.health();
             if (health.status === 'degraded') {
                 this.toaster.warn('Yapay zekâ servisi yapılandırılmamış. Analizler çalışmayacak.');
+            } else if (health.status === 'warning') {
+                this.toaster.warn('Sistem uyarısı: disk alanı düşük.');
+            }
+            if (health.warnings?.length) {
+                health.warnings.forEach(w => this.toaster.warn(w));
             }
         } catch {}
         const context = {

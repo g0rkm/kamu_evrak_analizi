@@ -488,6 +488,13 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 /* ---------- İstatistik ---------- */
 
 .stat { padding: 16px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); }
+.stat {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.stat:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
 .stat__label { font-size: 12px; color: var(--muted); font-weight: 600; display: flex; align-items: center; gap: 6px; }
 .stat__value { font-size: 26px; font-weight: 750; margin-top: 4px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 
