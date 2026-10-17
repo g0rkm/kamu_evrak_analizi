@@ -84,10 +84,12 @@ class HistoryRepository:
         except (json.JSONDecodeError, OSError):
             return None
 
-    def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None) -> dict:
+    def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None) -> dict:
         items = self._summaries()
         if document_type:
             items = [i for i in items if i["document_type"] == document_type]
+        if draft_status:
+            items = [i for i in items if i["draft_status"] == draft_status]
         if query:
             needle = query.casefold()
             items = [
@@ -95,7 +97,7 @@ class HistoryRepository:
                 if needle in i["summary"].casefold()
                 or needle in i["source_name"].casefold()
                 or needle in i["document_type"].casefold()
-                or needle in i.get("keywords", "").casefold()
+                or needle.get("keywords", "").casefold()
             ]
         return {"total": len(items), "items": items[offset: offset + limit]}
 
