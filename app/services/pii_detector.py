@@ -42,6 +42,8 @@ DEFAULT_PATTERNS: tuple[PIIPattern, ...] = (
     PIIPattern("eposta", "E-posta Adresi", re.compile(r"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b"), "info"),
     PIIPattern("plaka", "Araç Plakası", re.compile(r"\b\d{2}\s?[A-Z]{1,3}\s?\d{2,4}\b"), "info"),
     PIIPattern("pasaport", "Pasaport Numarası", re.compile(r"\b[A-Z]\s?\d{2}\s?\d{3}\s?\d{3}\b"), "warning"),
+    PIIPattern("vergi_no", "Vergi Numarası", re.compile(r"\bV\.?D\.?\s*:?\s*\d{10}\b"), "info"),
+    PIIPattern("sgk_no", "SGK Sicil Numarası", re.compile(r"\b\d{7,9}[-/]\d{2,4}\b"), "info"),
 )
 
 

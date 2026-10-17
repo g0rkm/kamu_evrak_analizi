@@ -45,13 +45,15 @@ def test_confidence_penalties():
 def test_pii_detector():
     from app.services.pii_detector import PIIDetector
     d = PIIDetector()
-    text = "TC: 10000000146, Tel: 0532 123 45 67, Mail: test@example.com, Geçersiz TC: 12345678901, Sabit: 0312 456 78 90"
+    text = "TC: 10000000146, Tel: 0532 123 45 67, Mail: test@example.com, Geçersiz TC: 12345678901, Sabit: 0312 456 78 90, VD: 1234567890, SGK: 1234567-01"
     findings = d.detect(text)
     types = {f.type for f in findings}
     assert "tc_kimlik" in types
     assert "telefon" in types
     assert "eposta" in types
     assert "sabit_tel" in types
+    assert "vergi_no" in types
+    assert "sgk_no" in types
     assert all("***" in f.masked_value for f in findings)
     # Geçersiz TC atlanmalı (sağlama başarısız)
     assert sum(1 for f in findings if f.type == "tc_kimlik") == 1
