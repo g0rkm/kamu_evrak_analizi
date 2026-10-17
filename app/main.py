@@ -56,10 +56,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.middleware("http")
     async def inject_request_id(request: Request, call_next):
+        import time as _time
         rid = request.headers.get("X-Request-ID") or new_request_id()
         request_id_var.set(rid)
+        start = _time.perf_counter()
         response = await call_next(request)
         response.headers["X-Request-ID"] = rid
+        response.headers["X-Response-Time"] = f"{((_time.perf_counter() - start) * 1000):.0f}ms"
         return response
 
     @app.middleware("http")
