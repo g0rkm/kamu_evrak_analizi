@@ -51,11 +51,7 @@ async def export_all_records(history: HistoryRepository = Depends(get_history)):
 
 @router.delete("/history/clear", summary="Tüm analiz kayıtlarını sil")
 async def clear_all_records(history: HistoryRepository = Depends(get_history)):
-    items = history.list_records(limit=10000)
-    deleted = 0
-    for item in items["items"]:
-        if history.delete(item["id"]):
-            deleted += 1
+    deleted = history.clear_all()
     return {"deleted": deleted}
 
 

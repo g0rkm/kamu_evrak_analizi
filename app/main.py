@@ -87,11 +87,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         # Basit CSRF koruması: durum değiştiren API istekleri Content-Type başlığı gerektirir
         if (
             request.url.path.startswith("/api/")
-            and request.method in ("POST", "PATCH", "PUT")
+            and request.method in ("POST", "PATCH", "PUT", "DELETE")
             and not request.url.path.endswith("/file")  # multipart upload hariç
         ):
             ct = (request.headers.get("content-type") or "").lower()
-            if not ct.startswith(("application/json", "multipart/form-data")):
+            if request.method == "DELETE" and not ct:
+                pass  # DELETE istekleri body gerektirmez
+            elif not ct.startswith(("application/json", "multipart/form-data")):
                 from fastapi.responses import JSONResponse
                 return JSONResponse(
                     status_code=400,

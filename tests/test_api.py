@@ -347,3 +347,11 @@ def test_keyword_search_in_history(client, fake_llm):
     client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — kaldırım onarımı talebi " * 5})
     resp = client.get("/api/history?q=onarım")
     assert resp.status_code == 200
+
+
+def test_delete_without_content_type_allowed(client, fake_llm):
+    """DELETE isteği Content-Type olmadan da çalışmalı."""
+    client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — test kayıt " * 5})
+    # Content-Type header'ı olmadan DELETE isteği
+    resp = client.delete("/api/history/clear")
+    assert resp.status_code == 200
