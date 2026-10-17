@@ -168,7 +168,9 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
 
 @router.get("/stats/requests", summary="HTTP istek metrikleri")
 async def request_stats():
-    return app_metrics.snapshot()
+    data = app_metrics.snapshot()
+    data["error_rate"] = app_metrics.error_rate()
+    return data
 
 
 @router.get("/health/llm", summary="LLM bağlantı testi")

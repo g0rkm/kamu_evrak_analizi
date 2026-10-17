@@ -520,3 +520,14 @@ def test_history_pagination_metadata(client):
     assert data["offset"] == 0
     assert data["limit"] == 10
     assert isinstance(data["has_more"], bool)
+
+
+def test_request_stats_includes_error_rate(client):
+    # Önce birkaç istek yaparak metrikleri oluştur
+    client.get("/api/health")
+    client.get("/api/nonexistent")
+    resp = client.get("/api/stats/requests")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "error_rate" in data
+    assert isinstance(data["error_rate"], (int, float))
