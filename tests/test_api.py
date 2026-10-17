@@ -898,3 +898,11 @@ def test_history_trends_default_30_days(client):
     data = response.json()
     assert data["days"] == 30
     assert len(data["trends"]) == 30
+
+
+def test_validate_text_endpoint(client):
+    response = client.post('/api/validate-text', json={'text': 'Bu bir test metnidir.'})
+    assert response.status_code == 200
+    data = response.json()
+    assert 'valid' in data
+    assert 'char_count' in data

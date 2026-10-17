@@ -124,6 +124,26 @@ async def mask_pii(body: MaskRequest):
     return MaskResponse(masked_text=masked, pii_count=len(findings))
 
 
+@router.post('/validate-text', summary='Metin dogrulama')
+async def validate_text(body: MaskRequest):
+    issues = []
+    if len(body.text.strip()) < 10:
+        issues.append('Metin çok kısa (minimum 10 karakter).')
+    if body.text.count('\n') > 500:
+        issues.append('Metin çok fazla satır içeriyor.')
+    from app.services.pii_detector import PIIDetector
+    detector = PIIDetector()
+    findings = detector.detect(body.text)
+    if findings:
+        issues.append(f'{len(findings)} adet kişisel veri tespit edildi.')
+    return {
+        'valid': len(issues) == 0,
+        'issues': issues,
+        'char_count': len(body.text),
+        'line_count': body.text.count(chr(10)) + 1
+    }
+
+
 @router.get("/stats/llm", summary="LLM kullanım istatistikleri")
 async def llm_stats(container: ServiceContainer = Depends(get_container)):
     stats = container.llm.get_usage_stats()
