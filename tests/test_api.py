@@ -461,3 +461,25 @@ def test_null_byte_stripped_from_text(client):
     )
     # İstek başarılı olmalı (503 = LLM bağlanamadı, ama null byte hatası olmamalı)
     assert resp.status_code in (200, 503)
+
+
+def test_pii_mask_kredi_kart(client):
+    resp = client.post(
+        "/api/mask-pii",
+        json={"text": "Kart: 4539 1234 5678 9012"},
+        headers={"Content-Type": "application/json"},
+    )
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["pii_count"] >= 1
+    assert "4539 1234 5678 9012" not in data["masked_text"]
+
+
+def test_readiness_probe_checks(client):
+    resp = client.get("/api/ready")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "ready" in data
+    assert "checks" in data
+    assert "llm_configured" in data["checks"]
+    assert "history_writable" in data["checks"]

@@ -64,6 +64,16 @@ def test_pii_detector():
     assert "0532 123 45 67" not in masked
     assert "***" in masked
 
+    # Kredi kartı tespiti
+    kredi_text = "Kart numarası: 4539 1234 5678 9012"
+    kredi_findings = PIIDetector().detect(kredi_text)
+    assert any(f.type == "kredi_kart" for f in kredi_findings), "Kredi kartı tespit edilmeli"
+
+    # Sağlık provizyon no tespiti
+    saglik_text = "Provizyon numarası: PRV-12345678"
+    saglik_findings = PIIDetector().detect(saglik_text)
+    assert any(f.type == "saglik_no" for f in saglik_findings), "Sağlık provizyon no tespit edilmeli"
+
 
 def test_llm_json_parsing():
     assert LLMService.parse_json('Yanıt: ```json\n{"a": 1}\n```') == {"a": 1}
