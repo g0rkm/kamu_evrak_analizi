@@ -50,6 +50,18 @@ export class HistoryView {
             h('option', { value: 'confidence_asc' }, 'Güven (düşük → yüksek)'));
         this.dateFromInput = h('input', { type: 'date', class: 'input input--sm', 'aria-label': 'Başlangıç tarihi', onChange: () => this.load() });
         this.dateToInput = h('input', { type: 'date', class: 'input input--sm', 'aria-label': 'Bitiş tarihi', onChange: () => this.load() });
+        this.favoriteFilter = h('button', {
+            type: 'button',
+            class: 'btn btn--ghost btn--sm',
+            title: 'Sadece favoriler',
+            'aria-pressed': 'false',
+            onClick: () => {
+                const isActive = this.favoriteFilter.getAttribute('aria-pressed') === 'true';
+                this.favoriteFilter.setAttribute('aria-pressed', String(!isActive));
+                this.favoriteFilter.classList.toggle('btn--active', !isActive);
+                this.load();
+            },
+        }, icon('star'), ' Favoriler');
 
         return h('div', { class: 'stack' },
             h('div', { class: 'view-header' },
@@ -74,7 +86,8 @@ export class HistoryView {
                         this.sortSelect,
                         h('span', { class: 'small muted' }, 'Tarih:'),
                         this.dateFromInput,
-                        this.dateToInput),
+                        this.dateToInput,
+                        this.favoriteFilter),
                     this.tableRoot,
                     this.moreRoot)),
         );
@@ -128,6 +141,7 @@ export class HistoryView {
             offset: append ? this.items.length : 0,
             dateFrom: this.dateFromInput?.value || undefined,
             dateTo: this.dateToInput?.value || undefined,
+            favorite: this.favoriteFilter?.getAttribute('aria-pressed') === 'true' ? true : undefined,
         };
         if (!append) replace(this.tableRoot, emptyState({ iconName: 'loader', title: 'Yükleniyor…', compact: true }));
         try {
@@ -142,7 +156,7 @@ export class HistoryView {
     }
 
     renderTable() {
-        const filtered = this.search.value.trim() || this.typeFilter.value || this.statusFilter.value || this.dateFromInput?.value || this.dateToInput?.value;
+        const filtered = this.search.value.trim() || this.typeFilter.value || this.statusFilter.value || this.dateFromInput?.value || this.dateToInput?.value || this.favoriteFilter?.getAttribute('aria-pressed') === 'true';
         const sort = this.sortSelect?.value || 'newest';
         if (sort === 'oldest') this.items.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
         else if (sort === 'confidence_desc') this.items.sort((a, b) => b.confidence_score - a.confidence_score);

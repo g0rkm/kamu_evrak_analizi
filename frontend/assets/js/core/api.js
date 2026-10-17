@@ -97,7 +97,7 @@ export class ApiClient {
 
     job(jobId, signal) { return this.request(`/jobs/${encodeURIComponent(jobId)}`, { signal }); }
 
-    history({ q = '', documentType = '', draftStatus = '', sort = '', limit = 50, offset = 0, dateFrom = '', dateTo = '' } = {}) {
+    history({ q = '', documentType = '', draftStatus = '', sort = '', limit = 50, offset = 0, dateFrom = '', dateTo = '', favorite } = {}) {
         const params = new URLSearchParams({ limit, offset });
         if (q) params.set('q', q);
         if (documentType) params.set('document_type', documentType);
@@ -105,6 +105,7 @@ export class ApiClient {
         if (sort) params.set('sort', sort);
         if (dateFrom) params.set('date_from', dateFrom);
         if (dateTo) params.set('date_to', dateTo);
+        if (favorite !== undefined && favorite !== null) params.set('favorite', favorite);
         return this.request(`/history?${params}`);
     }
 
