@@ -180,6 +180,16 @@ async def update_notes(record_id: str, body: dict, history: HistoryRepository = 
     return {"record_id": record_id, "notes": notes}
 
 
+@router.post("/history/{record_id}/duplicate", summary="Analiz kaydını kopyala")
+async def duplicate_record(record_id: str, history: HistoryRepository = Depends(get_history)):
+    record = _require(history, record_id)
+    # Kopyayı kaydet
+    new_record = {k: v for k, v in record.items() if k not in ("id", "review")}
+    new_record["source_name"] = f"{record.get('source_name', 'Kopya')} (kopya)"
+    new_id = history.save(new_record)
+    return {"original_id": record_id, "new_id": new_id}
+
+
 @router.delete("/history/{record_id}")
 async def delete_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     if not history.delete(record_id):

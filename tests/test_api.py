@@ -835,3 +835,17 @@ def test_history_trends_endpoint(client):
     assert data["days"] == 7
     assert "trends" in data
     assert len(data["trends"]) == 7
+
+
+def test_duplicate_nonexistent(client):
+    """Var olmayan kaydı kopyalama 404 dönmeli."""
+    response = client.post("/api/history/nonexistent-id/duplicate", json={})
+    assert response.status_code == 404
+
+
+def test_history_favorite_filter(client):
+    """Favori filtresi çalışmalı."""
+    response = client.get("/api/history?favorite=true")
+    assert response.status_code == 200
+    data = response.json()
+    assert "items" in data
