@@ -95,12 +95,10 @@ export class HistoryView {
     }
 
     async load({ append = false } = {}) {
-        const query = { q: this.search.value.trim(), documentType: this.typeFilter.value, limit: PAGE_SIZE, offset: append ? this.items.length : 0 };
-        const statusValue = this.statusFilter.value;
+        const query = { q: this.search.value.trim(), documentType: this.typeFilter.value, draftStatus: this.statusFilter.value, limit: PAGE_SIZE, offset: append ? this.items.length : 0 };
         if (!append) replace(this.tableRoot, emptyState({ iconName: 'loader', title: 'Yükleniyor…', compact: true }));
         try {
             const page = await this.api.history(query);
-            if (statusValue) { page.items = page.items.filter(i => i.draft_status === statusValue); page.total = page.items.length; }
             this.items = append ? [...this.items, ...page.items] : page.items;
             this.total = page.total;
             this.renderTable();
