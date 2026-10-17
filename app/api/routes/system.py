@@ -123,7 +123,12 @@ async def mask_pii(body: MaskRequest):
 
 @router.get("/stats/llm", summary="LLM kullanım istatistikleri")
 async def llm_stats(container: ServiceContainer = Depends(get_container)):
-    return container.llm.get_usage_stats()
+    stats = container.llm.get_usage_stats()
+    if stats.get("total_requests", 0) > 0 and stats.get("total_latency_ms", 0) > 0:
+        stats["avg_latency_ms"] = round(stats["total_latency_ms"] / stats["total_requests"], 1)
+    else:
+        stats["avg_latency_ms"] = 0
+    return stats
 
 
 @router.get("/system-info", summary="Sistem yapılandırma bilgileri (yönetici)")

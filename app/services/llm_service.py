@@ -74,6 +74,8 @@ class UsageStats:
     total_tokens: int = 0
     cache_hits: int = 0
     cache_misses: int = 0
+    total_latency_ms: float = 0.0
+    max_latency_ms: float = 0.0
 
 
 class LLMService:
@@ -189,6 +191,9 @@ class LLMService:
                     self.usage.cache_misses += 1
                     self._breaker.record_success()
                     elapsed = _time.monotonic() - _req_start
+                    elapsed_ms = elapsed * 1000
+                    self.usage.total_latency_ms += elapsed_ms
+                    self.usage.max_latency_ms = max(self.usage.max_latency_ms, elapsed_ms)
                     if elapsed > 30:
                         logger.warning("Yavaş LLM yanıtı: %.1f sn", elapsed)
                     return result
