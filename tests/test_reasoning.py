@@ -147,3 +147,35 @@ def test_pipeline_timeout_config():
     assert s.PIPELINE_TIMEOUT_SECONDS == 300.0
     s2 = Settings(LLM_API_KEY="test", PIPELINE_TIMEOUT_SECONDS=60.0)
     assert s2.PIPELINE_TIMEOUT_SECONDS == 60.0
+
+
+def test_circuit_breaker_opens_after_failures():
+    """Art arda hatalardan sonra devre kesici açılmalı."""
+    import time as _time
+    from app.services.llm_service import LLMService
+
+    svc = LLMService.__new__(LLMService)
+    breaker = LLMService._CircuitBreaker(threshold=3, cooldown=0.5)
+
+    # İlk 2 hata devre kesiciyi açmamalı
+    breaker.record_failure()
+    breaker.record_failure()
+    breaker.check()  # Hata fırlatmamalı
+
+    # 3. hata devre kesiciyi açmalı
+    breaker.record_failure()
+    from app.core.exceptions import CircuitBreakerOpenError
+    try:
+        breaker.check()
+        assert False, "CircuitBreakerOpenError beklendi"
+    except CircuitBreakerOpenError:
+        pass
+
+    assert breaker.is_open
+    assert breaker.consecutive_failures == 3
+
+    # Başarı kaydı devre kesiciyi kapatmalı
+    breaker.record_success()
+    assert not breaker.is_open
+    assert breaker.consecutive_failures == 0
+    breaker.check()  # Hata fırlatmamalı

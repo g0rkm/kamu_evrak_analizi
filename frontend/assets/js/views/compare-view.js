@@ -61,7 +61,11 @@ export class CompareView {
         try {
             this.renderResult(await this.api.compare(text1, text2));
         } catch (error) {
-            replace(this.resultRoot, h('div', { class: 'alert alert--danger', role: 'alert' }, icon('circleX'), h('div', null, h('strong', null, 'Karşılaştırma yapılamadı'), error.message)));
+            const retryBtn = h('button', { type: 'button', class: 'btn btn--primary btn--sm', onClick: () => this.submit() }, icon('refresh'), 'Tekrar dene');
+            replace(this.resultRoot, h('div', { class: 'card card__body stack' },
+                h('div', { class: 'alert alert--danger', role: 'alert' }, icon('circleX'), h('div', null, h('strong', null, 'Karşılaştırma yapılamadı'), error.message)),
+                error.code === 'network' ? h('p', { class: 'muted' }, 'Sunucu bağlantısı kesildi. Sunucunun çalıştığından emin olun.') : null,
+                h('div', { class: 'row' }, retryBtn)));
         } finally {
             this.button.disabled = false;
             replace(this.button, icon('compare'), 'Karşılaştır');
