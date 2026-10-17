@@ -206,4 +206,16 @@ export class ApiClient {
             body: JSON.stringify({ notes }),
         });
     }
+
+    trends(days = 30) {
+        return this.request(`/history/trends?days=${days}`);
+    }
+
+    duplicateRecord(recordId) {
+        return this.request(`/history/${encodeURIComponent(recordId)}/duplicate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+        });
+    }
 }

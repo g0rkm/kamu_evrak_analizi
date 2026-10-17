@@ -135,6 +135,14 @@ class App {
             }
         });
 
+        // Versiyon kontrolü
+        try {
+            const config = await this.api.configExportData();
+            if (config && config.maintenance_mode) {
+                this.toaster.warn('Sistem bakım modundadır. Bazı işlemler kısıtlı olabilir.');
+            }
+        } catch {}
+
         window.addEventListener('offline', () => this.toaster.warn('İnternet bağlantısı kesildi.'));
         window.addEventListener('online', () => this.toaster.success('İnternet bağlantısı yeniden kuruldu.'));
     }
