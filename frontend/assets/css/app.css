@@ -775,3 +775,11 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .stat-card { background: var(--color-surface, #fff); border-radius: 8px; padding: 1rem; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 .stat-value { display: block; font-size: 1.5rem; font-weight: 700; color: var(--color-primary, #2563eb); }
 .stat-label { display: block; font-size: 0.85rem; color: var(--color-text-muted, #6b7280); margin-top: 0.25rem; }
+
+@media (prefers-color-scheme: dark) { 
+    .chart-container { background: var(--color-surface-dark, #1e293b); } 
+    .stat-card { background: var(--color-surface-dark, #1e293b); } 
+    .trends-wrapper h2 { color: var(--color-text-dark, #e2e8f0); } 
+    .stat-label { color: var(--color-text-muted-dark, #94a3b8); } 
+    .form-select { background: var(--color-surface-dark, #1e293b); color: var(--color-text-dark, #e2e8f0); border-color: var(--color-border-dark, #334155); } 
+}
