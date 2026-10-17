@@ -189,3 +189,20 @@ def test_export_all_records(client, fake_llm):
     data = resp.json()
     assert data["total"] >= 2
     assert len(data["records"]) >= 2
+
+
+def test_csrf_protection_blocks_invalid_content_type(client):
+    """CSRF korumasi: POST isteklerinde Content-Type basliksiz istek reddedilmeli."""
+    resp = client.post("/api/analyze-text", content=b'{"text": "test"}')
+    assert resp.status_code == 400
+    assert resp.json()["code"] == "invalid_content_type"
+
+
+def test_health_endpoint_extended_fields(client):
+    """Health endpoint'i yeni metrikleri icermeli."""
+    data = client.get("/api/health").json()
+    assert "uptime_seconds" in data
+    assert data["uptime_seconds"] >= 0
+    assert "active_jobs" in data
+    assert data["active_jobs"] == 0
+    assert "disk_free_mb" in data
