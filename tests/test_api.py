@@ -849,3 +849,11 @@ def test_history_favorite_filter(client):
     assert response.status_code == 200
     data = response.json()
     assert "items" in data
+
+
+def test_health_includes_uptime_human(client):
+    """Health endpoint uptime_human alanını içermeli."""
+    response = client.get("/api/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert "uptime_human" in data

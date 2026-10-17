@@ -51,7 +51,7 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
     if disk_free_mb is not None and disk_free_mb < container.settings.DISK_WARNING_THRESHOLD_MB:
         warnings.append(f"Disk alanı düşük: {disk_free_mb} MB kaldı.")
 
-    return HealthStatus(
+    result = HealthStatus(
         status=status,
         environment=container.settings.ENVIRONMENT,
         service=container.settings.APP_NAME,
@@ -68,6 +68,9 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
         disk_free_mb=disk_free_mb,
         warnings=warnings,
     )
+    data = result.model_dump()
+    data["uptime_human"] = _format_uptime(time.monotonic() - _start_time)
+    return data
 
 
 @router.get("/ready", summary="Hazırlık kontrolü (readiness probe)")
