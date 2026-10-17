@@ -23,6 +23,19 @@ const FALLBACK_META = {
     },
 };
 
+export const DOCUMENT_TYPE_ICONS = {
+    dilekce: 'file-text',
+    rapor: 'file-chart',
+    sozlesme: 'file-check',
+    tutanak: 'clipboard',
+    karar: 'gavel',
+    genelge: 'send',
+    yonerge: 'book-open',
+    teblig: 'mail',
+    kanun: 'scale',
+    yonetmelik: 'scroll',
+};
+
 const ENTITY_LABELS = {
     tarih: 'Tarih', kurum: 'Kurum', kisi: 'Kişi', konu: 'Konu', referans_no: 'Referans No',
     adres: 'Adres', telefon: 'Telefon', eposta: 'E-posta',

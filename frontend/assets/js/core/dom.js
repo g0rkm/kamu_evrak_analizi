@@ -101,3 +101,13 @@ export function skeleton(type = 'text', count = 3) {
     }
     return h('div', { class: 'stack-sm', 'aria-hidden': 'true', 'aria-label': 'Yükleniyor' }, ...items);
 }
+
+export function formatDate(isoString) {
+    if (!isoString) return '-';
+    const d = new Date(isoString);
+    if (isNaN(d.getTime())) return isoString;
+    return d.toLocaleString('tr-TR', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit',
+    });
+}
