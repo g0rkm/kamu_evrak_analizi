@@ -621,6 +621,29 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     outline: none;
 }
 
+/* Responsive table */
+.table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+}
+@media (max-width: 640px) {
+    .table-wrap table {
+        font-size: 0.8125rem;
+    }
+    .table-wrap th,
+    .table-wrap td {
+        padding: 0.375rem 0.5rem;
+        white-space: nowrap;
+    }
+}
+
+/* Confidence badge */
+.badge--high { background: var(--success, #16a34a); color: white; }
+.badge--medium { background: var(--warning, #eab308); color: #1a1a1a; }
+.badge--low { background: var(--danger, #dc2626); color: white; }
+
 /* Error detail panel */
 .error-detail {
     background: var(--surface-1, #fef2f2);
