@@ -39,6 +39,7 @@ export class HistoryView {
             h('div', { class: 'view-header' },
                 h('div', null, h('h1', null, 'Analiz geçmişi'), h('p', null, 'Önceki analizleri arayın, açın ve memur kararlarını takip edin.')),
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportAll() }, icon('download'), 'Tümünü dışa aktar'),
+                h('button', { type: 'button', class: 'btn btn--danger-ghost btn--sm', onClick: () => this.clearAll() }, icon('trash'), 'Tümünü sil'),
                 h('button', { type: 'button', class: 'btn btn--secondary', onClick: () => this.refresh() }, icon('refresh'), 'Yenile')),
             this.statsRoot,
             h('section', { class: 'card' },
@@ -180,5 +181,22 @@ export class HistoryView {
         } catch (error) {
             this.toaster.error(`Dışa aktarma başarısız: ${error.message}`);
         }
+    }
+
+    async clearAll() {
+        if (!this.items.length) { this.toaster.info('Silinecek kayıt yok.'); return; }
+        const ok = await confirmDialog({
+            title: 'Tüm kayıtlar silinsin mi?',
+            message: `${this.items.length} analiz kaydı kalıcı olarak silinecek. Bu işlem geri alınamaz.`,
+            confirmText: 'Tümünü sil',
+            danger: true,
+        });
+        if (!ok) return;
+        let deleted = 0;
+        for (const item of this.items) {
+            try { await this.api.deleteRecord(item.id); deleted++; } catch {}
+        }
+        this.toaster.success(`${deleted} kayıt silindi.`);
+        await this.refresh();
     }
 }
