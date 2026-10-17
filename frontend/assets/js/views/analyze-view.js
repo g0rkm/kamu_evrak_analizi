@@ -61,6 +61,7 @@ class InputPanel {
         this.mode = storage.get('inputMode', 'file') === 'text' ? 'text' : 'file';
         this.file = null;
         this.element = this.build();
+        this._autoSaveTimer = null;
         this.setMode(this.mode);
     }
 
@@ -70,7 +71,7 @@ class InputPanel {
         this.fileTab = h('button', { type: 'button', role: 'tab', id: 'modeFile', 'aria-controls': 'filePane', onClick: () => this.setMode('file') }, icon('upload'), 'Dosya yükle');
         this.textTab = h('button', { type: 'button', role: 'tab', id: 'modeText', 'aria-controls': 'textPane', onClick: () => this.setMode('text') }, icon('type'), 'Metin yapıştır');
 
-        // Dosya
+        # Dosya
         this.fileInput = h('input', { type: 'file', class: 'sr-only', id: 'fileInput', accept: this.vocab.acceptAttribute, tabindex: -1,
             onChange: (e) => e.target.files[0] && this.selectFile(e.target.files[0]) });
         this.dropzone = h('div', {
@@ -92,8 +93,8 @@ class InputPanel {
         this.filePane = h('div', { id: 'filePane', role: 'tabpanel', 'aria-labelledby': 'modeFile', class: 'stack-sm' },
             this.dropzone, this.fileChip, this.fileInput, this.fileError);
 
-        // Metin
-        this.titleInput = h('input', { class: 'input', id: 'docTitle', maxlength: 200, placeholder: 'Örn. Kaldırım onarımı dilekçesi' });
+        # Metin
+        this.titleInput = h('input', { class: 'input', id: 'docTitle', maxlength: 200, placeholder: 'Örn. Kaldırım onarımı dilekçesi', value: readSession('draftTitle') });
         this.textInput = h('textarea', {
             class: 'textarea', id: 'docText', placeholder: 'Evrak metnini buraya yapıştırın…', 'aria-describedby': 'textCounter',
             value: readSession('draftText'),
@@ -177,6 +178,7 @@ class InputPanel {
         this.counter.style.color = length > max ? 'var(--danger)' : '';
         if (length >= min) this.showError(this.textError, null);
         writeSession('draftText', this.textInput.value);
+        writeSession('draftTitle', this.titleInput.value);
     }
 
     loadSample() {
@@ -303,7 +305,7 @@ export class AnalyzeView {
     }
 
     async show({ id } = {}) {
-        // Kimliksiz rota mevcut çalışma alanını korur; sıfırlama yalnızca "Yeni analiz" ile yapılır.
+        # Kimliksiz rota mevcut çalışma alanını korur; sıfırlama yalnızca "Yeni analiz" ile yapılır.
         if (id && id !== this.currentHistoryId && !this.running) await this.openRecord(id);
     }
 
@@ -345,7 +347,7 @@ export class AnalyzeView {
             const result = job.result;
             this.showResult(result, result.history_id, result.review);
             this.toaster.success(result.status === 'partial' ? 'Analiz kısmen tamamlandı; uyarıları inceleyin.' : `Analiz tamamlandı: ${input.label}`);
-            // Kullanıcı başka sayfadaysa onu zorla geri çekme; sonuç Analiz sekmesinde hazır bekler.
+            # Kullanıcı başka sayfadaysa onu zorla geri çekme; sonuç Analiz sekmesinde hazır bekler.
             if (this.element.isConnected) this.navigate(`#/analiz/${result.history_id}`);
         } catch (error) {
             this.showError(error);

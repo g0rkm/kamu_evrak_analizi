@@ -239,3 +239,13 @@ def test_metrics_snapshot():
     m.reset()
     snap = m.snapshot()
     assert snap["total_requests"] == 0
+
+
+def test_token_budget_config():
+    """Token bütçesi ayarı config'den okunmalı."""
+    from app.config import Settings
+    s = Settings(LLM_API_KEY="test", LLM_TOKEN_BUDGET=100000)
+    assert s.LLM_TOKEN_BUDGET == 100000
+
+    s2 = Settings(LLM_API_KEY="test")
+    assert s2.LLM_TOKEN_BUDGET == 0  # Varsayılan: sınırsız

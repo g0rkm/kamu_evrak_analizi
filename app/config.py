@@ -51,6 +51,7 @@ class Settings(BaseSettings):
     MAX_CONCURRENT_JOBS: int = 2
     JOB_TTL_SECONDS: int = 3600
     PIPELINE_TIMEOUT_SECONDS: float = 300.0
+    LLM_TOKEN_BUDGET: int = 0  # 0 = sınırsız; >0 = toplam token üst limiti
 
     # Güvenlik
     RATE_LIMIT_REQUESTS: int = 60
