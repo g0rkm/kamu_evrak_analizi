@@ -9,6 +9,9 @@ services:
       - APP_HOST=0.0.0.0
       - LOG_FORMAT=json
       - ENVIRONMENT=production
+      - MAINTENANCE_MODE=false
+      - LOG_FILE=
+      - ADMIN_TOKEN=
     volumes:
       - history_data:/app/data/history
       - upload_data:/app/uploads
