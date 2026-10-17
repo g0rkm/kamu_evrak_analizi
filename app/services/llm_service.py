@@ -161,7 +161,9 @@ class LLMService:
             ],
             "temperature": temp,
         }
-        headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
+        from app.core.logging import request_id_var
+        rid = request_id_var.get("-")
+        headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json", "X-Request-ID": rid}
 
         last_error: LLMError = LLMUnavailableError()
         for attempt in range(1, self.max_retries + 1):
