@@ -38,7 +38,10 @@ DEFAULT_PATTERNS: tuple[PIIPattern, ...] = (
                validator=lambda v: is_valid_tc_kimlik(re.sub(r"\s", "", v))),
     PIIPattern("iban", "IBAN", re.compile(r"\bTR\s?\d{2}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{2}\b"), "warning"),
     PIIPattern("telefon", "Telefon Numarası", re.compile(r"\b(?:\+90|0)\s?[5]\d{2}\s?\d{3}\s?\d{2}\s?\d{2}\b"), "info"),
+    PIIPattern("sabit_tel", "Sabit Telefon", re.compile(r"\b(?:\+90|0)\s?[2-4]\d{2}\s?\d{3}\s?\d{2}\s?\d{2}\b"), "info"),
     PIIPattern("eposta", "E-posta Adresi", re.compile(r"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b"), "info"),
+    PIIPattern("plaka", "Araç Plakası", re.compile(r"\b\d{2}\s?[A-Z]{1,3}\s?\d{2,4}\b"), "info"),
+    PIIPattern("pasaport", "Pasaport Numarası", re.compile(r"\b[A-Z]\s?\d{2}\s?\d{3}\s?\d{3}\b"), "warning"),
 )
 
 
