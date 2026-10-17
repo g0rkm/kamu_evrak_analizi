@@ -136,10 +136,16 @@ class HistoryRepository:
         total = len(items)
         if total == 0:
             return {"total": 0, "avg_confidence": 0, "avg_processing_time": 0, "by_type": {}, "by_draft_status": {}}
+        confidences = [i["confidence_score"] for i in items]
+        times = [i["processing_time"] for i in items]
         return {
             "total": total,
-            "avg_confidence": round(sum(i["confidence_score"] for i in items) / total, 2),
-            "avg_processing_time": round(sum(i["processing_time"] for i in items) / total, 2),
+            "avg_confidence": round(sum(confidences) / total, 2),
+            "min_confidence": round(min(confidences), 2),
+            "max_confidence": round(max(confidences), 2),
+            "avg_processing_time": round(sum(times) / total, 2),
+            "min_processing_time": round(min(times), 2),
+            "max_processing_time": round(max(times), 2),
             "by_type": dict(Counter(i["document_type"] for i in items).most_common()),
             "by_draft_status": dict(Counter(i["draft_status"] for i in items)),
         }
