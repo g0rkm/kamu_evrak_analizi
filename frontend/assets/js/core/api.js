@@ -17,12 +17,26 @@ const STATUS_MESSAGES = {
     500: 'Sunucuda beklenmeyen bir hata oluştu.',
     502: 'Yapay zekâ servisi isteği işleyemedi.',
     503: 'Servis şu anda kullanılamıyor.',
+    504: 'İşlem zaman aşımına uğradı. Daha kısa bir metin deneyin.',
 };
 
 /** Arka uç REST API'si için tek giriş noktası. */
 export class ApiClient {
     constructor(baseUrl = '/api') {
         this.baseUrl = baseUrl;
+    }
+
+    async requestWithRetry(path, options = {}, { retries = 2, retryDelay = 1000 } = {}) {
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+                return await this.request(path, options);
+            } catch (error) {
+                const isRetryable = error.code === 'network' || error.status === 502 || error.status === 503;
+                if (!isRetryable || attempt === retries) throw error;
+                const delay = retryDelay * Math.pow(2, attempt);
+                await new Promise(r => setTimeout(r, delay));
+            }
+        }
     }
 
     async request(path, { method = 'GET', json, body, signal } = {}) {
@@ -85,4 +99,12 @@ export class ApiClient {
 
     compare(text1, text2) { return this.request('/compare', { method: 'POST', json: { text1, text2 } }); }
     maskPii(text) { return this.request('/mask-pii', { method: 'POST', json: { text } }); }
+
+    exportRecord(id) {
+        return this.request(`/export/${encodeURIComponent(id)}`);
+    }
+
+    exportAllRecords() {
+        return this.request('/history/export-all');
+    }
 }
