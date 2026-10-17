@@ -214,3 +214,34 @@ def test_magic_bytes_rejects_fake_pdf(client):
     resp = client.post("/api/analyze", files={"file": ("fake.pdf", fake_pdf, "application/pdf")})
     assert resp.status_code == 415
     assert "uyuşmuyor" in resp.json()["detail"]
+
+
+def test_llm_stats_endpoint(client):
+    """LLM kullanım istatistikleri endpoint'i çalışmalı."""
+    resp = client.get("/api/stats/llm")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "total_requests" in data
+    assert "cache_hits" in data
+
+
+def test_draft_status_filter(client, fake_llm):
+    """Taslak durumuna göre filtreleme çalışmalı."""
+    hid = client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — kaldırım onarımı talebi " * 5}).json()["history_id"]
+    client.patch(f"/api/history/{hid}/review", json={"draft_status": "approved"})
+
+    # Onaylanmış kayıtları filtrele
+    page = client.get("/api/history", params={"draft_status": "approved"}).json()
+    assert page["total"] >= 1
+    assert all(i["draft_status"] == "approved" for i in page["items"])
+
+    # Bekleyen kayıtları filtrele (bu kayıt onaylanmış olduğundan 0 olmalı)
+    page2 = client.get("/api/history", params={"draft_status": "pending"}).json()
+    assert all(i["draft_status"] == "pending" for i in page2["items"])
+
+
+def test_response_time_header(client):
+    """Her API yanıtında X-Response-Time başlığı olmalı."""
+    resp = client.get("/api/health")
+    assert "X-Response-Time" in resp.headers
+    assert resp.headers["X-Response-Time"].endswith("ms")

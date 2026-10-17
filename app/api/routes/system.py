@@ -78,3 +78,8 @@ async def mask_pii(body: MaskRequest):
     findings = detector.detect(body.text)
     masked = detector.mask_text(body.text)
     return MaskResponse(masked_text=masked, pii_count=len(findings))
+
+
+@router.get("/stats/llm", summary="LLM kullanım istatistikleri")
+async def llm_stats(container: ServiceContainer = Depends(get_container)):
+    return container.llm.get_usage_stats()
