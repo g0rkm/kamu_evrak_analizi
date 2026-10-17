@@ -95,6 +95,7 @@ class HistoryRepository:
                 if needle in i["summary"].casefold()
                 or needle in i["source_name"].casefold()
                 or needle in i["document_type"].casefold()
+                or needle in i.get("keywords", "").casefold()
             ]
         return {"total": len(items), "items": items[offset: offset + limit]}
 
@@ -131,6 +132,7 @@ class HistoryRepository:
                 "status": data.get("status", ""),
                 "summary": (data.get("summary", "") or "")[: self.SUMMARY_PREVIEW_CHARS],
                 "draft_status": (data.get("review") or {}).get("draft_status", "pending"),
+                "keywords": ", ".join((((data.get("result") or {}).get("analysis") or {}).get("content") or {}).get("keywords") or []),
             })
         return summaries
 
