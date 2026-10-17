@@ -483,3 +483,28 @@ def test_readiness_probe_checks(client):
     assert "checks" in data
     assert "llm_configured" in data["checks"]
     assert "history_writable" in data["checks"]
+
+
+def test_health_includes_environment(client):
+    resp = client.get("/api/health")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "environment" in data
+    assert data["environment"] == "development"
+
+
+def test_system_info_includes_environment(client):
+    resp = client.get("/api/system-info")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "environment" in data
+
+
+def test_sort_parameter_in_history(client):
+    # Sıralama parametresi ile istek kabul edilmeli
+    resp = client.get("/api/history?sort=newest")
+    assert resp.status_code == 200
+    resp2 = client.get("/api/history?sort=oldest")
+    assert resp2.status_code == 200
+    resp3 = client.get("/api/history?sort=confidence_desc")
+    assert resp3.status_code == 200
