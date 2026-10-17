@@ -45,6 +45,7 @@ export class HistoryView {
             h('div', { class: 'view-header' },
                 h('div', null, h('h1', null, 'Analiz geçmişi'), h('p', null, 'Önceki analizleri arayın, açın ve memur kararlarını takip edin.')),
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportAll() }, icon('download'), 'Tümünü dışa aktar'),
+                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportCsv() }, icon('download'), 'CSV indir'),
                 h('button', { type: 'button', class: 'btn btn--danger-ghost btn--sm', onClick: () => this.clearAll() }, icon('trash'), 'Tümünü sil'),
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.importRecords() }, icon('upload'), 'İçe aktar'),
                 h('button', { type: 'button', class: 'btn btn--secondary', onClick: () => this.refresh() }, icon('refresh'), 'Yenile')),
@@ -237,5 +238,22 @@ export class HistoryView {
             }
         };
         input.click();
+    }
+
+    async exportCsv() {
+        try {
+            const resp = await fetch('/api/history/export-csv');
+            if (!resp.ok) throw new Error('CSV indirilemedi.');
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `gecmis_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            this.toaster.success('CSV dosyası indirildi.');
+        } catch (error) {
+            this.toaster.error(`CSV indirme başarısız: ${error.message}`);
+        }
     }
 }
