@@ -100,10 +100,18 @@ class JobManager:
             raise NotFoundError("İş bulunamadı veya süresi doldu.")
         return job
 
-    async def shutdown(self) -> None:
-        for task in list(self._tasks):
-            task.cancel()
-        await asyncio.gather(*self._tasks, return_exceptions=True)
+    async def shutdown(self, grace_period: float = 15.0) -> None:
+        """Açık işlerin tamamlanmasını bekler; süre aşılırsa iptal eder."""
+        if not self._tasks:
+            return
+        logger.info("Kapatma: %d açık iş bekleniyor (maks %.0f sn)", len(self._tasks), grace_period)
+        done, pending = await asyncio.wait(self._tasks, timeout=grace_period)
+        if pending:
+            logger.warning("Kapatma: %d iş süre aşımından iptal ediliyor", len(pending))
+            for task in pending:
+                task.cancel()
+            await asyncio.gather(*pending, return_exceptions=True)
+        logger.info("Kapatma: tüm işler sonlandı")
 
     async def _run(self, job: Job, runner: JobRunner) -> None:
         async with self._semaphore:
