@@ -95,6 +95,9 @@ class App {
                     break;
             }
         });
+
+        window.addEventListener('offline', () => this.toaster.warn('İnternet bağlantısı kesildi.'));
+        window.addEventListener('online', () => this.toaster.success('İnternet bağlantısı yeniden kuruldu.'));
     }
 
     navigate(hash) {

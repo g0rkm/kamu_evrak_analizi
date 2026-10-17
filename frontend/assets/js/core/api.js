@@ -16,7 +16,7 @@ const STATUS_MESSAGES = {
     429: 'Çok fazla istek gönderildi. Lütfen biraz bekleyin.',
     500: 'Sunucuda beklenmeyen bir hata oluştu.',
     502: 'Yapay zekâ servisi isteği işleyemedi.',
-    503: 'Servis şu anda kullanılamıyor.',
+    503: 'Servis şu anda kullanılamıyor. Birkaç dakika sonra tekrar deneyin.',
     504: 'İşlem zaman aşımına uğradı. Daha kısa bir metin deneyin.',
 };
 
@@ -24,6 +24,10 @@ const STATUS_MESSAGES = {
 export class ApiClient {
     constructor(baseUrl = '/api') {
         this.baseUrl = baseUrl;
+    }
+
+    isOnline() {
+        return typeof navigator.onLine === 'boolean' ? navigator.onLine : true;
     }
 
     async requestWithRetry(path, options = {}, { retries = 2, retryDelay = 1000 } = {}) {
@@ -53,7 +57,8 @@ export class ApiClient {
             response = await fetch(`${this.baseUrl}${path}`, init);
         } catch (error) {
             if (error.name === 'AbortError') throw error;
-            throw new ApiError('Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.', { code: 'network' });
+            const offlineMsg = !this.isOnline() ? 'İnternet bağlantınız yok. Çevrimiçi olduğunuzda tekrar deneyin.' : 'Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.';
+            throw new ApiError(offlineMsg, { code: 'network' });
         }
 
         const data = await response.json().catch(() => null);
