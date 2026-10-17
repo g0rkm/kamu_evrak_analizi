@@ -61,6 +61,27 @@ class _LLMCache:
         key = self._key(model, system, user, temperature)
         self._store[key] = (_time.monotonic(), value)
 
+    def deduplicate_key(self, content_hash: str, window_seconds: int = 30) -> str | None:
+        """Aynı content_hash ile son window_seconds saniye içinde yapılmış bir istek olup olmadığını kontrol eder."""
+        if not self.enabled:
+            return None
+        dedup_key = f"dedup:{content_hash}"
+        entry = self._store.get(dedup_key)
+        if entry is None:
+            return None
+        ts, cache_key = entry
+        if (_time.monotonic() - ts) > window_seconds:
+            del self._store[dedup_key]
+            return None
+        return cache_key
+
+    def set_dedup(self, content_hash: str, cache_key: str, window_seconds: int = 30) -> None:
+        """Dedup kaydını oluşturur."""
+        if not self.enabled:
+            return
+        dedup_key = f"dedup:{content_hash}"
+        self._store[dedup_key] = (_time.monotonic(), cache_key)
+
     def stats(self) -> dict:
         return {"cache_hits": self._hits, "cache_misses": self._misses, "cache_size": len(self._store)}
 
