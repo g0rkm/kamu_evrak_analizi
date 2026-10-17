@@ -482,3 +482,30 @@ def test_token_budget_exceeded_error():
     err = TokenBudgetExceededError()
     assert err.status_code == 429
     assert err.code == 'token_budget_exceeded'
+
+
+def test_dedup_key_returns_none_on_miss():
+    from app.services.llm_service import _LLMCache
+    cache = _LLMCache(ttl_seconds=60)
+    result = cache.deduplicate_key('nonexistent')
+    assert result is None
+
+
+def test_dedup_key_returns_key_after_set():
+    from app.services.llm_service import _LLMCache
+    cache = _LLMCache(ttl_seconds=60)
+    cache.set_dedup('hash123', 'llm:hash123', window_seconds=30)
+    result = cache.deduplicate_key('hash123')
+    assert result == 'llm:hash123'
+
+
+def test_api_version_endpoint():
+    from fastapi.testclient import TestClient
+    from app.main import app
+    client = TestClient(app)
+    response = client.get('/version')
+    assert response.status_code == 200
+    data = response.json()
+    assert data['api'] == 'v1'
+    assert data['status'] == 'stable'
+    assert 'version' in data

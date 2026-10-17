@@ -28,6 +28,12 @@ def _format_uptime(seconds: float) -> str:
     return f"{secs} sn"
 
 
+@router.get('/version', tags=['Sistem'], summary='API surum bilgisi')
+async def api_version():
+    from app import __version__
+    return {'version': __version__, 'api': 'v1', 'status': 'stable'}
+
+
 @router.get("/health", summary="Sistem sağlık kontrolü")
 async def health_check(container: ServiceContainer = Depends(get_container)):
     stats = container.history.stats()
