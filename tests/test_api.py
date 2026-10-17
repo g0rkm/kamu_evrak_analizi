@@ -610,3 +610,24 @@ def test_system_info_includes_settings(client):
     assert "settings" in data
     assert "log_level" in data["settings"]
     assert "llm_model" in data["settings"]
+
+
+def test_maintenance_mode_blocks_requests(client):
+    """Bakım modunda health dışındaki istekler 503 dönmeli."""
+    # Bakım modunu aç
+    from app.main import create_app
+    app = create_app()
+    app.state.container.settings.MAINTENANCE_MODE = True
+    from starlette.testclient import TestClient
+    mc = TestClient(app)
+    response = mc.get("/api/meta")
+    assert response.status_code == 503
+    # Health hâlâ erişilebilir
+    health = mc.get("/api/health")
+    assert health.status_code == 200
+
+
+def test_maintenance_mode_off_allows_requests(client):
+    """Bakım modu kapalıyken istekler normal işlenmeli."""
+    response = client.get("/api/meta")
+    assert response.status_code == 200

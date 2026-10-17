@@ -335,3 +335,12 @@ def test_circuit_breaker_initial_state():
     settings = Settings(LLM_API_KEY="test-key")
     svc = LLMService(settings)
     assert not svc._breaker.is_open
+
+
+def test_maintenance_mode_error_attributes():
+    """MaintenanceModeError doğru status code ve code alanlarını içermeli."""
+    from app.core.exceptions import MaintenanceModeError
+    err = MaintenanceModeError()
+    assert err.status_code == 503
+    assert err.code == "maintenance_mode"
+    assert "bakım" in err.message.lower()
