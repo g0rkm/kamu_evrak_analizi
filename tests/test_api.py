@@ -423,3 +423,11 @@ def test_system_info_includes_uptime(client):
     assert "uptime_seconds" in data
     assert "uptime_human" in data
     assert "warnings" in data
+
+
+def test_llm_health_endpoint(client):
+    """LLM bağlantı testi endpoint'i çalışmalı."""
+    resp = client.get("/api/health/llm")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "status" in data

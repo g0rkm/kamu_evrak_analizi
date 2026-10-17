@@ -37,7 +37,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI):
         app.state.container = ServiceContainer.build(settings)
         verify_environment(settings)
+        import logging as _logging
+        _logging.getLogger("startup").info("Uygulama başlatıldı, istekler kabul ediliyor.")
         yield
+        _logging.getLogger("startup").info("Uygulama kapatılıyor…")
         await app.state.container.aclose()
 
     app = FastAPI(

@@ -167,3 +167,15 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
 @router.get("/stats/requests", summary="HTTP istek metrikleri")
 async def request_stats():
     return app_metrics.snapshot()
+
+
+@router.get("/health/llm", summary="LLM bağlantı testi")
+async def llm_health(container: ServiceContainer = Depends(get_container)):
+    if not container.llm.is_configured:
+        return {"status": "unconfigured", "message": "LLM API anahtarı yapılandırılmamış."}
+    reachable = await container.llm.ping()
+    return {
+        "status": "ok" if reachable else "unreachable",
+        "model": container.llm.model,
+        "api_base": container.llm.api_base,
+    }

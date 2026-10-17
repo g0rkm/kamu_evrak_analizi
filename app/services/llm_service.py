@@ -243,6 +243,17 @@ class LLMService:
         result["consecutive_failures"] = self._breaker.consecutive_failures
         return result
 
+    async def ping(self) -> bool:
+        """LLM servisine basit bir bağlantı testi yapar."""
+        try:
+            response = await self.client.get(
+                f"{self.api_base}/models",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+            )
+            return response.is_success
+        except (httpx.TransportError, httpx.TimeoutException):
+            return False
+
     async def close(self) -> None:
         self._cache.clear()
         if self._owns_client:
