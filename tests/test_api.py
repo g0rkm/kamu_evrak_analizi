@@ -614,23 +614,16 @@ def test_system_info_includes_settings(client):
 
 def test_maintenance_mode_blocks_requests():
     """Bakım modunda health dışındaki istekler 503 dönmeli."""
-    import os
-    old = os.environ.get("MAINTENANCE_MODE")
-    os.environ["MAINTENANCE_MODE"] = "true"
-    try:
-        from app.main import create_app
-        app = create_app()
-        from starlette.testclient import TestClient
-        with TestClient(app) as mc:
-            response = mc.get("/api/meta")
-            assert response.status_code == 503
-            health = mc.get("/api/health")
-            assert health.status_code == 200
-    finally:
-        if old is None:
-            os.environ.pop("MAINTENANCE_MODE", None)
-        else:
-            os.environ["MAINTENANCE_MODE"] = old
+    from app.config import Settings
+    from app.main import create_app
+    from starlette.testclient import TestClient
+    settings = Settings(MAINTENANCE_MODE=True)
+    app = create_app(settings=settings)
+    with TestClient(app) as mc:
+        response = mc.get("/api/meta")
+        assert response.status_code == 503
+        health = mc.get("/api/health")
+        assert health.status_code == 200
 
 
 def test_maintenance_mode_off_allows_requests(client):
