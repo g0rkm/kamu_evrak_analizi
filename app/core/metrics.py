@@ -36,6 +36,15 @@ class Metrics:
                 "uptime_seconds": round(uptime, 1),
             }
 
+    def error_rate(self) -> float:
+        """Son isteklerin hata oranını döndürür (4xx + 5xx / toplam)."""
+        with self._lock:
+            total = self._total
+            if total == 0:
+                return 0.0
+            errors = sum(count for code, count in self._by_status.items() if code >= 400)
+            return round(errors / total, 4)
+
     def reset(self) -> None:
         with self._lock:
             self._requests = 0

@@ -14,6 +14,7 @@ export class HistoryView {
         this.navigate = navigate;
         this.items = [];
         this.total = 0;
+        this.hasMore = false;
         this.element = this.build();
     }
 
@@ -109,6 +110,7 @@ export class HistoryView {
             const page = await this.api.history(query);
             this.items = append ? [...this.items, ...page.items] : page.items;
             this.total = page.total;
+            this.hasMore = page.has_more === true;
             this.renderTable();
         } catch (error) {
             replace(this.tableRoot, h('div', { class: 'alert alert--danger' }, icon('alert'), `Geçmiş yüklenemedi: ${error.message}`));
@@ -159,7 +161,7 @@ export class HistoryView {
         replace(this.moreRoot,
             h('span', { class: 'small muted' }, `${fmt.number(this.total)} kayıttan ${fmt.number(this.items.length)} tanesi gösteriliyor`,
                 this.total > PAGE_SIZE ? ` · Sayfa ${Math.ceil(this.items.length / PAGE_SIZE)}/${Math.ceil(this.total / PAGE_SIZE)}` : ''),
-            this.items.length < this.total
+            this.hasMore
                 ? h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.load({ append: true }) }, 'Daha fazla yükle')
                 : null);
     }
