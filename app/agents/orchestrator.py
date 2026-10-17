@@ -28,6 +28,7 @@ from app.agents.ocr_agent import OCRAgent
 from app.agents.reasoning_agent import ReasoningAgent, ReasoningOutcome
 from app.agents.routing_agent import RoutingAgent
 from app.agents.summary_agent import SummaryAgent
+from app.config import Settings
 from app.core.exceptions import AppError, LLMError, TextExtractionError
 from app.models.analysis import AnalysisResult, ClassificationResult, ContentAnalysis
 from app.models.draft import PipelineResult, StepTiming
@@ -100,6 +101,7 @@ class OrchestratorAgent(BaseAgent):
         legislation_catalog: LegislationCatalog | None = None,
         ocr_service: OCRService | None = None,
         observer: PipelineObserver | None = None,
+        timeout: float = 300.0,
     ) -> None:
         super().__init__()
         self._owns_llm = llm_service is None
@@ -115,6 +117,7 @@ class OrchestratorAgent(BaseAgent):
         self.router = RoutingAgent(self.llm_service)
         self.reasoner = ReasoningAgent()
 
+        self._timeout = timeout
         self._logs: list[str] = []
         self._timings: list[StepTiming] = []
         self._warnings: list[str] = []
@@ -125,6 +128,12 @@ class OrchestratorAgent(BaseAgent):
         return await self.run(DocumentInput.from_file(file_path))
 
     async def run(self, document: DocumentInput) -> PipelineResult:
+        try:
+            return await asyncio.wait_for(self._run_pipeline(document), timeout=self._timeout)
+        except asyncio.TimeoutError:
+            raise AppError(f"Pipeline {self._timeout:.0f} saniye içinde tamamlanamadı.", code="pipeline_timeout", status_code=504)
+
+    async def _run_pipeline(self, document: DocumentInput) -> PipelineResult:
         started = time.perf_counter()
         self.log(f"Pipeline başlatılıyor: {document.source_name}")
         self._logs.extend(self.get_logs())
