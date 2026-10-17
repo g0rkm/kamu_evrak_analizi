@@ -140,7 +140,7 @@ class HistoryRepository:
         except (json.JSONDecodeError, OSError):
             return None
 
-    def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None, sort: str | None = None, date_from: str | None = None, date_to: str | None = None, min_confidence: float | None = None, favorite: bool | None = None) -> dict:
+    def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None, sort: str | None = None, date_from: str | None = None, date_to: str | None = None, min_confidence: float | None = None, favorite: bool | None = None, has_notes: bool | None = None) -> dict:
         items = self._summaries()
         if document_type:
             items = [i for i in items if i["document_type"] == document_type]
@@ -164,6 +164,8 @@ class HistoryRepository:
             items = [i for i in items if i.get("confidence_score", 0) >= min_confidence]
         if favorite is not None:
             items = [i for i in items if i.get("favorite", False) == favorite]
+        if has_notes is not None:
+            items = [i for i in items if bool(i.get("notes", "")) == has_notes]
         if sort == "oldest":
             items.sort(key=lambda i: i["timestamp"])
         elif sort == "confidence_desc":
@@ -216,6 +218,7 @@ class HistoryRepository:
                 "keywords": ", ".join((((data.get("result") or {}).get("analysis") or {}).get("content") or {}).get("keywords") or []),
                 "favorite": data.get("favorite", False),
                 "tags": data.get("tags", []),
+                "notes": data.get("notes", ""),
             })
         return summaries
 
