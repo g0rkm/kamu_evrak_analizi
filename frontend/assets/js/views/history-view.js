@@ -34,6 +34,11 @@ export class HistoryView {
             h('option', { value: 'approved' }, 'Onaylandı'),
             h('option', { value: 'rejected' }, 'Reddedildi'),
             h('option', { value: 'edited' }, 'Düzenlendi'));
+        this.sortSelect = h('select', { class: 'select', 'aria-label': 'Sıralama', onChange: () => this.load() },
+            h('option', { value: 'newest' }, 'En yeni önce'),
+            h('option', { value: 'oldest' }, 'En eski önce'),
+            h('option', { value: 'confidence_desc' }, 'Güven (yüksek → düşük)'),
+            h('option', { value: 'confidence_asc' }, 'Güven (düşük → yüksek)'));
 
         return h('div', { class: 'stack' },
             h('div', { class: 'view-header' },
@@ -52,7 +57,8 @@ export class HistoryView {
                     h('div', { class: 'toolbar' },
                         h('label', { class: 'input-icon' }, h('span', { class: 'sr-only' }, 'Geçmişte ara'), icon('search'), this.search),
                         this.typeFilter,
-                        this.statusFilter),
+                        this.statusFilter,
+                        this.sortSelect),
                     this.tableRoot,
                     this.moreRoot)),
         );
@@ -111,6 +117,12 @@ export class HistoryView {
 
     renderTable() {
         const filtered = this.search.value.trim() || this.typeFilter.value || this.statusFilter.value;
+        const sort = this.sortSelect?.value || 'newest';
+        if (sort === 'oldest') this.items.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+        else if (sort === 'confidence_desc') this.items.sort((a, b) => b.confidence_score - a.confidence_score);
+        else if (sort === 'confidence_asc') this.items.sort((a, b) => a.confidence_score - b.confidence_score);
+        else this.items.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+
         if (!this.items.length) {
             replace(this.tableRoot, filtered
                 ? emptyState({ iconName: 'search', title: 'Sonuç bulunamadı', text: 'Arama ölçütlerini değiştirip tekrar deneyin.', compact: true })
