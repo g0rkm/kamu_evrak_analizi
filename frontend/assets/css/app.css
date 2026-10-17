@@ -644,6 +644,35 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .badge--medium { background: var(--warning, #eab308); color: #1a1a1a; }
 .badge--low { background: var(--danger, #dc2626); color: white; }
 
+/* Tag badges */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--primary-bg, #dbeafe);
+    color: var(--primary, #2563eb);
+    border: 1px solid var(--primary-border, #93c5fd);
+}
+.tag__remove {
+    cursor: pointer;
+    font-size: 0.875rem;
+    line-height: 1;
+    opacity: 0.6;
+}
+.tag__remove:hover {
+    opacity: 1;
+}
+.tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    align-items: center;
+}
+
 /* Error detail panel */
 .error-detail {
     background: var(--surface-1, #fef2f2);

@@ -181,4 +181,12 @@ export class ApiClient {
     healthDetailed() {
         return this.request('/health/detailed');
     }
+
+    updateTags(recordId, tags) {
+        return this.request(`/history/${encodeURIComponent(recordId)}/tags`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tags }),
+        });
+    }
 }
