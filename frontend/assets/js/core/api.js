@@ -177,4 +177,8 @@ export class ApiClient {
             body: JSON.stringify({ ids }),
         });
     }
+
+    healthDetailed() {
+        return this.request('/health/detailed');
+    }
 }
