@@ -603,3 +603,55 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     .log-console { background: #f8fafc; color: #111; border: 1px solid #e2e8f0; }
     a { color: #111; text-decoration: none; }
 }
+
+/* ── Loading Skeleton ── */
+.skeleton {
+    background: linear-gradient(90deg, var(--surface-alt) 25%, var(--border) 50%, var(--surface-alt) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: var(--radius);
+    min-height: 1em;
+}
+
+@keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton--text { height: 14px; width: 80%; margin-bottom: 8px; }
+.skeleton--title { height: 20px; width: 50%; margin-bottom: 12px; }
+.skeleton--card { height: 120px; width: 100%; }
+
+/* ── Skip Link ── */
+.skip-link {
+    position: absolute;
+    left: -999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.skip-link:focus {
+    position: fixed;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: auto;
+    padding: 8px 16px;
+    background: var(--primary);
+    color: white;
+    border-radius: var(--radius);
+    font-weight: 600;
+    z-index: 9999;
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ── Focus visible ── */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}

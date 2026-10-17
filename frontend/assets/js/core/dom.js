@@ -93,3 +93,11 @@ export const storage = {
         try { localStorage.setItem(key, value); } catch { /* depolama kapalı olabilir */ }
     },
 };
+
+export function skeleton(type = 'text', count = 3) {
+    const items = [];
+    for (let i = 0; i < count; i++) {
+        items.push(h('div', { class: `skeleton skeleton--${type}` }));
+    }
+    return h('div', { class: 'stack-sm', 'aria-hidden': 'true', 'aria-label': 'Yükleniyor' }, ...items);
+}
