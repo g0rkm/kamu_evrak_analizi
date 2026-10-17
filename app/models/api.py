@@ -116,6 +116,7 @@ class JobStatusResponse(BaseModel):
 
 class HealthStatus(BaseModel):
     status: str
+    environment: str = "development"
     service: str
     version: str
     llm_configured: bool
