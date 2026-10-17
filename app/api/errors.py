@@ -35,5 +35,14 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(Exception)
     async def handle_unexpected(request: Request, exc: Exception) -> JSONResponse:
-        logger.exception("Beklenmeyen hata: %s %s", request.method, request.url.path)
-        return _error(500, "internal_error", "Sunucuda beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.")
+        from app.core.logging import request_id_var
+        rid = request_id_var.get("")
+        logger.exception("Beklenmeyen hata: %s %s [request_id=%s]", request.method, request.url.path, rid)
+        return JSONResponse(
+            status_code=500,
+            content={
+                "detail": "Sunucuda beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
+                "code": "internal_error",
+                "request_id": rid,
+            },
+        )

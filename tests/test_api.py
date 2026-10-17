@@ -385,3 +385,14 @@ def test_update_review_notes(client, fake_llm):
     # Notun kaydedildiğini doğrula
     record = client.get(f"/api/history/{history_id}").json()
     assert record["review"]["notes"] == "Dikkat: acil değerlendirme gerekiyor."
+
+
+def test_error_response_includes_request_id(client):
+    """Hata yanıtları X-Request-ID header'ı içermeli."""
+    resp = client.get("/api/health")
+    assert "X-Request-ID" in resp.headers
+
+    # 404 yanıtı da request_id içermeli
+    resp = client.get("/api/history/nonexistent_record_12345")
+    assert resp.status_code == 404
+    assert "X-Request-ID" in resp.headers

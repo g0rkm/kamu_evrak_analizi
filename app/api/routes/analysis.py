@@ -37,6 +37,10 @@ async def analyze_batch(
     if len(files) > limit:
         raise InvalidInputError(f"Tek seferde en fazla {limit} dosya yüklenebilir.")
 
+    import logging
+    batch_logger = logging.getLogger("api.batch")
+    batch_logger.info("Toplu analiz başlatıldı: %d dosya", len(files))
+
     results: list[BatchItem] = []
     for upload in files:
         name = container.storage.display_name(upload.filename)
