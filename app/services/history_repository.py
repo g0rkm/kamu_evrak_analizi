@@ -20,14 +20,23 @@ class HistoryRepository:
     _ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
     SUMMARY_PREVIEW_CHARS = 160
 
-    def __init__(self, directory: Path) -> None:
+    def __init__(self, directory: Path, max_records: int = 10000) -> None:
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
+        self._max_records = max_records
         self._lock = threading.Lock()
 
     # ── Yazma ─────────────────────────────────────────────
 
     def save(self, result: dict) -> str:
+        # Kayıt sayısı limitini kontrol et
+        max_records = self._max_records
+        existing = list(self.directory.glob("*.json"))
+        if len(existing) >= max_records:
+            # En eski kaydı sil
+            oldest = min(existing, key=lambda p: p.stat().st_mtime)
+            oldest.unlink()
+
         now = datetime.now(timezone.utc)
         record_id = f"{now.strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
         analysis = result.get("analysis") or {}

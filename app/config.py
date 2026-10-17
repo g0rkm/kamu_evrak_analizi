@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     MIN_TEXT_CHARS: int = 20
     MAX_TEXT_CHARS: int = 100_000
     MAX_BATCH_FILES: int = 10
+    MAX_HISTORY_RECORDS: int = 10000
 
     # RAG
     RAG_INDEX_DIR: str = "app/data/rag"
