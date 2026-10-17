@@ -90,7 +90,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         response.headers["X-Response-Time"] = f"{((_time.perf_counter() - start) * 1000):.0f}ms"
         response.headers["X-API-Version"] = __version__
         if request.url.path.startswith("/api/"):
-            metrics.record_request(response.status_code)
+            metrics.record_request(response.status_code, endpoint=request.url.path)
         return response
 
     @app.middleware("http")

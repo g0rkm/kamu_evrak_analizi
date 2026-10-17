@@ -14,14 +14,17 @@ class Metrics:
         self._requests = 0
         self._errors = 0
         self._status_codes: dict[int, int] = defaultdict(int)
+        self._by_endpoint: dict[str, int] = defaultdict(int)
         self._started_at = time.monotonic()
 
-    def record_request(self, status_code: int) -> None:
+    def record_request(self, status_code: int, endpoint: str = "") -> None:
         with self._lock:
             self._requests += 1
             self._status_codes[status_code] += 1
             if status_code >= 400:
                 self._errors += 1
+            if endpoint:
+                self._by_endpoint[endpoint] += 1
 
     def snapshot(self) -> dict:
         with self._lock:
@@ -33,6 +36,7 @@ class Metrics:
                 "error_rate": round(self._errors / self._requests, 4) if self._requests > 0 else 0,
                 "requests_per_second": round(rps, 2),
                 "status_codes": dict(self._status_codes),
+                "top_endpoints": dict(sorted(self._by_endpoint.items(), key=lambda x: x[1], reverse=True)[:10]),
                 "uptime_seconds": round(uptime, 1),
             }
 
@@ -48,6 +52,7 @@ class Metrics:
             self._requests = 0
             self._errors = 0
             self._status_codes.clear()
+            self._by_endpoint.clear()
             self._started_at = time.monotonic()
 
 
