@@ -226,6 +226,19 @@ async def request_stats():
     return data
 
 
+@router.get('/metrics/summary', tags=['Sistem'], summary='Metrik ozeti')
+async def metrics_summary():
+    from app.core.metrics import metrics
+    snap = metrics.snapshot()
+    return {
+        'total_requests': snap['total_requests'],
+        'error_rate': snap.get('error_rate', 0),
+        'status_codes': snap.get('by_status', {}),
+        'top_endpoints': snap.get('top_endpoints', []),
+        'uptime_seconds': round(time.monotonic() - _start_time, 1)
+    }
+
+
 @router.get("/health/llm", summary="LLM bağlantı testi")
 async def llm_health(container: ServiceContainer = Depends(get_container)):
     if not container.llm.is_configured:

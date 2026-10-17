@@ -981,3 +981,13 @@ def test_list_document_types(client):
 def test_audit_log_not_found(client):
     response = client.get('/api/history/nonexistent/audit')
     assert response.status_code == 404
+
+
+def test_metrics_summary(client):
+    client.get('/api/health')
+    response = client.get('/api/metrics/summary')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'total_requests' in data
+    assert 'error_rate' in data
+    assert 'top_endpoints' in data
