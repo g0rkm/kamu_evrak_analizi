@@ -33,6 +33,12 @@ class FileTooLargeError(InvalidInputError):
     default_message = "Dosya boyutu izin verilen sınırı aşıyor."
 
 
+class FileValidationError(AppError):
+    status_code = 400
+    code = "file_validation_error"
+    default_message = "Dosya doğrulama hatası."
+
+
 class NotFoundError(AppError):
     status_code = 404
     code = "not_found"
@@ -97,3 +103,9 @@ class TokenBudgetExceededError(AppError):
     status_code = 429
     code = 'token_budget_exceeded'
     default_message = 'Token bütçesi aşıldı. Lütfen daha sonra tekrar deneyin.'
+
+
+class ConfigurationError(AppError):
+    status_code = 500
+    code = "configuration_error"
+    default_message = "Yapılandırma hatası oluştu."
