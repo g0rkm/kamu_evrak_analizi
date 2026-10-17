@@ -40,6 +40,7 @@ export class HistoryView {
                 h('div', null, h('h1', null, 'Analiz geçmişi'), h('p', null, 'Önceki analizleri arayın, açın ve memur kararlarını takip edin.')),
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportAll() }, icon('download'), 'Tümünü dışa aktar'),
                 h('button', { type: 'button', class: 'btn btn--danger-ghost btn--sm', onClick: () => this.clearAll() }, icon('trash'), 'Tümünü sil'),
+                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.importRecords() }, icon('upload'), 'İçe aktar'),
                 h('button', { type: 'button', class: 'btn btn--secondary', onClick: () => this.refresh() }, icon('refresh'), 'Yenile')),
             this.statsRoot,
             h('section', { class: 'card' },
@@ -199,5 +200,27 @@ export class HistoryView {
         } catch (error) {
             this.toaster.error(`Silme başarısız: ${error.message}`);
         }
+    }
+
+    async importRecords() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = async () => {
+            const file = input.files[0];
+            if (!file) return;
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+                const records = Array.isArray(data) ? data : (data.records || data.items || []);
+                if (!records.length) { this.toaster.info('Dosyada kayıt bulunamadı.'); return; }
+                const resp = await this.api.request('/history/import', { method: 'POST', json: { records } });
+                this.toaster.success(`${resp.imported} kayıt içe aktarıldı.`);
+                await this.refresh();
+            } catch (error) {
+                this.toaster.error(`İçe aktarma başarısız: ${error.message}`);
+            }
+        };
+        input.click();
     }
 }

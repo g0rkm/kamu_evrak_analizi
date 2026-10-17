@@ -60,6 +60,8 @@ class AnalysisService:
             self.storage.release(stored)
 
     async def compare(self, text1: str, text2: str) -> ComparisonResult:
+        if not self.llm.is_configured:
+            raise InvalidInputError("Yapay zekâ servisi yapılandırılmamış. Karşılaştırma yapılamaz.")
         text1 = self.validate_text(text1, "Birinci metin")
         text2 = self.validate_text(text2, "İkinci metin")
         return await ComparisonAgent(self.llm).execute(text1, text2)
