@@ -28,7 +28,11 @@ async def list_history(
     sort: str | None = Query(None, max_length=30, description="Sıralama: newest, oldest, confidence_desc, confidence_asc"),
     history: HistoryRepository = Depends(get_history),
 ):
-    return history.list_records(limit=limit, offset=offset, query=q, document_type=document_type, draft_status=draft_status, sort=sort)
+    result = history.list_records(limit=limit, offset=offset, query=q, document_type=document_type, draft_status=draft_status, sort=sort)
+    result["has_more"] = (offset + limit) < result["total"]
+    result["offset"] = offset
+    result["limit"] = limit
+    return result
 
 
 @router.get("/history/stats", response_model=HistoryStats)

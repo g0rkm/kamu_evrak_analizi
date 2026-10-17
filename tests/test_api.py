@@ -508,3 +508,15 @@ def test_sort_parameter_in_history(client):
     assert resp2.status_code == 200
     resp3 = client.get("/api/history?sort=confidence_desc")
     assert resp3.status_code == 200
+
+
+def test_history_pagination_metadata(client):
+    resp = client.get("/api/history?limit=10&offset=0")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "has_more" in data
+    assert "offset" in data
+    assert "limit" in data
+    assert data["offset"] == 0
+    assert data["limit"] == 10
+    assert isinstance(data["has_more"], bool)
