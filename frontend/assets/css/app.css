@@ -588,6 +588,40 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     }
 }
 
+/* Progress bar */
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--surface-2, #e5e7eb);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+.progress-bar__fill {
+    height: 100%;
+    background: var(--primary, #2563eb);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+/* Error detail panel */
+.error-detail {
+    background: var(--surface-1, #fef2f2);
+    border: 1px solid var(--danger, #dc2626);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+}
+.error-detail__title {
+    font-weight: 600;
+    color: var(--danger, #dc2626);
+    margin-bottom: 0.25rem;
+}
+.error-detail__message {
+    color: var(--text-2, #6b7280);
+}
+
 /* ---------- Yazdırma ---------- */
 
 @media print {

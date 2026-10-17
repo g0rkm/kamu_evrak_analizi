@@ -117,6 +117,9 @@ class InputPanel {
         this.onTextInput();
 
         this.submitButton = h('button', { type: 'button', class: 'btn btn--primary btn--lg btn--block', onClick: () => this.submit() });
+        this.progressBar = h('div', { class: 'progress-bar', style: { display: 'none' } },
+            h('div', { class: 'progress-bar__fill', style: { width: '0%' } })
+        );
         this.setBusy(false);
 
         return h('section', { class: 'card', 'aria-labelledby': 'inputTitle' },
@@ -126,7 +129,7 @@ class InputPanel {
             ),
             h('div', { class: 'card__body stack' },
                 h('div', { class: 'segmented', role: 'tablist', 'aria-label': 'Girdi türü' }, this.fileTab, this.textTab),
-                this.filePane, this.textPane, this.submitButton),
+                this.filePane, this.textPane, this.submitButton, this.progressBar),
             h('div', { class: 'card__footer small muted row', style: { alignItems: 'flex-start', flexWrap: 'nowrap' } },
                 icon('shield'),
                 this.vocab.limits.keep_uploads
@@ -340,6 +343,8 @@ export class AnalyzeView {
         this.lastInput = input;
         this.running = true;
         this.input.setBusy(true);
+        this.input.progressBar.style.display = 'block';
+        this.input.progressBar.firstChild.style.width = '30%';
         replace(this.workspace, this.progress.render(input.label));
         try {
             const { job_id: jobId } = input.kind === 'file'
@@ -349,11 +354,15 @@ export class AnalyzeView {
             if (job.status === 'failed') throw new ApiError(job.error?.detail || 'Analiz tamamlanamadı.', { code: job.error?.code });
 
             const result = job.result;
+            this.input.progressBar.firstChild.style.width = '100%';
+            setTimeout(() => { this.input.progressBar.style.display = 'none'; this.input.progressBar.firstChild.style.width = '0%'; }, 500);
             this.showResult(result, result.history_id, result.review);
             this.toaster.success(result.status === 'partial' ? 'Analiz kısmen tamamlandı; uyarıları inceleyin.' : `Analiz tamamlandı: ${input.label}`);
             // Kullanıcı başka sayfadaysa onu zorla geri çekme; sonuç Analiz sekmesinde hazır bekler.
             if (this.element.isConnected) this.navigate(`#/analiz/${result.history_id}`);
         } catch (error) {
+            this.input.progressBar.style.display = 'none';
+            this.input.progressBar.firstChild.style.width = '0%';
             this.showError(error);
         } finally {
             this.progress.stop();
