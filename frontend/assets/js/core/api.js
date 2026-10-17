@@ -125,6 +125,10 @@ export class ApiClient {
         return this.request('/history/clear', { method: 'DELETE' });
     }
 
+    importRecords(records) {
+        return this.request('/history/import', { method: 'POST', json: { records } });
+    }
+
     systemInfo() {
         return this.request('/system-info');
     }

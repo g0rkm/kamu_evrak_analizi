@@ -183,15 +183,15 @@ export class HistoryView {
 
     async exportAll() {
         try {
-            const page = await this.api.history({ limit: 200 });
-            const blob = new Blob([JSON.stringify(page.items, null, 2)], { type: 'application/json' });
+            const data = await this.api.exportAllRecords();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = `gecmis_${new Date().toISOString().slice(0, 10)}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            this.toaster.success(`${page.items.length} kayıt dışa aktarıldı.`);
+            this.toaster.success(`${data.total || data.records?.length || 0} kayıt dışa aktarıldı.`);
         } catch (error) {
             this.toaster.error(`Dışa aktarma başarısız: ${error.message}`);
         }
@@ -227,7 +227,7 @@ export class HistoryView {
                 const data = JSON.parse(text);
                 const records = Array.isArray(data) ? data : (data.records || data.items || []);
                 if (!records.length) { this.toaster.info('Dosyada kayıt bulunamadı.'); return; }
-                const resp = await this.api.request('/history/import', { method: 'POST', json: { records } });
+                const resp = await this.api.importRecords(records);
                 this.toaster.success(`${resp.imported} kayıt içe aktarıldı.`);
                 await this.refresh();
             } catch (error) {
