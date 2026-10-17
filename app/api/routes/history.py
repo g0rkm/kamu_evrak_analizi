@@ -32,9 +32,10 @@ async def list_history(
     date_from: str | None = Query(None, max_length=10, description="Başlangıç tarihi (YYYY-MM-DD)"),
     date_to: str | None = Query(None, max_length=10, description="Bitiş tarihi (YYYY-MM-DD)"),
     min_confidence: float | None = Query(None, ge=0, le=100, description="Minimum güven skoru filtresi"),
+    favorite: bool | None = Query(None, description="Sadece favorileri göster"),
     history: HistoryRepository = Depends(get_history),
 ):
-    result = history.list_records(limit=limit, offset=offset, query=q, document_type=document_type, draft_status=draft_status, sort=sort, date_from=date_from, date_to=date_to, min_confidence=min_confidence)
+    result = history.list_records(limit=limit, offset=offset, query=q, document_type=document_type, draft_status=draft_status, sort=sort, date_from=date_from, date_to=date_to, min_confidence=min_confidence, favorite=favorite)
     result["has_more"] = (offset + limit) < result["total"]
     result["offset"] = offset
     result["limit"] = limit
@@ -71,7 +72,7 @@ async def export_csv(history: HistoryRepository = Depends(get_history)):
     page = history.list_records(limit=10000, offset=0)
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["id", "timestamp", "source_name", "document_type", "confidence_score", "processing_time", "status", "draft_status"])
+    writer.writerow(["id", "timestamp", "source_name", "document_type", "confidence_score", "processing_time", "status", "draft_status", "tags"])
     for item in page["items"]:
         writer.writerow([
             item["id"],
@@ -82,6 +83,7 @@ async def export_csv(history: HistoryRepository = Depends(get_history)):
             item.get("processing_time", 0),
             item.get("status", ""),
             item.get("draft_status", "pending"),
+            ",".join(item.get("tags", [])),
         ])
     from starlette.responses import Response
     return Response(
