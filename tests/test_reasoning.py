@@ -532,3 +532,17 @@ def test_pii_mask_text():
     assert '[***EPOSTA***]' in result
     assert '[***TELEFON***]' in result
     assert 'test@test.com' not in result
+
+
+def test_file_validation_error():
+    from app.core.exceptions import FileValidationError
+    e = FileValidationError('test')
+    assert e.status_code == 400
+    assert e.code == 'file_validation_error'
+
+
+def test_configuration_error():
+    from app.core.exceptions import ConfigurationError
+    e = ConfigurationError('test')
+    assert e.status_code == 500
+    assert e.code == 'configuration_error'

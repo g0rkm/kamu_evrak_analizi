@@ -172,6 +172,10 @@ class HistoryRepository:
             items.sort(key=lambda i: i["confidence_score"], reverse=True)
         elif sort == "confidence_asc":
             items.sort(key=lambda i: i["confidence_score"])
+        elif sort == 'name_asc':
+            items.sort(key=lambda i: i['source_name'].lower())
+        elif sort == 'name_desc':
+            items.sort(key=lambda i: i['source_name'].lower(), reverse=True)
         # "newest" veya None = varsayılan (dosya adına göre ters sıralı, zaten öyle)
         return {"total": len(items), "items": items[offset: offset + limit]}
 

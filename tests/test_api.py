@@ -955,3 +955,8 @@ def test_search_history(client):
     data = response.json()
     assert 'total' in data
     assert 'items' in data
+
+
+def test_history_sort_by_name(client):
+    response = client.get('/api/history', params={'sort': 'name_asc'});
+    assert response.status_code == 200
