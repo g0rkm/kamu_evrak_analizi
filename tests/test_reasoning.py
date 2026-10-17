@@ -501,11 +501,12 @@ def test_dedup_key_returns_key_after_set():
 
 def test_api_version_endpoint():
     from fastapi.testclient import TestClient
-    from app.main import app
-    client = TestClient(app)
-    response = client.get('/version')
-    assert response.status_code == 200
-    data = response.json()
-    assert data['api'] == 'v1'
-    assert data['status'] == 'stable'
-    assert 'version' in data
+    from app.main import create_app
+    app = create_app()
+    with TestClient(app) as client:
+        response = client.get('/api/version')
+        assert response.status_code == 200
+        data = response.json()
+        assert data['api'] == 'v1'
+        assert data['status'] == 'stable'
+        assert 'version' in data
