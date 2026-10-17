@@ -108,4 +108,16 @@ export class ApiClient {
     exportAllRecords() {
         return this.request('/history/export-all');
     }
+
+    clearAllRecords() {
+        return this.request('/history/clear', { method: 'DELETE' });
+    }
+
+    systemInfo() {
+        return this.request('/system-info');
+    }
+
+    llmStats() {
+        return this.request('/stats/llm');
+    }
 }

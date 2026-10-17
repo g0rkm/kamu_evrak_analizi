@@ -245,3 +245,16 @@ def test_response_time_header(client):
     resp = client.get("/api/health")
     assert "X-Response-Time" in resp.headers
     assert resp.headers["X-Response-Time"].endswith("ms")
+
+
+def test_clear_all_records(client, fake_llm):
+    """Tüm kayıtları silme endpoint'i çalışmalı."""
+    client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — test kayıt 1 " * 5})
+    client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — test kayıt 2 " * 5})
+
+    resp = client.delete("/api/history/clear")
+    assert resp.status_code == 200
+    assert resp.json()["deleted"] >= 2
+
+    page = client.get("/api/history").json()
+    assert page["total"] == 0

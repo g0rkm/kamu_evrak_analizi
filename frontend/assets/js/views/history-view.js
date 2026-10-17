@@ -187,16 +187,17 @@ export class HistoryView {
         if (!this.items.length) { this.toaster.info('Silinecek kayıt yok.'); return; }
         const ok = await confirmDialog({
             title: 'Tüm kayıtlar silinsin mi?',
-            message: `${this.items.length} analiz kaydı kalıcı olarak silinecek. Bu işlem geri alınamaz.`,
+            message: `${this.total} analiz kaydı kalıcı olarak silinecek. Bu işlem geri alınamaz.`,
             confirmText: 'Tümünü sil',
             danger: true,
         });
         if (!ok) return;
-        let deleted = 0;
-        for (const item of this.items) {
-            try { await this.api.deleteRecord(item.id); deleted++; } catch {}
+        try {
+            const result = await this.api.clearAllRecords();
+            this.toaster.success(`${result.deleted} kayıt silindi.`);
+            await this.refresh();
+        } catch (error) {
+            this.toaster.error(`Silme başarısız: ${error.message}`);
         }
-        this.toaster.success(`${deleted} kayıt silindi.`);
-        await this.refresh();
     }
 }
