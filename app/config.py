@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     MAX_TEXT_CHARS: int = 100_000
     MAX_BATCH_FILES: int = 10
     MAX_HISTORY_RECORDS: int = 10000
+    DISK_WARNING_THRESHOLD_MB: int = 100
 
     # RAG
     RAG_INDEX_DIR: str = "app/data/rag"

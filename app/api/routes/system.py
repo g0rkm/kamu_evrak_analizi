@@ -40,7 +40,7 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
     status = "ok"
     if not container.llm.is_configured:
         status = "degraded"
-    elif disk_free_mb is not None and disk_free_mb < 50:
+    elif disk_free_mb is not None and disk_free_mb < container.settings.DISK_WARNING_THRESHOLD_MB / 2:
         status = "warning"
 
     warnings = []
@@ -48,7 +48,7 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
         warnings.append("LLM API anahtarı yapılandırılmamış.")
     if not container.rag.available:
         warnings.append("RAG mevzuat indeksi yüklenmemiş.")
-    if disk_free_mb is not None and disk_free_mb < 100:
+    if disk_free_mb is not None and disk_free_mb < container.settings.DISK_WARNING_THRESHOLD_MB:
         warnings.append(f"Disk alanı düşük: {disk_free_mb} MB kaldı.")
 
     return HealthStatus(
@@ -143,7 +143,7 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
         warnings_list.append("RAG mevzuat indeksi yüklenmemiş.")
     try:
         disk = shutil.disk_usage(settings.history_path)
-        if disk.free < 100 * 1024 * 1024:
+        if disk.free < settings.DISK_WARNING_THRESHOLD_MB * 1024 * 1024:
             warnings_list.append(f"Disk alanı düşük: {disk.free // (1024 * 1024)} MB kaldı.")
     except OSError:
         pass
