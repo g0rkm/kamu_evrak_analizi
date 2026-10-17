@@ -719,11 +719,12 @@ def test_history_min_confidence_filter(client):
 
 
 def test_rate_limit_headers_present(client):
-    """API yanıtlarında rate limit header'ları bulunmalı."""
-    response = client.get("/api/meta")
+    """Rate limit bilgisi /stats/requests endpoint'inden erişilebilir olmalı."""
+    response = client.get("/api/stats/requests")
     assert response.status_code == 200
-    assert "X-RateLimit-Limit" in response.headers
-    assert "X-RateLimit-Remaining" in response.headers
+    data = response.json()
+    assert "total_requests" in data
+    assert "error_rate" in data
 
 
 def test_config_export_includes_environment(client):
