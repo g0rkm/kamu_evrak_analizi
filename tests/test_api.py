@@ -857,3 +857,26 @@ def test_health_includes_uptime_human(client):
     assert response.status_code == 200
     data = response.json()
     assert "uptime_human" in data
+
+
+def test_request_stats_includes_top_endpoints(client):
+    """Request stats top_endpoints alanını içermeli."""
+    # Önce birkaç istek yap
+    client.get("/api/health")
+    client.get("/api/meta")
+    response = client.get("/api/stats/requests")
+    assert response.status_code == 200
+    data = response.json()
+    assert "top_endpoints" in data
+
+
+def test_openapi_docs_available(client):
+    """OpenAPI docs endpoint'i erişilebilir olmalı."""
+    response = client.get("/docs")
+    assert response.status_code == 200
+
+
+def test_redoc_available(client):
+    """ReDoc endpoint'i erişilebilir olmalı."""
+    response = client.get("/redoc")
+    assert response.status_code == 200

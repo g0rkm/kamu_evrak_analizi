@@ -448,3 +448,15 @@ def test_settings_has_all_new_fields():
     assert hasattr(settings, 'LOG_FILE')
     assert hasattr(settings, 'MAX_HISTORY_RECORDS')
     assert hasattr(settings, 'DISK_WARNING_THRESHOLD_MB')
+
+
+def test_metrics_endpoint_tracking():
+    """Metrics endpoint bazlı sayım yapmalı."""
+    from app.core.metrics import Metrics
+    m = Metrics()
+    m.record_request(200, endpoint="/api/health")
+    m.record_request(200, endpoint="/api/health")
+    m.record_request(200, endpoint="/api/meta")
+    snap = m.snapshot()
+    assert snap["top_endpoints"]["/api/health"] == 2
+    assert snap["top_endpoints"]["/api/meta"] == 1
