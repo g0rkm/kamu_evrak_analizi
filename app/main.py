@@ -31,7 +31,7 @@ SECURITY_HEADERS = {
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or get_settings()
-    configure_logging(settings.LOG_LEVEL, settings.LOG_FORMAT)
+    configure_logging(settings.LOG_LEVEL, settings.LOG_FORMAT, settings.LOG_FILE)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
