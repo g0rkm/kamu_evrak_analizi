@@ -170,6 +170,8 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
             "rate_limit_requests": settings.RATE_LIMIT_REQUESTS,
             "rate_limit_window": settings.RATE_LIMIT_WINDOW,
             "csp_report_only": settings.CSP_REPORT_ONLY,
+            "max_history_records": settings.MAX_HISTORY_RECORDS,
+            "disk_warning_threshold_mb": settings.DISK_WARNING_THRESHOLD_MB,
         },
     }
 
