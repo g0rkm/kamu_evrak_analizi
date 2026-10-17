@@ -700,3 +700,36 @@ def test_admin_endpoint_with_correct_token():
     with TestClient(app) as mc:
         response = mc.post("/api/cache/clear", json={}, headers={"Authorization": "Bearer test-secret-token"})
         assert response.status_code == 200
+
+
+def test_history_date_filter_params(client):
+    """History endpoint tarih filtre parametrelerini kabul etmeli."""
+    response = client.get("/api/history?date_from=2024-01-01&date_to=2024-12-31")
+    assert response.status_code == 200
+    data = response.json()
+    assert "items" in data
+
+
+def test_history_min_confidence_filter(client):
+    """History endpoint min_confidence parametresini kabul etmeli."""
+    response = client.get("/api/history?min_confidence=50")
+    assert response.status_code == 200
+    data = response.json()
+    assert "items" in data
+
+
+def test_rate_limit_headers_present(client):
+    """API yanıtlarında rate limit header'ları bulunmalı."""
+    response = client.get("/api/meta")
+    assert response.status_code == 200
+    assert "X-RateLimit-Limit" in response.headers
+    assert "X-RateLimit-Remaining" in response.headers
+
+
+def test_config_export_includes_environment(client):
+    """Config export environment ve maintenance_mode içermeli."""
+    response = client.get("/api/config/export")
+    assert response.status_code == 200
+    data = response.json()
+    assert "environment" in data
+    assert "maintenance_mode" in data
