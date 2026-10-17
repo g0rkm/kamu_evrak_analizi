@@ -25,9 +25,10 @@ async def list_history(
     q: str | None = Query(None, max_length=200, description="Özet, kaynak adı veya türde arama"),
     document_type: str | None = Query(None, max_length=50),
     draft_status: str | None = Query(None, max_length=20, description="Taslak durumuna göre filtrele"),
+    sort: str | None = Query(None, max_length=30, description="Sıralama: newest, oldest, confidence_desc, confidence_asc"),
     history: HistoryRepository = Depends(get_history),
 ):
-    return history.list_records(limit=limit, offset=offset, query=q, document_type=document_type, draft_status=draft_status)
+    return history.list_records(limit=limit, offset=offset, query=q, document_type=document_type, draft_status=draft_status, sort=sort)
 
 
 @router.get("/history/stats", response_model=HistoryStats)

@@ -107,7 +107,7 @@ class HistoryRepository:
         except (json.JSONDecodeError, OSError):
             return None
 
-    def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None) -> dict:
+    def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None, sort: str | None = None) -> dict:
         items = self._summaries()
         if document_type:
             items = [i for i in items if i["document_type"] == document_type]
@@ -122,6 +122,13 @@ class HistoryRepository:
                 or needle in i["document_type"].casefold()
                 or needle in (i.get("keywords") or "").casefold()
             ]
+        if sort == "oldest":
+            items.sort(key=lambda i: i["timestamp"])
+        elif sort == "confidence_desc":
+            items.sort(key=lambda i: i["confidence_score"], reverse=True)
+        elif sort == "confidence_asc":
+            items.sort(key=lambda i: i["confidence_score"])
+        # "newest" veya None = varsayılan (dosya adına göre ters sıralı, zaten öyle)
         return {"total": len(items), "items": items[offset: offset + limit]}
 
     def stats(self) -> dict:
