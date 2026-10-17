@@ -370,3 +370,18 @@ def test_request_stats_endpoint(client):
     assert data["total_requests"] >= 2
     assert "error_rate" in data
     assert "status_codes" in data
+
+
+def test_update_review_notes(client, fake_llm):
+    """Analiz kaydına not eklenebilmeli."""
+    resp = client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — test not " * 5})
+    history_id = resp.json()["history_id"]
+
+    # Not ekle
+    resp = client.patch(f"/api/history/{history_id}/review", json={"notes": "Dikkat: acil değerlendirme gerekiyor."})
+    assert resp.status_code == 200
+    assert resp.json()["notes"] == "Dikkat: acil değerlendirme gerekiyor."
+
+    # Notun kaydedildiğini doğrula
+    record = client.get(f"/api/history/{history_id}").json()
+    assert record["review"]["notes"] == "Dikkat: acil değerlendirme gerekiyor."

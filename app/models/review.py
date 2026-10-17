@@ -16,6 +16,7 @@ class ReviewState(BaseModel):
     routing_unit: Optional[str] = None  # Memurun seçtiği birim
     updated_at: Optional[datetime] = None
     audit_log: list[dict] = Field(default_factory=list)
+    notes: str = ""
 
 
 class ReviewUpdate(BaseModel):
@@ -24,3 +25,4 @@ class ReviewUpdate(BaseModel):
     reject_reason: Optional[str] = Field(default=None, max_length=1_000)
     routing_status: Optional[RoutingReviewStatus] = None
     routing_unit: Optional[str] = Field(default=None, max_length=200)
+    notes: Optional[str] = Field(default=None, max_length=2000)
