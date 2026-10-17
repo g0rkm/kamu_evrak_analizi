@@ -195,6 +195,49 @@ async def llm_health(container: ServiceContainer = Depends(get_container)):
     }
 
 
+@router.get("/health/detailed", summary="Detaylı sağlık kontrolleri")
+async def health_detailed(container: ServiceContainer = Depends(get_container)):
+    """Tüm alt sistem sağlık kontrollerini tek yanıtta döndürür."""
+    import shutil
+    checks = {}
+    
+    # LLM kontrolü
+    checks["llm"] = {
+        "configured": container.llm.is_configured,
+        "circuit_breaker_closed": not container.llm._breaker.is_open,
+    }
+    
+    # Depolama kontrolü
+    try:
+        disk = shutil.disk_usage(container.settings.history_path)
+        checks["storage"] = {
+            "writable": container.settings.history_path.exists(),
+            "free_mb": round(disk.free / (1024 * 1024), 1),
+            "warning": disk.free < container.settings.DISK_WARNING_THRESHOLD_MB * 1024 * 1024,
+        }
+    except OSError:
+        checks["storage"] = {"writable": False, "free_mb": None, "warning": True}
+    
+    # RAG kontrolü
+    checks["rag"] = {
+        "available": container.rag.available,
+        "chunks": container.rag.chunk_count,
+    }
+    
+    all_ok = (
+        checks["llm"]["configured"]
+        and checks["llm"]["circuit_breaker_closed"]
+        and checks["storage"]["writable"]
+        and not checks["storage"]["warning"]
+    )
+    
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        content={"status": "healthy" if all_ok else "degraded", "checks": checks},
+        status_code=200 if all_ok else 503,
+    )
+
+
 @router.get("/config/export", summary="Çalışma zamanı yapılandırma dışa aktarımı", dependencies=[Depends(require_admin)])
 async def config_export(container: ServiceContainer = Depends(get_container)):
     """Hassas olmayan yapılandırma değerlerini dışa aktarır (sorun giderme için)."""

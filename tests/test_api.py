@@ -771,3 +771,15 @@ def test_audit_log_nonexistent(client):
     """Var olmayan kayıt için denetim logu 404 dönmeli."""
     response = client.get("/api/history/nonexistent-id-123/audit")
     assert response.status_code == 404
+
+
+def test_health_detailed_endpoint(client):
+    """Detaylı sağlık kontrolü endpoint'i çalışmalı."""
+    response = client.get("/api/health/detailed")
+    assert response.status_code in (200, 503)
+    data = response.json()
+    assert "status" in data
+    assert "checks" in data
+    assert "llm" in data["checks"]
+    assert "storage" in data["checks"]
+    assert "rag" in data["checks"]
