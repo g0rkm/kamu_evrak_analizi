@@ -668,7 +668,7 @@ def test_api_version_header(client):
     """Her API yanıtı X-API-Version header'ı içermeli."""
     response = client.get("/api/health")
     assert "X-API-Version" in response.headers
-    assert response.headers["X-API-Version"] == "2.7.0"
+    assert response.headers["X-API-Version"] == "2.8.0"
 
 
 def test_admin_endpoint_without_token(client):
@@ -915,3 +915,18 @@ def test_history_summary_stats(client):
     assert 'total' in data
     assert 'top_confidence' in data
     assert isinstance(data['top_confidence'], list)
+
+
+def test_version_endpoint(client):
+    response = client.get('/api/version')
+    assert response.status_code == 200
+    data = response.json()
+    assert data['version'] == '2.8.0'
+    assert data['api'] == 'v1'
+
+
+def test_system_info_includes_timeout(client):
+    response = client.get('/api/system-info')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'analysis_timeout' in data

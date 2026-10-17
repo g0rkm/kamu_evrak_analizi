@@ -434,9 +434,9 @@ def test_json_formatter_output():
 
 
 def test_app_version_is_2_7():
-    """Uygulama versiyonu 2.7.0 olmalı."""
+    """Uygulama versiyonu 2.8.0 olmalı."""
     from app import __version__
-    assert __version__ == "2.7.0"
+    assert __version__ == "2.8.0"
 
 
 def test_settings_has_all_new_fields():
@@ -510,3 +510,16 @@ def test_api_version_endpoint():
         assert data['api'] == 'v1'
         assert data['status'] == 'stable'
         assert 'version' in data
+
+
+def test_analysis_timeout_config_default():
+    from app.config import Settings
+    s = Settings()
+    assert s.ANALYSIS_TIMEOUT == 60
+
+
+def test_analysis_timeout_config_validation():
+    from app.config import Settings
+    import pytest
+    with pytest.raises(Exception):
+        Settings(ANALYSIS_TIMEOUT=3)
