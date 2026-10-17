@@ -175,3 +175,17 @@ def test_audit_log_on_review(client, fake_llm):
     resp = client.patch(f"/api/history/{hid}/review", json={"routing_status": "approved"})
     review = resp.json()
     assert len(review["audit_log"]) == 2
+
+
+def test_export_all_records(client, fake_llm):
+    """Tum analiz kayitlarini JSON olarak indirme."""
+    # Iki analiz olustur
+    client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — kaldırım onarımı talebi " * 5})
+    client.post("/api/analyze-text", json={"text": "T.C. Kanun teklifi — vergi düzenlemesi " * 5})
+
+    resp = client.get("/api/history/export-all")
+    assert resp.status_code == 200
+    assert "attachment" in resp.headers["content-disposition"]
+    data = resp.json()
+    assert data["total"] >= 2
+    assert len(data["records"]) >= 2
