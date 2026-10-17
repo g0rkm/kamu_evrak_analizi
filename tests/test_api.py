@@ -156,3 +156,22 @@ def test_mask_pii_endpoint(client):
     assert data["pii_count"] >= 2
     assert "10000000146" not in data["masked_text"]
     assert "***" in data["masked_text"]
+
+
+def test_audit_log_on_review(client, fake_llm):
+    """Memur kararı verdiğinde audit log kaydı tutulmalı."""
+    resp = client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — kaldırım onarımı talebi " * 5})
+    hid = resp.json()["history_id"]
+
+    # Taslak onayla
+    resp = client.patch(f"/api/history/{hid}/review", json={"draft_status": "approved"})
+    assert resp.status_code == 200
+    review = resp.json()
+    assert len(review["audit_log"]) == 1
+    assert review["audit_log"][0]["action"] == "draft_status"
+    assert "timestamp" in review["audit_log"][0]
+
+    # Yönlendirme onayla
+    resp = client.patch(f"/api/history/{hid}/review", json={"routing_status": "approved"})
+    review = resp.json()
+    assert len(review["audit_log"]) == 2
