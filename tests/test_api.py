@@ -431,3 +431,33 @@ def test_llm_health_endpoint(client):
     assert resp.status_code == 200
     data = resp.json()
     assert "status" in data
+
+
+def test_config_export_endpoint(client):
+    resp = client.get("/api/config/export")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "version" in data
+    assert "llm_model" in data
+    assert "rate_limit" in data
+    assert "llm_configured" in data
+    # Hassas bilgi olmamalı
+    assert "api_key" not in str(data).lower()
+
+
+def test_clear_cache_endpoint(client):
+    resp = client.post("/api/cache/clear", headers={"Content-Type": "application/json"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["cleared"] is True
+    assert "entries_removed" in data
+
+
+def test_null_byte_stripped_from_text(client):
+    resp = client.post(
+        "/api/analyze-text",
+        json={"text": "Bu metin\x00 null byte içeriyor"},
+        headers={"Content-Type": "application/json"},
+    )
+    # İstek başarılı olmalı (503 = LLM bağlanamadı, ama null byte hatası olmamalı)
+    assert resp.status_code in (200, 503)

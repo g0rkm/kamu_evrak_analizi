@@ -207,3 +207,14 @@ async def config_export(container: ServiceContainer = Depends(get_container)):
         "csp_report_only": settings.CSP_REPORT_ONLY,
         "keep_uploads": settings.KEEP_UPLOADS,
     }
+
+
+@router.post("/cache/clear", summary="LLM önbelleğini temizle")
+async def clear_cache(container: ServiceContainer = Depends(get_container)):
+    """LLM yanıt önbelleğini temizler."""
+    stats_before = container.llm.get_usage_stats()
+    container.llm._cache.clear()
+    return {
+        "cleared": True,
+        "entries_removed": stats_before.get("cache_size", 0),
+    }

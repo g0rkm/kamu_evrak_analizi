@@ -15,7 +15,7 @@ class TextAnalysisRequest(BaseModel):
     @field_validator("text")
     @classmethod
     def _strip_text(cls, v: str) -> str:
-        v = v.strip()
+        v = v.replace("\x00", "").strip()
         if not v:
             raise ValueError("Metin boş olamaz.")
         return v
@@ -28,7 +28,7 @@ class CompareRequest(BaseModel):
     @field_validator("text1", "text2")
     @classmethod
     def _strip_compare_texts(cls, v: str) -> str:
-        v = v.strip()
+        v = v.replace("\x00", "").strip()
         if not v:
             raise ValueError("Karşılaştırma metinleri boş olamaz.")
         return v
