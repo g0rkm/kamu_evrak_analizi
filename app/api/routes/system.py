@@ -1,3 +1,6 @@
+import shutil
+import time
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
@@ -11,11 +14,17 @@ from app.services.pii_detector import PIIDetector
 from app.services.upload_storage import ALLOWED_EXTENSIONS
 
 router = APIRouter(tags=["sistem"])
+_start_time = time.monotonic()
 
 
 @router.get("/health", response_model=HealthStatus, summary="Sistem sağlık kontrolü")
 async def health_check(container: ServiceContainer = Depends(get_container)):
     stats = container.history.stats()
+    try:
+        disk = shutil.disk_usage(container.settings.history_path)
+        disk_free_mb = round(disk.free / (1024 * 1024), 1)
+    except OSError:
+        disk_free_mb = None
     return HealthStatus(
         status="ok",
         service=container.settings.APP_NAME,
@@ -27,6 +36,9 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
         total_analyses=stats["total"],
         avg_confidence=stats["avg_confidence"],
         llm_usage=container.llm.get_usage_stats(),
+        uptime_seconds=round(time.monotonic() - _start_time, 1),
+        active_jobs=len(container.jobs._tasks),
+        disk_free_mb=disk_free_mb,
     )
 
 
