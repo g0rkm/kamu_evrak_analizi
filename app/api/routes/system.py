@@ -18,6 +18,16 @@ router = APIRouter(tags=["sistem"])
 _start_time = time.monotonic()
 
 
+def _format_uptime(seconds: float) -> str:
+    hours, remainder = divmod(int(seconds), 3600)
+    minutes, secs = divmod(remainder, 60)
+    if hours > 0:
+        return f"{hours} saat {minutes} dk"
+    if minutes > 0:
+        return f"{minutes} dk {secs} sn"
+    return f"{secs} sn"
+
+
 @router.get("/health", response_model=HealthStatus, summary="Sistem sağlık kontrolü")
 async def health_check(container: ServiceContainer = Depends(get_container)):
     stats = container.history.stats()
@@ -131,6 +141,8 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
 
     return {
         "version": __version__,
+        "uptime_seconds": round(time.monotonic() - _start_time, 1),
+        "uptime_human": _format_uptime(time.monotonic() - _start_time),
         "python_version": platform.python_version(),
         "warnings": warnings_list,
         "settings": {

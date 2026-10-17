@@ -68,4 +68,13 @@ def verify_environment(settings: Settings) -> list[str]:
     if tmp_count:
         logger.info("Geçici dosya temizliği: %d dosya silindi.", tmp_count)
 
+    logger.info(
+        "Yapılandırma: model=%s, timeout=%.0fs, cache_ttl=%ds, rate_limit=%d/%ds",
+        settings.LLM_MODEL,
+        settings.PIPELINE_TIMEOUT_SECONDS,
+        settings.LLM_CACHE_TTL_SECONDS,
+        settings.RATE_LIMIT_REQUESTS,
+        settings.RATE_LIMIT_WINDOW,
+    )
+
     return warnings

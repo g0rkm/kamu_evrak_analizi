@@ -413,3 +413,13 @@ def test_health_warnings_field(client):
     data = resp.json()
     assert "warnings" in data
     assert isinstance(data["warnings"], list)
+
+
+def test_system_info_includes_uptime(client):
+    """System info endpoint'i uptime döndürmeli."""
+    resp = client.get("/api/system-info")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "uptime_seconds" in data
+    assert "uptime_human" in data
+    assert "warnings" in data

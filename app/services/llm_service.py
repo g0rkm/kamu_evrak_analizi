@@ -143,6 +143,7 @@ class LLMService:
     async def chat(self, system_prompt: str, user_prompt: str, *, temperature: float | None = None) -> str:
         """Tek bir sohbet isteği gönderir, yanıt metnini döndürür."""
         self._breaker.check()
+        _req_start = _time.monotonic()
         if self._token_budget > 0 and self.usage.total_tokens >= self._token_budget:
             raise LLMUnavailableError(f"Token bütçesi ({self._token_budget:,} token) aşıldı. Yönetici bütçeyi artırmalıdır.".replace(",", "."))
         temp = self.temperature if temperature is None else temperature
@@ -185,6 +186,9 @@ class LLMService:
                     self._cache.put(self.model, system_prompt, user_prompt, temp, result)
                     self.usage.cache_misses += 1
                     self._breaker.record_success()
+                    elapsed = _time.monotonic() - _req_start
+                    if elapsed > 30:
+                        logger.warning("Yavaş LLM yanıtı: %.1f sn", elapsed)
                     return result
 
             if attempt < self.max_retries:
