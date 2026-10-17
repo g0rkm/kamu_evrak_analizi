@@ -64,8 +64,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def maintenance_mode_middleware(request: Request, call_next):
         if request.app.state.container.settings.MAINTENANCE_MODE:
             if not request.url.path.startswith("/api/health"):
-                from app.core.exceptions import MaintenanceModeError
-                raise MaintenanceModeError()
+                from starlette.responses import JSONResponse as _JSONResp
+                return _JSONResp(
+                    status_code=503,
+                    content={"error": "maintenance_mode", "message": "Sistem şu anda bakım modundadır. Lütfen daha sonra tekrar deneyin."},
+                )
         return await call_next(request)
 
     app.add_middleware(GZipMiddleware, minimum_size=1000)
