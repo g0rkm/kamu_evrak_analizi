@@ -142,6 +142,7 @@ class HistoryRepository:
                 or needle in i["source_name"].casefold()
                 or needle in i["document_type"].casefold()
                 or needle in (i.get("keywords") or "").casefold()
+                or needle in " ".join(i.get("tags") or []).casefold()
             ]
         if date_from:
             items = [i for i in items if i.get("timestamp", "") >= date_from]
@@ -198,6 +199,7 @@ class HistoryRepository:
                 "summary": (data.get("summary", "") or "")[: self.SUMMARY_PREVIEW_CHARS],
                 "draft_status": (data.get("review") or {}).get("draft_status", "pending"),
                 "keywords": ", ".join((((data.get("result") or {}).get("analysis") or {}).get("content") or {}).get("keywords") or []),
+                "tags": data.get("tags") or [],
             })
         return summaries
 
