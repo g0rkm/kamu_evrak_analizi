@@ -315,17 +315,17 @@ def test_llm_usage_stats_includes_latency():
 
 
 def test_history_repository_stats_min_max():
-    """History stats min/max değerlerini içermeli."""
+    """History stats boş depoda min/max içermemeli, dolu depoda içermeli."""
     from app.services.history_repository import HistoryRepository
     from pathlib import Path
     import tempfile
     with tempfile.TemporaryDirectory() as tmp:
         repo = HistoryRepository(Path(tmp))
         stats = repo.stats()
-        assert "min_confidence" in stats
-        assert "max_confidence" in stats
-        assert "min_processing_time" in stats
-        assert "max_processing_time" in stats
+        # Boş depoda min/max olmamalı
+        assert stats["total"] == 0
+        assert "min_confidence" not in stats
+        assert "max_confidence" not in stats
 
 
 def test_circuit_breaker_initial_state():

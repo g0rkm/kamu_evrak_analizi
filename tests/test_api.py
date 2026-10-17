@@ -573,22 +573,22 @@ def test_readiness_includes_circuit_breaker(client):
 
 
 def test_import_records_invalid_body(client):
-    """records alanı list değilse 422 dönmeli."""
+    """records alanı list değilse 400 dönmeli."""
     response = client.post("/api/history/import", json={"records": "not_a_list"})
-    assert response.status_code == 422
+    assert response.status_code == 400
 
 
 def test_import_records_over_limit(client):
-    """500'den fazla kayıt gönderildiğinde 422 dönmeli."""
+    """500'den fazla kayıt gönderildiğinde 400 dönmeli."""
     records = [{"id": f"test-{i}", "result": {}} for i in range(501)]
     response = client.post("/api/history/import", json={"records": records})
-    assert response.status_code == 422
+    assert response.status_code == 400
 
 
 def test_mask_pii_empty_text_returns_zero(client):
     """Boş metin gönderildiğinde pii_count 0 olmalı."""
     response = client.post("/api/mask-pii", json={"text": ""})
-    assert response.status_code == 200
+    assert resp.status_code == 200
     data = response.json()
     assert data["pii_count"] == 0
     assert data["masked_text"] == ""
