@@ -96,7 +96,7 @@ class InputPanel {
         // Metin
         this.titleInput = h('input', { class: 'input', id: 'docTitle', maxlength: 200, placeholder: 'Örn. Kaldırım onarımı dilekçesi', value: readSession('draftTitle') });
         this.textInput = h('textarea', {
-            class: 'textarea', id: 'docText', placeholder: 'Evrak metnini buraya yapıştırın…', 'aria-describedby': 'textCounter',
+            class: 'textarea', id: 'analyzeTextInput', placeholder: 'Evrak metnini buraya yapıştırın…', 'aria-describedby': 'textCounter',
             value: readSession('draftText'),
             onInput: () => this.onTextInput(),
             onKeydown: (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); this.submit(); } },
@@ -109,6 +109,7 @@ class InputPanel {
                 h('div', { class: 'row row--between' },
                     h('label', { class: 'field__label', for: 'docText' }, 'Evrak metni'),
                     h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.loadSample() }, icon('sparkles'), 'Örnek evrak')),
+                h('label', { for: 'analyzeTextInput', class: 'sr-only' }, 'Analiz edilecek metin'),
                 this.textInput,
                 h('div', { class: 'row row--between' }, this.counter, h('span', { class: 'field__hint' }, h('span', { class: 'kbd' }, 'Ctrl'), ' + ', h('span', { class: 'kbd' }, 'Enter'), ' ile gönder')),
                 this.textError),

@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
-    <a class="skip-link" href="#main">İçeriğe geç</a>
+    <a href="#viewRoot" class="skip-link">İçeriğe geç</a>
 
     <header class="app-header">
         <div class="app-header__inner">
@@ -47,14 +47,14 @@
     </header>
 
     <main class="app-main" id="main" tabindex="-1">
-        <div id="viewRoot">
+        <div id="viewRoot" role="main">
             <noscript>
                 <div class="card card__body">Bu uygulama JavaScript gerektirir. Lütfen tarayıcınızda JavaScript'i etkinleştirin.</div>
             </noscript>
         </div>
     </main>
 
-    <div class="toaster" id="toaster" aria-live="polite" aria-atomic="false"></div>
+    <div class="toaster" id="toaster" role="status" aria-live="polite"></div>
 
     <script type="module" src="assets/js/main.js"></script>
 </body>
