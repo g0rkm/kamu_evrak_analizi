@@ -44,7 +44,6 @@ def verify_environment(settings: Settings) -> list[str]:
 
     # Disk alanı kontrolü
     try:
-        import shutil
         disk = shutil.disk_usage(settings.history_path)
         free_mb = disk.free / (1024 * 1024)
         if free_mb < 100:
