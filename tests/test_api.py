@@ -734,3 +734,24 @@ def test_config_export_includes_environment(client):
     data = response.json()
     assert "environment" in data
     assert "maintenance_mode" in data
+
+
+def test_bulk_delete_empty_ids(client):
+    """Boş ids listesi 422 dönmeli."""
+    response = client.post("/api/history/bulk-delete", json={"ids": []})
+    assert response.status_code == 400
+
+
+def test_bulk_delete_invalid_body(client):
+    """ids alanı list değilse 400 dönmeli."""
+    response = client.post("/api/history/bulk-delete", json={"ids": "not_a_list"})
+    assert response.status_code == 400
+
+
+def test_bulk_delete_nonexistent_ids(client):
+    """Var olmayan id'leri silmeye çalışmak 200 dönmeli (deleted=0)."""
+    response = client.post("/api/history/bulk-delete", json={"ids": ["nonexistent-1", "nonexistent-2"]})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["deleted"] == 0
+    assert data["requested"] == 2

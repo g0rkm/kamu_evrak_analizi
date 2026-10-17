@@ -91,6 +91,22 @@ async def export_csv(history: HistoryRepository = Depends(get_history)):
     )
 
 
+@router.post("/history/bulk-delete", summary="Seçili kayıtları toplu sil")
+async def bulk_delete_records(body: dict, history: HistoryRepository = Depends(get_history)):
+    ids = body.get("ids")
+    if not isinstance(ids, list) or not ids:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError("'ids' listesi gereklidir.")
+    if len(ids) > 100:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError("Tek seferde en fazla 100 kayıt silinebilir.")
+    deleted = 0
+    for record_id in ids:
+        if history.delete(record_id):
+            deleted += 1
+    return {"deleted": deleted, "requested": len(ids)}
+
+
 @router.get("/history/{record_id}")
 async def get_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     return _require(history, record_id)
