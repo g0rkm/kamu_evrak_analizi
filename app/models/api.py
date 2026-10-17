@@ -112,3 +112,17 @@ class HealthStatus(BaseModel):
     uptime_seconds: float = 0.0
     active_jobs: int = 0
     disk_free_mb: Optional[float] = None
+
+
+class CacheStatsResponse(BaseModel):
+    cache_hits: int = 0
+    cache_misses: int = 0
+    cache_size: int = 0
+    total_requests: int = 0
+    total_tokens: int = 0
+
+
+class SystemInfoResponse(BaseModel):
+    version: str
+    python_version: str
+    settings: dict = Field(default_factory=dict)

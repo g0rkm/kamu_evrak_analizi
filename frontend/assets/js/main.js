@@ -40,6 +40,7 @@ class SystemStatus {
         this.element.dataset.state = state;
         this.text.textContent = text;
         this.element.title = title;
+        this.element.setAttribute('aria-label', title);
     }
 }
 

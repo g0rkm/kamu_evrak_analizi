@@ -83,3 +83,26 @@ async def mask_pii(body: MaskRequest):
 @router.get("/stats/llm", summary="LLM kullanım istatistikleri")
 async def llm_stats(container: ServiceContainer = Depends(get_container)):
     return container.llm.get_usage_stats()
+
+
+@router.get("/system-info", summary="Sistem yapılandırma bilgileri (yönetici)")
+async def system_info(container: ServiceContainer = Depends(get_container)):
+    import platform
+    settings = container.settings
+    return {
+        "version": __version__,
+        "python_version": platform.python_version(),
+        "settings": {
+            "log_level": settings.LOG_LEVEL,
+            "log_format": settings.LOG_FORMAT,
+            "llm_model": settings.LLM_MODEL,
+            "llm_timeout": settings.LLM_TIMEOUT_SECONDS,
+            "llm_cache_ttl": settings.LLM_CACHE_TTL_SECONDS,
+            "pipeline_timeout": settings.PIPELINE_TIMEOUT_SECONDS,
+            "max_file_mb": settings.MAX_FILE_SIZE_MB,
+            "max_text_chars": settings.MAX_TEXT_CHARS,
+            "max_concurrent_jobs": settings.MAX_CONCURRENT_JOBS,
+            "rag_available": container.rag.available,
+            "keep_uploads": settings.KEEP_UPLOADS,
+        },
+    }
