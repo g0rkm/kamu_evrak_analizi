@@ -66,6 +66,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return response
 
     @app.middleware("http")
+    async def log_api_requests(request: Request, call_next):
+        if request.url.path.startswith("/api/"):
+            import logging
+            api_logger = logging.getLogger("api.access")
+            response = await call_next(request)
+            api_logger.info(
+                "%s %s -> %d (%s)",
+                request.method,
+                request.url.path,
+                response.status_code,
+                response.headers.get("X-Response-Time", "?"),
+            )
+            return response
+        return await call_next(request)
+
+    @app.middleware("http")
     async def add_security_headers(request: Request, call_next):
         # Basit CSRF koruması: durum değiştiren API istekleri Content-Type başlığı gerektirir
         if (
