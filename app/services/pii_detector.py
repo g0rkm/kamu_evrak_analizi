@@ -31,6 +31,8 @@ class PIIFinding:
     label: str
     masked_value: str
     severity: str
+    start: int = 0
+    end: int = 0
 
 
 DEFAULT_PATTERNS: tuple[PIIPattern, ...] = (
@@ -61,7 +63,7 @@ class PIIDetector:
                 value = match.group()
                 if pattern.validator and not pattern.validator(value):
                     continue
-                findings.append(PIIFinding(pattern.code, pattern.label, self.mask(value), pattern.severity))
+                findings.append(PIIFinding(pattern.code, pattern.label, self.mask(value), pattern.severity, match.start(), match.end()))
         return findings
 
     @staticmethod
@@ -70,12 +72,8 @@ class PIIDetector:
 
     def mask_text(self, text: str) -> str:
         """Metindeki tüm kişisel verileri maskelenmiş halleriyle değiştirir."""
-        result = text
-        for pattern in self.patterns:
-            def _replacer(m: re.Match, p: PIIPattern = pattern) -> str:
-                value = m.group()
-                if p.validator and not p.validator(value):
-                    return value
-                return self.mask(value)
-            result = pattern.regex.sub(_replacer, result)
-        return result
+        findings = self.detect(text)
+        masked = text
+        for f in sorted(findings, key=lambda x: x.start, reverse=True):
+            masked = masked[:f.start] + f'[***{f.type.upper()}***]' + masked[f.end:]
+        return masked

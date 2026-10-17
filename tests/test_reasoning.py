@@ -62,7 +62,7 @@ def test_pii_detector():
     masked = d.mask_text(text)
     assert "10000000146" not in masked
     assert "0532 123 45 67" not in masked
-    assert "***" in masked
+    assert "[***" in masked
 
     # Kredi kartı tespiti
     kredi_text = "Kart numarası: 4539 1234 5678 9012"
@@ -523,3 +523,7 @@ def test_analysis_timeout_config_validation():
     import pytest
     with pytest.raises(Exception):
         Settings(ANALYSIS_TIMEOUT=3)
+
+
+def test_pii_mask_text():
+    from app.services.pii_detector import PIIDetector; d = PIIDetector(); result = d.mask_text('TC: 12345678901 ve email test@test.com'); assert '[***TC_KIMLIK***]' in result; assert '[***EPOSTA***]' in result; assert '12345678901' not in result
