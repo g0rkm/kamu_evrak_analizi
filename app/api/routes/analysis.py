@@ -54,7 +54,7 @@ async def analyze_document(
             if cached:
                 return cached
 
-        result = await asyncio.wait_for(service.analyze_file(stored), timeout=60.0)
+        result = await asyncio.wait_for(service.analyze_file(stored), timeout=float(container.settings.ANALYSIS_TIMEOUT))
         
         # Başarılı sonuç sonrası cache/dedup kaydı
         if result:

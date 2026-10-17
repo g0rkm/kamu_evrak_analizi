@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     MAX_BATCH_FILES: int = 10
     MAX_HISTORY_RECORDS: int = 10000
     DISK_WARNING_THRESHOLD_MB: int = 100
+    ANALYSIS_TIMEOUT: int = 60
 
     # RAG
     RAG_INDEX_DIR: str = "app/data/rag"
@@ -77,6 +78,13 @@ class Settings(BaseSettings):
     def _validate_timeout(cls, v: float) -> float:
         if v < 10:
             raise ValueError("PIPELINE_TIMEOUT_SECONDS en az 10 olmalıdır.")
+        return v
+
+    @field_validator("ANALYSIS_TIMEOUT")
+    @classmethod
+    def _validate_analysis_timeout(cls, v: int) -> int:
+        if not (5 <= v <= 600):
+            raise ValueError("ANALYSIS_TIMEOUT 5 ile 600 arasında olmalıdır.")
         return v
 
     @field_validator("MIN_TEXT_CHARS")
