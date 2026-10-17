@@ -72,6 +72,18 @@ class HistoryRepository:
             path.unlink()
             return True
 
+    def clear_all(self) -> int:
+        """Tüm kayıtları siler, silinen kayıt sayısını döndürür."""
+        count = 0
+        with self._lock:
+            for path in list(self.directory.glob("*.json")):
+                try:
+                    path.unlink()
+                    count += 1
+                except OSError:
+                    pass
+        return count
+
     # ── Okuma ─────────────────────────────────────────────
 
     def get(self, record_id: str) -> dict | None:
