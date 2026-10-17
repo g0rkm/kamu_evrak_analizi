@@ -181,3 +181,26 @@ def test_circuit_breaker_opens_after_failures():
     assert not breaker.is_open
     assert breaker.consecutive_failures == 0
     breaker.check()  # Hata fırlatmamalı
+
+
+def test_config_validators():
+    """Config validator'ları yanlış değerleri reddetmeli."""
+    from app.config import Settings
+    import pytest
+
+    with pytest.raises(Exception):
+        Settings(LLM_API_KEY="test", MIN_TEXT_CHARS=0)
+
+    with pytest.raises(Exception):
+        Settings(LLM_API_KEY="test", MAX_TEXT_CHARS=50)
+
+    with pytest.raises(Exception):
+        Settings(LLM_API_KEY="test", PIPELINE_TIMEOUT_SECONDS=5)
+
+    with pytest.raises(Exception):
+        Settings(LLM_API_KEY="test", LOG_FORMAT="xml")
+
+    # Geçerli değerler çalışmalı
+    s = Settings(LLM_API_KEY="test", MIN_TEXT_CHARS=5, MAX_TEXT_CHARS=500)
+    assert s.MIN_TEXT_CHARS == 5
+    assert s.MAX_TEXT_CHARS == 500

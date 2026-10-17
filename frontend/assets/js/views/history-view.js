@@ -145,7 +145,8 @@ export class HistoryView {
             h('tbody', null, rows))));
 
         replace(this.moreRoot,
-            h('span', { class: 'small muted' }, `${fmt.number(this.total)} kayıttan ${fmt.number(this.items.length)} tanesi gösteriliyor`),
+            h('span', { class: 'small muted' }, `${fmt.number(this.total)} kayıttan ${fmt.number(this.items.length)} tanesi gösteriliyor`,
+                this.total > PAGE_SIZE ? ` · Sayfa ${Math.ceil(this.items.length / PAGE_SIZE)}/${Math.ceil(this.total / PAGE_SIZE)}` : ''),
             this.items.length < this.total
                 ? h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.load({ append: true }) }, 'Daha fazla yükle')
                 : null);

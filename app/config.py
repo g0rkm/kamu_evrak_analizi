@@ -72,6 +72,20 @@ class Settings(BaseSettings):
             raise ValueError("PIPELINE_TIMEOUT_SECONDS en az 10 olmalıdır.")
         return v
 
+    @field_validator("MIN_TEXT_CHARS")
+    @classmethod
+    def _validate_min_text(cls, v: int) -> int:
+        if v < 1:
+            raise ValueError("MIN_TEXT_CHARS en az 1 olmalıdır.")
+        return v
+
+    @field_validator("MAX_TEXT_CHARS")
+    @classmethod
+    def _validate_max_text(cls, v: int) -> int:
+        if v < 100:
+            raise ValueError("MAX_TEXT_CHARS en az 100 olmalıdır.")
+        return v
+
     @staticmethod
     def resolve(path: str) -> Path:
         """Göreli yolları proje köküne göre çözer."""
