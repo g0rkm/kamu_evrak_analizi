@@ -563,3 +563,10 @@ def test_csv_export_endpoint(client):
     assert len(lines) >= 1
     assert "id" in lines[0]
     assert "timestamp" in lines[0]
+
+
+def test_readiness_includes_circuit_breaker(client):
+    resp = client.get("/api/ready")
+    data = resp.json()
+    assert "circuit_breaker_closed" in data["checks"]
+    assert data["checks"]["circuit_breaker_closed"] is True

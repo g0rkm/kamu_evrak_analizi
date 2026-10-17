@@ -75,9 +75,12 @@ async def readiness_check(container: ServiceContainer = Depends(get_container)):
     checks = {
         "llm_configured": container.llm.is_configured,
         "history_writable": container.settings.history_path.exists(),
+        "circuit_breaker_closed": not container.llm._breaker.is_open,
     }
     all_ok = all(checks.values())
-    return {"ready": all_ok, "checks": checks}
+    from fastapi.responses import JSONResponse
+    status_code = 200 if all_ok else 503
+    return JSONResponse(content={"ready": all_ok, "checks": checks}, status_code=status_code)
 
 
 @router.get("/meta", summary="Arayüzün kullandığı sözlük ve sınırlar")
