@@ -43,6 +43,29 @@ async def list_history(
     return result
 
 
+@router.get("/history/search", summary="Gelişmiş geçmiş arama")
+async def search_history(
+    q: str = Query("", min_length=1),
+    document_type: str = Query(None),
+    date_from: str = Query(None),
+    date_to: str = Query(None),
+    min_confidence: float = Query(None, ge=0, le=1),
+    limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    container: ServiceContainer = Depends(get_container),
+):
+    results = container.history.list_records(
+        limit=limit,
+        offset=offset,
+        query=q,
+        document_type=document_type,
+        date_from=date_from,
+        date_to=date_to,
+        min_confidence=min_confidence,
+    )
+    return results
+
+
 @router.get("/history/stats", summary="Analiz istatistikleri")
 async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()

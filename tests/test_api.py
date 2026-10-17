@@ -947,3 +947,11 @@ def test_config_validate_endpoint(client):
     assert 'valid' in data
     assert 'issues' in data
     assert isinstance(data['issues'], list)
+
+
+def test_search_history(client):
+    response = client.get('/api/history/search', params={'q': 'test'})
+    assert response.status_code == 200
+    data = response.json()
+    assert 'total' in data
+    assert 'items' in data
