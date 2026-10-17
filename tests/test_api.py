@@ -755,3 +755,19 @@ def test_bulk_delete_nonexistent_ids(client):
     data = response.json()
     assert data["deleted"] == 0
     assert data["requested"] == 2
+
+
+def test_export_all_records(client):
+    """Tüm kayıtları JSON olarak dışa aktarmalı."""
+    response = client.get("/api/history/export-all")
+    assert response.status_code == 200
+    data = response.json()
+    assert "total" in data
+    assert "records" in data
+    assert isinstance(data["records"], list)
+
+
+def test_audit_log_nonexistent(client):
+    """Var olmayan kayıt için denetim logu 404 dönmeli."""
+    response = client.get("/api/history/nonexistent-id-123/audit")
+    assert response.status_code == 404

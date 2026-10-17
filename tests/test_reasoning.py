@@ -375,3 +375,26 @@ def test_config_log_file_default():
     from app.config import Settings
     settings = Settings()
     assert settings.LOG_FILE == ""
+
+
+def test_config_disk_warning_threshold_default():
+    """DISK_WARNING_THRESHOLD_MB varsayılan olarak 100 olmalı."""
+    from app.config import Settings
+    settings = Settings()
+    assert settings.DISK_WARNING_THRESHOLD_MB == 100
+
+
+def test_config_max_history_records_default():
+    """MAX_HISTORY_RECORDS varsayılan olarak 10000 olmalı."""
+    from app.config import Settings
+    settings = Settings()
+    assert settings.MAX_HISTORY_RECORDS == 10000
+
+
+def test_pii_detector_mask_preserves_nonpii():
+    """PII olmayan metin maskelenmemeli."""
+    from app.services.pii_detector import PIIDetector
+    detector = PIIDetector()
+    text = "Bu bir normal metin, kişisel veri yok."
+    masked = detector.mask_text(text)
+    assert masked == text
