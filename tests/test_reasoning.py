@@ -301,3 +301,14 @@ def test_metrics_error_rate():
     m.record_request(500)
     m.record_request(404)
     assert m.error_rate() == 0.5  # 2 hata / 4 toplam
+
+
+def test_llm_usage_stats_includes_latency():
+    """LLM usage stats latency alanlarını içermeli."""
+    from app.services.llm_service import UsageStats
+    stats = UsageStats()
+    assert stats.total_latency_ms == 0.0
+    assert stats.max_latency_ms == 0.0
+    stats.total_latency_ms = 1500.0
+    stats.max_latency_ms = 800.0
+    assert stats.total_latency_ms == 1500.0

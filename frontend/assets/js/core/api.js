@@ -153,4 +153,15 @@ export class ApiClient {
     requestStats() {
         return this.request('/stats/requests');
     }
+
+    exportCsv() {
+        return fetch(`${this.baseUrl}/history/export-csv`).then(r => {
+            if (!r.ok) throw new Error('CSV indirilemedi.');
+            return r.blob();
+        });
+    }
+
+    configExportData() {
+        return this.request('/config/export');
+    }
 }
