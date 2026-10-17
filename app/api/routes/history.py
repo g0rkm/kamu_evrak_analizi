@@ -117,6 +117,22 @@ async def update_review(record_id: str, body: ReviewUpdate, history: HistoryRepo
     return history.update_review(record_id, body)
 
 
+@router.patch("/history/{record_id}/tags", summary="Kayıt etiketlerini güncelle")
+async def update_tags(record_id: str, body: dict, history: HistoryRepository = Depends(get_history)):
+    record = _require(history, record_id)
+    tags = body.get("tags")
+    if not isinstance(tags, list):
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError("'tags' bir liste olmalıdır.")
+    if len(tags) > 10:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError("En fazla 10 etiket eklenebilir.")
+    # Etiketleri normalize et
+    tags = [str(t).strip().lower()[:50] for t in tags if str(t).strip()]
+    history.update_tags(record_id, tags)
+    return {"record_id": record_id, "tags": tags}
+
+
 @router.delete("/history/{record_id}")
 async def delete_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     if not history.delete(record_id):

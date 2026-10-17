@@ -73,6 +73,18 @@ class HistoryRepository:
             self._write(record_id, record, locked=True)
         return review
 
+    def update_tags(self, record_id: str, tags: list[str]) -> None:
+        """Kayıt etiketlerini günceller."""
+        path = self.directory / f"{record_id}.json"
+        if not path.exists():
+            raise NotFoundError("Analiz kaydı bulunamadı.")
+        with self._lock:
+            with path.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+            data["tags"] = tags
+            with path.open("w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+
     def delete(self, record_id: str) -> bool:
         path = self._path(record_id)
         with self._lock:
