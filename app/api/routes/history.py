@@ -116,6 +116,18 @@ async def export_all_records(history: HistoryRepository = Depends(get_history)):
     )
 
 
+@router.get('/history/export-filtered', summary='Filtrelenmis gecmis verisi')
+async def export_filtered(
+    document_type: str = Query(None),
+    date_from: str = Query(None),
+    date_to: str = Query(None),
+    favorite: bool = Query(None),
+    container: ServiceContainer = Depends(get_container),
+):
+    records = container.history.export_filtered(document_type=document_type, date_from=date_from, date_to=date_to, favorite=favorite)
+    return {'records': records, 'count': len(records)}
+
+
 @router.delete("/history/clear", summary="Tüm analiz kayıtlarını sil")
 async def clear_all_records(history: HistoryRepository = Depends(get_history)):
     deleted = history.clear_all()

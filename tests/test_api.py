@@ -991,3 +991,12 @@ def test_metrics_summary(client):
     assert 'total_requests' in data
     assert 'error_rate' in data
     assert 'top_endpoints' in data
+
+
+def test_export_filtered(client):
+    response = client.get('/api/history/export-filtered')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'records' in data
+    assert 'count' in data
+    assert data['count'] == 0
