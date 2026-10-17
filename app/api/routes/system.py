@@ -84,6 +84,18 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
     return data
 
 
+@router.get('/health/dependencies', tags=['Sistem'], summary='Bagimliliklarin durumu')
+async def check_dependencies(container: ServiceContainer = Depends(get_container)):
+    import shutil
+    deps = {}
+    deps['tesseract'] = shutil.which('tesseract') is not None
+    deps['llm_configured'] = container.llm.is_configured
+    deps['rag_available'] = container.rag.available
+    deps['history_writable'] = container.settings.history_path.exists()
+    all_ok = all(deps.values())
+    return {'healthy': all_ok, 'dependencies': deps}
+
+
 @router.get("/ready", summary="Hazırlık kontrolü (readiness probe)")
 async def readiness_check(container: ServiceContainer = Depends(get_container)):
     checks = {

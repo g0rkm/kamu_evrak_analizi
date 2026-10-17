@@ -1005,3 +1005,12 @@ def test_export_filtered(client):
 def test_bulk_update_tags_invalid(client):
     response = client.patch('/api/history/bulk-tags', json={'ids': [], 'tags': ['test']})
     assert response.status_code == 400
+
+
+def test_health_dependencies(client):
+    response = client.get('/api/health/dependencies')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'healthy' in data
+    assert 'dependencies' in data
+    assert 'llm_configured' in data['dependencies']
