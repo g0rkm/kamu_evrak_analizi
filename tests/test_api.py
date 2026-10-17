@@ -630,3 +630,28 @@ def test_maintenance_mode_off_allows_requests(client):
     """Bakım modu kapalıyken istekler normal işlenmeli."""
     response = client.get("/api/meta")
     assert response.status_code == 200
+
+
+def test_config_export_includes_cache(client):
+    """Config export cache_entries alanını içermeli."""
+    response = client.get("/api/config/export")
+    assert response.status_code == 200
+    data = response.json()
+    assert "cache_entries" in data
+
+
+def test_health_llm_unconfigured(client):
+    """LLM yapılandırılmamışsa health/llm unconfigured dönmeli."""
+    response = client.get("/api/health/llm")
+    assert response.status_code == 200
+    data = response.json()
+    # Test ortamında LLM key yok
+    assert data["status"] in ("unconfigured", "ok", "unreachable")
+
+
+def test_clear_all_history(client):
+    """Tüm geçmiş kayıtlarını silmeli."""
+    response = client.delete("/api/history/clear")
+    assert response.status_code == 200
+    data = response.json()
+    assert "deleted" in data

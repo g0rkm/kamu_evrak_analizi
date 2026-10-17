@@ -218,6 +218,7 @@ async def config_export(container: ServiceContainer = Depends(get_container)):
         "rate_limit": f"{settings.RATE_LIMIT_REQUESTS}/{settings.RATE_LIMIT_WINDOW}s",
         "csp_report_only": settings.CSP_REPORT_ONLY,
         "keep_uploads": settings.KEEP_UPLOADS,
+        "cache_entries": container.llm.get_usage_stats().get("cache_size", 0),
     }
 
 
