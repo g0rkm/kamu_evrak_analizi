@@ -82,6 +82,12 @@ export class CompareView {
             h('div', { class: 'grid-2' },
                 h('div', { class: 'panel' }, h('div', { class: 'panel__label' }, 'Yalnızca birinci evrakta'), h('p', null, result.text1_unique || '—')),
                 h('div', { class: 'panel' }, h('div', { class: 'panel__label' }, 'Yalnızca ikinci evrakta'), h('p', null, result.text2_unique || '—'))),
+            h('div', { class: 'row', style: { justifyContent: 'flex-end' } },
+                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => {
+                    const text = `Benzerlik: %${Math.round(result.similarity_score * 100)}\nOrtak temalar: ${(result.common_themes || []).join(', ') || '—'}\nÖneri: ${result.recommendation || '—'}`;
+                    navigator.clipboard.writeText(text).then(() => this.toaster.success('Sonuç kopyalandı.'), () => this.toaster.error('Kopyalama başarısız.'));
+                }}, icon('copy'), 'Sonucu kopyala'),
+            ),
         ));
     }
 }

@@ -109,6 +109,7 @@ export class ResultView {
         const unitValue = h('div', { class: 'kpi__value' }, this.currentUnit() || '—');
         this.review.subscribe(() => { unitValue.textContent = this.currentUnit() || '—'; });
 
+        const copyButton = h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.copySummary(), title: 'Özeti panoya kopyala' }, icon('copy'), 'Kopyala');
         const printButton = h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => window.print(), title: 'Sayfayı yazdır' }, icon('printer'), 'Yazdır');
         const exportButton = h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.exportJson() }, icon('download'), 'JSON indir');
         const newButton = h('button', { type: 'button', class: 'btn btn--primary btn--sm', onClick: () => this.onNewAnalysis?.() }, icon('plus'), 'Yeni analiz');
@@ -123,7 +124,7 @@ export class ResultView {
                         h('span', null, icon('refresh'), `${fmt.seconds(result.processing_time)} sürdü`),
                     ),
                 ),
-                h('div', { class: 'result-hero__actions' }, printButton, exportButton, newButton),
+                h('div', { class: 'result-hero__actions' }, copyButton, printButton, exportButton, newButton),
             ),
             h('div', { class: 'kpis' },
                 h('div', { class: 'kpi' }, h('div', { class: 'kpi__label' }, 'Evrak türü'),
@@ -537,6 +538,22 @@ export class ResultView {
     }
 
     // ── Eylemler ─────────────────────────────────────────
+
+    copySummary() {
+        const r = this.result;
+        const a = r.analysis || {};
+        const lines = [
+            `Evrak: ${r.source_name || 'Adsız'}`,
+            `Tür: ${(a.classification || {}).document_type || '?'}`,
+            `Güven: %${Math.round((r.confidence_score || 0) * 100)}`,
+            `Özet: ${a.summary || '—'}`,
+            r.routing ? `Birim: ${r.routing.target_unit || '?'} (${r.routing.priority || '?'})` : '',
+        ].filter(Boolean).join('\n');
+        navigator.clipboard.writeText(lines).then(
+            () => this.toaster.success('Özet panoya kopyalandı.'),
+            () => this.toaster.error('Kopyalama başarısız oldu.'),
+        );
+    }
 
     exportJson() {
         const payload = { ...this.result, review: this.review.state };
