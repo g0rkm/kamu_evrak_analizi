@@ -396,3 +396,20 @@ def test_error_response_includes_request_id(client):
     resp = client.get("/api/history/nonexistent_record_12345")
     assert resp.status_code == 404
     assert "X-Request-ID" in resp.headers
+
+
+def test_app_error_includes_request_id(client):
+    """AppError yanıtları request_id içermeli."""
+    resp = client.post("/api/analyze-text", json={"text": ""})
+    assert resp.status_code == 422
+    body = resp.json()
+    assert "request_id" in body
+
+
+def test_health_warnings_field(client):
+    """Health endpoint'i warnings alanı döndürmeli."""
+    resp = client.get("/api/health")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "warnings" in data
+    assert isinstance(data["warnings"], list)

@@ -18,9 +18,14 @@ def _error(status_code: int, code: str, detail: str) -> JSONResponse:
 def register_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(AppError)
     async def handle_app_error(request: Request, exc: AppError) -> JSONResponse:
+        from app.core.logging import request_id_var
+        rid = request_id_var.get("")
         if exc.status_code >= 500:
-            logger.warning("%s %s -> %s: %s", request.method, request.url.path, exc.code, exc.message)
-        return _error(exc.status_code, exc.code, exc.message)
+            logger.warning("%s %s -> %s: %s [request_id=%s]", request.method, request.url.path, exc.code, exc.message, rid)
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"detail": exc.message, "code": exc.code, "request_id": rid},
+        )
 
     @app.exception_handler(RequestValidationError)
     async def handle_validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
