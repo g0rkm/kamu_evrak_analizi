@@ -70,7 +70,7 @@ def verify_environment(settings: Settings) -> list[str]:
 
     from app import __version__
     logger.info(
-        "Yapılandırma: v%s env=%s model=%s timeout=%.0fs cache_ttl=%ds rate_limit=%d/%ds",
+        "Yapılandırma: v%s env=%s model=%s timeout=%.0fs cache_ttl=%ds rate_limit=%d/%ds maintenance=%s max_hist=%d",
         __version__,
         settings.ENVIRONMENT,
         settings.LLM_MODEL,
@@ -78,6 +78,8 @@ def verify_environment(settings: Settings) -> list[str]:
         settings.LLM_CACHE_TTL_SECONDS,
         settings.RATE_LIMIT_REQUESTS,
         settings.RATE_LIMIT_WINDOW,
+        settings.MAINTENANCE_MODE,
+        settings.MAX_HISTORY_RECORDS,
     )
 
     return warnings
