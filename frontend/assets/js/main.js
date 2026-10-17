@@ -5,6 +5,7 @@ import { Vocabulary } from './core/vocabulary.js';
 import { AnalyzeView } from './views/analyze-view.js';
 import { CompareView } from './views/compare-view.js';
 import { HistoryView } from './views/history-view.js';
+import { TrendsView } from './views/trends-view.js';
 
 /** Üst bardaki sistem durumu göstergesi; sağlık uç noktasını periyodik olarak sorgular. */
 class SystemStatus {
@@ -113,6 +114,7 @@ class App {
             analiz: new AnalyzeView(context),
             gecmis: new HistoryView(context),
             karsilastir: new CompareView(context),
+            trends: new TrendsView(context),
         };
 
         window.addEventListener('hashchange', () => this.route());
@@ -128,9 +130,10 @@ class App {
                 case '1': e.preventDefault(); this.navigate('#/analiz'); break;
                 case '2': e.preventDefault(); this.navigate('#/gecmis'); break;
                 case '3': e.preventDefault(); this.navigate('#/karsilastir'); break;
+                case '4': e.preventDefault(); this.navigate('#/trends'); break;
                 case '?':
                     e.preventDefault();
-                    alert('Klavye kısayolları:\n\n1 — Analiz sayfası\n2 — Geçmiş sayfası\n3 — Karşılaştır sayfası\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
+                    alert('Klavye kısayolları:\n\n1 — Analiz sayfası\n2 — Geçmiş sayfası\n3 — Karşılaştır sayfası\n4 — Trendler sayfası\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
                     break;
             }
         });
