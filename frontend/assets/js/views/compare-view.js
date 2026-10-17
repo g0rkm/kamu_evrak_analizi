@@ -15,10 +15,16 @@ export class CompareView {
         const counter = h('span', { class: 'field__hint' });
         const textarea = h('textarea', {
             class: 'textarea', id, placeholder: 'Evrak metnini yapıştırın…',
-            onInput: () => { counter.textContent = `${fmt.number(textarea.value.trim().length)} karakter`; },
+            onInput: () => {
+                const len = textarea.value.trim().length;
+                const max = this.vocab.limits.max_text_chars;
+                counter.textContent = `${fmt.number(len)} / ${fmt.number(max)} karakter`;
+                counter.style.color = len > max ? 'var(--danger)' : '';
+            },
             onKeydown: (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); this.submit(); } },
         });
-        counter.textContent = '0 karakter';
+        const initialMax = this.vocab.limits.max_text_chars;
+        counter.textContent = `0 / ${fmt.number(initialMax)} karakter`;
         return { textarea, element: h('div', { class: 'field' }, h('label', { class: 'field__label', for: id }, label), textarea, counter) };
     }
 
@@ -97,7 +103,14 @@ export class CompareView {
                 h('div', { class: 'panel' }, h('div', { class: 'panel__label' }, 'Yalnızca ikinci evrakta'), h('p', null, result.text2_unique || '—'))),
             h('div', { class: 'row', style: { justifyContent: 'flex-end', gap: '8px' } },
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => {
-                    const text = `Benzerlik: %${Math.round(result.similarity_score * 100)}\nOrtak temalar: ${(result.common_themes || []).join(', ') || '—'}\nÖneri: ${result.recommendation || '—'}`;
+                    const text = [
+                        `Benzerlik: %${Math.round(result.similarity_score * 100)}`,
+                        `Ortak temalar: ${(result.common_themes || []).join(', ') || '—'}`,
+                        `Farklar: ${(result.differences || []).join(', ') || '—'}`,
+                        `Birinci evrak: ${result.text1_unique || '—'}`,
+                        `İkinci evrak: ${result.text2_unique || '—'}`,
+                        `Öneri: ${result.recommendation || '—'}`,
+                    ].join('\n');
                     navigator.clipboard.writeText(text).then(() => this.toaster.success('Sonuç kopyalandı.'), () => this.toaster.error('Kopyalama başarısız.'));
                 }}, icon('copy'), 'Sonucu kopyala'),
                 h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => {
