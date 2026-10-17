@@ -62,6 +62,7 @@ class Settings(BaseSettings):
     TRUSTED_PROXIES: list[str] = []
     CSP_REPORT_ONLY: bool = True
     MAINTENANCE_MODE: bool = False
+    ADMIN_TOKEN: str = ""
 
     @field_validator("LOG_FORMAT")
     @classmethod
