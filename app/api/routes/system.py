@@ -76,6 +76,11 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
     )
     data = result.model_dump()
     data["uptime_human"] = _format_uptime(time.monotonic() - _start_time)
+    data["checks"] = {
+        "storage": True,
+        "llm_configured": container.llm.is_configured,
+        "rag_available": container.rag.available,
+    }
     return data
 
 

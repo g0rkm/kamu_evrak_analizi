@@ -930,3 +930,11 @@ def test_system_info_includes_timeout(client):
     assert response.status_code == 200
     data = response.json()
     assert 'analysis_timeout' in data['settings']
+
+
+def test_health_includes_checks(client):
+    response = client.get('/api/health')
+    data = response.json()
+    assert 'checks' in data
+    assert data['checks']['storage'] is True
+    assert 'llm_configured' in data['checks']
