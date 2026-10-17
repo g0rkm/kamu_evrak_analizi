@@ -176,6 +176,26 @@ async def bulk_delete_records(body: dict, history: HistoryRepository = Depends(g
     return {"deleted": deleted, "requested": len(ids)}
 
 
+@router.patch('/history/bulk-tags', summary='Toplu etiket guncelleme')
+async def bulk_update_tags(body: dict, container: ServiceContainer = Depends(get_container)):
+    ids = body.get('ids', [])
+    tags = body.get('tags', [])
+    if not ids or len(ids) > 100:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('ids listesi 1-100 arasi olmalidir.')
+    if not isinstance(tags, list):
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('tags bir liste olmalidir.')
+    updated = 0
+    for record_id in ids:
+        try:
+            container.history.update_tags(record_id, tags)
+            updated += 1
+        except Exception:
+            pass
+    return {'updated': updated, 'total': len(ids)}
+
+
 @router.get("/history/{record_id}")
 async def get_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     return _require(history, record_id)

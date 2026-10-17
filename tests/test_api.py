@@ -1000,3 +1000,8 @@ def test_export_filtered(client):
     assert 'records' in data
     assert 'count' in data
     assert data['count'] == 0
+
+
+def test_bulk_update_tags_invalid(client):
+    response = client.patch('/api/history/bulk-tags', json={'ids': [], 'tags': ['test']})
+    assert response.status_code == 400
