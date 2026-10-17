@@ -398,3 +398,36 @@ def test_pii_detector_mask_preserves_nonpii():
     text = "Bu bir normal metin, kişisel veri yok."
     masked = detector.mask_text(text)
     assert masked == text
+
+
+def test_pii_detector_iban():
+    """IBAN tespit edilmeli."""
+    from app.services.pii_detector import PIIDetector
+    detector = PIIDetector()
+    text = "IBAN: TR33 0006 1005 1978 6457 8413 26"
+    findings = detector.detect(text)
+    types = [f.type for f in findings]
+    assert "iban" in types
+
+
+def test_pii_detector_telefon():
+    """Telefon numarası tespit edilmeli."""
+    from app.services.pii_detector import PIIDetector
+    detector = PIIDetector()
+    text = "İletişim: 0532 123 45 67"
+    findings = detector.detect(text)
+    types = [f.type for f in findings]
+    assert "telefon" in types
+
+
+def test_json_formatter_output():
+    """JsonFormatter log çıktısı JSON olmalı."""
+    import json
+    import logging
+    from app.core.logging import JsonFormatter
+    formatter = JsonFormatter()
+    record = logging.LogRecord("test", logging.INFO, "", 0, "test message", (), None)
+    output = formatter.format(record)
+    parsed = json.loads(output)
+    assert parsed["message"] == "test message"
+    assert parsed["level"] == "INFO"

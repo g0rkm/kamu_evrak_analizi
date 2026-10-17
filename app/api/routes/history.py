@@ -53,7 +53,7 @@ async def export_all_records(history: HistoryRepository = Depends(get_history)):
     for item in page["items"]:
         full = history.get(item["id"])
         if full:
-            records.append({**full.get("result", full), "review": full.get("review"), "id": item["id"]})
+            records.append({**full.get("result", full), "review": full.get("review"), "tags": full.get("tags", []), "id": item["id"]})
     return JSONResponse(
         content={"total": len(records), "records": records},
         headers={"Content-Disposition": 'attachment; filename="tum_analizler.json"'},
