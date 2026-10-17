@@ -47,6 +47,29 @@ async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
 
 
+@router.get("/history/trends", summary="Günlük analiz trend verisi")
+async def history_trends(
+    days: int = Query(30, ge=1, le=365, description="Kaç günlük trend"),
+    history: HistoryRepository = Depends(get_history),
+):
+    """Son N gündeki günlük analiz sayılarını döndürür."""
+    from collections import Counter
+    from datetime import datetime, timedelta, timezone
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    page = history.list_records(limit=10000, offset=0, date_from=cutoff[:10])
+    daily = Counter()
+    for item in page["items"]:
+        date_str = item["timestamp"][:10]
+        daily[date_str] += 1
+    # Son N gün için sıralı liste
+    result = []
+    today = datetime.now(timezone.utc).date()
+    for i in range(days):
+        d = (today - timedelta(days=days - 1 - i)).isoformat()
+        result.append({"date": d, "count": daily.get(d, 0)})
+    return {"days": days, "trends": result}
+
+
 @router.get("/history/export-all", summary="Tüm analiz kayıtlarını JSON olarak indir")
 async def export_all_records(history: HistoryRepository = Depends(get_history)):
     page = history.list_records(limit=10000, offset=0)

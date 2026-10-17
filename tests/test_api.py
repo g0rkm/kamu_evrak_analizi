@@ -824,3 +824,14 @@ def test_update_notes_too_long(client):
     long_note = "a" * 2001
     response = client.patch("/api/history/nonexistent-id/notes", json={"notes": long_note})
     assert response.status_code in (400, 404)
+
+
+def test_history_trends_endpoint(client):
+    """Trend endpoint'i çalışmalı ve trends listesi döndürmeli."""
+    response = client.get("/api/history/trends?days=7")
+    assert response.status_code == 200
+    data = response.json()
+    assert "days" in data
+    assert data["days"] == 7
+    assert "trends" in data
+    assert len(data["trends"]) == 7
