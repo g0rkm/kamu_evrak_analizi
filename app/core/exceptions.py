@@ -91,3 +91,9 @@ class MaintenanceModeError(AppError):
     status_code = 503
     code = "maintenance_mode"
     default_message = "Sistem şu anda bakım modundadır. Lütfen daha sonra tekrar deneyin."
+
+
+class TokenBudgetExceededError(AppError):
+    status_code = 429
+    code = 'token_budget_exceeded'
+    default_message = 'Token bütçesi aşıldı. Lütfen daha sonra tekrar deneyin.'

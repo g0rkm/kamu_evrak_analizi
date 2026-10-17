@@ -475,3 +475,10 @@ def test_history_repository_stats_favorites_count():
 
 def test_pii_detector_plaka():
     from app.services.pii_detector import PIIDetector; detector = PIIDetector(); text = 'Arac plakasi: 34 ABC 123'; findings = detector.detect(text); types = [f.type for f in findings]; assert 'plaka' in types
+
+
+def test_token_budget_exceeded_error():
+    from app.core.exceptions import TokenBudgetExceededError
+    err = TokenBudgetExceededError()
+    assert err.status_code == 429
+    assert err.code == 'token_budget_exceeded'
