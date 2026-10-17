@@ -77,6 +77,23 @@ class App {
 
         window.addEventListener('hashchange', () => this.route());
         this.route();
+
+        // Klavye kısayolları
+        document.addEventListener('keydown', (e) => {
+            // Input/textarea içindeyken kısayolları devre dışı bırak
+            if (e.target.matches('input, textarea, select, [contenteditable]')) return;
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+            switch (e.key) {
+                case '1': e.preventDefault(); this.navigate('#/analiz'); break;
+                case '2': e.preventDefault(); this.navigate('#/gecmis'); break;
+                case '3': e.preventDefault(); this.navigate('#/karsilastir'); break;
+                case '?':
+                    e.preventDefault();
+                    this.toaster.info('Kısayollar: 1=Analiz, 2=Geçmiş, 3=Karşılaştır');
+                    break;
+            }
+        });
     }
 
     navigate(hash) {
