@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from app import __version__
 from app.agents.orchestrator import PIPELINE_STEPS
-from app.api.dependencies import get_container
+from app.api.dependencies import get_container, require_admin
 from app.container import ServiceContainer
 from app.core.metrics import metrics as app_metrics
 from app.core.taxonomy import DOCUMENT_TYPES, DRAFT_TYPES, ORG_UNITS, PRIORITIES, UNKNOWN_DOCUMENT_TYPE
@@ -193,7 +193,7 @@ async def llm_health(container: ServiceContainer = Depends(get_container)):
     }
 
 
-@router.get("/config/export", summary="Çalışma zamanı yapılandırma dışa aktarımı")
+@router.get("/config/export", summary="Çalışma zamanı yapılandırma dışa aktarımı", dependencies=[Depends(require_admin)])
 async def config_export(container: ServiceContainer = Depends(get_container)):
     """Hassas olmayan yapılandırma değerlerini dışa aktarır (sorun giderme için)."""
     settings = container.settings
@@ -222,7 +222,7 @@ async def config_export(container: ServiceContainer = Depends(get_container)):
     }
 
 
-@router.post("/cache/clear", summary="LLM önbelleğini temizle")
+@router.post("/cache/clear", summary="LLM önbelleğini temizle", dependencies=[Depends(require_admin)])
 async def clear_cache(container: ServiceContainer = Depends(get_container)):
     """LLM yanıt önbelleğini temizler."""
     stats_before = container.llm.get_usage_stats()

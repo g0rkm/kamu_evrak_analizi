@@ -598,7 +598,7 @@ def test_llm_stats_includes_avg_latency(client):
     """LLM stats avg_latency_ms alanını içermeli."""
     response = client.get("/api/stats/llm")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert "avg_latency_ms" in data
 
 
@@ -606,7 +606,7 @@ def test_system_info_includes_settings(client):
     """System info settings bölümünü içermeli."""
     response = client.get("/api/system-info")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert "settings" in data
     assert "log_level" in data["settings"]
     assert "llm_model" in data["settings"]
@@ -636,7 +636,7 @@ def test_config_export_includes_cache(client):
     """Config export cache_entries alanını içermeli."""
     response = client.get("/api/config/export")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert "cache_entries" in data
 
 
@@ -644,7 +644,7 @@ def test_health_llm_unconfigured(client):
     """LLM yapılandırılmamışsa health/llm unconfigured dönmeli."""
     response = client.get("/api/health/llm")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     # Test ortamında LLM key yok
     assert data["status"] in ("unconfigured", "ok", "unreachable")
 
@@ -653,7 +653,7 @@ def test_clear_all_history(client):
     """Tüm geçmiş kayıtlarını silmeli."""
     response = client.delete("/api/history/clear")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert "deleted" in data
 
 
@@ -662,3 +662,34 @@ def test_api_version_header(client):
     response = client.get("/api/health")
     assert "X-API-Version" in response.headers
     assert response.headers["X-API-Version"] == "2.6.0"
+
+
+def test_admin_endpoint_without_token(client):
+    """Admin token yokken hassas endpoint'ler erişilebilir olmalı."""
+    # ADMIN_TOKEN boş olduğunda kontrol atlanır
+    response = client.post("/api/cache/clear")
+    assert response.status_code == 200
+
+
+def test_admin_endpoint_with_wrong_token():
+    """Yanlış token ile admin endpoint'lere erişim 401 dönmeli."""
+    from app.config import Settings
+    from app.main import create_app
+    from starlette.testclient import TestClient
+    settings = Settings(ADMIN_TOKEN="test-secret-token")
+    app = create_app(settings=settings)
+    with TestClient(app) as mc:
+        response = mc.post("/api/cache/clear", headers={"Authorization": "Bearer wrong-token"})
+        assert response.status_code == 401
+
+
+def test_admin_endpoint_with_correct_token():
+    """Doğru token ile admin endpoint'lere erişim sağlanmalı."""
+    from app.config import Settings
+    from app.main import create_app
+    from starlette.testclient import TestClient
+    settings = Settings(ADMIN_TOKEN="test-secret-token")
+    app = create_app(settings=settings)
+    with TestClient(app) as mc:
+        response = mc.post("/api/cache/clear", headers={"Authorization": "Bearer test-secret-token"})
+        assert response.status_code == 200
