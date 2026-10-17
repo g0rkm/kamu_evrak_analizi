@@ -570,3 +570,43 @@ def test_readiness_includes_circuit_breaker(client):
     data = resp.json()
     assert "circuit_breaker_closed" in data["checks"]
     assert data["checks"]["circuit_breaker_closed"] is True
+
+
+def test_import_records_invalid_body(client):
+    """records alanı list değilse 422 dönmeli."""
+    response = client.post("/api/history/import", json={"records": "not_a_list"})
+    assert response.status_code == 422
+
+
+def test_import_records_over_limit(client):
+    """500'den fazla kayıt gönderildiğinde 422 dönmeli."""
+    records = [{"id": f"test-{i}", "result": {}} for i in range(501)]
+    response = client.post("/api/history/import", json={"records": records})
+    assert response.status_code == 422
+
+
+def test_mask_pii_empty_text_returns_zero(client):
+    """Boş metin gönderildiğinde pii_count 0 olmalı."""
+    response = client.post("/api/mask-pii", json={"text": ""})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["pii_count"] == 0
+    assert data["masked_text"] == ""
+
+
+def test_llm_stats_includes_avg_latency(client):
+    """LLM stats avg_latency_ms alanını içermeli."""
+    response = client.get("/api/stats/llm")
+    assert response.status_code == 200
+    data = response.json()
+    assert "avg_latency_ms" in data
+
+
+def test_system_info_includes_settings(client):
+    """System info settings bölümünü içermeli."""
+    response = client.get("/api/system-info")
+    assert response.status_code == 200
+    data = response.json()
+    assert "settings" in data
+    assert "log_level" in data["settings"]
+    assert "llm_model" in data["settings"]

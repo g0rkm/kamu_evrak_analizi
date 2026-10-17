@@ -312,3 +312,26 @@ def test_llm_usage_stats_includes_latency():
     stats.total_latency_ms = 1500.0
     stats.max_latency_ms = 800.0
     assert stats.total_latency_ms == 1500.0
+
+
+def test_history_repository_stats_min_max():
+    """History stats min/max değerlerini içermeli."""
+    from app.services.history_repository import HistoryRepository
+    from pathlib import Path
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = HistoryRepository(Path(tmp))
+        stats = repo.stats()
+        assert "min_confidence" in stats
+        assert "max_confidence" in stats
+        assert "min_processing_time" in stats
+        assert "max_processing_time" in stats
+
+
+def test_circuit_breaker_initial_state():
+    """Circuit breaker başlangıçta kapalı (closed) olmalı."""
+    from app.services.llm_service import LLMService
+    from app.config import Settings
+    settings = Settings(LLM_API_KEY="test-key")
+    svc = LLMService(settings)
+    assert not svc._breaker.is_open
