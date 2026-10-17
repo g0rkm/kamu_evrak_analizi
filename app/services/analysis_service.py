@@ -36,6 +36,8 @@ class AnalysisService:
 
     def validate_text(self, text: str, field_name: str = "Metin") -> str:
         text = (text or "").strip()
+        # Null byte ve kontrol karakterlerini temizle (tab ve newline hariç)
+        text = "".join(ch for ch in text if ch in ("\t", "\n", "\r") or (ord(ch) >= 32))
         if len(text) < self.settings.MIN_TEXT_CHARS:
             raise InvalidInputError(f"{field_name} en az {self.settings.MIN_TEXT_CHARS} karakter olmalıdır.")
         if len(text) > self.settings.MAX_TEXT_CHARS:
