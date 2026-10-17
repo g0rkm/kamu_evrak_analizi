@@ -382,6 +382,7 @@ export class AnalyzeView {
             llm_auth_error: 'Sunucudaki LLM API anahtarı geçersiz. Sistem yöneticinize başvurun.',
             text_extraction_failed: 'Dosya taranmış bir görüntüyse daha net bir kopya deneyin veya metni yapıştırın.',
             network: 'Sunucu bağlantısı kesildi. Sunucunun çalıştığından emin olun.',
+            pipeline_timeout: 'Analiz süresi aşıldı. Daha kısa bir metin veya daha küçük bir dosya deneyin.',
         }[error.code];
         replace(this.workspace, h('section', { class: 'card card__body stack' },
             h('div', { class: 'alert alert--danger', role: 'alert' }, icon('circleX'),
