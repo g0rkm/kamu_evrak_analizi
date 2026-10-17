@@ -312,6 +312,22 @@ async def config_export(container: ServiceContainer = Depends(get_container)):
     }
 
 
+@router.get('/config/validate', tags=['Sistem'], summary='Yapilandirma dogrulama')
+async def validate_config(container: ServiceContainer = Depends(get_container), _admin=Depends(require_admin)):
+    issues = []
+    settings = container.settings
+    if not settings.ADMIN_TOKEN:
+        issues.append('ADMIN_TOKEN ayarlanmamis')
+    if settings.RATE_LIMIT_REQUESTS < 10:
+        issues.append('Rate limit cok dusuk')
+    if settings.LLM_TIMEOUT_SECONDS < 10:
+        issues.append('LLM timeout cok dusuk')
+    if settings.MAX_FILE_SIZE_MB > 100:
+        issues.append('Dosya boyutu limiti cok yuksek')
+    valid = len(issues) == 0
+    return {'valid': valid, 'issues': issues, 'checked_fields': 4}
+
+
 @router.post("/cache/clear", summary="LLM önbelleğini temizle", dependencies=[Depends(require_admin)])
 async def clear_cache(container: ServiceContainer = Depends(get_container)):
     """LLM yanıt önbelleğini temizler."""

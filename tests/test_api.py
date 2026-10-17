@@ -938,3 +938,12 @@ def test_health_includes_checks(client):
     assert 'checks' in data
     assert data['checks']['storage'] is True
     assert 'llm_configured' in data['checks']
+
+
+def test_config_validate_endpoint(client):
+    response = client.get('/api/config/validate')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'valid' in data
+    assert 'issues' in data
+    assert isinstance(data['issues'], list)
