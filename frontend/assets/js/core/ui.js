@@ -44,9 +44,11 @@ export class ThemeController {
 
     toggle() {
         const next = this.current === 'dark' ? 'light' : 'dark';
+        document.documentElement.classList.add('theme-transitioning');
         document.documentElement.setAttribute('data-theme', next);
         storage.set('theme', next);
         this.render();
+        setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 400);
     }
 
     render() {

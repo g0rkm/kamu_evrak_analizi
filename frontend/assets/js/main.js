@@ -47,15 +47,20 @@ class SystemStatus {
 
     async showDetails() {
         try {
-            const health = await this.api.health();
+            const [health, sysInfo] = await Promise.all([
+                this.api.health(),
+                this.api.systemInfo().catch(() => null),
+            ]);
             const info = [
                 `Sürüm: ${health.version}`,
+                `Durum: ${health.status}`,
                 `Model: ${health.llm_model}`,
                 `LLM: ${health.llm_configured ? 'Yapılandırılmış' : 'Yapılandırılmamış'}`,
                 `RAG: ${health.rag_available ? `${health.rag_chunks} parça` : 'Yok'}`,
                 `Toplam analiz: ${health.total_analyses}`,
-                `Çalışma süresi: ${Math.round(health.uptime_seconds / 60)} dk`,
+                `Çalışma süresi: ${sysInfo?.uptime_human || Math.round(health.uptime_seconds / 60) + ' dk'}`,
                 health.disk_free_mb != null ? `Disk: ${health.disk_free_mb} MB boş` : null,
+                health.warnings?.length ? `\nUyarılar:\n${health.warnings.map(w => '⚠ ' + w).join('\n')}` : null,
             ].filter(Boolean).join('\n');
             alert(info);
         } catch {
