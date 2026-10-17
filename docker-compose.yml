@@ -7,12 +7,13 @@ services:
       - .env
     environment:
       - APP_HOST=0.0.0.0
+      - LOG_FORMAT=json
     volumes:
       - history_data:/app/data/history
       - upload_data:/app/uploads
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8080/health').raise_for_status()"]
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8080/api/health').raise_for_status()"]
       interval: 30s
       timeout: 10s
       retries: 3
