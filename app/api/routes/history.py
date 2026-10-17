@@ -18,7 +18,7 @@ def _require(history: HistoryRepository, record_id: str) -> dict:
     return record
 
 
-@router.get("/history", response_model=HistoryPage)
+@router.get("/history", summary="Analiz geçmişi listele")
 async def list_history(
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
