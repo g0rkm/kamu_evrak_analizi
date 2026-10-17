@@ -604,6 +604,23 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     transition: width 0.3s ease;
 }
 
+/* Search input enhancements */
+.search-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+    border: 1px solid var(--border, #d1d5db);
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background: var(--surface-1, #fff);
+    color: var(--text-1, #111827);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.search-input:focus {
+    border-color: var(--primary, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
 /* Error detail panel */
 .error-detail {
     background: var(--surface-1, #fef2f2);

@@ -24,7 +24,7 @@ export class HistoryView {
         this.tableRoot = h('div');
         this.moreRoot = h('div', { class: 'row', style: { justifyContent: 'center' } });
 
-        this.search = h('input', { class: 'input', type: 'search', id: 'historySearch', placeholder: 'Özet, başlık, tür veya anahtar kelimede ara…',
+        this.search = h('input', { class: 'input', type: 'search', id: 'historySearch', placeholder: 'Özet, başlık, tür veya anahtar kelimede ara…', 'aria-label': 'Arama',
             onInput: debounce(() => this.load(), 300) });
         this.typeFilter = h('select', { class: 'select', 'aria-label': 'Evrak türüne göre filtrele', onChange: () => this.load() },
             h('option', { value: '' }, 'Tüm evrak türleri'),
@@ -168,6 +168,7 @@ export class HistoryView {
     }
 
     async remove(item) {
+        if (!confirm('Bu analiz kaydını silmek istediğinizden emin misiniz?')) return;
         const ok = await confirmDialog({
             title: 'Analiz kaydı silinsin mi?',
             message: `"${item.source_name || 'Adsız analiz'}" kaydı ve memur kararları kalıcı olarak silinecek. Bu işlem geri alınamaz.`,
