@@ -967,3 +967,12 @@ def test_query_logs_endpoint(client):
     assert response.status_code == 200
     data = response.json()
     assert 'logs' in data
+
+
+def test_list_document_types(client):
+    response = client.get('/api/history/types')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'types' in data
+    assert isinstance(data['types'], list)
+    assert 'total_types' in data

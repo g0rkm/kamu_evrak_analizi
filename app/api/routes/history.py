@@ -71,6 +71,14 @@ async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
 
 
+@router.get("/history/types", summary="Belge turlerini listele")
+async def list_document_types(container: ServiceContainer = Depends(get_container)):
+    stats = container.history.stats()
+    by_type = stats.get("by_type", {})
+    types = [{"type": t, "count": c} for t, c in sorted(by_type.items(), key=lambda x: x[1], reverse=True)]
+    return {"types": types, "total_types": len(types)}
+
+
 @router.get("/history/trends", summary="Günlük analiz trend verisi")
 async def history_trends(
     days: int = Query(30, ge=1, le=365, description="Kaç günlük trend"),
