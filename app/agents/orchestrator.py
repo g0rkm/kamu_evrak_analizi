@@ -29,7 +29,7 @@ from app.agents.reasoning_agent import ReasoningAgent, ReasoningOutcome
 from app.agents.routing_agent import RoutingAgent
 from app.agents.summary_agent import SummaryAgent
 from app.config import Settings
-from app.core.exceptions import AppError, LLMError, TextExtractionError
+from app.core.exceptions import AppError, LLMError, PipelineTimeoutError, TextExtractionError
 from app.models.analysis import AnalysisResult, ClassificationResult, ContentAnalysis
 from app.models.draft import PipelineResult, StepTiming
 from app.services.legislation_catalog import LegislationCatalog
@@ -131,7 +131,7 @@ class OrchestratorAgent(BaseAgent):
         try:
             return await asyncio.wait_for(self._run_pipeline(document), timeout=self._timeout)
         except asyncio.TimeoutError:
-            raise AppError(f"Pipeline {self._timeout:.0f} saniye içinde tamamlanamadı.", code="pipeline_timeout", status_code=504)
+            raise PipelineTimeoutError(f"Pipeline {self._timeout:.0f} saniye içinde tamamlanamadı.")
 
     async def _run_pipeline(self, document: DocumentInput) -> PipelineResult:
         started = time.perf_counter()

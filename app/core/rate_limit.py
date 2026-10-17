@@ -53,6 +53,12 @@ class RateLimiter:
         bucket.timestamps.append(now)
         return True
 
+    @property
+    def active_clients(self) -> int:
+        """Aktif istemci sayısı."""
+        self._cleanup(time.monotonic())
+        return len(self._buckets)
+
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     def __init__(self, app, max_requests: int = 60, window: int = 60) -> None:

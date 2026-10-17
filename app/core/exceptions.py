@@ -65,3 +65,9 @@ class LLMUnavailableError(LLMError):
 class LLMResponseError(LLMError):
     code = "llm_bad_response"
     default_message = "Yapay zekâ servisi beklenen biçimde yanıt vermedi."
+
+
+class PipelineTimeoutError(AppError):
+    """Pipeline süre aşımı."""
+    def __init__(self, message: str = "Pipeline süresi aşıldı.") -> None:
+        super().__init__(message, code="pipeline_timeout", status_code=504)
