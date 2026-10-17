@@ -33,6 +33,14 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
     elif disk_free_mb is not None and disk_free_mb < 50:
         status = "warning"
 
+    warnings = []
+    if not container.llm.is_configured:
+        warnings.append("LLM API anahtarı yapılandırılmamış.")
+    if not container.rag.available:
+        warnings.append("RAG mevzuat indeksi yüklenmemiş.")
+    if disk_free_mb is not None and disk_free_mb < 100:
+        warnings.append(f"Disk alanı düşük: {disk_free_mb} MB kaldı.")
+
     return HealthStatus(
         status=status,
         service=container.settings.APP_NAME,
@@ -47,6 +55,7 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
         uptime_seconds=round(time.monotonic() - _start_time, 1),
         active_jobs=len(container.jobs._tasks),
         disk_free_mb=disk_free_mb,
+        warnings=warnings,
     )
 
 

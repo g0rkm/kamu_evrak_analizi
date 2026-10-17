@@ -128,6 +128,7 @@ class HealthStatus(BaseModel):
     uptime_seconds: float = 0.0
     active_jobs: int = 0
     disk_free_mb: Optional[float] = None
+    warnings: list[str] = Field(default_factory=list)
 
 
 class CacheStatsResponse(BaseModel):
