@@ -655,3 +655,10 @@ def test_clear_all_history(client):
     assert response.status_code == 200
     data = response.json()
     assert "deleted" in data
+
+
+def test_api_version_header(client):
+    """Her API yanıtı X-API-Version header'ı içermeli."""
+    response = client.get("/api/health")
+    assert "X-API-Version" in response.headers
+    assert response.headers["X-API-Version"] == "2.6.0"
