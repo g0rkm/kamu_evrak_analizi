@@ -13,7 +13,7 @@ from typing import Any
 import httpx
 
 from app.config import Settings, get_settings
-from app.core.exceptions import LLMAuthError, LLMError, LLMResponseError, LLMUnavailableError
+from app.core.exceptions import CircuitBreakerOpenError, LLMAuthError, LLMError, LLMResponseError, LLMUnavailableError
 
 logger = logging.getLogger("llm_service")
 
@@ -83,6 +83,42 @@ class LLMService:
     istekler arasında yeniden kullanılır.
     """
 
+    class _CircuitBreaker:
+        """Basit devre kesici: art arda N hatada, cooldown süresi boyunca istekleri anında reddeder."""
+
+        def __init__(self, threshold: int = 5, cooldown: float = 60.0) -> None:
+            self.threshold = threshold
+            self.cooldown = cooldown
+            self._failures = 0
+            self._open_until: float = 0.0
+
+        def record_success(self) -> None:
+            self._failures = 0
+            self._open_until = 0.0
+
+        def record_failure(self) -> None:
+            self._failures += 1
+            if self._failures >= self.threshold:
+                self._open_until = _time.monotonic() + self.cooldown
+                logger.warning("Circuit breaker açıldı — %.0f sn boyunca LLM istekleri reddedilecek", self.cooldown)
+
+        def check(self) -> None:
+            if self._open_until and _time.monotonic() < self._open_until:
+                remaining = self._open_until - _time.monotonic()
+                raise CircuitBreakerOpenError(
+                    f"Yapay zekâ servisi geçici olarak devre dışı. ~{remaining:.0f} sn sonra tekrar deneyin."
+                )
+            if self._open_until and _time.monotonic() >= self._open_until:
+                self._open_until = 0.0
+
+        @property
+        def is_open(self) -> bool:
+            return bool(self._open_until) and _time.monotonic() < self._open_until
+
+        @property
+        def consecutive_failures(self) -> int:
+            return self._failures
+
     RETRY_BACKOFF_BASE = 2
     MAX_RETRY_WAIT_SECONDS = 30.0
 
@@ -97,6 +133,7 @@ class LLMService:
         self.client = client or httpx.AsyncClient(timeout=settings.LLM_TIMEOUT_SECONDS)
         self.usage = UsageStats()
         self._cache = _LLMCache(ttl=settings.LLM_CACHE_TTL_SECONDS)
+        self._breaker = self._CircuitBreaker(threshold=max(3, self.max_retries + 1), cooldown=60.0)
 
     @property
     def is_configured(self) -> bool:
@@ -104,6 +141,7 @@ class LLMService:
 
     async def chat(self, system_prompt: str, user_prompt: str, *, temperature: float | None = None) -> str:
         """Tek bir sohbet isteği gönderir, yanıt metnini döndürür."""
+        self._breaker.check()
         temp = self.temperature if temperature is None else temperature
         cached = self._cache.get(self.model, system_prompt, user_prompt, temp)
         if cached is not None:
@@ -143,6 +181,7 @@ class LLMService:
                     result = self._parse_completion(response)
                     self._cache.put(self.model, system_prompt, user_prompt, temp, result)
                     self.usage.cache_misses += 1
+                    self._breaker.record_success()
                     return result
 
             if attempt < self.max_retries:
@@ -151,6 +190,7 @@ class LLMService:
                 logger.warning("%s — %.0f sn sonra tekrar denenecek (%d/%d)", last_error.message, wait, attempt, self.max_retries)
                 await asyncio.sleep(wait)
 
+        self._breaker.record_failure()
         raise last_error
 
     async def chat_json(self, system_prompt: str, user_prompt: str) -> Any:
@@ -192,6 +232,8 @@ class LLMService:
     def get_usage_stats(self) -> dict:
         result = asdict(self.usage)
         result.update(self._cache.stats())
+        result["circuit_breaker_open"] = self._breaker.is_open
+        result["consecutive_failures"] = self._breaker.consecutive_failures
         return result
 
     async def close(self) -> None:

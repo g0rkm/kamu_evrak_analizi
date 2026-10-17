@@ -9,13 +9,29 @@ from .review import ReviewState
 
 
 class TextAnalysisRequest(BaseModel):
-    text: str = Field(..., description="Analiz edilecek evrak metni")
+    text: str = Field(..., min_length=1, description="Analiz edilecek evrak metni")
     title: Optional[str] = Field(default=None, max_length=200, description="Geçmişte görünecek başlık")
+
+    @field_validator("text")
+    @classmethod
+    def _strip_text(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("Metin boş olamaz.")
+        return v
 
 
 class CompareRequest(BaseModel):
-    text1: str
-    text2: str
+    text1: str = Field(..., min_length=1, description="Birinci evrak metni")
+    text2: str = Field(..., min_length=1, description="İkinci evrak metni")
+
+    @field_validator("text1", "text2")
+    @classmethod
+    def _strip_compare_texts(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("Karşılaştırma metinleri boş olamaz.")
+        return v
 
 
 class ComparisonResult(BaseModel):

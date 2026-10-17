@@ -69,5 +69,12 @@ class LLMResponseError(LLMError):
 
 class PipelineTimeoutError(AppError):
     """Pipeline süre aşımı."""
-    def __init__(self, message: str = "Pipeline süresi aşıldı.") -> None:
-        super().__init__(message, code="pipeline_timeout", status_code=504)
+    status_code = 504
+    code = "pipeline_timeout"
+    default_message = "Pipeline süresi aşıldı."
+
+
+class CircuitBreakerOpenError(LLMUnavailableError):
+    """Devre kesici açık — LLM servisi geçici olarak devre dışı."""
+    code = "circuit_breaker_open"
+    default_message = "Yapay zekâ servisi art arda hatalar nedeniyle geçici olarak devre dışı bırakıldı. Lütfen birkaç dakika sonra tekrar deneyin."
