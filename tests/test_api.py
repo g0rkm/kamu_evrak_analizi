@@ -323,3 +323,27 @@ def test_unconfigured_llm_blocks_analysis(client):
         resp = c.post("/api/analyze-text", json={"text": "T.C. Dilekçe — test metin " * 5})
         assert resp.status_code == 400
         assert "yapılandırılmamış" in resp.json()["detail"].lower()
+
+
+def test_import_records(client, fake_llm):
+    """Kayıt içe aktarma endpoint'i çalışmalı."""
+    # Önce bir kayıt oluştur ve dışa aktar
+    client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — test kayıt " * 5})
+    page = client.get("/api/history").json()
+    assert page["total"] >= 1
+
+    # Tüm kayıtları sil
+    client.delete("/api/history/clear")
+    assert client.get("/api/history").json()["total"] == 0
+
+    # Kayıtları geri içe aktar
+    resp = client.post("/api/history/import", json={"records": page["items"]})
+    assert resp.status_code == 200
+    assert resp.json()["imported"] >= 1
+
+
+def test_keyword_search_in_history(client, fake_llm):
+    """Geçmiş araması anahtar kelimelerle çalışmalı."""
+    client.post("/api/analyze-text", json={"text": "T.C. Dilekçe — kaldırım onarımı talebi " * 5})
+    resp = client.get("/api/history?q=onarım")
+    assert resp.status_code == 200

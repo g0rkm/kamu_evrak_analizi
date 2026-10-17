@@ -84,6 +84,17 @@ class HistoryRepository:
                     pass
         return count
 
+    def import_records(self, records: list[dict]) -> int:
+        """Dışa aktarılmış kayıtları içe aktarır. Mevcut ID'ler güncellenir."""
+        imported = 0
+        for record in records:
+            record_id = record.get("id")
+            if not record_id or not self._ID_PATTERN.match(record_id):
+                continue
+            self._write(record_id, record)
+            imported += 1
+        return imported
+
     # ── Okuma ─────────────────────────────────────────────
 
     def get(self, record_id: str) -> dict | None:
@@ -109,7 +120,7 @@ class HistoryRepository:
                 if needle in i["summary"].casefold()
                 or needle in i["source_name"].casefold()
                 or needle in i["document_type"].casefold()
-                or needle.get("keywords", "").casefold()
+                or needle in (i.get("keywords") or "").casefold()
             ]
         return {"total": len(items), "items": items[offset: offset + limit]}
 

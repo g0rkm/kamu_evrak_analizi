@@ -121,5 +121,8 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
             "max_concurrent_jobs": settings.MAX_CONCURRENT_JOBS,
             "rag_available": container.rag.available,
             "keep_uploads": settings.KEEP_UPLOADS,
+            "rate_limit_requests": settings.RATE_LIMIT_REQUESTS,
+            "rate_limit_window": settings.RATE_LIMIT_WINDOW,
+            "csp_report_only": settings.CSP_REPORT_ONLY,
         },
     }

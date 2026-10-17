@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import JSONResponse
 
-from app.api.dependencies import get_history
+from app.api.dependencies import get_container, get_history
+from app.container import ServiceContainer
 from app.core.exceptions import NotFoundError
 from app.models.api import HistoryPage, HistoryStats
 from app.models.review import ReviewState, ReviewUpdate
@@ -90,3 +91,16 @@ async def get_audit_log(record_id: str, history: HistoryRepository = Depends(get
     record = _require(history, record_id)
     review = record.get("review") or {}
     return {"record_id": record_id, "audit_log": review.get("audit_log", [])}
+
+
+@router.post("/history/import", summary="Dışa aktarılmış kayıtları içe aktar")
+async def import_records(body: dict, container: ServiceContainer = Depends(get_container)):
+    records = body.get("records")
+    if not isinstance(records, list):
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError("'records' listesi gereklidir.")
+    if len(records) > 500:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError("Tek seferde en fazla 500 kayıt içe aktarılabilir.")
+    imported = container.history.import_records(records)
+    return {"imported": imported}
