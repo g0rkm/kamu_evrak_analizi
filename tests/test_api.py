@@ -531,3 +531,23 @@ def test_request_stats_includes_error_rate(client):
     data = resp.json()
     assert "error_rate" in data
     assert isinstance(data["error_rate"], (int, float))
+
+
+def test_mask_pii_empty_text(client):
+    resp = client.post(
+        "/api/mask-pii",
+        json={"text": "Bu metinde kişisel veri yoktur."},
+        headers={"Content-Type": "application/json"},
+    )
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["pii_count"] == 0
+    assert data["masked_text"] == "Bu metinde kişisel veri yoktur."
+
+
+def test_config_export_no_secrets(client):
+    """Config export API anahtarını içermemeli."""
+    resp = client.get("/api/config/export")
+    assert resp.status_code == 200
+    raw = resp.text.lower()
+    assert "not-set" not in raw or "api_key" not in raw

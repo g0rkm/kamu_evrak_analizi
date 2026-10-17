@@ -264,3 +264,40 @@ def test_token_budget_config():
 
     s2 = Settings(LLM_API_KEY="test")
     assert s2.LLM_TOKEN_BUDGET == 0  # Varsayılan: sınırsız
+
+
+def test_pii_detector_kredi_kart():
+    """Kredi kartı numarası tespit edilmeli."""
+    from app.services.pii_detector import PIIDetector
+    text = "Ödeme kartı: 5234 5678 9012 3456"
+    findings = PIIDetector().detect(text)
+    assert any(f.type == "kredi_kart" for f in findings)
+
+
+def test_pii_detector_mask_text():
+    """PII maskeleme tüm türler için çalışmalı."""
+    from app.services.pii_detector import PIIDetector
+    text = "E-posta: test@example.com, Tel: 05551234567"
+    masked = PIIDetector().mask_text(text)
+    assert "test@example.com" not in masked
+    assert "05551234567" not in masked
+
+
+def test_llm_cache_ttl_zero_disables():
+    """TTL=0 ise cache devre dışı olmalı."""
+    from app.services.llm_service import _LLMCache
+    cache = _LLMCache(ttl=0)
+    assert not cache.enabled
+    cache.put("model", "sys", "user", 0.5, "result")
+    assert cache.get("model", "sys", "user", 0.5) is None
+
+
+def test_metrics_error_rate():
+    """Metrics error_rate doğru hesaplamalı."""
+    from app.core.metrics import Metrics
+    m = Metrics()
+    m.record_request(200)
+    m.record_request(200)
+    m.record_request(500)
+    m.record_request(404)
+    assert m.error_rate() == 0.5  # 2 hata / 4 toplam
