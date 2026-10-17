@@ -65,7 +65,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         # Basit CSRF koruması: durum değiştiren API istekleri Content-Type başlığı gerektirir
         if (
             request.url.path.startswith("/api/")
-            and request.method in ("POST", "PATCH", "PUT", "DELETE")
+            and request.method in ("POST", "PATCH", "PUT")
             and not request.url.path.endswith("/file")  # multipart upload hariç
         ):
             ct = (request.headers.get("content-type") or "").lower()
