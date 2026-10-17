@@ -197,6 +197,7 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
             "log_format": settings.LOG_FORMAT,
             "llm_model": settings.LLM_MODEL,
             "llm_timeout": settings.LLM_TIMEOUT_SECONDS,
+            "analysis_timeout": settings.ANALYSIS_TIMEOUT,
             "llm_cache_ttl": settings.LLM_CACHE_TTL_SECONDS,
             "pipeline_timeout": settings.PIPELINE_TIMEOUT_SECONDS,
             "max_file_mb": settings.MAX_FILE_SIZE_MB,

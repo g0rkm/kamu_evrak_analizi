@@ -70,11 +70,12 @@ def verify_environment(settings: Settings) -> list[str]:
 
     from app import __version__
     logger.info(
-        "Yapılandırma: v%s env=%s model=%s timeout=%.0fs cache_ttl=%ds rate_limit=%d/%ds maintenance=%s max_hist=%d",
+        "Yapılandırma: v%s env=%s model=%s timeout=%.0fs analysis_timeout=%ds cache_ttl=%ds rate_limit=%d/%ds maintenance=%s max_hist=%d",
         __version__,
         settings.ENVIRONMENT,
         settings.LLM_MODEL,
         settings.PIPELINE_TIMEOUT_SECONDS,
+        settings.ANALYSIS_TIMEOUT,
         settings.LLM_CACHE_TTL_SECONDS,
         settings.RATE_LIMIT_REQUESTS,
         settings.RATE_LIMIT_WINDOW,
