@@ -14,6 +14,8 @@ class SystemStatus {
         this.element = element;
         this.text = element.querySelector('.status-pill__text');
         this.api = api;
+        element.style.cursor = 'pointer';
+        element.addEventListener('click', () => this.showDetails());
     }
 
     start() {
@@ -41,6 +43,24 @@ class SystemStatus {
         this.text.textContent = text;
         this.element.title = title;
         this.element.setAttribute('aria-label', title);
+    }
+
+    async showDetails() {
+        try {
+            const health = await this.api.health();
+            const info = [
+                `Sürüm: ${health.version}`,
+                `Model: ${health.llm_model}`,
+                `LLM: ${health.llm_configured ? 'Yapılandırılmış' : 'Yapılandırılmamış'}`,
+                `RAG: ${health.rag_available ? `${health.rag_chunks} parça` : 'Yok'}`,
+                `Toplam analiz: ${health.total_analyses}`,
+                `Çalışma süresi: ${Math.round(health.uptime_seconds / 60)} dk`,
+                health.disk_free_mb != null ? `Disk: ${health.disk_free_mb} MB boş` : null,
+            ].filter(Boolean).join('\n');
+            alert(info);
+        } catch {
+            alert('Sistem bilgisi alınamadı.');
+        }
     }
 }
 

@@ -509,6 +509,12 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .toast--success .toast__icon { color: var(--success); }
 .toast--error .toast__icon { color: var(--danger); }
 .toast--info .toast__icon { color: var(--primary); }
+.toast--warning {
+    border-left-color: var(--warning);
+}
+.toast--warning .toast__icon {
+    color: var(--warning);
+}
 .toast__message { flex: 1; font-size: 13.5px; }
 .toast.is-leaving { opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s; }
 @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }

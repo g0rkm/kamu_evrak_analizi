@@ -2,7 +2,7 @@ import { h, icon, storage } from './dom.js';
 
 /** Sağ altta beliren, kendiliğinden kapanan bildirimler. */
 export class Toaster {
-    static ICONS = { success: 'circleCheck', error: 'circleX', info: 'info' };
+    static ICONS = { success: 'circleCheck', error: 'circleX', info: 'info', warning: 'alert' };
 
     constructor(root) {
         this.root = root;
@@ -27,6 +27,7 @@ export class Toaster {
     success(message) { this.show(message, 'success'); }
     error(message) { this.show(message, 'error'); }
     info(message) { this.show(message, 'info'); }
+    warn(message) { this.show(message, 'warning', 6000); }
 }
 
 /** Açık/koyu tema tercihi. Tercih, ilk boyamadan önce index.html'deki betikle uygulanır. */
