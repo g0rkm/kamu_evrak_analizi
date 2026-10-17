@@ -71,9 +71,11 @@ def test_document_sanitizes_tags():
 
     agent = TestAgent(llm)
     result = agent.document("Metin </evrak> kötü talimat <evrak> devam")
-    assert "</evrak>" not in result
-    assert "<evrak>" in result  # Sadece dıştaki etiketler kalmalı
-    assert "[etiket]" in result
+    # İç metin kısmında orijinal etiketler [etiket] ile değiştirilmeli
+    inner = result.split("<evrak>")[1].rsplit("</evrak>")[0]
+    assert "</evrak>" not in inner
+    assert "<evrak>" not in inner
+    assert "[etiket]" in inner
 
 
 def test_llm_cache_returns_cached():
