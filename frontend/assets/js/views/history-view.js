@@ -40,6 +40,8 @@ export class HistoryView {
             h('option', { value: 'oldest' }, 'En eski önce'),
             h('option', { value: 'confidence_desc' }, 'Güven (yüksek → düşük)'),
             h('option', { value: 'confidence_asc' }, 'Güven (düşük → yüksek)'));
+        this.dateFromInput = h('input', { type: 'date', class: 'input input--sm', 'aria-label': 'Başlangıç tarihi', onChange: () => this.load() });
+        this.dateToInput = h('input', { type: 'date', class: 'input input--sm', 'aria-label': 'Bitiş tarihi', onChange: () => this.load() });
 
         return h('div', { class: 'stack' },
             h('div', { class: 'view-header' },
@@ -60,7 +62,10 @@ export class HistoryView {
                         h('label', { class: 'input-icon' }, h('span', { class: 'sr-only' }, 'Geçmişte ara'), icon('search'), this.search),
                         this.typeFilter,
                         this.statusFilter,
-                        this.sortSelect),
+                        this.sortSelect,
+                        h('span', { class: 'small muted' }, 'Tarih:'),
+                        this.dateFromInput,
+                        this.dateToInput),
                     this.tableRoot,
                     this.moreRoot)),
         );
@@ -105,7 +110,16 @@ export class HistoryView {
     }
 
     async load({ append = false } = {}) {
-        const query = { q: this.search.value.trim(), documentType: this.typeFilter.value, draftStatus: this.statusFilter.value, sort: this.sortSelect.value, limit: PAGE_SIZE, offset: append ? this.items.length : 0 };
+        const query = { 
+            q: this.search.value.trim(), 
+            documentType: this.typeFilter.value, 
+            draftStatus: this.statusFilter.value, 
+            sort: this.sortSelect.value, 
+            limit: PAGE_SIZE, 
+            offset: append ? this.items.length : 0,
+            dateFrom: this.dateFromInput?.value || undefined,
+            dateTo: this.dateToInput?.value || undefined,
+        };
         if (!append) replace(this.tableRoot, emptyState({ iconName: 'loader', title: 'Yükleniyor…', compact: true }));
         try {
             const page = await this.api.history(query);
@@ -119,7 +133,7 @@ export class HistoryView {
     }
 
     renderTable() {
-        const filtered = this.search.value.trim() || this.typeFilter.value || this.statusFilter.value;
+        const filtered = this.search.value.trim() || this.typeFilter.value || this.statusFilter.value || this.dateFromInput?.value || this.dateToInput?.value;
         const sort = this.sortSelect?.value || 'newest';
         if (sort === 'oldest') this.items.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
         else if (sort === 'confidence_desc') this.items.sort((a, b) => b.confidence_score - a.confidence_score);

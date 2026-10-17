@@ -97,12 +97,14 @@ export class ApiClient {
 
     job(jobId, signal) { return this.request(`/jobs/${encodeURIComponent(jobId)}`, { signal }); }
 
-    history({ q = '', documentType = '', draftStatus = '', sort = '', limit = 50, offset = 0 } = {}) {
+    history({ q = '', documentType = '', draftStatus = '', sort = '', limit = 50, offset = 0, dateFrom = '', dateTo = '' } = {}) {
         const params = new URLSearchParams({ limit, offset });
         if (q) params.set('q', q);
         if (documentType) params.set('document_type', documentType);
         if (draftStatus) params.set('draft_status', draftStatus);
         if (sort) params.set('sort', sort);
+        if (dateFrom) params.set('date_from', dateFrom);
+        if (dateTo) params.set('date_to', dateTo);
         return this.request(`/history?${params}`);
     }
 
