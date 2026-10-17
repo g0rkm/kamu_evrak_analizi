@@ -133,6 +133,28 @@ async def update_tags(record_id: str, body: dict, history: HistoryRepository = D
     return {"record_id": record_id, "tags": tags}
 
 
+@router.patch("/history/{record_id}/favorite", summary="Kayıdı favorilere ekle/çıkar")
+async def toggle_favorite(record_id: str, body: dict, history: HistoryRepository = Depends(get_history)):
+    record = _require(history, record_id)
+    favorite = body.get("favorite", False)
+    history.update_field(record_id, "favorite", bool(favorite))
+    return {"record_id": record_id, "favorite": bool(favorite)}
+
+
+@router.patch("/history/{record_id}/notes", summary="Kayıda not ekle")
+async def update_notes(record_id: str, body: dict, history: HistoryRepository = Depends(get_history)):
+    record = _require(history, record_id)
+    notes = body.get("notes", "")
+    if not isinstance(notes, str):
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError("'notes' bir metin olmalıdır.")
+    if len(notes) > 2000:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError("Not en fazla 2000 karakter olabilir.")
+    history.update_field(record_id, "notes", notes)
+    return {"record_id": record_id, "notes": notes}
+
+
 @router.delete("/history/{record_id}")
 async def delete_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     if not history.delete(record_id):

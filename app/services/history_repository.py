@@ -85,6 +85,18 @@ class HistoryRepository:
             with path.open("w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
 
+    def update_field(self, record_id: str, field: str, value) -> None:
+        """Kayıttaki belirli bir alanı günceller."""
+        path = self.directory / f"{record_id}.json"
+        if not path.exists():
+            raise NotFoundError("Analiz kaydı bulunamadı.")
+        with self._lock:
+            with path.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+            data[field] = value
+            with path.open("w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+
     def delete(self, record_id: str) -> bool:
         path = self._path(record_id)
         with self._lock:
