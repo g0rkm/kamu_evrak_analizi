@@ -107,9 +107,23 @@ async def llm_stats(container: ServiceContainer = Depends(get_container)):
 async def system_info(container: ServiceContainer = Depends(get_container)):
     import platform
     settings = container.settings
+
+    warnings_list = []
+    if not container.llm.is_configured:
+        warnings_list.append("LLM API anahtarı yapılandırılmamış.")
+    if not container.rag.available:
+        warnings_list.append("RAG mevzuat indeksi yüklenmemiş.")
+    try:
+        disk = shutil.disk_usage(settings.history_path)
+        if disk.free < 100 * 1024 * 1024:
+            warnings_list.append(f"Disk alanı düşük: {disk.free // (1024 * 1024)} MB kaldı.")
+    except OSError:
+        pass
+
     return {
         "version": __version__,
         "python_version": platform.python_version(),
+        "warnings": warnings_list,
         "settings": {
             "log_level": settings.LOG_LEVEL,
             "log_format": settings.LOG_FORMAT,
