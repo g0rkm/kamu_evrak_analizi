@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     RATE_LIMIT_WINDOW: int = 60
     TRUSTED_PROXIES: list[str] = []
     CSP_REPORT_ONLY: bool = True
+    MAINTENANCE_MODE: bool = False
 
     @field_validator("LOG_FORMAT")
     @classmethod

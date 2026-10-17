@@ -59,6 +59,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
 
     app.add_middleware(RateLimitMiddleware, max_requests=settings.RATE_LIMIT_REQUESTS, window=settings.RATE_LIMIT_WINDOW)
+    
+    @app.middleware("http")
+    async def maintenance_mode_middleware(request: Request, call_next):
+        if request.app.state.container.settings.MAINTENANCE_MODE:
+            if not request.url.path.startswith("/api/health"):
+                from app.core.exceptions import MaintenanceModeError
+                raise MaintenanceModeError()
+        return await call_next(request)
+
     app.add_middleware(GZipMiddleware, minimum_size=1000)
 
     @app.middleware("http")
