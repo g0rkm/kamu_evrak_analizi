@@ -547,11 +547,18 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
-/* ---------- Yazdırma: yalnızca resmî yazı önizlemesi ---------- */
+/* ---------- Yazdırma ---------- */
 
 @media print {
-    body { background: #fff; }
-    body * { visibility: hidden; }
-    .letter, .letter * { visibility: visible; }
-    .letter { position: absolute; inset: 0 auto auto 0; width: 100%; max-width: none; border: 0; box-shadow: none; padding: 0; }
+    body { background: #fff; color: #111; }
+    .app-header, .app-sidebar, .main-nav, .toaster, .dialog,
+    .analyze-layout__aside, .btn, button, .review-bar,
+    .segmented, .dropzone, .result-hero__actions { display: none !important; }
+    .app-main { padding: 0; max-width: 100%; }
+    .card { border: none; box-shadow: none; break-inside: avoid; }
+    .tab-panel { padding: 0; }
+    .meter__fill { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .letter { border: 0; box-shadow: none; padding: 20px 0; max-width: none; }
+    .log-console { background: #f8fafc; color: #111; border: 1px solid #e2e8f0; }
+    a { color: #111; text-decoration: none; }
 }
