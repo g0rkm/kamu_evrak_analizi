@@ -43,7 +43,10 @@ def register_exception_handlers(app: FastAPI) -> None:
             content={
                 "detail": errors[0]["msg"] if errors else "Doğrulama hatası.",
                 "code": "validation_error",
-                "errors": errors,
+                "errors": [
+                    {k: v for k, v in e.items() if k != "ctx"}
+                    for e in errors
+                ],
                 "request_id": rid,
             },
         )
