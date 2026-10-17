@@ -929,4 +929,4 @@ def test_system_info_includes_timeout(client):
     response = client.get('/api/system-info')
     assert response.status_code == 200
     data = response.json()
-    assert 'analysis_timeout' in data
+    assert 'analysis_timeout' in data['settings']
