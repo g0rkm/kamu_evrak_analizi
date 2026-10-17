@@ -54,6 +54,7 @@ class SystemStatus {
             const info = [
                 `Sürüm: ${health.version}`,
                 `Durum: ${health.status}`,
+                `Ortam: ${health.environment || 'development'}`,
                 `Model: ${health.llm_model}`,
                 `LLM: ${health.llm_configured ? 'Yapılandırılmış' : 'Yapılandırılmamış'}`,
                 `RAG: ${health.rag_available ? `${health.rag_chunks} parça` : 'Yok'}`,
