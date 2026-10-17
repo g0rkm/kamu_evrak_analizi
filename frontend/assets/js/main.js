@@ -128,7 +128,7 @@ class App {
                 case '3': e.preventDefault(); this.navigate('#/karsilastir'); break;
                 case '?':
                     e.preventDefault();
-                    this.toaster.info('Kısayollar: 1=Analiz, 2=Geçmiş, 3=Karşılaştır');
+                    alert('Klavye kısayolları:\n\n1 — Analiz sayfası\n2 — Geçmiş sayfası\n3 — Karşılaştır sayfası\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
                     break;
             }
         });

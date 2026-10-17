@@ -551,3 +551,15 @@ def test_config_export_no_secrets(client):
     assert resp.status_code == 200
     raw = resp.text.lower()
     assert "not-set" not in raw or "api_key" not in raw
+
+
+def test_csv_export_endpoint(client):
+    resp = client.get("/api/history/export-csv")
+    assert resp.status_code == 200
+    assert "text/csv" in resp.headers.get("content-type", "")
+    assert "gecmis.csv" in resp.headers.get("content-disposition", "")
+    # CSV header satiri kontrolü
+    lines = resp.text.strip().split("\n")
+    assert len(lines) >= 1
+    assert "id" in lines[0]
+    assert "timestamp" in lines[0]
