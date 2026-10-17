@@ -144,6 +144,14 @@ async def validate_text(body: MaskRequest):
     }
 
 
+@router.get('/stats/history-summary', summary='Gecmis ozet istatistikleri')
+async def history_summary_stats(container: ServiceContainer = Depends(get_container)):
+    stats = container.history.stats()
+    page = container.history.list_records(limit=5, offset=0, sort='confidence_desc')
+    top_records = [{'id': i['id'], 'source_name': i['source_name'], 'confidence_score': i['confidence_score']} for i in page['items']]
+    return {'total': stats['total'], 'favorites_count': stats.get('favorites_count', 0), 'avg_confidence': stats.get('avg_confidence', 0), 'top_confidence': top_records}
+
+
 @router.get("/stats/llm", summary="LLM kullanım istatistikleri")
 async def llm_stats(container: ServiceContainer = Depends(get_container)):
     stats = container.llm.get_usage_stats()

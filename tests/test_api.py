@@ -906,3 +906,12 @@ def test_validate_text_endpoint(client):
     data = response.json()
     assert 'valid' in data
     assert 'char_count' in data
+
+
+def test_history_summary_stats(client):
+    response = client.get('/api/stats/history-summary')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'total' in data
+    assert 'top_confidence' in data
+    assert isinstance(data['top_confidence'], list)
