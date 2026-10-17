@@ -8,6 +8,7 @@ from app import __version__
 from app.agents.orchestrator import PIPELINE_STEPS
 from app.api.dependencies import get_container
 from app.container import ServiceContainer
+from app.core.metrics import metrics as app_metrics
 from app.core.taxonomy import DOCUMENT_TYPES, DRAFT_TYPES, ORG_UNITS, PRIORITIES, UNKNOWN_DOCUMENT_TYPE
 from app.models.api import HealthStatus
 from app.services.pii_detector import PIIDetector
@@ -126,3 +127,8 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
             "csp_report_only": settings.CSP_REPORT_ONLY,
         },
     }
+
+
+@router.get("/stats/requests", summary="HTTP istek metrikleri")
+async def request_stats():
+    return app_metrics.snapshot()

@@ -14,6 +14,7 @@ from app.api.errors import register_exception_handlers
 from app.config import BASE_DIR, Settings, get_settings
 from app.container import ServiceContainer
 from app.core.logging import configure_logging, new_request_id, request_id_var
+from app.core.metrics import metrics
 from app.core.rate_limit import RateLimitMiddleware
 from app.core.startup import verify_environment
 
@@ -64,6 +65,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         response = await call_next(request)
         response.headers["X-Request-ID"] = rid
         response.headers["X-Response-Time"] = f"{((_time.perf_counter() - start) * 1000):.0f}ms"
+        if request.url.path.startswith("/api/"):
+            metrics.record_request(response.status_code)
         return response
 
     @app.middleware("http")

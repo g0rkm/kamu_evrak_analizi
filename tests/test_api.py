@@ -355,3 +355,18 @@ def test_delete_without_content_type_allowed(client, fake_llm):
     # Content-Type header'ı olmadan DELETE isteği
     resp = client.delete("/api/history/clear")
     assert resp.status_code == 200
+
+
+def test_request_stats_endpoint(client):
+    """İstek metrikleri endpoint'i çalışmalı."""
+    # Birkaç istek yap
+    client.get("/api/health")
+    client.get("/api/health")
+
+    resp = client.get("/api/stats/requests")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "total_requests" in data
+    assert data["total_requests"] >= 2
+    assert "error_rate" in data
+    assert "status_codes" in data
