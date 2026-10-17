@@ -109,3 +109,6 @@ class HealthStatus(BaseModel):
     total_analyses: int
     avg_confidence: float
     llm_usage: dict = Field(default_factory=dict)
+    uptime_seconds: float = 0.0
+    active_jobs: int = 0
+    disk_free_mb: Optional[float] = None
