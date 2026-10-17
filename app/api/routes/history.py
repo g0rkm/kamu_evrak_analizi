@@ -33,6 +33,20 @@ async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
 
 
+@router.get("/history/export-all", summary="Tüm analiz kayıtlarını JSON olarak indir")
+async def export_all_records(history: HistoryRepository = Depends(get_history)):
+    page = history.list_records(limit=10000, offset=0)
+    records = []
+    for item in page["items"]:
+        full = history.get(item["id"])
+        if full:
+            records.append({**full.get("result", full), "review": full.get("review"), "id": item["id"]})
+    return JSONResponse(
+        content={"total": len(records), "records": records},
+        headers={"Content-Disposition": 'attachment; filename="tum_analizler.json"'},
+    )
+
+
 @router.get("/history/{record_id}")
 async def get_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     return _require(history, record_id)
