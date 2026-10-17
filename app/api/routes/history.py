@@ -63,6 +63,31 @@ async def clear_all_records(history: HistoryRepository = Depends(get_history)):
     return {"deleted": deleted}
 
 
+@router.get("/history/export-csv", summary="Analiz kayıtlarını CSV olarak indir")
+async def export_csv(history: HistoryRepository = Depends(get_history)):
+    page = history.list_records(limit=10000, offset=0)
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["id", "timestamp", "source_name", "document_type", "confidence_score", "processing_time", "status", "draft_status"])
+    for item in page["items"]:
+        writer.writerow([
+            item["id"],
+            item["timestamp"],
+            item["source_name"],
+            item["document_type"],
+            item.get("confidence_score", 0),
+            item.get("processing_time", 0),
+            item.get("status", ""),
+            item.get("draft_status", "pending"),
+        ])
+    from starlette.responses import Response
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="gecmis.csv"'},
+    )
+
+
 @router.get("/history/{record_id}")
 async def get_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     return _require(history, record_id)
@@ -108,28 +133,3 @@ async def import_records(body: dict, container: ServiceContainer = Depends(get_c
         raise InvalidInputError("Tek seferde en fazla 500 kayıt içe aktarılabilir.")
     imported = container.history.import_records(records)
     return {"imported": imported}
-
-
-@router.get("/history/export-csv", summary="Analiz kayıtlarını CSV olarak indir")
-async def export_csv(history: HistoryRepository = Depends(get_history)):
-    page = history.list_records(limit=10000, offset=0)
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(["id", "timestamp", "source_name", "document_type", "confidence_score", "processing_time", "status", "draft_status"])
-    for item in page["items"]:
-        writer.writerow([
-            item["id"],
-            item["timestamp"],
-            item["source_name"],
-            item["document_type"],
-            item.get("confidence_score", 0),
-            item.get("processing_time", 0),
-            item.get("status", ""),
-            item.get("draft_status", "pending"),
-        ])
-    from starlette.responses import Response
-    return Response(
-        content=output.getvalue(),
-        media_type="text/csv",
-        headers={"Content-Disposition": 'attachment; filename="gecmis.csv"'},
-    )
