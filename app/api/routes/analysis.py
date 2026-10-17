@@ -46,7 +46,7 @@ async def analyze_batch(
         raise InvalidInputError(f"Tek seferde en fazla {limit} dosya yüklenebilir.")
 
     batch_logger = logging.getLogger("api.batch")
-    batch_logger.info("Toplu analiz başlatıldı: %d dosya", len(files))
+    batch_logger.info("Toplu analiz başlatıldı: %d dosya (limit: %d)", len(files), limit)
 
     results: list[BatchItem] = []
     for upload in files:

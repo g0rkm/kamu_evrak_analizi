@@ -354,3 +354,24 @@ def test_pii_detector_ehliyet():
     findings = detector.detect(text)
     types = [f.type for f in findings]
     assert "ehliyet" in types
+
+
+def test_config_maintenance_mode_default():
+    """MAINTENANCE_MODE varsayılan olarak False olmalı."""
+    from app.config import Settings
+    settings = Settings()
+    assert settings.MAINTENANCE_MODE is False
+
+
+def test_config_admin_token_default():
+    """ADMIN_TOKEN varsayılan olarak boş string olmalı."""
+    from app.config import Settings
+    settings = Settings()
+    assert settings.ADMIN_TOKEN == ""
+
+
+def test_config_log_file_default():
+    """LOG_FILE varsayılan olarak boş string olmalı."""
+    from app.config import Settings
+    settings = Settings()
+    assert settings.LOG_FILE == ""
