@@ -132,8 +132,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         response = await call_next(request)
         for name, value in SECURITY_HEADERS.items():
             response.headers.setdefault(name, value)
+            
         if request.url.path.startswith("/api/"):
-            response.headers.setdefault("Cache-Control", "no-store")
+            if request.method == "GET":
+                response.headers.setdefault("Cache-Control", "private, max-age=0, must-revalidate")
+            else:
+                response.headers.setdefault("Cache-Control", "no-store")
 
         if not request.url.path.startswith("/api/"):
             csp = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"

@@ -1,5 +1,7 @@
 """Senkron analiz uç noktaları (API istemcileri ve betikler için)."""
 import asyncio
+import hashlib
+import json
 import logging
 import time
 from fastapi import APIRouter, Depends, File, UploadFile
@@ -22,10 +24,44 @@ async def analyze_document(
     file: UploadFile = File(...),
     storage: UploadStorage = Depends(get_storage),
     service: AnalysisService = Depends(get_analysis_service),
+    container: ServiceContainer = Depends(get_container),
 ):
     stored = await storage.save(file)
     try:
-        return await asyncio.wait_for(service.analyze_file(stored), timeout=60.0)
+        # Dosya içeriğini okuyup content_hash hesapla ve deduplication kontrolü yap
+        content = getattr(stored, "content", None)
+        if content is None:
+            # Eğer stored objesinde content doğrudan yoksa dosya yolundan okumayı deneyebiliriz ya da okunduğunu varsayabiliriz
+            # Ancak standart akışta stored üzerinden ilerlenir. Güvenli okuma için:
+            if hasattr(stored, "read_bytes"):
+                content_bytes = await stored.read_bytes()
+            elif hasattr(stored, "path") and stored.path:
+                with open(stored.path, "rb") as f:
+                    content_bytes = f.read()
+            else:
+                content_bytes = b""
+            content_hash = hashlib.sha256(content_bytes).hexdigest()
+        else:
+            if isinstance(content, str):
+                content_bytes = content.encode()
+            else:
+                content_bytes = content
+            content_hash = hashlib.sha256(content_bytes).hexdigest()
+
+        dedup_key = container.llm._cache.deduplicate_key(content_hash)
+        if dedup_key:
+            cached = container.llm._cache.get(dedup_key)
+            if cached:
+                return cached
+
+        result = await asyncio.wait_for(service.analyze_file(stored), timeout=60.0)
+        
+        # Başarılı sonuç sonrası cache/dedup kaydı
+        if result:
+            result_hash = hashlib.sha256(json.dumps(result, sort_keys=True).encode()).hexdigest()
+            container.llm._cache.set_dedup(content_hash, 'llm:' + content_hash)
+            
+        return result
     except (asyncio.TimeoutError, TimeoutError):
         logger.warning("Analiz pipeline süresi aşıldı (dosya: %s)", getattr(stored, "filename", "bilinmiyor"))
         raise PipelineTimeoutError()
