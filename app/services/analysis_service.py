@@ -67,6 +67,7 @@ class AnalysisService:
             legislation_catalog=self.legislation,
             ocr_service=self.ocr,
             observer=observer,
+            timeout=self.settings.PIPELINE_TIMEOUT_SECONDS,
         )
         result = await orchestrator.run(document)
         payload = result.model_dump(mode="json")
