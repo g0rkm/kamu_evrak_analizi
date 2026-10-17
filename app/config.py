@@ -2,6 +2,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +51,20 @@ class Settings(BaseSettings):
     MAX_CONCURRENT_JOBS: int = 2
     JOB_TTL_SECONDS: int = 3600
     PIPELINE_TIMEOUT_SECONDS: float = 300.0
+
+    @field_validator("LOG_FORMAT")
+    @classmethod
+    def _validate_log_format(cls, v: str) -> str:
+        if v not in ("text", "json"):
+            raise ValueError("LOG_FORMAT 'text' veya 'json' olmalıdır.")
+        return v
+
+    @field_validator("PIPELINE_TIMEOUT_SECONDS")
+    @classmethod
+    def _validate_timeout(cls, v: float) -> float:
+        if v < 10:
+            raise ValueError("PIPELINE_TIMEOUT_SECONDS en az 10 olmalıdır.")
+        return v
 
     @staticmethod
     def resolve(path: str) -> Path:

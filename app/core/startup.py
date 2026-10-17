@@ -42,6 +42,16 @@ def verify_environment(settings: Settings) -> list[str]:
     if not (rag_path / "tfidf_matrix.npz").exists():
         warnings.append("RAG indeksi bulunamadı — mevzuat eşleştirme yalnızca metadata ile çalışacak.")
 
+    # Disk alanı kontrolü
+    try:
+        import shutil
+        disk = shutil.disk_usage(settings.history_path)
+        free_mb = disk.free / (1024 * 1024)
+        if free_mb < 100:
+            warnings.append(f"Disk alanı kritik düzeyde düşük: {free_mb:.0f} MB kaldı")
+    except OSError:
+        pass
+
     for w in warnings:
         logger.warning("⚠ %s", w)
 
