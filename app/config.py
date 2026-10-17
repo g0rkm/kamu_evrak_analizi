@@ -49,6 +49,7 @@ class Settings(BaseSettings):
     HISTORY_DIR: str = "data/history"
     MAX_CONCURRENT_JOBS: int = 2
     JOB_TTL_SECONDS: int = 3600
+    PIPELINE_TIMEOUT_SECONDS: float = 300.0
 
     @staticmethod
     def resolve(path: str) -> Path:
