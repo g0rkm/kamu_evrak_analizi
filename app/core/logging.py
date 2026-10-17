@@ -44,13 +44,13 @@ class JsonFormatter(logging.Formatter):
 _FORMAT = "%(asctime)s %(levelname)-7s [%(request_id)s] %(name)s: %(message)s"
 
 
-def configure_logging(level: str = "INFO", log_format: str = "text") -> None:
+def configure_logging(level: str = "INFO", fmt: str = "text", log_file: str = ""):
     root = logging.getLogger()
     root.setLevel(level.upper())
 
     if not root.handlers:
         handler = logging.StreamHandler(sys.stdout)
-        if log_format == "json":
+        if fmt == "json":
             handler.setFormatter(JsonFormatter())
         else:
             handler.setFormatter(logging.Formatter(_FORMAT, datefmt="%H:%M:%S"))
@@ -59,3 +59,11 @@ def configure_logging(level: str = "INFO", log_format: str = "text") -> None:
 
     # httpx her isteği INFO seviyesinde loglar; API anahtarı içeren URL'ler log'a düşmesin.
     logging.getLogger("httpx").setLevel(logging.WARNING)
+
+    if log_file:
+        from logging.handlers import RotatingFileHandler
+        file_handler = RotatingFileHandler(
+            log_file, maxBytes=10 * 1024 * 1024, backupCount=5, encoding="utf-8"
+        )
+        file_handler.setFormatter(JsonFormatter())
+        logging.getLogger().addHandler(file_handler)

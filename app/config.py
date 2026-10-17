@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"  # "development", "staging", "production"
     LOG_LEVEL: str = "INFO"
     LOG_FORMAT: str = "text"  # "text" veya "json"
+    LOG_FILE: str = ""
     CORS_ORIGINS: list[str] = []
 
     # LLM (OpenAI uyumlu uç nokta)
