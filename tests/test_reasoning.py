@@ -471,3 +471,7 @@ def test_history_repository_stats_favorites_count():
         repo = HistoryRepository(Path(tmp))
         stats = repo.stats()
         assert stats["favorites_count"] == 0
+
+
+def test_pii_detector_plaka():
+    from app.services.pii_detector import PIIDetector; detector = PIIDetector(); text = 'Arac plakasi: 34 ABC 123'; findings = detector.detect(text); types = [f.type for f in findings]; assert 'plaka' in types

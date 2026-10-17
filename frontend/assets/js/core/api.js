@@ -218,4 +218,7 @@ export class ApiClient {
             body: JSON.stringify({}),
         });
     }
+
+    validateText(text) { return this.request('/validate-text', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) }); }
+    historyNotes(recordId) { return this.request('/history/' + encodeURIComponent(recordId)); }
 }
