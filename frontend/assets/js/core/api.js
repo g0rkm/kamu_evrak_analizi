@@ -189,4 +189,20 @@ export class ApiClient {
             body: JSON.stringify({ tags }),
         });
     }
+
+    toggleFavorite(recordId, favorite) {
+        return this.request(`/history/${encodeURIComponent(recordId)}/favorite`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ favorite }),
+        });
+    }
+
+    updateNotes(recordId, notes) {
+        return this.request(`/history/${encodeURIComponent(recordId)}/notes`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ notes }),
+        });
+    }
 }

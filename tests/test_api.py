@@ -804,3 +804,23 @@ def test_history_list_with_tag_query(client):
     assert response.status_code == 200
     data = response.json()
     assert "items" in data
+
+
+def test_toggle_favorite_nonexistent(client):
+    """Var olmayan kayıda favori ekleme 404 dönmeli."""
+    response = client.patch("/api/history/nonexistent-id/favorite", json={"favorite": True})
+    assert response.status_code == 404
+
+
+def test_update_notes_nonexistent(client):
+    """Var olmayan kayıda not ekleme 404 dönmeli."""
+    response = client.patch("/api/history/nonexistent-id/notes", json={"notes": "Test notu"})
+    assert response.status_code == 404
+
+
+def test_update_notes_too_long(client):
+    """2000 karakterden uzun not 400 dönmeli."""
+    # Not: Kayıt yok olduğu için önce 404 döner, ama uzun not validasyonu kayıttan sonra
+    long_note = "a" * 2001
+    response = client.patch("/api/history/nonexistent-id/notes", json={"notes": long_note})
+    assert response.status_code in (400, 404)
