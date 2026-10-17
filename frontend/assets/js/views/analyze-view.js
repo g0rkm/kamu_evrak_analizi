@@ -120,7 +120,10 @@ class InputPanel {
         this.setBusy(false);
 
         return h('section', { class: 'card', 'aria-labelledby': 'inputTitle' },
-            h('div', { class: 'card__header' }, h('h2', { class: 'card__title', id: 'inputTitle' }, icon('file'), 'Yeni analiz')),
+            h('div', { class: 'card__header' }, 
+                h('h2', { class: 'card__title', id: 'inputTitle' }, icon('file'), 'Yeni analiz'),
+                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', title: 'Yazdır', onClick: () => window.print() }, icon('printer'), ' Yazdır')
+            ),
             h('div', { class: 'card__body stack' },
                 h('div', { class: 'segmented', role: 'tablist', 'aria-label': 'Girdi türü' }, this.fileTab, this.textTab),
                 this.filePane, this.textPane, this.submitButton),

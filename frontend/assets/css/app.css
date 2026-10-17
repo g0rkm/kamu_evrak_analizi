@@ -655,3 +655,10 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     outline: 2px solid var(--primary);
     outline-offset: 2px;
 }
+
+/* Yazdırma stilleri */
+@media print {
+    .main-nav, .top-bar, .skip-link, #toaster, .btn--ghost { display: none !important; }
+    .card { break-inside: avoid; border: 1px solid #ccc; }
+    body { background: white; color: black; }
+}
