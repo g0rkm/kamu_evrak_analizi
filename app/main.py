@@ -81,11 +81,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             api_logger = logging.getLogger("api.access")
             response = await call_next(request)
             api_logger.info(
-                "%s %s -> %d (%s)",
+                "%s %s -> %d (%s) ua=%s cl=%s",
                 request.method,
                 request.url.path,
                 response.status_code,
                 response.headers.get("X-Response-Time", "?"),
+                (request.headers.get("user-agent") or "-")[:80],
+                request.headers.get("content-length", "-"),
             )
             return response
         return await call_next(request)
