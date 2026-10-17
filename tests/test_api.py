@@ -605,7 +605,7 @@ def test_llm_stats_includes_avg_latency(client):
     """LLM stats avg_latency_ms alanını içermeli."""
     response = client.get("/api/stats/llm")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "avg_latency_ms" in data
 
 
@@ -613,7 +613,7 @@ def test_system_info_includes_settings(client):
     """System info settings bölümünü içermeli."""
     response = client.get("/api/system-info")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "settings" in data
     assert "log_level" in data["settings"]
     assert "llm_model" in data["settings"]
@@ -643,7 +643,7 @@ def test_config_export_includes_cache(client):
     """Config export cache_entries alanını içermeli."""
     response = client.get("/api/config/export")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "cache_entries" in data
 
 
@@ -651,7 +651,7 @@ def test_health_llm_unconfigured(client):
     """LLM yapılandırılmamışsa health/llm unconfigured dönmeli."""
     response = client.get("/api/health/llm")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     # Test ortamında LLM key yok
     assert data["status"] in ("unconfigured", "ok", "unreachable")
 
@@ -660,7 +660,7 @@ def test_clear_all_history(client):
     """Tüm geçmiş kayıtlarını silmeli."""
     response = client.delete("/api/history/clear")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "deleted" in data
 
 
@@ -706,7 +706,7 @@ def test_history_date_filter_params(client):
     """History endpoint tarih filtre parametrelerini kabul etmeli."""
     response = client.get("/api/history?date_from=2024-01-01&date_to=2024-12-31")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "items" in data
 
 
@@ -714,7 +714,7 @@ def test_history_min_confidence_filter(client):
     """History endpoint min_confidence parametresini kabul etmeli."""
     response = client.get("/api/history?min_confidence=50")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "items" in data
 
 
@@ -722,7 +722,7 @@ def test_rate_limit_headers_present(client):
     """Rate limit bilgisi /stats/requests endpoint'inden erişilebilir olmalı."""
     response = client.get("/api/stats/requests")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "total_requests" in data
     assert "error_rate" in data
 
@@ -731,7 +731,7 @@ def test_config_export_includes_environment(client):
     """Config export environment ve maintenance_mode içermeli."""
     response = client.get("/api/config/export")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "environment" in data
     assert "maintenance_mode" in data
 
@@ -752,7 +752,7 @@ def test_bulk_delete_nonexistent_ids(client):
     """Var olmayan id'leri silmeye çalışmak 200 dönmeli (deleted=0)."""
     response = client.post("/api/history/bulk-delete", json={"ids": ["nonexistent-1", "nonexistent-2"]})
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert data["deleted"] == 0
     assert data["requested"] == 2
 
@@ -761,7 +761,7 @@ def test_export_all_records(client):
     """Tüm kayıtları JSON olarak dışa aktarmalı."""
     response = client.get("/api/history/export-all")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "total" in data
     assert "records" in data
     assert isinstance(data["records"], list)
@@ -777,7 +777,7 @@ def test_health_detailed_endpoint(client):
     """Detaylı sağlık kontrolü endpoint'i çalışmalı."""
     response = client.get("/api/health/detailed")
     assert response.status_code in (200, 503)
-    data = resp.json()
+    data = response.json()
     assert "status" in data
     assert "checks" in data
     assert "llm" in data["checks"]
@@ -802,5 +802,5 @@ def test_history_list_with_tag_query(client):
     """History list endpoint'inde tag araması çalışmalı."""
     response = client.get("/api/history?q=test-tag")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "items" in data
