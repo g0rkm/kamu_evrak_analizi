@@ -103,7 +103,7 @@ export class HistoryView {
     }
 
     async load({ append = false } = {}) {
-        const query = { q: this.search.value.trim(), documentType: this.typeFilter.value, draftStatus: this.statusFilter.value, limit: PAGE_SIZE, offset: append ? this.items.length : 0 };
+        const query = { q: this.search.value.trim(), documentType: this.typeFilter.value, draftStatus: this.statusFilter.value, sort: this.sortSelect.value, limit: PAGE_SIZE, offset: append ? this.items.length : 0 };
         if (!append) replace(this.tableRoot, emptyState({ iconName: 'loader', title: 'Yükleniyor…', compact: true }));
         try {
             const page = await this.api.history(query);
