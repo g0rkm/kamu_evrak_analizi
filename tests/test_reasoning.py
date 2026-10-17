@@ -94,3 +94,43 @@ def test_llm_cache_returns_cached():
     assert stats["cache_hits"] == 1
     assert stats["cache_misses"] == 2
     assert stats["cache_size"] == 1
+
+
+def test_json_log_formatter():
+    """JSON log formatlayici yapilandirilmis cikti uretmeli."""
+    import json
+    import logging
+    from app.core.logging import JsonFormatter, RequestIdFilter, request_id_var
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(JsonFormatter())
+    handler.addFilter(RequestIdFilter())
+
+    logger = logging.getLogger("test_json_fmt")
+    logger.handlers = [handler]
+    logger.setLevel(logging.DEBUG)
+
+    request_id_var.set("abc123")
+
+    import io
+    stream = io.StringIO()
+    handler.stream = stream
+
+    logger.info("Test mesaji")
+    output = stream.getvalue().strip()
+    entry = json.loads(output)
+
+    assert entry["level"] == "INFO"
+    assert entry["message"] == "Test mesaji"
+    assert entry["request_id"] == "abc123"
+    assert "timestamp" in entry
+    assert entry["logger"] == "test_json_fmt"
+
+
+def test_pipeline_timeout_config():
+    """Pipeline timeout ayari config'den okunmali."""
+    from app.config import Settings
+    s = Settings(LLM_API_KEY="test")
+    assert s.PIPELINE_TIMEOUT_SECONDS == 300.0
+    s2 = Settings(LLM_API_KEY="test", PIPELINE_TIMEOUT_SECONDS=60.0)
+    assert s2.PIPELINE_TIMEOUT_SECONDS == 60.0
