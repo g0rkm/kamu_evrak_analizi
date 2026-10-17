@@ -42,7 +42,7 @@ export class ApiClient {
             try {
                 return await this.request(path, options);
             } catch (error) {
-                const isRetryable = error.code === 'network' || error.status === 502 || error.status === 503;
+                const isRetryable = error.code === 'network' || error.code === 'network_error' || error.status === 502 || error.status === 503;
                 if (!isRetryable || attempt === retries) throw error;
                 const delay = retryDelay * Math.pow(2, attempt);
                 await new Promise(r => setTimeout(r, delay));
@@ -64,6 +64,9 @@ export class ApiClient {
             response = await fetch(`${this.baseUrl}${path}`, init);
         } catch (error) {
             if (error.name === 'AbortError') throw error;
+            if (error instanceof TypeError) {
+                throw new ApiError('Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.', { code: 'network_error' });
+            }
             const offlineMsg = !this.isOnline() ? 'İnternet bağlantınız yok. Çevrimiçi olduğunuzda tekrar deneyin.' : 'Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.';
             throw new ApiError(offlineMsg, { code: 'network' });
         }

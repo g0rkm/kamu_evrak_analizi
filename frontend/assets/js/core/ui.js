@@ -8,7 +8,7 @@ export class Toaster {
         this.root = root;
     }
 
-    show(message, type = 'info', timeout = type === 'error' ? 7000 : 4000) {
+    show(message, type = 'info', timeout = type === 'error' ? 8000 : type === 'warning' ? 5000 : type === 'success' ? 3000 : 4000) {
         const close = h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', 'aria-label': 'Bildirimi kapat' }, icon('x'));
         const toast = h('div', { class: `toast toast--${type}`, role: type === 'error' ? 'alert' : 'status' },
             h('span', { class: 'toast__icon' }, icon(Toaster.ICONS[type] || 'info')),
@@ -24,10 +24,10 @@ export class Toaster {
         if (timeout) setTimeout(dismiss, timeout);
     }
 
-    success(message) { this.show(message, 'success'); }
-    error(message) { this.show(message, 'error'); }
+    success(message) { this.show(message, 'success', 3000); }
+    error(message) { this.show(message, 'error', 8000); }
     info(message) { this.show(message, 'info'); }
-    warn(message) { this.show(message, 'warning', 6000); }
+    warn(message) { this.show(message, 'warning', 5000); }
 }
 
 /** Açık/koyu tema tercihi. Tercih, ilk boyamadan önce index.html'deki betikle uygulanır. */
