@@ -486,14 +486,14 @@ def test_token_budget_exceeded_error():
 
 def test_dedup_key_returns_none_on_miss():
     from app.services.llm_service import _LLMCache
-    cache = _LLMCache(ttl_seconds=60)
+    cache = _LLMCache(ttl=60)
     result = cache.deduplicate_key('nonexistent')
     assert result is None
 
 
 def test_dedup_key_returns_key_after_set():
     from app.services.llm_service import _LLMCache
-    cache = _LLMCache(ttl_seconds=60)
+    cache = _LLMCache(ttl=60)
     cache.set_dedup('hash123', 'llm:hash123', window_seconds=30)
     result = cache.deduplicate_key('hash123')
     assert result == 'llm:hash123'
