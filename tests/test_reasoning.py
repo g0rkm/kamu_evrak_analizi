@@ -431,3 +431,20 @@ def test_json_formatter_output():
     parsed = json.loads(output)
     assert parsed["message"] == "test message"
     assert parsed["level"] == "INFO"
+
+
+def test_app_version_is_2_7():
+    """Uygulama versiyonu 2.7.0 olmalı."""
+    from app import __version__
+    assert __version__ == "2.7.0"
+
+
+def test_settings_has_all_new_fields():
+    """Settings tüm yeni alanları içermeli."""
+    from app.config import Settings
+    settings = Settings()
+    assert hasattr(settings, 'MAINTENANCE_MODE')
+    assert hasattr(settings, 'ADMIN_TOKEN')
+    assert hasattr(settings, 'LOG_FILE')
+    assert hasattr(settings, 'MAX_HISTORY_RECORDS')
+    assert hasattr(settings, 'DISK_WARNING_THRESHOLD_MB')

@@ -40,6 +40,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         import logging as _logging
         _logging.getLogger("startup").info("Uygulama başlatıldı, istekler kabul ediliyor.")
         yield
+        active = len(app.state.container.jobs._tasks)
+        if active > 0:
+            _logging.getLogger("startup").info("Aktif iş sayısı: %d — tamamlanması bekleniyor…", active)
         _logging.getLogger("startup").info("Uygulama kapatılıyor…")
         await app.state.container.aclose()
 
