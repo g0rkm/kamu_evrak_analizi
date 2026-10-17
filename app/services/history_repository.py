@@ -179,6 +179,11 @@ class HistoryRepository:
         # "newest" veya None = varsayılan (dosya adına göre ters sıralı, zaten öyle)
         return {"total": len(items), "items": items[offset: offset + limit]}
 
+    def export_filtered(self, document_type: str | None = None, date_from: str | None = None, date_to: str | None = None, favorite: bool | None = None) -> list[dict]:
+        """Filtrelenmiş kayıtları tam veriyle döndürür."""
+        items = self.list_records(limit=self._max_records, document_type=document_type, date_from=date_from, date_to=date_to, favorite=favorite)['items']
+        return [self.get(i['id']) for i in items if self.get(i['id']) is not None]
+
     def stats(self) -> dict:
         items = self._summaries()
         total = len(items)

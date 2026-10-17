@@ -546,3 +546,13 @@ def test_configuration_error():
     e = ConfigurationError('test')
     assert e.status_code == 500
     assert e.code == 'configuration_error'
+
+
+def test_export_filtered_empty():
+    from app.services.history_repository import HistoryRepository
+    from pathlib import Path
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = HistoryRepository(Path(tmp))
+        result = repo.export_filtered()
+        assert result == []
