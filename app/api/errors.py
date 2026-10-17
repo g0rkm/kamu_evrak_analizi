@@ -34,12 +34,18 @@ def register_exception_handlers(app: FastAPI) -> None:
     async def handle_validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
         from app.core.logging import request_id_var
         rid = request_id_var.get("")
-        first = exc.errors()[0] if exc.errors() else {}
+        errors = exc.errors()
+        first = errors[0] if errors else {}
         location = ".".join(str(p) for p in first.get("loc", ()) if p not in ("body", "query", "path"))
         detail = f"Geçersiz istek{f' ({location})' if location else ''}: {first.get('msg', 'alan doğrulanamadı')}"
         return JSONResponse(
             status_code=422,
-            content={"detail": detail, "code": "validation_error", "request_id": rid},
+            content={
+                "detail": errors[0]["msg"] if errors else "Doğrulama hatası.",
+                "code": "validation_error",
+                "errors": errors,
+                "request_id": rid,
+            },
         )
 
     @app.exception_handler(StarletteHTTPException)

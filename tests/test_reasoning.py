@@ -344,3 +344,13 @@ def test_maintenance_mode_error_attributes():
     assert err.status_code == 503
     assert err.code == "maintenance_mode"
     assert "bakım" in err.message.lower()
+
+
+def test_pii_detector_ehliyet():
+    """Ehliyet numarası tespit edilmeli."""
+    from app.services.pii_detector import PIIDetector
+    detector = PIIDetector()
+    text = "Ehliyet no: 123456 numaralı belge"
+    findings = detector.detect(text)
+    types = [f["type"] for f in findings]
+    assert "ehliyet" in types
