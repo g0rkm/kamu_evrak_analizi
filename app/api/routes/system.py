@@ -28,7 +28,7 @@ def _format_uptime(seconds: float) -> str:
     return f"{secs} sn"
 
 
-@router.get("/health", response_model=HealthStatus, summary="Sistem sağlık kontrolü")
+@router.get("/health", summary="Sistem sağlık kontrolü")
 async def health_check(container: ServiceContainer = Depends(get_container)):
     stats = container.history.stats()
     try:
@@ -53,6 +53,7 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
 
     return HealthStatus(
         status=status,
+        environment=container.settings.ENVIRONMENT,
         service=container.settings.APP_NAME,
         version=__version__,
         llm_configured=container.llm.is_configured,
@@ -141,6 +142,7 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
 
     return {
         "version": __version__,
+        "environment": container.settings.ENVIRONMENT,
         "uptime_seconds": round(time.monotonic() - _start_time, 1),
         "uptime_human": _format_uptime(time.monotonic() - _start_time),
         "python_version": platform.python_version(),

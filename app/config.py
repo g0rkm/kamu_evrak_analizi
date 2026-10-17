@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     APP_NAME: str = "Kamu Evrak Analizi Sistemi"
     APP_HOST: str = "127.0.0.1"
     APP_PORT: int = 8080
+    ENVIRONMENT: str = "development"  # "development", "staging", "production"
     LOG_LEVEL: str = "INFO"
     LOG_FORMAT: str = "text"  # "text" veya "json"
     CORS_ORIGINS: list[str] = []
