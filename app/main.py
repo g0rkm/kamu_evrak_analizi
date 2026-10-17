@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.gzip import GZipMiddleware
 
 from app import __version__
-from app.api import router
+from app.api import router, TAGS_METADATA
 from app.api.errors import register_exception_handlers
 from app.config import BASE_DIR, Settings, get_settings
 from app.container import ServiceContainer
@@ -45,8 +45,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app = FastAPI(
         title=settings.APP_NAME,
-        description="Kamu evrak ve yazışma süreçleri için çok ajanlı yapay zekâ destek sistemi",
+        description="Kamu evraklarını yapay zekâ ile analiz eden, sınıflandıran ve karşılaştıran API servisi.",
         version=__version__,
+        docs_url="/docs",
+        redoc_url="/redoc",
+        openapi_tags=TAGS_METADATA,
         lifespan=lifespan,
     )
 
