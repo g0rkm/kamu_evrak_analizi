@@ -197,6 +197,7 @@ def test_config_validators():
     """Config validator'ları yanlış değerleri reddetmeli."""
     from app.config import Settings
     import pytest
+    from pydantic import ValidationError
 
     with pytest.raises(Exception):
         Settings(LLM_API_KEY="test", MIN_TEXT_CHARS=0)
@@ -214,6 +215,10 @@ def test_config_validators():
     s = Settings(LLM_API_KEY="test", MIN_TEXT_CHARS=5, MAX_TEXT_CHARS=500)
     assert s.MIN_TEXT_CHARS == 5
     assert s.MAX_TEXT_CHARS == 500
+
+    # ENVIRONMENT validator testi
+    with pytest.raises(ValidationError):
+        Settings(ENVIRONMENT="invalid_env")
 
 
 def test_upload_display_name_sanitizes():

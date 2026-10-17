@@ -88,6 +88,14 @@ class Settings(BaseSettings):
             raise ValueError("MAX_TEXT_CHARS en az 100 olmalıdır.")
         return v
 
+    @field_validator("ENVIRONMENT")
+    @classmethod
+    def _validate_environment(cls, v: str) -> str:
+        allowed = ("development", "staging", "production")
+        if v not in allowed:
+            raise ValueError(f"ENVIRONMENT {', '.join(allowed)} olmalıdır.")
+        return v
+
     @staticmethod
     def resolve(path: str) -> Path:
         """Göreli yolları proje köküne göre çözer."""
