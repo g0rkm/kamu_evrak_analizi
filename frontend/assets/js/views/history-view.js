@@ -23,7 +23,7 @@ export class HistoryView {
         this.tableRoot = h('div');
         this.moreRoot = h('div', { class: 'row', style: { justifyContent: 'center' } });
 
-        this.search = h('input', { class: 'input', type: 'search', id: 'historySearch', placeholder: 'Özet, başlık veya türde ara…',
+        this.search = h('input', { class: 'input', type: 'search', id: 'historySearch', placeholder: 'Özet, başlık, tür veya anahtar kelimede ara…',
             onInput: debounce(() => this.load(), 300) });
         this.typeFilter = h('select', { class: 'select', 'aria-label': 'Evrak türüne göre filtrele', onChange: () => this.load() },
             h('option', { value: '' }, 'Tüm evrak türleri'),
@@ -32,6 +32,7 @@ export class HistoryView {
         return h('div', { class: 'stack' },
             h('div', { class: 'view-header' },
                 h('div', null, h('h1', null, 'Analiz geçmişi'), h('p', null, 'Önceki analizleri arayın, açın ve memur kararlarını takip edin.')),
+                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportAll() }, icon('download'), 'Tümünü dışa aktar'),
                 h('button', { type: 'button', class: 'btn btn--secondary', onClick: () => this.refresh() }, icon('refresh'), 'Yenile')),
             this.statsRoot,
             h('section', { class: 'card' },
@@ -155,6 +156,22 @@ export class HistoryView {
             await this.refresh();
         } catch (error) {
             this.toaster.error(`Kayıt silinemedi: ${error.message}`);
+        }
+    }
+
+    async exportAll() {
+        try {
+            const page = await this.api.history({ limit: 200 });
+            const blob = new Blob([JSON.stringify(page.items, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `gecmis_${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            this.toaster.success(`${page.items.length} kayıt dışa aktarıldı.`);
+        } catch (error) {
+            this.toaster.error(`Dışa aktarma başarısız: ${error.message}`);
         }
     }
 }
