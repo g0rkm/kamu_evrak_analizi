@@ -206,3 +206,11 @@ def test_health_endpoint_extended_fields(client):
     assert "active_jobs" in data
     assert data["active_jobs"] == 0
     assert "disk_free_mb" in data
+
+
+def test_magic_bytes_rejects_fake_pdf(client):
+    """PDF uzantili ama icerigi PDF olmayan dosya reddedilmeli."""
+    fake_pdf = b"This is not a PDF file at all"
+    resp = client.post("/api/analyze", files={"file": ("fake.pdf", fake_pdf, "application/pdf")})
+    assert resp.status_code == 415
+    assert "uyuşmuyor" in resp.json()["detail"]
