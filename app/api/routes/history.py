@@ -29,9 +29,11 @@ async def list_history(
     document_type: str | None = Query(None, max_length=50),
     draft_status: str | None = Query(None, max_length=20, description="Taslak durumuna göre filtrele"),
     sort: str | None = Query(None, max_length=30, description="Sıralama: newest, oldest, confidence_desc, confidence_asc"),
+    date_from: str | None = Query(None, max_length=10, description="Başlangıç tarihi (YYYY-MM-DD)"),
+    date_to: str | None = Query(None, max_length=10, description="Bitiş tarihi (YYYY-MM-DD)"),
     history: HistoryRepository = Depends(get_history),
 ):
-    result = history.list_records(limit=limit, offset=offset, query=q, document_type=document_type, draft_status=draft_status, sort=sort)
+    result = history.list_records(limit=limit, offset=offset, query=q, document_type=document_type, draft_status=draft_status, sort=sort, date_from=date_from, date_to=date_to)
     result["has_more"] = (offset + limit) < result["total"]
     result["offset"] = offset
     result["limit"] = limit
