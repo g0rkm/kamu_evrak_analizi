@@ -15,6 +15,7 @@ from app.config import BASE_DIR, Settings, get_settings
 from app.container import ServiceContainer
 from app.core.logging import configure_logging, new_request_id, request_id_var
 from app.core.rate_limit import RateLimitMiddleware
+from app.core.startup import verify_environment
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -32,6 +33,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         app.state.container = ServiceContainer.build(settings)
+        verify_environment(settings)
         yield
         await app.state.container.aclose()
 
