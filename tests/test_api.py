@@ -596,7 +596,7 @@ def test_mask_pii_empty_text_returns_zero(client):
     """Boş metin gönderildiğinde pii_count 0 olmalı."""
     response = client.post("/api/mask-pii", json={"text": ""})
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert data["pii_count"] == 0
     assert data["masked_text"] == ""
 
@@ -613,7 +613,7 @@ def test_system_info_includes_settings(client):
     """System info settings bölümünü içermeli."""
     response = client.get("/api/system-info")
     assert response.status_code == 200
-    data = resp.json()
+    data = response.json()
     assert "settings" in data
     assert "log_level" in data["settings"]
     assert "llm_model" in data["settings"]
