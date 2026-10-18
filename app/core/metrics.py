@@ -36,6 +36,16 @@ class Metrics:
                 return 0.0
             return sum(self._response_times) / len(self._response_times)
 
+    def endpoint_stats(self, endpoint: str) -> dict:
+        """Belirli bir endpoint'in istatistiklerini döner."""
+        with self._lock:
+            count = self._by_endpoint.get(endpoint, 0)
+            return {
+                'endpoint': endpoint,
+                'request_count': count,
+                'percentage': round(count / self._requests * 100, 1) if self._requests > 0 else 0
+            }
+
     def snapshot(self) -> dict:
         with self._lock:
             uptime = time.monotonic() - self._started_at

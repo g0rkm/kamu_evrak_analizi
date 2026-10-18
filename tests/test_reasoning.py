@@ -596,3 +596,15 @@ def test_session_timeout_default():
     from app.config import Settings
     s = Settings()
     assert s.SESSION_TIMEOUT_MINUTES == 30
+
+
+def test_endpoint_stats():
+    from app.core.metrics import metrics
+    metrics.reset()
+    metrics.record_request(200, endpoint='/api/health')
+    metrics.record_request(200, endpoint='/api/health')
+    metrics.record_request(200, endpoint='/api/version')
+    stats = metrics.endpoint_stats('/api/health')
+    assert stats['request_count'] == 2
+    assert stats['percentage'] > 0
+    metrics.reset()
