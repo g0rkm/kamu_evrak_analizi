@@ -632,3 +632,11 @@ def test_export_error():
     e = ExportError('Disari aktarma hatasi')
     assert e.status_code == 500
     assert e.code == 'export_error'
+
+
+def test_pii_detect_and_classify():
+    from app.services.pii_detector import PIIDetector
+    d = PIIDetector()
+    result = d.detect_and_classify('Email: test@test.com')
+    assert result['total'] == 1
+    assert 'eposta' in result['unique_types']

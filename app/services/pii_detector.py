@@ -92,3 +92,20 @@ class PIIDetector:
                 'info': sum(1 for f in findings if f.severity == 'info')
             }
         }
+
+    def detect_and_classify(self, text: str) -> dict:
+        findings = self.detect(text)
+        by_severity = {'warning': [], 'info': []}
+        for f in findings:
+            by_severity.get(f.severity, by_severity['info']).append({
+                'type': f.type,
+                'label': f.label,
+                'start': f.start,
+                'end': f.end
+            })
+        return {
+            'total': len(findings),
+            'by_severity': by_severity,
+            'has_warnings': len(by_severity['warning']) > 0,
+            'unique_types': list(set(f.type for f in findings))
+        }
