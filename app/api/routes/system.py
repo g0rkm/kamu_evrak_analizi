@@ -34,6 +34,21 @@ async def api_version():
     return {'version': __version__, 'api': 'v1', 'status': 'stable'}
 
 
+@router.get('/environment', tags=['Sistem'], summary='Ortam bilgisi')
+async def environment_info(container: ServiceContainer = Depends(get_container)):
+    import sys
+    return {
+        'environment': container.settings.ENVIRONMENT,
+        'python_version': sys.version,
+        'debug': container.settings.ENVIRONMENT == 'development',
+        'maintenance_mode': container.settings.MAINTENANCE_MODE,
+        'rate_limit': {
+            'requests': container.settings.RATE_LIMIT_REQUESTS,
+            'window': container.settings.RATE_LIMIT_WINDOW
+        }
+    }
+
+
 @router.get("/health", summary="Sistem sağlık kontrolü")
 async def health_check(container: ServiceContainer = Depends(get_container)):
     stats = container.history.stats()

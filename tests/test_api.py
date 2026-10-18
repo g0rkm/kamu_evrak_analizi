@@ -1090,3 +1090,20 @@ def test_startup_checks(client):
     assert 'healthy' in data
     assert 'checks' in data
     assert len(data['checks']) >= 3
+
+
+def test_environment_info(client):
+    response = client.get('/api/environment')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'environment' in data
+    assert 'python_version' in data
+    assert 'rate_limit' in data
+
+
+def test_status_distribution(client):
+    response = client.get('/api/history/status-distribution')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'distribution' in data
+    assert 'total' in data
