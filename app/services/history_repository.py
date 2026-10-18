@@ -188,6 +188,27 @@ class HistoryRepository:
         items = self.list_records(limit=self._max_records, document_type=document_type, date_from=date_from, date_to=date_to, favorite=favorite)['items']
         return [self.get(i['id']) for i in items if self.get(i['id']) is not None]
 
+    def search_by_content(self, keyword: str, limit: int = 20) -> list[dict]:
+        items = []
+        for path in sorted(self.directory.glob('*.json'), reverse=True):
+            try:
+                import json as _json
+                with path.open('r', encoding='utf-8') as f:
+                    data = _json.load(f)
+                content = _json.dumps(data.get('result', {}), ensure_ascii=False).lower()
+                if keyword.lower() in content:
+                    items.append({
+                        'id': data.get('id', path.stem),
+                        'source_name': data.get('source_name', ''),
+                        'document_type': data.get('document_type', ''),
+                        'timestamp': data.get('timestamp', '')
+                    })
+                    if len(items) >= limit:
+                        break
+            except:
+                pass
+        return items
+
     def stats(self) -> dict:
         items = self._summaries()
         total = len(items)

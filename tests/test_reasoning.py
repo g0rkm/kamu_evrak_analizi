@@ -608,3 +608,13 @@ def test_endpoint_stats():
     assert stats['request_count'] == 2
     assert stats['percentage'] > 0
     metrics.reset()
+
+
+def test_search_by_content_empty():
+    from app.services.history_repository import HistoryRepository
+    from pathlib import Path
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = HistoryRepository(Path(tmp))
+        result = repo.search_by_content('test')
+        assert result == []
