@@ -40,6 +40,7 @@ class Metrics:
         with self._lock:
             uptime = time.monotonic() - self._started_at
             rps = self._requests / uptime if uptime > 0 else 0
+            avg_rt = (sum(self._response_times) / len(self._response_times)) if self._response_times else 0.0
             return {
                 "total_requests": self._requests,
                 "total_errors": self._errors,
@@ -48,7 +49,7 @@ class Metrics:
                 "status_codes": dict(self._status_codes),
                 "top_endpoints": dict(sorted(self._by_endpoint.items(), key=lambda x: x[1], reverse=True)[:10]),
                 "uptime_seconds": round(uptime, 1),
-                "avg_response_time_ms": round(self.avg_response_time(), 1),
+                "avg_response_time_ms": round(avg_rt, 1),
             }
 
     def error_rate(self) -> float:
