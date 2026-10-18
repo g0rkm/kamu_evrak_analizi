@@ -1065,3 +1065,11 @@ def test_compare_records_not_found(client):
 def test_bulk_favorite_invalid(client):
     response = client.patch('/api/history/bulk-favorite', json={'ids': [], 'favorite': True})
     assert response.status_code == 400
+
+
+def test_allowed_file_types(client):
+    response = client.get('/api/config/allowed-types')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'types' in data
+    assert 'pdf' in data['types']

@@ -357,6 +357,12 @@ async def health_detailed(container: ServiceContainer = Depends(get_container)):
     )
 
 
+@router.get('/config/allowed-types', tags=['Sistem'], summary='Izin verilen dosya turleri')
+async def allowed_file_types(container: ServiceContainer = Depends(get_container)):
+    types = [t.strip() for t in container.settings.ALLOWED_FILE_TYPES.split(',')]
+    return {'types': types, 'count': len(types)}
+
+
 @router.get("/config/export", summary="Çalışma zamanı yapılandırma dışa aktarımı", dependencies=[Depends(require_admin)])
 async def config_export(container: ServiceContainer = Depends(get_container)):
     """Hassas olmayan yapılandırma değerlerini dışa aktarır (sorun giderme için)."""
