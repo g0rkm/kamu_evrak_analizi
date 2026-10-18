@@ -1167,3 +1167,11 @@ def test_extract_keywords(client):
     data = response.json()
     assert len(data['keywords']) > 0
     assert data['total_words'] > 0
+
+
+def test_confidence_distribution(client):
+    response = client.get('/api/history/confidence-distribution')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'distribution' in data
+    assert '80-100' in data['distribution']

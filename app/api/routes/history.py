@@ -89,6 +89,25 @@ async def status_distribution(container: ServiceContainer = Depends(get_containe
     return {'distribution': distribution, 'total': sum(distribution.values())}
 
 
+@router.get('/history/confidence-distribution', summary='Guven skoru dagilimi')
+async def confidence_distribution(container: ServiceContainer = Depends(get_container)):
+    items = container.history.list_records(limit=10000)['items']
+    buckets = {'0-20': 0, '20-40': 0, '40-60': 0, '60-80': 0, '80-100': 0}
+    for item in items:
+        score = item.get('confidence_score', 0) * 100
+        if score < 20:
+            buckets['0-20'] += 1
+        elif score < 40:
+            buckets['20-40'] += 1
+        elif score < 60:
+            buckets['40-60'] += 1
+        elif score < 80:
+            buckets['60-80'] += 1
+        else:
+            buckets['80-100'] += 1
+    return {'distribution': buckets, 'total': sum(buckets.values())}
+
+
 @router.get('/history/statistics/daily', summary='Gunluk analiz istatistikleri')
 async def daily_statistics(days: int = Query(7, ge=1, le=90), container: ServiceContainer = Depends(get_container)):
     from datetime import datetime, timedelta, timezone
