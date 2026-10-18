@@ -1,7 +1,7 @@
 import shutil
 import time
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from pydantic import BaseModel
 
 from app import __version__
@@ -249,6 +249,23 @@ async def metrics_summary():
         'top_endpoints': snap.get('top_endpoints', []),
         'uptime_seconds': round(time.monotonic() - _start_time, 1)
     }
+
+
+@router.get('/openapi-summary', tags=['Sistem'], summary='API endpoint ozeti')
+async def openapi_summary(request: Request):
+    from fastapi.openapi.utils import get_openapi
+    openapi_schema = request.app.openapi()
+    paths = openapi_schema.get('paths', {})
+    endpoints = []
+    for path, methods in paths.items():
+        for method, details in methods.items():
+            endpoints.append({
+                'path': path,
+                'method': method.upper(),
+                'summary': details.get('summary', ''),
+                'tags': details.get('tags', [])
+            })
+    return {'total_endpoints': len(endpoints), 'endpoints': endpoints}
 
 
 @router.get("/health/llm", summary="LLM bağlantı testi")

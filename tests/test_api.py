@@ -1014,3 +1014,11 @@ def test_health_dependencies(client):
     assert 'healthy' in data
     assert 'dependencies' in data
     assert 'llm_configured' in data['dependencies']
+
+
+def test_openapi_summary(client):
+    response = client.get('/api/openapi-summary')
+    assert response.status_code == 200
+    data = response.json()
+    assert data['total_endpoints'] > 0
+    assert isinstance(data['endpoints'], list)
