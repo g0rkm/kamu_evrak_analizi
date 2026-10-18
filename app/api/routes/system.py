@@ -629,3 +629,13 @@ async def query_logs(level: str = Query('INFO'), limit: int = Query(50, ge=1, le
             if level.upper() in line.upper():
                 lines.append(line.strip())
     return {'logs': lines[-limit:], 'total_matched': len(lines), 'level_filter': level}
+
+
+@router.get('/cors-info', tags=['Sistem'], summary='CORS yapilandirmasi')
+async def cors_info(container: ServiceContainer = Depends(get_container)):
+    return {
+        'cors_enabled': bool(container.settings.CORS_ORIGINS),
+        'allowed_origins': container.settings.CORS_ORIGINS,
+        'allowed_methods': ['GET', 'POST', 'PATCH', 'DELETE'],
+        'allowed_headers': ['Content-Type']
+    }
