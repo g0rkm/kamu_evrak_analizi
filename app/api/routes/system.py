@@ -559,6 +559,26 @@ async def cache_stats(container: ServiceContainer = Depends(get_container), _adm
     return {'cache_size': info.get('cache_size', 0), 'ttl_seconds': info.get('ttl_seconds', 0)}
 
 
+@router.get('/error-codes', tags=['Sistem'], summary='Hata kodlari listesi')
+async def error_codes():
+    from app.core.exceptions import AppError
+    errors = {
+        'invalid_input': {'status': 400, 'description': 'Gecersiz istek parametreleri'},
+        'not_found': {'status': 404, 'description': 'Kaynak bulunamadi'},
+        'rate_limit_exceeded': {'status': 429, 'description': 'Istek limiti asildi'},
+        'token_budget_exceeded': {'status': 429, 'description': 'Token butcesi asildi'},
+        'llm_unavailable': {'status': 503, 'description': 'LLM servisi kulanilamiyor'},
+        'circuit_breaker_open': {'status': 503, 'description': 'Devre kesici acik'},
+        'pipeline_timeout': {'status': 504, 'description': 'Islem zaman asimi'},
+        'maintenance_mode': {'status': 503, 'description': 'Bakim modu aktif'},
+        'storage_error': {'status': 500, 'description': 'Dosya sistemi hatasi'},
+        'configuration_error': {'status': 500, 'description': 'Yapilandirma hatasi'},
+        'file_validation_error': {'status': 400, 'description': 'Dosya dogrulama hatasi'},
+        'duplicate_record': {'status': 409, 'description': 'Cakisan kayit'}
+    }
+    return {'error_codes': errors, 'total': len(errors)}
+
+
 @router.post('/logs/query', tags=['Sistem'], summary='Log sorgulama')
 async def query_logs(level: str = Query('INFO'), limit: int = Query(50, ge=1, le=500), _admin=Depends(require_admin)):
     import logging

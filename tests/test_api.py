@@ -1151,3 +1151,11 @@ def test_text_statistics(client):
     data = response.json()
     assert data['word_count'] > 0
     assert data['sentence_count'] >= 2
+
+
+def test_error_codes(client):
+    response = client.get('/api/error-codes')
+    assert response.status_code == 200
+    data = response.json()
+    assert data['total'] >= 10
+    assert 'not_found' in data['error_codes']
