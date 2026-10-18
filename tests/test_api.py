@@ -1037,3 +1037,12 @@ def test_recent_analyses(client):
     data = response.json()
     assert 'records' in data
     assert 'count' in data
+
+
+def test_system_summary(client):
+    response = client.get('/api/stats/summary')
+    assert response.status_code == 200
+    data = response.json()
+    assert data['version'] == '2.9.0'
+    assert 'total_analyses' in data
+    assert 'error_rate' in data

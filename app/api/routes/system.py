@@ -167,6 +167,23 @@ async def validate_text(body: MaskRequest):
     }
 
 
+@router.get('/stats/summary', tags=['Sistem'], summary='Genel sistem ozeti')
+async def system_summary(container: ServiceContainer = Depends(get_container)):
+    from app.core.metrics import metrics
+    hist_stats = container.history.stats()
+    metric_snap = metrics.snapshot()
+    return {
+        'version': __version__,
+        'total_analyses': hist_stats['total'],
+        'avg_confidence': hist_stats.get('avg_confidence', 0),
+        'favorites_count': hist_stats.get('favorites_count', 0),
+        'total_requests': metric_snap['total_requests'],
+        'error_rate': metric_snap.get('error_rate', 0),
+        'uptime_seconds': metric_snap.get('uptime_seconds', 0),
+        'document_types': hist_stats.get('by_type', {})
+    }
+
+
 @router.get('/stats/history-summary', summary='Gecmis ozet istatistikleri')
 async def history_summary_stats(container: ServiceContainer = Depends(get_container)):
     stats = container.history.stats()
