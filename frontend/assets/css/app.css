@@ -795,3 +795,17 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     .dashboard-card h3 { color: var(--color-text-muted-dark, #94a3b8); } 
     .dashboard-card .subtitle { color: var(--color-text-muted-dark, #94a3b8); } 
 }
+
+.timeline { position: relative; padding: 1rem; }
+.timeline-item { display: flex; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--color-border, #e5e7eb); }
+.timeline-item:last-child { border-bottom: none; }
+.timeline-date { min-width: 100px; font-size: 0.8rem; color: var(--color-text-muted, #6b7280); }
+.timeline-content { flex: 1; }
+.timeline-content .source { font-weight: 600; }
+.timeline-content .type { font-size: 0.85rem; color: var(--color-text-muted, #6b7280); }
+.timeline-confidence { min-width: 60px; text-align: right; font-weight: 600; }
+@media (prefers-color-scheme: dark) {
+    .timeline-item { border-color: var(--color-border-dark, #334155); }
+    .timeline-date { color: var(--color-text-muted-dark, #94a3b8); }
+    .timeline-content .type { color: var(--color-text-muted-dark, #94a3b8); }
+}
