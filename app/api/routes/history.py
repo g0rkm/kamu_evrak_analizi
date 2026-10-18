@@ -77,6 +77,12 @@ async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
 
 
+@router.get('/history/status-distribution', summary='Taslak durum dagilimi')
+async def status_distribution(container: ServiceContainer = Depends(get_container)):
+    distribution = container.history.count_by_status()
+    return {'distribution': distribution, 'total': sum(distribution.values())}
+
+
 @router.get('/history/statistics/daily', summary='Gunluk analiz istatistikleri')
 async def daily_statistics(days: int = Query(7, ge=1, le=90), container: ServiceContainer = Depends(get_container)):
     from datetime import datetime, timedelta, timezone

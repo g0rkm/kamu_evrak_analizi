@@ -208,6 +208,15 @@ class HistoryRepository:
             "favorites_count": sum(1 for i in items if i.get("favorite", False)),
         }
 
+    def count_by_status(self) -> dict:
+        """Kayıtların draft_status dağılımını döner."""
+        items = self._summaries()
+        status_counts = {}
+        for item in items:
+            status = item.get('draft_status', 'pending')
+            status_counts[status] = status_counts.get(status, 0) + 1
+        return status_counts
+
     # ── Yardımcılar ───────────────────────────────────────
 
     def _summaries(self) -> list[dict]:
