@@ -77,3 +77,18 @@ class PIIDetector:
         for f in sorted(findings, key=lambda x: x.start, reverse=True):
             masked = masked[:f.start] + f'[***{f.type.upper()}***]' + masked[f.end:]
         return masked
+
+    def summary(self, text: str) -> dict:
+        findings = self.detect(text)
+        types_found = {}
+        for f in findings:
+            types_found[f.type] = types_found.get(f.type, 0) + 1
+        return {
+            'total_pii_count': len(findings),
+            'types_found': types_found,
+            'has_critical': any(f.severity == 'warning' for f in findings),
+            'severity_counts': {
+                'warning': sum(1 for f in findings if f.severity == 'warning'),
+                'info': sum(1 for f in findings if f.severity == 'info')
+            }
+        }

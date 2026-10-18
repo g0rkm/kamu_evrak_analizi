@@ -574,3 +574,12 @@ def test_duplicate_record_error():
     e = DuplicateRecordError('Kayit zaten mevcut')
     assert e.status_code == 409
     assert e.code == 'duplicate_record'
+
+
+def test_pii_summary():
+    from app.services.pii_detector import PIIDetector
+    d = PIIDetector()
+    result = d.summary('Email: test@test.com ve tel: 05551234567')
+    assert result['total_pii_count'] == 2
+    assert 'eposta' in result['types_found']
+    assert 'telefon' in result['types_found']
