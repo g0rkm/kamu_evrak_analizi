@@ -1175,3 +1175,11 @@ def test_confidence_distribution(client):
     data = response.json()
     assert 'distribution' in data
     assert '80-100' in data['distribution']
+
+
+def test_api_docs_summary(client):
+    response = client.get('/api/api-docs-summary')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'documentation' in data
+    assert '/docs' in data['documentation']['swagger_ui']

@@ -449,6 +449,23 @@ async def openapi_summary(request: Request):
     return {'total_endpoints': len(endpoints), 'endpoints': endpoints}
 
 
+@router.get('/api-docs-summary', tags=['Sistem'], summary='API dokumantasyon ozeti')
+async def api_docs_summary():
+    return {
+        'documentation': {
+            'swagger_ui': '/docs',
+            'redoc': '/redoc',
+            'openapi_json': '/openapi.json'
+        },
+        'endpoints_summary': {
+            'system': 'Sistem saglik kontrolleri, metrikler, yapilandirma',
+            'history': 'Analiz gecmisi, arama, filtreleme, disari aktarma',
+            'analysis': 'Belge analizi ve siniflandirma',
+            'text': 'Metin isleme: PII tespiti, kelime sayimi, tarih cikarma, dil tespiti'
+        }
+    }
+
+
 @router.get("/health/llm", summary="LLM bağlantı testi")
 async def llm_health(container: ServiceContainer = Depends(get_container)):
     if not container.llm.is_configured:
