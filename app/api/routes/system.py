@@ -233,6 +233,28 @@ async def word_count(body: dict):
     }
 
 
+@router.post('/text/summarize-stats', tags=['Sistem'], summary='Metin istatistikleri')
+async def text_statistics(body: dict):
+    import re
+    text = body.get('text', '')
+    if not text:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('text alani gereklidir.')
+    words = text.split()
+    sentences = re.split(r'[.!?]+', text)
+    sentences = [s.strip() for s in sentences if s.strip()]
+    paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
+    avg_word_len = round(sum(len(w) for w in words) / len(words), 1) if words else 0
+    return {
+        'word_count': len(words),
+        'sentence_count': len(sentences),
+        'paragraph_count': len(paragraphs),
+        'avg_word_length': avg_word_len,
+        'unique_words': len(set(w.lower() for w in words)),
+        'char_count': len(text)
+    }
+
+
 @router.post('/text/extract-dates', tags=['Sistem'], summary='Tarih cikarma')
 async def extract_dates(body: dict):
     import re

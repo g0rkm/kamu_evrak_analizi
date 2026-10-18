@@ -1143,3 +1143,11 @@ def test_detect_language_turkish(client):
     data = response.json()
     assert data['language'] == 'tr'
     assert data['has_turkish_chars'] is True
+
+
+def test_text_statistics(client):
+    response = client.post('/api/text/summarize-stats', json={'text': 'Bu bir test. Bu da ikinci cumle.'})
+    assert response.status_code == 200
+    data = response.json()
+    assert data['word_count'] > 0
+    assert data['sentence_count'] >= 2
