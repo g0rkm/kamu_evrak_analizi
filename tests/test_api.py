@@ -668,7 +668,7 @@ def test_api_version_header(client):
     """Her API yanıtı X-API-Version header'ı içermeli."""
     response = client.get("/api/health")
     assert "X-API-Version" in response.headers
-    assert response.headers["X-API-Version"] == "2.8.0"
+    assert response.headers["X-API-Version"] == "2.9.0"
 
 
 def test_admin_endpoint_without_token(client):
@@ -921,7 +921,7 @@ def test_version_endpoint(client):
     response = client.get('/api/version')
     assert response.status_code == 200
     data = response.json()
-    assert data['version'] == '2.8.0'
+    assert data['version'] == '2.9.0'
     assert data['api'] == 'v1'
 
 
