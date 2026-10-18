@@ -255,6 +255,17 @@ async def bulk_update_tags(body: dict, container: ServiceContainer = Depends(get
     return {'updated': updated, 'total': len(ids)}
 
 
+@router.get('/history/{record_id}/related', summary='Iliskili kayitlar')
+async def related_records(record_id: str, limit: int = Query(5, ge=1, le=20), container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if record is None:
+        raise NotFoundError('Kayit bulunamadi.')
+    doc_type = record.get('document_type', '')
+    items = container.history.list_records(limit=limit + 1, document_type=doc_type)['items']
+    related = [i for i in items if i['id'] != record_id][:limit]
+    return {'record_id': record_id, 'document_type': doc_type, 'related': related, 'count': len(related)}
+
+
 @router.get("/history/{record_id}")
 async def get_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     return _require(history, record_id)
