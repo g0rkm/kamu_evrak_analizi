@@ -323,3 +323,27 @@ async def import_records(body: dict, container: ServiceContainer = Depends(get_c
         raise InvalidInputError("Tek seferde en fazla 500 kayıt içe aktarılabilir.")
     imported = container.history.import_records(records)
     return {"imported": imported}
+
+
+@router.get('/history/compare/{id1}/{id2}', summary='Iki kaydi karsilastir')
+async def compare_records(id1: str, id2: str, container: ServiceContainer = Depends(get_container)):
+    rec1 = container.history.get(id1)
+    rec2 = container.history.get(id2)
+    if rec1 is None or rec2 is None:
+        raise NotFoundError('Kayit bulunamadi.')
+    return {
+        'record_1': {
+            'id': id1,
+            'source_name': rec1.get('source_name', ''),
+            'document_type': rec1.get('document_type', ''),
+            'confidence_score': rec1.get('confidence_score', 0)
+        },
+        'record_2': {
+            'id': id2,
+            'source_name': rec2.get('source_name', ''),
+            'document_type': rec2.get('document_type', ''),
+            'confidence_score': rec2.get('confidence_score', 0)
+        },
+        'same_type': rec1.get('document_type') == rec2.get('document_type'),
+        'confidence_diff': round(abs(rec1.get('confidence_score', 0) - rec2.get('confidence_score', 0)), 2)
+    }
