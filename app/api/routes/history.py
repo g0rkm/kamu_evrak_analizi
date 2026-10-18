@@ -226,23 +226,6 @@ async def bulk_update_tags(body: dict, container: ServiceContainer = Depends(get
     return {'updated': updated, 'total': len(ids)}
 
 
-@router.patch('/history/bulk-favorite', summary='Toplu favori guncelleme')
-async def bulk_toggle_favorite(body: dict, container: ServiceContainer = Depends(get_container)):
-    ids = body.get('ids', [])
-    favorite = body.get('favorite', True)
-    if not ids or len(ids) > 100:
-        from app.core.exceptions import InvalidInputError
-        raise InvalidInputError('ids listesi 1-100 arasi olmalidir.')
-    updated = 0
-    for record_id in ids:
-        try:
-            container.history.update_field(record_id, 'favorite', favorite)
-            updated += 1
-        except Exception:
-            pass
-    return {'updated': updated, 'total': len(ids), 'favorite': favorite}
-
-
 @router.get("/history/{record_id}")
 async def get_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     return _require(history, record_id)
@@ -339,3 +322,20 @@ async def import_records(body: dict, container: ServiceContainer = Depends(get_c
         raise InvalidInputError("Tek seferde en fazla 500 kayıt içe aktarılabilir.")
     imported = container.history.import_records(records)
     return {"imported": imported}
+
+
+@router.patch('/history/bulk-favorite', summary='Toplu favori guncelleme')
+async def bulk_toggle_favorite(body: dict, container: ServiceContainer = Depends(get_container)):
+    ids = body.get('ids', [])
+    favorite = body.get('favorite', True)
+    if not ids or len(ids) > 100:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('ids listesi 1-100 arasi olmalidir.')
+    updated = 0
+    for record_id in ids:
+        try:
+            container.history.update_field(record_id, 'favorite', favorite)
+            updated += 1
+        except Exception:
+            pass
+    return {'updated': updated, 'total': len(ids), 'favorite': favorite}
