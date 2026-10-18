@@ -596,7 +596,7 @@ def test_mask_pii_empty_text_returns_zero(client):
     """Boş metin gönderildiğinde pii_count 0 olmalı."""
     response = client.post("/api/mask-pii", json={"text": ""})
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert data["pii_count"] == 0
     assert data["masked_text"] == ""
 
@@ -605,7 +605,7 @@ def test_llm_stats_includes_avg_latency(client):
     """LLM stats avg_latency_ms alanını içermeli."""
     response = client.get("/api/stats/llm")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert "avg_latency_ms" in data
 
 
@@ -613,7 +613,7 @@ def test_system_info_includes_settings(client):
     """System info settings bölümünü içermeli."""
     response = client.get("/api/system-info")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert "settings" in data
     assert "log_level" in data["settings"]
     assert "llm_model" in data["settings"]
@@ -668,7 +668,7 @@ def test_api_version_header(client):
     """Her API yanıtı X-API-Version header'ı içermeli."""
     response = client.get("/api/health")
     assert "X-API-Version" in response.headers
-    assert response.headers["X-API-Version"] == "2.9.0"
+    assert response.headers["X-API-Version"] == "3.0.0"
 
 
 def test_admin_endpoint_without_token(client):
@@ -921,7 +921,7 @@ def test_version_endpoint(client):
     response = client.get('/api/version')
     assert response.status_code == 200
     data = response.json()
-    assert data['version'] == '2.9.0'
+    assert data['version'] == '3.0.0'
     assert data['api'] == 'v1'
 
 
@@ -1043,7 +1043,7 @@ def test_system_summary(client):
     response = client.get('/api/stats/summary')
     assert response.status_code == 200
     data = response.json()
-    assert data['version'] == '2.9.0'
+    assert data['version'] == '3.0.0'
     assert 'total_analyses' in data
     assert 'error_rate' in data
 
