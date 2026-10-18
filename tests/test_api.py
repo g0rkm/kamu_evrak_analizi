@@ -1073,3 +1073,11 @@ def test_allowed_file_types(client):
     data = response.json()
     assert 'types' in data
     assert 'pdf' in data['types']
+
+
+def test_daily_statistics(client):
+    response = client.get('/api/history/statistics/daily')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'days' in data
+    assert len(data['days']) == 7

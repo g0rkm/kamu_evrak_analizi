@@ -77,6 +77,23 @@ async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
 
 
+@router.get('/history/statistics/daily', summary='Gunluk analiz istatistikleri')
+async def daily_statistics(days: int = Query(7, ge=1, le=90), container: ServiceContainer = Depends(get_container)):
+    from datetime import datetime, timedelta, timezone
+    items = container.history.list_records(limit=10000)['items']
+    daily = {}
+    today = datetime.now(timezone.utc).date()
+    for i in range(days):
+        day = (today - timedelta(days=i)).isoformat()
+        daily[day] = 0
+    for item in items:
+        ts = item.get('timestamp', '')[:10]
+        if ts in daily:
+            daily[ts] += 1
+    sorted_days = sorted(daily.items())
+    return {'days': [{'date': d, 'count': c} for d, c in sorted_days], 'total_days': len(sorted_days)}
+
+
 @router.get("/history/types", summary="Belge turlerini listele")
 async def list_document_types(container: ServiceContainer = Depends(get_container)):
     stats = container.history.stats()
