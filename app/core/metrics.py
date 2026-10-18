@@ -16,8 +16,9 @@ class Metrics:
         self._status_codes: dict[int, int] = defaultdict(int)
         self._by_endpoint: dict[str, int] = defaultdict(int)
         self._started_at = time.monotonic()
+        self._response_times: list[float] = []
 
-    def record_request(self, status_code: int, endpoint: str = "") -> None:
+    def record_request(self, status_code: int, endpoint: str = "", response_time: float = 0.0) -> None:
         with self._lock:
             self._requests += 1
             self._status_codes[status_code] += 1
@@ -25,6 +26,15 @@ class Metrics:
                 self._errors += 1
             if endpoint:
                 self._by_endpoint[endpoint] += 1
+            if response_time > 0:
+                self._response_times.append(response_time)
+
+    def avg_response_time(self) -> float:
+        """Ortalama yanıt süresini döndürür."""
+        with self._lock:
+            if not self._response_times:
+                return 0.0
+            return sum(self._response_times) / len(self._response_times)
 
     def snapshot(self) -> dict:
         with self._lock:
@@ -38,6 +48,7 @@ class Metrics:
                 "status_codes": dict(self._status_codes),
                 "top_endpoints": dict(sorted(self._by_endpoint.items(), key=lambda x: x[1], reverse=True)[:10]),
                 "uptime_seconds": round(uptime, 1),
+                "avg_response_time_ms": round(self.avg_response_time(), 1),
             }
 
     def error_rate(self) -> float:
@@ -54,6 +65,7 @@ class Metrics:
             self._status_codes.clear()
             self._by_endpoint.clear()
             self._started_at = time.monotonic()
+            self._response_times = []
 
 
 metrics = Metrics()

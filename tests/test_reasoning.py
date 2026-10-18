@@ -556,3 +556,14 @@ def test_export_filtered_empty():
         repo = HistoryRepository(Path(tmp))
         result = repo.export_filtered()
         assert result == []
+
+
+def test_metrics_response_time():
+    from app.core.metrics import metrics
+    metrics.reset()
+    metrics.record_request(200, response_time=0.15)
+    metrics.record_request(200, response_time=0.25)
+    assert metrics.avg_response_time() > 0
+    snap = metrics.snapshot()
+    assert 'avg_response_time_ms' in snap
+    metrics.reset()
