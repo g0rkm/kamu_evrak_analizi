@@ -1115,3 +1115,11 @@ def test_search_content(client):
     data = response.json()
     assert 'results' in data
     assert data['keyword'] == 'test'
+
+
+def test_word_count(client):
+    response = client.post('/api/text/word-count', json={'text': 'Merhaba dunya test'})
+    assert response.status_code == 200
+    data = response.json()
+    assert data['word_count'] == 3
+    assert data['char_count'] > 0

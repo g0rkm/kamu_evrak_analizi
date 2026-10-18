@@ -216,6 +216,23 @@ async def analyze_pii(body: dict, container: ServiceContainer = Depends(get_cont
     }
 
 
+@router.post('/text/word-count', tags=['Sistem'], summary='Kelime sayimi')
+async def word_count(body: dict):
+    text = body.get('text', '')
+    if not text:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('text alani gereklidir.')
+    words = text.split()
+    lines = text.count('\n') + 1
+    chars = len(text)
+    return {
+        'word_count': len(words),
+        'line_count': lines,
+        'char_count': chars,
+        'char_count_no_spaces': len(text.replace(' ', ''))
+    }
+
+
 @router.post('/validate-text', summary='Metin dogrulama')
 async def validate_text(body: MaskRequest):
     issues = []
