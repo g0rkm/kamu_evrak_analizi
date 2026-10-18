@@ -4,6 +4,7 @@ import { ThemeController, Toaster } from './core/ui.js';
 import { Vocabulary } from './core/vocabulary.js';
 import { AnalyzeView } from './views/analyze-view.js';
 import { CompareView } from './views/compare-view.js';
+import { DashboardView } from './views/dashboard-view.js';
 import { HistoryView } from './views/history-view.js';
 import { TrendsView } from './views/trends-view.js';
 
