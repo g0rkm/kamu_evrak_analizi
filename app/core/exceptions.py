@@ -115,3 +115,15 @@ class ConfigurationError(AppError):
     status_code = 500
     code = "configuration_error"
     default_message = "Yapılandırma hatası oluştu."
+
+
+class StorageError(AppError):
+    status_code = 500
+    code = "storage_error"
+    default_message = "Dosya sistemi hatası oluştu."
+
+
+class ExportError(AppError):
+    status_code = 500
+    code = "export_error"
+    default_message = "Dışarı aktarma hatası oluştu."

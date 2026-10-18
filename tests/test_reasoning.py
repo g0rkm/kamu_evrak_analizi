@@ -618,3 +618,17 @@ def test_search_by_content_empty():
         repo = HistoryRepository(Path(tmp))
         result = repo.search_by_content('test')
         assert result == []
+
+
+def test_storage_error():
+    from app.core.exceptions import StorageError
+    e = StorageError('Dosya yazma hatasi')
+    assert e.status_code == 500
+    assert e.code == 'storage_error'
+
+
+def test_export_error():
+    from app.core.exceptions import ExportError
+    e = ExportError('Disari aktarma hatasi')
+    assert e.status_code == 500
+    assert e.code == 'export_error'
