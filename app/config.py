@@ -44,6 +44,8 @@ class Settings(BaseSettings):
     MAX_HISTORY_RECORDS: int = 10000
     DISK_WARNING_THRESHOLD_MB: int = 100
     ANALYSIS_TIMEOUT: int = 60
+    ALLOWED_FILE_TYPES: str = 'pdf,png,jpg,jpeg,tiff,bmp'
+    SESSION_TIMEOUT_MINUTES: int = 30
 
     # RAG
     RAG_INDEX_DIR: str = "app/data/rag"
@@ -107,6 +109,24 @@ class Settings(BaseSettings):
         allowed = ("development", "staging", "production")
         if v not in allowed:
             raise ValueError(f"ENVIRONMENT {', '.join(allowed)} olmalıdır.")
+        return v
+
+    @field_validator("ALLOWED_FILE_TYPES")
+    @classmethod
+    def _validate_allowed_file_types(cls, v: str) -> str:
+        parts = [p.strip() for p in v.split(",") if p.strip()]
+        if not parts:
+            raise ValueError("ALLOWED_FILE_TYPES boş olamaz.")
+        for part in parts:
+            if not (2 <= len(part) <= 10):
+                raise ValueError("Her bir dosya uzantısının uzunluğu 2 ile 10 karakter arasında olmalıdır.")
+        return v
+
+    @field_validator("SESSION_TIMEOUT_MINUTES")
+    @classmethod
+    def _validate_session_timeout(cls, v: int) -> int:
+        if not (1 <= v <= 1440):
+            raise ValueError("SESSION_TIMEOUT_MINUTES 1 ile 1440 arasında olmalıdır.")
         return v
 
     @staticmethod

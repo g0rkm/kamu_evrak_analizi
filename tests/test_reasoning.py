@@ -583,3 +583,16 @@ def test_pii_summary():
     assert result['total_pii_count'] == 2
     assert 'eposta' in result['types_found']
     assert 'telefon' in result['types_found']
+
+
+def test_allowed_file_types_default():
+    from app.config import Settings
+    s = Settings()
+    assert 'pdf' in s.ALLOWED_FILE_TYPES
+    assert 'png' in s.ALLOWED_FILE_TYPES
+
+
+def test_session_timeout_default():
+    from app.config import Settings
+    s = Settings()
+    assert s.SESSION_TIMEOUT_MINUTES == 30
