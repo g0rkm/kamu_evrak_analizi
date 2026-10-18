@@ -640,3 +640,14 @@ def test_pii_detect_and_classify():
     result = d.detect_and_classify('Email: test@test.com')
     assert result['total'] == 1
     assert 'eposta' in result['unique_types']
+
+
+def test_metrics_health_summary():
+    from app.core.metrics import metrics
+    metrics.reset()
+    metrics.record_request(200)
+    metrics.record_request(200)
+    result = metrics.health_summary()
+    assert result['status'] == 'healthy'
+    assert result['error_rate'] == 0
+    metrics.reset()

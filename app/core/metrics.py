@@ -46,6 +46,18 @@ class Metrics:
                 'percentage': round(count / self._requests * 100, 1) if self._requests > 0 else 0
             }
 
+    def health_summary(self) -> dict:
+        """Metrik sağlık özetini döner."""
+        with self._lock:
+            error_rate = self._errors / self._requests if self._requests > 0 else 0
+            status = 'healthy' if error_rate < 0.05 else 'degraded' if error_rate < 0.2 else 'unhealthy'
+            return {
+                'status': status,
+                'error_rate': round(error_rate, 4),
+                'total_requests': self._requests,
+                'total_errors': self._errors
+            }
+
     def snapshot(self) -> dict:
         with self._lock:
             uptime = time.monotonic() - self._started_at
