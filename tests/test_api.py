@@ -1081,3 +1081,12 @@ def test_daily_statistics(client):
     data = response.json()
     assert 'days' in data
     assert len(data['days']) == 7
+
+
+def test_startup_checks(client):
+    response = client.get('/api/startup-checks')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'healthy' in data
+    assert 'checks' in data
+    assert len(data['checks']) >= 3

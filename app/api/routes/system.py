@@ -109,6 +109,43 @@ async def readiness_check(container: ServiceContainer = Depends(get_container)):
     return JSONResponse(content={"ready": all_ok, "checks": checks}, status_code=status_code)
 
 
+@router.get('/startup-checks', tags=['Sistem'], summary='Baslangic kontrolleri')
+async def startup_checks(container: ServiceContainer = Depends(get_container)):
+    import shutil
+    checks = []
+    checks.append({
+        'name': 'LLM Yapılandırması',
+        'status': 'ok' if container.llm.is_configured else 'warning',
+        'detail': 'API anahtarı yapılandırılmış' if container.llm.is_configured else 'API anahtarı eksik'
+    })
+    checks.append({
+        'name': 'RAG İndeksi',
+        'status': 'ok' if container.rag.available else 'warning',
+        'detail': 'Mevzuat indeksi yüklü' if container.rag.available else 'İndeks yüklenmemiş'
+    })
+    checks.append({
+        'name': 'Geçmiş Dizini',
+        'status': 'ok' if container.settings.history_path.exists() else 'error',
+        'detail': str(container.settings.history_path)
+    })
+    try:
+        disk = shutil.disk_usage(container.settings.history_path)
+        disk_ok = disk.free > container.settings.DISK_WARNING_THRESHOLD_MB * 1024 * 1024
+        checks.append({
+            'name': 'Disk Alanı',
+            'status': 'ok' if disk_ok else 'warning',
+            'detail': f'{disk.free // (1024*1024)} MB boş'
+        })
+    except:
+        checks.append({
+            'name': 'Disk Alanı',
+            'status': 'error',
+            'detail': 'Okunamadı'
+        })
+    all_ok = all(c['status'] != 'error' for c in checks)
+    return {'healthy': all_ok, 'checks': checks}
+
+
 @router.get("/meta", summary="Arayüzün kullandığı sözlük ve sınırlar")
 async def meta(container: ServiceContainer = Depends(get_container)):
     settings = container.settings
