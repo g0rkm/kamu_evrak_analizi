@@ -248,6 +248,31 @@ async def extract_dates(body: dict):
     return {'dates': dates, 'count': len(dates)}
 
 
+@router.post('/text/language-detect', tags=['Sistem'], summary='Dil tespiti')
+async def detect_language(body: dict):
+    text = body.get('text', '')
+    if not text:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('text alani gereklidir.')
+    tr_chars = set('çÇğĞıİöÖşŞüÜ')
+    has_turkish = any(c in tr_chars for c in text)
+    tr_words = ['ve', 'bir', 'bu', 'için', 'ile', 'olan', 'olarak', 'gibi', 'daha', 'ancak']
+    words = text.lower().split()
+    tr_word_count = sum(1 for w in words if w in tr_words)
+    confidence = 0.5
+    if has_turkish:
+        confidence += 0.3
+    if tr_word_count > 2:
+        confidence += 0.2
+    lang = 'tr' if confidence > 0.6 else 'unknown'
+    return {
+        'language': lang,
+        'confidence': round(min(confidence, 1.0), 2),
+        'has_turkish_chars': has_turkish,
+        'turkish_word_count': tr_word_count
+    }
+
+
 @router.post('/validate-text', summary='Metin dogrulama')
 async def validate_text(body: MaskRequest):
     issues = []

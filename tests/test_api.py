@@ -1135,3 +1135,11 @@ def test_extract_dates(client):
     assert response.status_code == 200
     data = response.json()
     assert data['count'] >= 1
+
+
+def test_detect_language_turkish(client):
+    response = client.post('/api/text/language-detect', json={'text': 'Bu bir Türkçe metin ve içinde özel karakterler var'})
+    assert response.status_code == 200
+    data = response.json()
+    assert data['language'] == 'tr'
+    assert data['has_turkish_chars'] is True
