@@ -221,4 +221,29 @@ export class ApiClient {
 
     validateText(text) { return this.request('/validate-text', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) }); }
     historyNotes(recordId) { return this.request('/history/' + encodeURIComponent(recordId)); }
+
+    async compareTwoRecords(id1, id2) {
+        return this.request('/history/compare/' + id1 + '/' + id2);
+    }
+
+    async piiAnalyze(text) {
+        return this.request('/pii/analyze', { method: 'POST', json: { text } });
+    }
+
+    async systemSummary() {
+        return this.request('/stats/summary');
+    }
+
+    async openApiSummary() {
+        return this.request('/openapi-summary');
+    }
+
+    async recentAnalyses(count = 5) {
+        return this.request('/history/recent?count=' + count);
+    }
+
+    async searchHistory(params) {
+        const qs = new URLSearchParams(params).toString();
+        return this.request('/history/search?' + qs);
+    }
 }
