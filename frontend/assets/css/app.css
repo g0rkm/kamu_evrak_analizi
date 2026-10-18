@@ -783,3 +783,15 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     .stat-label { color: var(--color-text-muted-dark, #94a3b8); } 
     .form-select { background: var(--color-surface-dark, #1e293b); color: var(--color-text-dark, #e2e8f0); border-color: var(--color-border-dark, #334155); } 
 }
+
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; padding: 1rem; } 
+.dashboard-card { background: var(--color-surface, #fff); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; } 
+.dashboard-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); } 
+.dashboard-card h3 { font-size: 0.85rem; color: var(--color-text-muted, #6b7280); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; } 
+.dashboard-card .value { font-size: 2rem; font-weight: 700; color: var(--color-primary, #2563eb); } 
+.dashboard-card .subtitle { font-size: 0.8rem; color: var(--color-text-muted, #6b7280); margin-top: 0.25rem; } 
+@media (prefers-color-scheme: dark) { 
+    .dashboard-card { background: var(--color-surface-dark, #1e293b); } 
+    .dashboard-card h3 { color: var(--color-text-muted-dark, #94a3b8); } 
+    .dashboard-card .subtitle { color: var(--color-text-muted-dark, #94a3b8); } 
+}
