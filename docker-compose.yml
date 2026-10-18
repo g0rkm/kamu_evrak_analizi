@@ -12,6 +12,7 @@ services:
       - MAINTENANCE_MODE=false
       - LOG_FILE=
       - ADMIN_TOKEN=
+      - ANALYSIS_TIMEOUT=60
     volumes:
       - history_data:/app/data/history
       - upload_data:/app/uploads
