@@ -1159,3 +1159,11 @@ def test_error_codes(client):
     data = response.json()
     assert data['total'] >= 10
     assert 'not_found' in data['error_codes']
+
+
+def test_extract_keywords(client):
+    response = client.post('/api/text/keywords', json={'text': 'kamu evrak analizi kamu sistemi analiz evrak'})
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data['keywords']) > 0
+    assert data['total_words'] > 0

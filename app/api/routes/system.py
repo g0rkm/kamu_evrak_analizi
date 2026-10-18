@@ -295,6 +295,22 @@ async def detect_language(body: dict):
     }
 
 
+@router.post('/text/keywords', tags=['Sistem'], summary='Anahtar kelime cikarma')
+async def extract_keywords(body: dict):
+    import re
+    from collections import Counter
+    text = body.get('text', '')
+    if not text:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('text alani gereklidir.')
+    stop_words = {'ve', 'bir', 'bu', 'de', 'da', 'ile', 'için', 'olan', 'gibi', 'daha', 'en', 'her', 'ne', 'ki', 'var', 'o', 'ben', 'sen', 'biz', 'siz', 'onlar', 'ama', 'fakat', 'ancak', 'veya', 'ya', 'hem', 'ise', 'mi', 'mu'}
+    words = re.findall(r'\b[a-zçğıöşüA-ZÇĞİÖŞÜ]{3,}\b', text.lower())
+    filtered = [w for w in words if w not in stop_words]
+    counts = Counter(filtered)
+    top_keywords = [{'word': w, 'count': c} for w, c in counts.most_common(20)]
+    return {'keywords': top_keywords, 'total_words': len(words), 'unique_words': len(set(filtered))}
+
+
 @router.post('/validate-text', summary='Metin dogrulama')
 async def validate_text(body: MaskRequest):
     issues = []
