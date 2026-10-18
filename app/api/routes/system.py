@@ -153,7 +153,7 @@ async def analyze_pii(body: dict, container: ServiceContainer = Depends(get_cont
     if not text:
         from app.core.exceptions import InvalidInputError
         raise InvalidInputError('text alani gereklidir.')
-    pii = container.pii
+    pii = PIIDetector()
     findings = pii.detect(text)
     summary = pii.summary(text)
     masked = pii.mask_text(text)
