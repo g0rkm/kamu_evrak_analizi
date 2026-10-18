@@ -384,7 +384,7 @@ async def clear_cache(container: ServiceContainer = Depends(get_container)):
 @router.post('/cache/stats', tags=['Sistem'], summary='Cache istatistikleri')
 async def cache_stats(container: ServiceContainer = Depends(get_container), _admin=Depends(require_admin)):
     cache = container.llm._cache
-    info = cache.info()
+    info = cache.stats()
     return {'cache_size': info.get('cache_size', 0), 'ttl_seconds': info.get('ttl_seconds', 0)}
 
 
