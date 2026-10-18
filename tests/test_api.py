@@ -1128,3 +1128,10 @@ def test_word_count(client):
 def test_related_records_not_found(client):
     response = client.get('/api/history/nonexistent/related')
     assert response.status_code == 404
+
+
+def test_extract_dates(client):
+    response = client.post('/api/text/extract-dates', json={'text': 'Tarih: 15.03.2026 ve 2026-03-15'})
+    assert response.status_code == 200
+    data = response.json()
+    assert data['count'] >= 1

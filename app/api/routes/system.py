@@ -233,6 +233,21 @@ async def word_count(body: dict):
     }
 
 
+@router.post('/text/extract-dates', tags=['Sistem'], summary='Tarih cikarma')
+async def extract_dates(body: dict):
+    import re
+    text = body.get('text', '')
+    if not text:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('text alani gereklidir.')
+    patterns = [r'\b(\d{1,2})[./](\d{1,2})[./](\d{4})\b', r'\b(\d{4})[-](\d{2})[-](\d{2})\b']
+    dates = []
+    for p in patterns:
+        for m in re.finditer(p, text):
+            dates.append({'match': m.group(), 'start': m.start(), 'end': m.end()})
+    return {'dates': dates, 'count': len(dates)}
+
+
 @router.post('/validate-text', summary='Metin dogrulama')
 async def validate_text(body: MaskRequest):
     issues = []
