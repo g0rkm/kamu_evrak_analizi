@@ -1022,3 +1022,18 @@ def test_openapi_summary(client):
     data = response.json()
     assert data['total_endpoints'] > 0
     assert isinstance(data['endpoints'], list)
+
+
+def test_cache_stats(client):
+    response = client.post('/api/cache/stats', json={})
+    assert response.status_code == 200
+    data = response.json()
+    assert 'cache_size' in data
+
+
+def test_recent_analyses(client):
+    response = client.get('/api/history/recent')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'records' in data
+    assert 'count' in data
