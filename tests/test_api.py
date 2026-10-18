@@ -596,7 +596,7 @@ def test_mask_pii_empty_text_returns_zero(client):
     """Boş metin gönderildiğinde pii_count 0 olmalı."""
     response = client.post("/api/mask-pii", json={"text": ""})
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert data["pii_count"] == 0
     assert data["masked_text"] == ""
 
@@ -605,7 +605,7 @@ def test_llm_stats_includes_avg_latency(client):
     """LLM stats avg_latency_ms alanını içermeli."""
     response = client.get("/api/stats/llm")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert "avg_latency_ms" in data
 
 
@@ -613,7 +613,7 @@ def test_system_info_includes_settings(client):
     """System info settings bölümünü içermeli."""
     response = client.get("/api/system-info")
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert "settings" in data
     assert "log_level" in data["settings"]
     assert "llm_model" in data["settings"]
@@ -1055,3 +1055,8 @@ def test_pii_analyze_endpoint(client):
     assert 'findings' in data
     assert 'masked_text' in data
     assert len(data['findings']) > 0
+
+
+def test_compare_records_not_found(client):
+    response = client.get('/api/history/compare/nonexistent1/nonexistent2')
+    assert response.status_code == 404
