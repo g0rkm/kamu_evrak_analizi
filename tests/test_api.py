@@ -1046,3 +1046,12 @@ def test_system_summary(client):
     assert data['version'] == '2.9.0'
     assert 'total_analyses' in data
     assert 'error_rate' in data
+
+
+def test_pii_analyze_endpoint(client):
+    response = client.post('/api/pii/analyze', json={'text': 'Email: test@test.com'})
+    assert response.status_code == 200
+    data = response.json()
+    assert 'findings' in data
+    assert 'masked_text' in data
+    assert len(data['findings']) > 0

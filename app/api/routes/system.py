@@ -147,6 +147,23 @@ async def mask_pii(body: MaskRequest):
     return MaskResponse(masked_text=masked, pii_count=len(findings))
 
 
+@router.post('/pii/analyze', tags=['Sistem'], summary='Metin PII analizi')
+async def analyze_pii(body: dict, container: ServiceContainer = Depends(get_container)):
+    text = body.get('text', '')
+    if not text:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('text alani gereklidir.')
+    pii = container.pii
+    findings = pii.detect(text)
+    summary = pii.summary(text)
+    masked = pii.mask_text(text)
+    return {
+        'findings': [{'type': f.type, 'label': f.label, 'start': f.start, 'end': f.end, 'severity': f.severity} for f in findings],
+        'summary': summary,
+        'masked_text': masked
+    }
+
+
 @router.post('/validate-text', summary='Metin dogrulama')
 async def validate_text(body: MaskRequest):
     issues = []
