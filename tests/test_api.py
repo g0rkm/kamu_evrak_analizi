@@ -1183,3 +1183,11 @@ def test_api_docs_summary(client):
     data = response.json()
     assert 'documentation' in data
     assert '/docs' in data['documentation']['swagger_ui']
+
+
+def test_history_timeline(client):
+    response = client.get('/api/history/timeline')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'timeline' in data
+    assert 'count' in data

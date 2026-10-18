@@ -156,6 +156,22 @@ async def history_trends(
     return {"days": days, "trends": result}
 
 
+@router.get('/history/timeline', summary='Zaman cigizi gorunumu')
+async def history_timeline(limit: int = Query(50, ge=1, le=200), container: ServiceContainer = Depends(get_container)):
+    items = container.history.list_records(limit=limit)['items']
+    timeline = []
+    for item in items:
+        timeline.append({
+            'id': item['id'],
+            'timestamp': item.get('timestamp', ''),
+            'source_name': item.get('source_name', ''),
+            'document_type': item.get('document_type', ''),
+            'confidence_score': item.get('confidence_score', 0),
+            'status': item.get('status', '')
+        })
+    return {'timeline': timeline, 'count': len(timeline)}
+
+
 @router.get("/history/export-all", summary="Tüm analiz kayıtlarını JSON olarak indir")
 async def export_all_records(history: HistoryRepository = Depends(get_history)):
     page = history.list_records(limit=10000, offset=0)
