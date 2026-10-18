@@ -45,6 +45,12 @@ class NotFoundError(AppError):
     default_message = "Kayıt bulunamadı."
 
 
+class DuplicateRecordError(AppError):
+    status_code = 409
+    code = "duplicate_record"
+    default_message = "Kayıt zaten mevcut."
+
+
 class TextExtractionError(AppError):
     status_code = 422
     code = "text_extraction_failed"

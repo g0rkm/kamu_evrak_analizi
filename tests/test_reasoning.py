@@ -567,3 +567,10 @@ def test_metrics_response_time():
     snap = metrics.snapshot()
     assert 'avg_response_time_ms' in snap
     metrics.reset()
+
+
+def test_duplicate_record_error():
+    from app.core.exceptions import DuplicateRecordError
+    e = DuplicateRecordError('Kayit zaten mevcut')
+    assert e.status_code == 409
+    assert e.code == 'duplicate_record'
