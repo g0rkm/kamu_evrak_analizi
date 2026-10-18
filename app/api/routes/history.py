@@ -43,6 +43,12 @@ async def list_history(
     return result
 
 
+@router.get('/history/recent', summary='Son analizler')
+async def recent_analyses(count: int = Query(5, ge=1, le=20), container: ServiceContainer = Depends(get_container)):
+    records = container.history.recent_records(count)
+    return {'records': records, 'count': len(records)}
+
+
 @router.get("/history/search", summary="Gelişmiş geçmiş arama")
 async def search_history(
     q: str = Query("", min_length=1),

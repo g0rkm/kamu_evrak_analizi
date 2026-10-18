@@ -140,6 +140,10 @@ class HistoryRepository:
         except (json.JSONDecodeError, OSError):
             return None
 
+    def recent_records(self, count: int = 5) -> list[dict]:
+        items = self._summaries()
+        return items[:count]
+
     def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None, sort: str | None = None, date_from: str | None = None, date_to: str | None = None, min_confidence: float | None = None, favorite: bool | None = None, has_notes: bool | None = None) -> dict:
         items = self._summaries()
         if document_type:
