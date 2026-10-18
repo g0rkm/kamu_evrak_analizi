@@ -595,7 +595,7 @@ def test_import_records_over_limit(client):
 def test_mask_pii_empty_text_returns_zero(client):
     """Boş metin gönderildiğinde pii_count 0 olmalı."""
     response = client.post("/api/mask-pii", json={"text": ""})
-    assert resp.status_code == 200
+    assert response.status_code == 200
     data = response.json()
     assert data["pii_count"] == 0
     assert data["masked_text"] == ""
