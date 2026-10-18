@@ -139,8 +139,8 @@ async def compare_records(id1: str, id2: str, container: ServiceContainer = Depe
     rec1 = container.history.get(id1)
     rec2 = container.history.get(id2)
     if rec1 is None or rec2 is None:
-        raise NotFoundError('Bir veya her iki kayit bulunamadi.')
-    comparison = {
+        raise NotFoundError('Kayit bulunamadi.')
+    return {
         'record_1': {
             'id': id1,
             'source_name': rec1.get('source_name', ''),
@@ -156,7 +156,6 @@ async def compare_records(id1: str, id2: str, container: ServiceContainer = Depe
         'same_type': rec1.get('document_type') == rec2.get('document_type'),
         'confidence_diff': round(abs(rec1.get('confidence_score', 0) - rec2.get('confidence_score', 0)), 2)
     }
-    return comparison
 
 
 @router.delete("/history/clear", summary="Tüm analiz kayıtlarını sil")
@@ -225,6 +224,23 @@ async def bulk_update_tags(body: dict, container: ServiceContainer = Depends(get
         except Exception:
             pass
     return {'updated': updated, 'total': len(ids)}
+
+
+@router.patch('/history/bulk-favorite', summary='Toplu favori guncelleme')
+async def bulk_toggle_favorite(body: dict, container: ServiceContainer = Depends(get_container)):
+    ids = body.get('ids', [])
+    favorite = body.get('favorite', True)
+    if not ids or len(ids) > 100:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('ids listesi 1-100 arasi olmalidir.')
+    updated = 0
+    for record_id in ids:
+        try:
+            container.history.update_field(record_id, 'favorite', favorite)
+            updated += 1
+        except Exception:
+            pass
+    return {'updated': updated, 'total': len(ids), 'favorite': favorite}
 
 
 @router.get("/history/{record_id}")
@@ -323,27 +339,3 @@ async def import_records(body: dict, container: ServiceContainer = Depends(get_c
         raise InvalidInputError("Tek seferde en fazla 500 kayıt içe aktarılabilir.")
     imported = container.history.import_records(records)
     return {"imported": imported}
-
-
-@router.get('/history/compare/{id1}/{id2}', summary='Iki kaydi karsilastir')
-async def compare_records(id1: str, id2: str, container: ServiceContainer = Depends(get_container)):
-    rec1 = container.history.get(id1)
-    rec2 = container.history.get(id2)
-    if rec1 is None or rec2 is None:
-        raise NotFoundError('Kayit bulunamadi.')
-    return {
-        'record_1': {
-            'id': id1,
-            'source_name': rec1.get('source_name', ''),
-            'document_type': rec1.get('document_type', ''),
-            'confidence_score': rec1.get('confidence_score', 0)
-        },
-        'record_2': {
-            'id': id2,
-            'source_name': rec2.get('source_name', ''),
-            'document_type': rec2.get('document_type', ''),
-            'confidence_score': rec2.get('confidence_score', 0)
-        },
-        'same_type': rec1.get('document_type') == rec2.get('document_type'),
-        'confidence_diff': round(abs(rec1.get('confidence_score', 0) - rec2.get('confidence_score', 0)), 2)
-    }
