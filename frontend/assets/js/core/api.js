@@ -246,4 +246,44 @@ export class ApiClient {
         const qs = new URLSearchParams(params).toString();
         return this.request('/history/search?' + qs);
     }
+
+    async wordCount(text) {
+        return this.request('/text/word-count', { method: 'POST', json: { text } });
+    }
+
+    async extractDates(text) {
+        return this.request('/text/extract-dates', { method: 'POST', json: { text } });
+    }
+
+    async detectLanguage(text) {
+        return this.request('/text/language-detect', { method: 'POST', json: { text } });
+    }
+
+    async textStatistics(text) {
+        return this.request('/text/summarize-stats', { method: 'POST', json: { text } });
+    }
+
+    async statusDistribution() {
+        return this.request('/history/status-distribution');
+    }
+
+    async dailyStatistics(days = 7) {
+        return this.request(`/history/statistics/daily?days=${days}`);
+    }
+
+    async searchContent(keyword, limit = 20) {
+        return this.request(`/history/search-content?keyword=${encodeURIComponent(keyword)}&limit=${limit}`);
+    }
+
+    async relatedRecords(recordId, limit = 5) {
+        return this.request(`/history/${encodeURIComponent(recordId)}/related?limit=${limit}`);
+    }
+
+    async startupChecks() {
+        return this.request('/startup-checks');
+    }
+
+    async environmentInfo() {
+        return this.request('/environment');
+    }
 }
