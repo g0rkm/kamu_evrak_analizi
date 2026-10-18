@@ -83,6 +83,17 @@ async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
 
 
+@router.get('/history/processing-time-stats', summary='İşlem süresi istatistikleri')
+async def processing_time_stats(container: ServiceContainer = Depends(get_container)):
+    stats = container.history.stats()
+    return {
+        'avg_processing_time': stats.get('avg_processing_time', 0),
+        'min_processing_time': stats.get('min_processing_time', 0),
+        'max_processing_time': stats.get('max_processing_time', 0),
+        'total_records': stats.get('total', 0)
+    }
+
+
 @router.get('/history/status-distribution', summary='Taslak durum dagilimi')
 async def status_distribution(container: ServiceContainer = Depends(get_container)):
     distribution = container.history.count_by_status()

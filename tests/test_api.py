@@ -1199,3 +1199,11 @@ def test_cors_info(client):
     data = response.json()
     assert 'cors_enabled' in data
     assert 'allowed_methods' in data
+
+
+def test_processing_time_stats(client):
+    response = client.get('/api/history/processing-time-stats')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'avg_processing_time' in data
+    assert 'total_records' in data
