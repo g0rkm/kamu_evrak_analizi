@@ -72,6 +72,12 @@ async def search_history(
     return results
 
 
+@router.get('/history/search-content', summary='İçerik bazlı arama')
+async def search_content(keyword: str = Query(..., min_length=2), limit: int = Query(20, ge=1, le=100), container: ServiceContainer = Depends(get_container)):
+    results = container.history.search_by_content(keyword, limit)
+    return {'results': results, 'count': len(results), 'keyword': keyword}
+
+
 @router.get("/history/stats", summary="Analiz istatistikleri")
 async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()

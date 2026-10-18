@@ -1107,3 +1107,11 @@ def test_status_distribution(client):
     data = response.json()
     assert 'distribution' in data
     assert 'total' in data
+
+
+def test_search_content(client):
+    response = client.get('/api/history/search-content', params={'keyword': 'test'})
+    assert response.status_code == 200
+    data = response.json()
+    assert 'results' in data
+    assert data['keyword'] == 'test'
