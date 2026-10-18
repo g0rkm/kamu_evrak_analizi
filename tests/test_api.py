@@ -1207,3 +1207,11 @@ def test_processing_time_stats(client):
     data = response.json()
     assert 'avg_processing_time' in data
     assert 'total_records' in data
+
+
+def test_status_codes_distribution(client):
+    client.get('/api/health');
+    response = client.get('/api/metrics/status-codes');
+    assert response.status_code == 200;
+    data = response.json();
+    assert '2xx' in data

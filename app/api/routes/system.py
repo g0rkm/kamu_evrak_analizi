@@ -432,6 +432,12 @@ async def metrics_summary():
     }
 
 
+@router.get('/metrics/status-codes', tags=['Sistem'], summary='HTTP durum kodu dagilimi')
+async def status_codes_distribution():
+    from app.core.metrics import metrics
+    return metrics.status_code_distribution()
+
+
 @router.get('/openapi-summary', tags=['Sistem'], summary='API endpoint ozeti')
 async def openapi_summary(request: Request):
     from fastapi.openapi.utils import get_openapi
