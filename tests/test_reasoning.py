@@ -651,3 +651,16 @@ def test_metrics_health_summary():
     assert result['status'] == 'healthy'
     assert result['error_rate'] == 0
     metrics.reset()
+
+
+def test_status_code_distribution():
+    from app.core.metrics import metrics
+    metrics.reset()
+    metrics.record_request(200)
+    metrics.record_request(404)
+    metrics.record_request(500)
+    result = metrics.status_code_distribution()
+    assert result['2xx'] == 1
+    assert result['4xx'] == 1
+    assert result['5xx'] == 1
+    metrics.reset()

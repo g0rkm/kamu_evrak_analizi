@@ -46,6 +46,19 @@ class Metrics:
                 'percentage': round(count / self._requests * 100, 1) if self._requests > 0 else 0
             }
 
+    def status_code_distribution(self) -> dict:
+        """HTTP durum kodu dağılımını döner."""
+        with self._lock:
+            total = self._requests
+            return {
+                'distribution': dict(self._status_codes),
+                'total': total,
+                '2xx': sum(v for k, v in self._status_codes.items() if 200 <= k < 300),
+                '3xx': sum(v for k, v in self._status_codes.items() if 300 <= k < 400),
+                '4xx': sum(v for k, v in self._status_codes.items() if 400 <= k < 500),
+                '5xx': sum(v for k, v in self._status_codes.items() if 500 <= k < 600)
+            }
+
     def health_summary(self) -> dict:
         """Metrik sağlık özetini döner."""
         with self._lock:
