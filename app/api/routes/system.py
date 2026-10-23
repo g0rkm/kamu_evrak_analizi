@@ -125,7 +125,7 @@ async def readiness_check(container: ServiceContainer = Depends(get_container)):
 
 
 @router.get('/startup-checks', tags=['Sistem'], summary='Baslangic kontrolleri')
-async def startup_checks(container: ServiceContainer = Depends(get_container)):
+async def startup_checks(container: ServiceContainer = Depends(get_container), request: Request = None):
     import shutil
     checks = []
     checks.append({
@@ -157,6 +157,14 @@ async def startup_checks(container: ServiceContainer = Depends(get_container)):
             'status': 'error',
             'detail': 'Okunamadı'
         })
+    try:
+        disk_root = shutil.disk_usage('/')
+        free_mb = disk_root.free // (1024 * 1024)
+        disk_ok_root = free_mb > container.settings.DISK_WARNING_THRESHOLD_MB
+        checks.append({'name': 'disk_space', 'status': 'ok' if disk_ok_root else 'warning', 'detail': f'{free_mb} MB boş alan'})
+    except:
+        pass
+
     all_ok = all(c['status'] != 'error' for c in checks)
     return {'healthy': all_ok, 'checks': checks}
 
@@ -429,6 +437,7 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
             "csp_report_only": settings.CSP_REPORT_ONLY,
             "max_history_records": settings.MAX_HISTORY_RECORDS,
             "disk_warning_threshold_mb": settings.DISK_WARNING_THRESHOLD_MB,
+            "max_file_size_mb": settings.MAX_FILE_SIZE_MB,
         },
     }
 
@@ -573,6 +582,7 @@ async def config_export(container: ServiceContainer = Depends(get_container)):
         "llm_token_budget": settings.LLM_TOKEN_BUDGET,
         "pipeline_timeout": settings.PIPELINE_TIMEOUT_SECONDS,
         "max_file_mb": settings.MAX_FILE_SIZE_MB,
+        "max_file_size_mb": settings.MAX_FILE_SIZE_MB,
         "min_text_chars": settings.MIN_TEXT_CHARS,
         "max_text_chars": settings.MAX_TEXT_CHARS,
         "max_batch_files": settings.MAX_BATCH_FILES,
