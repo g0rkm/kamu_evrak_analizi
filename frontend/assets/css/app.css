@@ -921,3 +921,25 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .template-form{background:var(--card-bg,#fff);border:1px solid var(--border,#e0e0e0);border-radius:8px;padding:1rem;margin-bottom:1rem;display:flex;flex-wrap:wrap;gap:.5rem}
 .btn-sm{padding:2px 8px;font-size:.8rem}
 .btn-danger{background:#dc2626;color:#fff;border:none;border-radius:4px;cursor:pointer}
+
+/* System View */
+.system-view-container { padding: 1rem 0; }
+.system-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.system-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.health-status-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+.health-metrics p { margin: 0.25rem 0; font-size: 0.9rem; }
+.session-count-info { font-weight: 600; margin-bottom: 0.5rem; }
+.badge-container { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.badge-outline { border: 1px solid var(--clr-border); background: transparent; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; }
+.badge-success { background: var(--clr-success, #22c55e); color: #fff; }
+.badge-warning { background: var(--clr-warning, #f59e0b); color: #000; }
+.badge-danger { background: var(--clr-danger, #ef4444); color: #fff; }
+.badge-secondary { background: var(--clr-surface-alt, #6b7280); color: #fff; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th, .data-table td { padding: 0.5rem; text-align: left; border-bottom: 1px solid var(--clr-border); }
+.data-table th { font-weight: 600; background: var(--clr-surface-alt, #f3f4f6); }
+.error-text { color: var(--clr-danger, #ef4444); font-style: italic; }
+
+/* Export View */
+.export-view-container { padding: 1rem 0; }
+.export-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
