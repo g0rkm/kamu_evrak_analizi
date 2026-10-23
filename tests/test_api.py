@@ -1381,3 +1381,30 @@ def test_data_integrity_check(client):
     data = resp.json()
     assert 'total_records' in data
     assert 'status' in data
+
+
+def test_summary_statistics(client):
+    resp = client.get('/api/history/summary-stats')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'total' in data
+    assert 'by_type' in data
+    assert 'avg_confidence' in data
+
+
+def test_find_duplicates(client):
+    resp = client.get('/api/history/duplicates')
+    assert resp.status_code == 200
+    assert 'duplicates' in resp.json()
+    assert 'count' in resp.json()
+
+
+def test_records_by_type(client):
+    resp = client.get('/api/history/by-type/Dilekce')
+    assert resp.status_code == 200
+    assert 'records' in resp.json()
+
+
+def test_request_id_header_present(client):
+    resp = client.get('/api/health')
+    assert 'X-Request-ID' in resp.headers
