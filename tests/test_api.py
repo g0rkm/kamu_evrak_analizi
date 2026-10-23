@@ -1500,3 +1500,12 @@ def test_webhook_history(client):
     resp = client.get('/api/webhooks/history')
     assert resp.status_code == 200
     assert 'history' in resp.json()
+
+
+def test_validate_record(client):
+    client.post('/api/history/import', json={'records': [{'id': 'val1', 'file_name': 'test.pdf', 'status': 'ok', 'timestamp': '2026-01-01T00:00:00'}]})
+    resp = client.post('/api/history/val1/validate', json={})
+    assert resp.status_code == 200
+    result = resp.json()
+    assert result['valid'] is True
+    assert result['issues'] == []

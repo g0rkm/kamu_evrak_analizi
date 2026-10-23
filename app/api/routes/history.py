@@ -458,6 +458,25 @@ async def related_records(record_id: str, limit: int = Query(5, ge=1, le=20), co
     return {'record_id': record_id, 'document_type': doc_type, 'related': related, 'count': len(related)}
 
 
+@router.post('/history/{record_id}/validate', tags=['Geçmiş'], summary='Kayıt geçerliliğini kontrol et')
+async def validate_record(record_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if not record:
+        raise NotFoundError(f'{record_id} bulunamadı')
+    issues = []
+    required_fields = ['id', 'file_name', 'status', 'timestamp']
+    for f in required_fields:
+        if not record.get(f):
+            issues.append({'field': f, 'issue': 'Eksik zorunlu alan'})
+    cs = record.get('confidence_score')
+    if cs is not None and not (0 <= cs <= 1):
+        issues.append({'field': 'confidence_score', 'issue': 'Güven skoru 0-1 aralığında olmalı'})
+    tags = record.get('tags', [])
+    if tags and len(tags) > container.settings.MAX_TAGS_PER_RECORD:
+        issues.append({'field': 'tags', 'issue': 'Etiket sınırı aşıldı'})
+    return {'record_id': record_id, 'valid': len(issues) == 0, 'issues': issues}
+
+
 @router.delete('/history/{record_id}/soft', tags=['Gecmis'], summary='Kaydi soft delete yap')
 async def soft_delete_record(record_id: str, request: Request, container = Depends(get_container)):
     repo = container.history
