@@ -140,14 +140,14 @@ async def check_directories(container: ServiceContainer = Depends(get_container)
     return hc.check_data_directories()
 
 
-@router.get("/cache/stats")
+@router.get("/system/cache-stats")
 async def cache_stats(container: ServiceContainer = Depends(get_container)):
     if not container.cache:
         return {"error": "Cache service not available"}
     return container.cache.stats()
 
 
-@router.post("/cache/clear")
+@router.post("/system/cache-clear")
 async def clear_cache(container: ServiceContainer = Depends(get_container)):
     if not container.cache:
         return {"error": "Cache service not available"}
@@ -155,7 +155,7 @@ async def clear_cache(container: ServiceContainer = Depends(get_container)):
     return {"status": "cleared"}
 
 
-@router.get("/retry/stats")
+@router.get("/system/retry-stats")
 async def retry_stats(container: ServiceContainer = Depends(get_container)):
     if not container.retry:
         return {"error": "Retry service not available"}
