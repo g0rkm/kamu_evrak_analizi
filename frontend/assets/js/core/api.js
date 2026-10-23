@@ -307,4 +307,10 @@ export class ApiClient {
     async securityHeaders() {
         return this.request('/security-headers');
     }
+
+    async comprehensiveHealth() { return this.request('/health/comprehensive'); }
+    async systemCapabilities() { return this.request('/system/capabilities'); }
+    async exportJson() { return this.request('/history/export-json'); }
+    async dateRangeRecords(start, end) { const params = []; if (start) params.push('start=' + start); if (end) params.push('end=' + end); return this.request('/history/date-range' + (params.length ? '?' + params.join('&') : '')); }
+    async endpointMetrics() { return this.request('/metrics/endpoints'); }
 }

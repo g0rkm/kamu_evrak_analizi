@@ -1448,3 +1448,21 @@ def test_bulk_soft_delete_and_restore(client):
     rr = client.post('/api/history/bulk-restore', json={'ids': ['bsd1', 'bsd2']})
     assert rr.status_code == 200
     assert rr.json()['restored'] == 2
+
+
+def test_comprehensive_health(client):
+    resp = client.get('/api/health/comprehensive')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'status' in data
+    assert 'services' in data
+    assert 'metrics' in data
+
+
+def test_system_capabilities(client):
+    resp = client.get('/api/system/capabilities')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'features' in data
+    assert data['features']['file_analysis'] is True
+    assert 'limits' in data
