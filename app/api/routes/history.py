@@ -401,6 +401,32 @@ async def bulk_export(request: Request, body: BulkIdsBody, container: ServiceCon
     return {'records': records, 'count': len(records)}
 
 
+@router.post('/history/bulk-soft-delete', tags=['Gecmis'], summary='Toplu soft delete')
+async def bulk_soft_delete(request: Request, body: BulkIdsBody, container: ServiceContainer = Depends(get_container)):
+    repo = container.history
+    deleted = 0
+    for rid in body.ids:
+        if repo.soft_delete(rid):
+            deleted += 1
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('bulk_soft_delete', details={'count': deleted})
+    return {'deleted': deleted, 'recoverable': True}
+
+
+@router.post('/history/bulk-restore', tags=['Gecmis'], summary='Toplu geri yukleme')
+async def bulk_restore(request: Request, body: BulkIdsBody, container: ServiceContainer = Depends(get_container)):
+    repo = container.history
+    restored = 0
+    for rid in body.ids:
+        if repo.restore_deleted(rid):
+            restored += 1
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('bulk_restore', details={'count': restored})
+    return {'restored': restored}
+
+
 @router.patch('/history/bulk-tags', summary='Toplu etiket guncelleme')
 async def bulk_update_tags(body: dict, container: ServiceContainer = Depends(get_container)):
     ids = body.get('ids', [])
