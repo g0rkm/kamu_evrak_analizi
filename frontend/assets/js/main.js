@@ -7,6 +7,8 @@ import { CompareView } from './views/compare-view.js';
 import { DashboardView } from './views/dashboard-view.js';
 import { HistoryView } from './views/history-view.js';
 import { TrendsView } from './views/trends-view.js';
+import { AuditView } from './views/audit-view.js';
+import { PiiView } from './views/pii-view.js';
 
 /** Üst bardaki sistem durumu göstergesi; sağlık uç noktasını periyodik olarak sorgular. */
 class SystemStatus {
@@ -116,6 +118,8 @@ class App {
             gecmis: new HistoryView(context),
             karsilastir: new CompareView(context),
             trends: new TrendsView(context),
+            audit: new AuditView(context),
+            pii: new PiiView(context),
         };
 
         window.addEventListener('hashchange', () => this.route());
@@ -161,7 +165,7 @@ class App {
         const view = this.views[routeName];
 
         if (this.currentView !== view) {
-            this.root.replaceChildren(view.element);
+            this.root.replaceChildren(view.element || view.render());
             this.currentView = view;
             window.scrollTo({ top: 0 });
         }
@@ -169,8 +173,10 @@ class App {
             if (link.dataset.route === routeName) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
         });
-        document.title = `${view.title} · Kamu Evrak Analizi`;
-        view.show({ id: id ? decodeURIComponent(id) : null });
+        document.title = `${view.title || routeName} · Kamu Evrak Analizi`;
+        if (typeof view.show === 'function') {
+            view.show({ id: id ? decodeURIComponent(id) : null });
+        }
     }
 }
 

@@ -809,3 +809,20 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
     .timeline-date { color: var(--color-text-muted-dark, #94a3b8); }
     .timeline-content .type { color: var(--color-text-muted-dark, #94a3b8); }
 }
+
+.audit-wrapper { padding: 1rem; }
+.audit-filters { display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center; }
+.audit-filters select { padding: 0.4rem; border-radius: 4px; border: 1px solid var(--border-color, #ddd); }
+.audit-table { width: 100%; border-collapse: collapse; }
+.audit-table th, .audit-table td { padding: 0.5rem; border-bottom: 1px solid var(--border-color, #ddd); text-align: left; font-size: 0.875rem; }
+.audit-table th { background: var(--bg-secondary, #f5f5f5); font-weight: 600; }
+.audit-stats { margin-bottom: 1rem; }
+.pii-wrapper { padding: 1rem; }
+.pii-input-section textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color, #ddd); border-radius: 6px; font-size: 0.9rem; resize: vertical; }
+.pii-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.pii-results { margin-top: 1.5rem; }
+.pii-stat-row { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+.pii-stat-row .stat-card.critical { border-color: #e53e3e; background: #fff5f5; }
+.pii-masked-text { background: var(--bg-secondary, #f0f0f0); padding: 1rem; border-radius: 6px; white-space: pre-wrap; word-break: break-all; }
+.pii-details ul { list-style: disc; padding-left: 1.5rem; }
+.badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 10px; background: var(--accent-color, #3182ce); color: white; font-size: 0.75rem; }
