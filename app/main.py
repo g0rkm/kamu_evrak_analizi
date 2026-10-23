@@ -27,6 +27,7 @@ from app.services.auth_service import AuthService
 from app.services.backup_service import BackupService
 from app.services.integrity_service import IntegrityService
 from app.services.notification_service import NotificationService
+from app.services.scheduler_service import SchedulerService
 from app.services.template_service import TemplateService
 from app.services.webhook_service import WebhookService
 
@@ -54,12 +55,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.notifications = NotificationService(str(Path(settings.HISTORY_DIR).parent / "notifications"))
         app.state.container.templates = TemplateService(str(Path(settings.HISTORY_DIR).parent / "templates"))
         app.state.container.auth = AuthService(str(Path(settings.HISTORY_DIR).parent / "auth"))
+        app.state.container.scheduler = SchedulerService()
+        app.state.container.scheduler.start()
         app.state.active_jobs = 0
         app.state.startup_time = time.time()
         verify_environment(settings)
         import logging as _logging
         _logging.getLogger("startup").info("Uygulama başlatıldı, istekler kabul ediliyor.")
         yield
+        if container := getattr(app.state, 'container', None):
+            if getattr(container, 'scheduler', None):
+                container.scheduler.stop()
         active_jobs = getattr(app.state, 'active_jobs', 0)
         _logging.getLogger("startup").info('Kapatiliyor, aktif is sayisi: %d', active_jobs)
         active = len(app.state.container.jobs._tasks)

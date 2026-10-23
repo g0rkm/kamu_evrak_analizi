@@ -1291,3 +1291,16 @@ async def list_permissions(request: Request, container: ServiceContainer = Depen
     if not container.auth:
         return {"permissions": {}}
     return {"permissions": container.auth.PERMISSIONS}
+
+
+@router.get("/scheduler/tasks", tags=["Sistem"])
+async def scheduler_tasks(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.scheduler:
+        return {"tasks": []}
+    return {"tasks": container.scheduler.list_tasks()}
+
+@router.get("/scheduler/stats", tags=["Sistem"])
+async def scheduler_stats(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.scheduler:
+        return {"total_tasks": 0, "active_tasks": 0}
+    return container.scheduler.task_stats()

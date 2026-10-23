@@ -30,6 +30,7 @@ class ServiceContainer:
     notifications: Any = None
     templates: Any = None
     auth: Any = None
+    scheduler: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:
