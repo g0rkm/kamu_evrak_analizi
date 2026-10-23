@@ -1864,19 +1864,19 @@ class TestCacheService:
 
 class TestCacheRetryEndpoints:
     def test_cache_stats_endpoint(self, client):
-        resp = client.get("/api/cache/stats")
+        resp = client.get("/api/system/cache-stats")
         assert resp.status_code == 200
         data = resp.json()
         assert "size" in data
         assert "hits" in data
 
     def test_clear_cache_endpoint(self, client):
-        resp = client.post("/api/cache/clear", json={})
+        resp = client.post("/api/system/cache-clear", json={})
         assert resp.status_code == 200
         assert resp.json()["status"] == "cleared"
 
     def test_retry_stats_endpoint(self, client):
-        resp = client.get("/api/retry/stats")
+        resp = client.get("/api/system/retry-stats")
         assert resp.status_code == 200
         data = resp.json()
         assert "total_calls" in data
