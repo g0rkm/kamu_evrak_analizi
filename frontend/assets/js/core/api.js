@@ -397,4 +397,15 @@ export class ApiClient {
             body: JSON.stringify({ text })
         });
     }
+
+    async dashboardSummary() { return this.request('/dashboard/summary'); }
+    async notifications(limit = 50) { return this.request(`/notifications?limit=${limit}`); }
+    async notificationStats() { return this.request('/notifications/stats'); }
+    async markNotificationsRead() { return this.request('/notifications/mark-read', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); }
+    async rateLimitInfo() { return this.request('/rate-limit/info'); }
+    async verifyIntegrity(recordId) { return this.request(`/integrity/verify/${recordId}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); }
+    async verifyAllIntegrity() { return this.request('/integrity/verify-all', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); }
+    async recordChangelog(recordId) { return this.request(`/history/${recordId}/changelog`); }
+    async recordsByPriority(priority) { return this.request(`/history/by-priority/${priority}`); }
+    async bulkPriority(ids, priority) { return this.request('/history/bulk-priority', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, priority }) }); }
 }

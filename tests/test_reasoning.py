@@ -1069,3 +1069,20 @@ def test_version_350():
     """Versiyon 3.5.0 testi."""
     from app import __version__
     assert __version__ == "3.5.0"
+
+def test_dashboard_summary_endpoint(client):
+    """Dashboard ozet endpoint testi."""
+    resp = client.get("/api/dashboard/summary")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "total_records" in data
+    assert "active_records" in data
+    assert "priority_distribution" in data
+    assert "uptime_seconds" in data
+
+def test_rate_limit_info_endpoint(client):
+    """Rate limit bilgi endpoint testi."""
+    resp = client.get("/api/rate-limit/info")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "ip" in data
