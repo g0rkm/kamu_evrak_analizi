@@ -911,23 +911,22 @@ def test_ip_config_defaults():
 
 def test_records_by_priority(client):
     """Oncelige gore filtreleme testi."""
-    import json, os, tempfile
-    with tempfile.NamedTemporaryFile(suffix=".txt", delete=False, mode="w", encoding="utf-8") as f:
-        f.write("test icerik")
-        tmp = f.name
-    try:
-        resp = client.post("/analyze", files={"file": ("test.txt", open(tmp, "rb"), "text/plain")})
-        assert resp.status_code == 200
-        record_id = resp.json()["record_id"]
-        resp = client.patch(f"/history/{record_id}/priority", json={"priority": "high"})
-        assert resp.status_code == 200
-        resp = client.get("/history/by-priority/high")
-        assert resp.status_code == 200
-        data = resp.json()
-        assert data["priority"] == "high"
-        assert data["count"] >= 1
-    finally:
-        os.unlink(tmp)
+    import tempfile, os
+    tmp = tempfile.mktemp(suffix=".txt")
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write("test icerik oncelik")
+    with open(tmp, "rb") as fh:
+        resp = client.post("/analyze", files={"file": ("test.txt", fh, "text/plain")})
+    assert resp.status_code == 200
+    record_id = resp.json()["record_id"]
+    resp = client.patch(f"/history/{record_id}/priority", json={"priority": "high"})
+    assert resp.status_code == 200
+    resp = client.get("/history/by-priority/high")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["priority"] == "high"
+    assert data["count"] >= 1
+    os.unlink(tmp)
 
 def test_records_by_priority_invalid(client):
     """Gecersiz oncelik filtrelemesi."""
@@ -937,20 +936,19 @@ def test_records_by_priority_invalid(client):
 def test_bulk_update_priority(client):
     """Toplu oncelik guncelleme testi."""
     import tempfile, os
-    with tempfile.NamedTemporaryFile(suffix=".txt", delete=False, mode="w", encoding="utf-8") as f:
-        f.write("test icerik")
-        tmp = f.name
-    try:
-        resp = client.post("/analyze", files={"file": ("test.txt", open(tmp, "rb"), "text/plain")})
-        assert resp.status_code == 200
-        record_id = resp.json()["record_id"]
-        resp = client.post("/history/bulk-priority", json={"ids": [record_id], "priority": "urgent"})
-        assert resp.status_code == 200
-        data = resp.json()
-        assert data["updated"] == 1
-        assert data["priority"] == "urgent"
-    finally:
-        os.unlink(tmp)
+    tmp = tempfile.mktemp(suffix=".txt")
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write("test icerik toplu")
+    with open(tmp, "rb") as fh:
+        resp = client.post("/analyze", files={"file": ("test.txt", fh, "text/plain")})
+    assert resp.status_code == 200
+    record_id = resp.json()["record_id"]
+    resp = client.post("/history/bulk-priority", json={"ids": [record_id], "priority": "urgent"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["updated"] == 1
+    assert data["priority"] == "urgent"
+    os.unlink(tmp)
 
 def test_bulk_update_priority_invalid(client):
     """Gecersiz oncelik toplu guncelleme."""
