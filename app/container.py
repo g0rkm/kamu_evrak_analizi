@@ -31,6 +31,9 @@ class ServiceContainer:
     templates: Any = None
     auth: Any = None
     scheduler: Any = None
+    file_validator: Any = None
+    session_manager: Any = None
+    health_checker: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

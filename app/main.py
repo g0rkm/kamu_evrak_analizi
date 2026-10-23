@@ -32,6 +32,9 @@ from app.services.scheduler_service import SchedulerService
 from app.services.template_service import TemplateService
 from app.services.webhook_service import WebhookService
 from app.services.migration_service import MigrationService
+from app.services.file_validator import FileValidator
+from app.services.session_manager import SessionManager
+from app.services.health_checker import HealthChecker
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -59,6 +62,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.auth = AuthService(str(Path(settings.HISTORY_DIR).parent / "auth"))
         app.state.container.scheduler = SchedulerService()
         app.state.container.scheduler.start()
+        app.state.container.file_validator = FileValidator(max_file_size_mb=settings.MAX_FILE_SIZE_MB)
+        app.state.container.session_manager = SessionManager(timeout_minutes=settings.SESSION_TIMEOUT_MINUTES)
+        app.state.container.health_checker = HealthChecker()
         migration_svc = MigrationService(settings.HISTORY_DIR)
         app.state.migration = migration_svc
         app.state.active_jobs = 0
