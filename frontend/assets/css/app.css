@@ -883,3 +883,13 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .btn-block { width: 100%; padding: 0.6rem; font-size: 1rem; }
 .error-text { color: #dc2626; font-size: 0.85rem; margin-bottom: 0.5rem; }
 .success-text { color: #16a34a; font-size: 0.85rem; }
+
+.profile-wrapper { padding: 1rem; max-width: 600px; margin: 0 auto; }
+.profile-card { background: var(--card-bg, #fff); border: 1px solid var(--border, #e0e0e0); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.profile-info p { margin: 0.4rem 0; }
+.profile-actions { margin-top: 1rem; }
+.profile-section { margin-top: 1rem; }
+.perm-list { list-style: none; padding: 0; columns: 2; }
+.perm-list li { padding: 0.3rem 0; font-size: 0.9rem; }
+.perm-granted { color: #16a34a; }
+.perm-denied { color: #dc2626; opacity: 0.6; }

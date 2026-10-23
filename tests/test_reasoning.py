@@ -1444,3 +1444,14 @@ def test_auth_permissions_endpoint(client):
     perms = resp.json()["permissions"]
     assert "record.create" in perms
     assert "system.admin" in perms
+
+
+def test_scheduler_task_removal():
+    """SchedulerService gorev kaldirma testi."""
+    from app.services.scheduler_service import SchedulerService
+    svc = SchedulerService()
+    svc.add_task("temp", lambda: None, 60)
+    assert len(svc.list_tasks()) == 1
+    assert svc.remove_task("temp") is True
+    assert svc.remove_task("nonexist") is False
+    assert len(svc.list_tasks()) == 0
