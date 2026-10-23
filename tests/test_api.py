@@ -1268,3 +1268,22 @@ def test_security_headers_check(client):
     data = response.json()
     assert data['csrf_protection'] is True
     assert data['rate_limiting'] is True
+
+
+def test_audit_logs_endpoint(client):
+    resp = client.get('/api/audit/logs')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'logs' in data
+
+
+def test_audit_stats_endpoint(client):
+    resp = client.get('/api/audit/stats')
+    assert resp.status_code == 200
+
+
+def test_file_size_limit_enforced(client):
+    import io
+    large_content = b'%PDF-' + b'x' * (51 * 1024 * 1024)
+    resp = client.post('/api/analyze', files={'file': ('big.pdf', io.BytesIO(large_content), 'application/pdf')})
+    assert resp.status_code == 400

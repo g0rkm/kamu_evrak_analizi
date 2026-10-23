@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, File, Request, UploadFile
 
 from app.api.dependencies import get_analysis_service, get_container, get_storage
 from app.container import ServiceContainer
-from app.core.exceptions import AppError, InvalidInputError, PipelineTimeoutError
+from app.core.exceptions import AppError, InvalidInputError, PipelineTimeoutError, FileValidationError
 from app.models.api import (
     AnalysisResponse, BatchItem, BatchResponse, CompareRequest, ComparisonResult, TextAnalysisRequest,
 )
@@ -27,6 +27,12 @@ async def analyze_document(
     service: AnalysisService = Depends(get_analysis_service),
     container: ServiceContainer = Depends(get_container),
 ):
+    contents = await file.read()
+    max_size = request.app.state.container.settings.MAX_FILE_SIZE_MB * 1024 * 1024
+    if len(contents) > max_size:
+        raise FileValidationError(f'Dosya boyutu {len(contents) / 1024 / 1024:.1f} MB, maksimum {request.app.state.container.settings.MAX_FILE_SIZE_MB} MB')
+    await file.seek(0)
+
     stored = await storage.save(file)
     try:
         # Dosya içeriğini okuyup content_hash hesapla ve deduplication kontrolü yap
