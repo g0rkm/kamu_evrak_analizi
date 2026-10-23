@@ -1,9 +1,10 @@
 import csv
 import io
+import json as json_mod
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Query, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
 from app.api.dependencies import get_container, get_history
 from app.container import ServiceContainer
@@ -272,6 +273,25 @@ async def export_all_records(history: HistoryRepository = Depends(get_history)):
     )
 
 
+@router.get('/history/export-json', tags=['Gecmis'], summary='JSON olarak export')
+async def export_json(request: Request, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    records = [r for r in records if not r.get('deleted')]
+    content = json_mod.dumps(records, ensure_ascii=False, indent=2)
+    return Response(content=content, media_type='application/json', headers={'Content-Disposition': 'attachment; filename=export.json'})
+
+
+@router.get('/history/date-range', tags=['Gecmis'], summary='Tarih araliginda kayitlar')
+async def records_by_date_range(request: Request, start: str = None, end: str = None, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    records = [r for r in records if not r.get('deleted')]
+    if start:
+        records = [r for r in records if r.get('timestamp', '') >= start]
+    if end:
+        records = [r for r in records if r.get('timestamp', '') <= end]
+    return {'records': records, 'count': len(records), 'date_range': {'start': start, 'end': end}}
+
+
 @router.get('/history/export-filtered', summary='Filtrelenmis gecmis verisi')
 async def export_filtered(
     document_type: str = Query(None),
@@ -332,7 +352,6 @@ async def export_csv(history: HistoryRepository = Depends(get_history)):
             item.get("draft_status", "pending"),
             ",".join(item.get("tags", [])),
         ])
-    from starlette.responses import Response
     return Response(
         content=output.getvalue(),
         media_type="text/csv",
