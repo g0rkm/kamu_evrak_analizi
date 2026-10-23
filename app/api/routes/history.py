@@ -269,6 +269,29 @@ async def records_by_type(doc_type: str, request: Request, limit: int = 50, cont
     return {'records': filtered, 'count': len(filtered), 'document_type': doc_type}
 
 
+@router.get('/history/tag-stats', tags=['Gecmis'], summary='Etiket istatistikleri')
+async def tag_statistics(request: Request, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    records = [r for r in records if not r.get('deleted')]
+    tag_counts = {}
+    for r in records:
+        for tag in r.get('tags', []):
+            tag_counts[tag] = tag_counts.get(tag, 0) + 1
+    sorted_tags = sorted(tag_counts.items(), key=lambda x: x[1], reverse=True)
+    return {
+        'tags': [{'tag': t, 'count': c} for t, c in sorted_tags],
+        'total_unique_tags': len(tag_counts),
+        'total_tag_usage': sum(tag_counts.values())
+    }
+
+
+@router.get('/history/favorites', tags=['Gecmis'], summary='Favori kayitlari listele')
+async def list_favorites(request: Request, limit: int = 50, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    favorites = [r for r in records if not r.get('deleted') and r.get('favorite')][:limit]
+    return {'records': favorites, 'count': len(favorites)}
+
+
 @router.get("/history/export-all", summary="Tüm analiz kayıtlarını JSON olarak indir")
 async def export_all_records(history: HistoryRepository = Depends(get_history)):
     page = history.list_records(limit=10000, offset=0)
