@@ -1400,3 +1400,47 @@ def test_version_360():
     """Versiyon 3.6.0 testi."""
     from app import __version__
     assert __version__ == "3.6.0"
+
+def test_scheduler_service():
+    """SchedulerService temel islemleri testi."""
+    from app.services.scheduler_service import SchedulerService
+    svc = SchedulerService()
+    counter = {"val": 0}
+    def increment():
+        counter["val"] += 1
+    svc.add_task("counter", increment, 3600, enabled=True)
+    tasks = svc.list_tasks()
+    assert len(tasks) == 1
+    assert tasks[0]["name"] == "counter"
+    stats = svc.task_stats()
+    assert stats["total_tasks"] == 1
+    assert stats["active_tasks"] == 1
+    assert svc.remove_task("counter") is True
+    assert len(svc.list_tasks()) == 0
+
+def test_scheduler_endpoints(client):
+    """Scheduler API endpoint'leri testi."""
+    resp = client.get("/api/scheduler/tasks")
+    assert resp.status_code == 200
+    assert "tasks" in resp.json()
+    resp2 = client.get("/api/scheduler/stats")
+    assert resp2.status_code == 200
+    assert "total_tasks" in resp2.json()
+
+def test_auth_roles_endpoint(client):
+    """Auth roller endpoint testi."""
+    resp = client.get("/api/auth/roles")
+    assert resp.status_code == 200
+    roles = resp.json()["roles"]
+    assert "admin" in roles
+    assert "memur" in roles
+    assert "yonetici" in roles
+    assert "izleyici" in roles
+
+def test_auth_permissions_endpoint(client):
+    """Auth izinler endpoint testi."""
+    resp = client.get("/api/auth/permissions")
+    assert resp.status_code == 200
+    perms = resp.json()["permissions"]
+    assert "record.create" in perms
+    assert "system.admin" in perms
