@@ -415,7 +415,7 @@ async def llm_stats(container: ServiceContainer = Depends(get_container)):
 
 
 @router.get("/system-info", summary="Sistem yapılandırma bilgileri (yönetici)")
-async def system_info(container: ServiceContainer = Depends(get_container)):
+async def system_info(request: Request, container: ServiceContainer = Depends(get_container)):
     import platform
     settings = container.settings
 
@@ -431,10 +431,13 @@ async def system_info(container: ServiceContainer = Depends(get_container)):
     except OSError:
         pass
 
+    import time
+    uptime = time.time() - getattr(request.app.state, 'startup_time', time.time())
+
     return {
         "version": __version__,
         "environment": container.settings.ENVIRONMENT,
-        "uptime_seconds": round(time.monotonic() - _start_time, 1),
+        "uptime_seconds": round(uptime, 1),
         "uptime_human": _format_uptime(time.monotonic() - _start_time),
         "python_version": platform.python_version(),
         "warnings": warnings_list,
