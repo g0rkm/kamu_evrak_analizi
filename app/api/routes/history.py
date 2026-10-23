@@ -200,6 +200,64 @@ async def history_timeline(limit: int = Query(50, ge=1, le=200), container: Serv
     return {'timeline': timeline, 'count': len(timeline)}
 
 
+@router.get('/history/summary-stats', tags=['Gecmis'], summary='Ozet istatistikler')
+async def summary_statistics(request: Request, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    records = [r for r in records if not r.get('deleted')]
+    total = len(records)
+    if not total:
+        return {'total': 0, 'by_type': {}, 'avg_confidence': 0, 'date_range': None}
+    by_type = {}
+    confidences = []
+    for r in records:
+        dt = r.get('document_type', 'bilinmiyor')
+        by_type[dt] = by_type.get(dt, 0) + 1
+        c = r.get('confidence_score', 0)
+        if c:
+            confidences.append(c)
+    avg_conf = sum(confidences)/len(confidences) if confidences else 0
+    timestamps = [r.get('timestamp', '') for r in records if r.get('timestamp')]
+    return {
+        'total': total,
+        'by_type': by_type,
+        'avg_confidence': round(avg_conf, 4),
+        'date_range': {
+            'earliest': min(timestamps) if timestamps else None,
+            'latest': max(timestamps) if timestamps else None
+        }
+    }
+
+
+@router.get('/history/duplicates', tags=['Gecmis'], summary='Olasi duplike kayitlari bul')
+async def find_duplicates(request: Request, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    records = [r for r in records if not r.get('deleted')]
+    seen = {}
+    duplicates = []
+    for r in records:
+        key = (r.get('source_name', ''), r.get('document_type', ''))
+        if key in seen:
+            duplicates.append({
+                'record_id': r.get('id'),
+                'matches_with': seen[key],
+                'source_name': key[0],
+                'document_type': key[1]
+            })
+        else:
+            seen[key] = r.get('id')
+    return {'duplicates': duplicates, 'count': len(duplicates)}
+
+
+@router.get('/history/by-type/{doc_type}', tags=['Gecmis'], summary='Ture gore kayitlar')
+async def records_by_type(doc_type: str, request: Request, limit: int = 50, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    filtered = [
+        r for r in records
+        if not r.get('deleted') and r.get('document_type', '').lower() == doc_type.lower()
+    ][:limit]
+    return {'records': filtered, 'count': len(filtered), 'document_type': doc_type}
+
+
 @router.get("/history/export-all", summary="Tüm analiz kayıtlarını JSON olarak indir")
 async def export_all_records(history: HistoryRepository = Depends(get_history)):
     page = history.list_records(limit=10000, offset=0)
