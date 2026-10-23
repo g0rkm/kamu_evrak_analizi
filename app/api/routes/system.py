@@ -988,8 +988,9 @@ async def rate_limit_status(request: Request, container: ServiceContainer = Depe
 
 @router.get("/rate-limit/info", tags=["Sistem"])
 async def rate_limit_info(request: Request, container: ServiceContainer = Depends(get_container)):
-    from app.core.rate_limit import get_client_info
-    info = get_client_info(request)
+    from app.core.rate_limit import RateLimiter
+    limiter = RateLimiter()
+    info = limiter.get_client_info(request)
     return info
 
 
