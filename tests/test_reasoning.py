@@ -436,7 +436,7 @@ def test_json_formatter_output():
 def test_app_version():
     """Uygulama versiyonu 3.4.0 olmalı."""
     from app import __version__
-    assert __version__ == "3.4.0"
+    assert __version__ == "3.5.0"
 
 
 def test_settings_has_all_new_fields():
@@ -955,3 +955,117 @@ def test_bulk_update_priority_empty_ids(client):
     """Bos id listesiyle toplu guncelleme."""
     resp = client.post("/api/history/bulk-priority", json={"ids": [], "priority": "high"})
     assert resp.status_code == 400
+
+
+def test_integrity_compute_hash():
+    """IntegrityService hash hesaplama testi."""
+    from app.services.integrity_service import IntegrityService
+    h = IntegrityService.compute_hash_from_bytes(b"test data")
+    assert isinstance(h, str)
+    assert len(h) == 64
+    h2 = IntegrityService.compute_hash_from_bytes(b"test data")
+    assert h == h2
+    h3 = IntegrityService.compute_hash_from_bytes(b"different")
+    assert h != h3
+
+def test_integrity_verify_record():
+    """IntegrityService kayit dogrulama testi."""
+    from app.services.integrity_service import IntegrityService
+    result = IntegrityService.verify_record_integrity({"id": "abc", "created_at": "2024-01-01"})
+    assert result["valid"] is True
+    result2 = IntegrityService.verify_record_integrity({"foo": "bar"})
+    assert result2["valid"] is False
+    assert len(result2["issues"]) > 0
+
+def test_integrity_compute_checksum():
+    """IntegrityService checksum testi."""
+    from app.services.integrity_service import IntegrityService
+    c1 = IntegrityService.compute_checksum({"a": 1, "b": 2})
+    c2 = IntegrityService.compute_checksum({"b": 2, "a": 1})
+    assert c1 == c2
+
+def test_notification_service():
+    """NotificationService temel islemleri testi."""
+    import tempfile
+    from app.services.notification_service import NotificationService
+    with tempfile.TemporaryDirectory() as d:
+        svc = NotificationService(d)
+        svc.send("info", "Test", "Test mesaji")
+        svc.send("warning", "Uyari", "Uyari mesaji")
+        notes = svc.get_notifications()
+        assert len(notes) == 2
+        assert svc.unread_count() == 2
+        svc.mark_all_read()
+        assert svc.unread_count() == 0
+        stats = svc.stats()
+        assert stats["total"] == 2
+
+def test_notification_filtering():
+    """NotificationService filtreleme testi."""
+    import tempfile
+    from app.services.notification_service import NotificationService
+    with tempfile.TemporaryDirectory() as d:
+        svc = NotificationService(d)
+        svc.send("info", "Info", "info msg")
+        svc.send("error", "Error", "error msg")
+        svc.send("warning", "Warn", "warn msg")
+        errors = svc.get_notifications(level="error")
+        assert len(errors) == 1
+        assert errors[0]["level"] == "error"
+
+def test_changelog_methods():
+    """HistoryRepository changelog metodlari testi."""
+    import tempfile
+    from app.services.history_repository import HistoryRepository
+    with tempfile.TemporaryDirectory() as d:
+        repo = HistoryRepository(d)
+        repo._write("rec1", {"id": "rec1", "created_at": "2024-01-01", "summary": "test"})
+        result = repo.add_changelog_entry("rec1", "created", {"by": "test"})
+        assert result is True
+        log = repo.record_changelog("rec1")
+        assert len(log) == 1
+        assert log[0]["action"] == "created"
+        result2 = repo.add_changelog_entry("nonexist", "update")
+        assert result2 is False
+
+def test_compute_hash_endpoint(client):
+    """compute-hash endpoint testi."""
+    import tempfile, os
+    tmp = tempfile.mktemp(suffix=".txt")
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write("hash test content")
+    with open(tmp, "rb") as fh:
+        resp = client.post("/api/compute-hash", files={"file": ("test.txt", fh, "text/plain")})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "hash" in data
+    assert data["algorithm"] == "sha256"
+    assert data["filename"] == "test.txt"
+    os.unlink(tmp)
+
+def test_notification_endpoints(client):
+    """Bildirim endpoint'leri testi."""
+    resp = client.get("/api/notifications")
+    assert resp.status_code == 200
+    resp = client.get("/api/notifications/stats")
+    assert resp.status_code == 200
+    resp = client.post("/api/notifications/mark-read", json={})
+    assert resp.status_code == 200
+
+def test_integrity_verify_endpoint(client):
+    """Integrity verify endpoint testi."""
+    resp = client.post("/api/integrity/verify-all", json={})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "total" in data
+    assert "valid" in data
+
+def test_changelog_endpoint(client):
+    """Changelog endpoint testi - kayit olmadan."""
+    resp = client.get("/api/history/nonexistent/changelog")
+    assert resp.status_code == 404
+
+def test_version_350():
+    """Versiyon 3.5.0 testi."""
+    from app import __version__
+    assert __version__ == "3.5.0"
