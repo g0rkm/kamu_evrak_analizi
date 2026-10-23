@@ -530,6 +530,30 @@ async def related_records(record_id: str, limit: int = Query(5, ge=1, le=20), co
     return {'record_id': record_id, 'document_type': doc_type, 'related': related, 'count': len(related)}
 
 
+@router.get('/history/{record_id}/report', tags=['Gecmis'], summary='Kayit raporu')
+async def record_report(record_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if not record:
+        raise NotFoundError(f'{record_id} bulunamadi')
+    result = record.get('result', {})
+    analysis = result.get('analysis', {})
+    classification = analysis.get('classification', {})
+    return {
+        'id': record_id,
+        'file_name': record.get('source_name', record.get('file_name', '')),
+        'document_type': record.get('document_type', classification.get('document_type', '')),
+        'confidence': record.get('confidence_score', classification.get('confidence', 0)),
+        'status': record.get('status', ''),
+        'created_at': record.get('timestamp', ''),
+        'summary': analysis.get('summary', record.get('summary', '')),
+        'tags': record.get('tags', []),
+        'notes': record.get('notes', ''),
+        'favorite': record.get('favorite', False),
+        'archived': record.get('archived', False),
+        'processing_time': record.get('processing_time', 0)
+    }
+
+
 @router.get('/history/{record_id}/history', tags=['Gecmis'], summary='Kayit degisiklik gecmisi')
 async def record_change_history(record_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
     record = container.history.get(record_id)
