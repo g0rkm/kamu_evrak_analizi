@@ -349,9 +349,15 @@ async def update_review(record_id: str, body: ReviewUpdate, history: HistoryRepo
 
 
 @router.patch("/history/{record_id}/tags", summary="Kayıt etiketlerini güncelle")
-async def update_tags(record_id: str, body: dict, history: HistoryRepository = Depends(get_history)):
+async def update_tags(record_id: str, body: dict, history: HistoryRepository = Depends(get_history), container: ServiceContainer = Depends(get_container)):
     record = _require(history, record_id)
     tags = body.get("tags")
+    if len(tags) > container.settings.MAX_TAGS_PER_RECORD:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError(f'En fazla {container.settings.MAX_TAGS_PER_RECORD} etiket eklenebilir.')
+    if any(len(t) > 50 for t in tags):
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('Etiket uzunlugu en fazla 50 karakter olabilir.')
     if not isinstance(tags, list):
         from app.core.exceptions import InvalidInputError
         raise InvalidInputError("'tags' bir liste olmalıdır.")

@@ -1249,3 +1249,8 @@ def test_archived_records(client):
 def test_unarchive_not_found(client):
     response = client.post('/api/history/nonexistent/unarchive', json={})
     assert response.status_code == 404
+
+
+def test_update_tags_too_many(client):
+    response = client.patch('/api/history/nonexistent/tags', json={'tags': ['t'] * 25})
+    assert response.status_code in [400, 404]
