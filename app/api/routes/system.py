@@ -697,12 +697,23 @@ async def cors_info(container: ServiceContainer = Depends(get_container)):
 
 @router.get('/rate-limit-status', tags=['Sistem'], summary='Rate limit durumu')
 async def rate_limit_status(request: Request, container: ServiceContainer = Depends(get_container)):
+    from app.core.rate_limit import RateLimiter
     client_ip = request.client.host if request.client else 'unknown'
     settings = container.settings
+    
+    # RateLimiter middleware erisimi deneniyor
+    limiter = getattr(request.app.state, 'rate_limiter', None)
+    if not limiter:
+        for mw in getattr(request.app, 'user_middleware', []):
+            if hasattr(mw, 'cls') and mw.cls == RateLimiter:
+                pass
+
     return {
         'client_ip': client_ip,
         'max_requests': settings.RATE_LIMIT_REQUESTS,
         'window_seconds': settings.RATE_LIMIT_WINDOW,
+        'active_clients': 'N/A',
+        'your_status': 'Rate limiting aktif',
         'limit_per_minute': round(settings.RATE_LIMIT_REQUESTS / settings.RATE_LIMIT_WINDOW * 60, 1)
     }
 

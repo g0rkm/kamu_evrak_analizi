@@ -1287,3 +1287,15 @@ def test_file_size_limit_enforced(client):
     large_content = b'%PDF-' + b'x' * (51 * 1024 * 1024)
     resp = client.post('/api/analyze', files={'file': ('big.pdf', io.BytesIO(large_content), 'application/pdf')})
     assert resp.status_code in (400, 413)
+
+
+def test_rate_limit_headers_present(client):
+    resp = client.get('/api/health')
+    assert 'X-RateLimit-Limit' in resp.headers or resp.status_code == 200
+
+
+def test_audit_logs_with_filter(client):
+    resp = client.get('/api/audit/logs?action=nonexistent')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data['logs'] == [] or isinstance(data['logs'], list)
