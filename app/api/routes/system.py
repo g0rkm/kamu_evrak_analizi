@@ -196,16 +196,55 @@ async def system_report(request: Request, container: ServiceContainer = Depends(
     }
 
 
-@router.get('/health/dependencies', tags=['Sistem'], summary='Bagimliliklarin durumu')
-async def check_dependencies(container: ServiceContainer = Depends(get_container)):
-    import shutil
-    deps = {}
-    deps['tesseract'] = shutil.which('tesseract') is not None
-    deps['llm_configured'] = container.llm.is_configured
-    deps['rag_available'] = container.rag.available
-    deps['history_writable'] = container.settings.history_path.exists()
-    all_ok = all(deps.values())
-    return {'healthy': all_ok, 'dependencies': deps}
+@router.get("/health/dependencies", tags=["Sistem"])
+async def dependency_check(request: Request, container: ServiceContainer = Depends(get_container)):
+    """Sistem bagimlilik kontrolu - tum servislerin durumunu kontrol eder."""
+    import os
+    checks = {}
+    # History repository
+    checks["history_repository"] = {
+        "status": "ok" if container.history else "missing",
+        "type": "core"
+    }
+    # Audit logger
+    checks["audit_logger"] = {
+        "status": "ok" if container.audit else "missing",
+        "type": "service"
+    }
+    # Backup service
+    checks["backup_service"] = {
+        "status": "ok" if container.backup else "missing",
+        "type": "service"
+    }
+    # Webhook service
+    checks["webhook_service"] = {
+        "status": "ok" if container.webhooks else "missing",
+        "type": "service"
+    }
+    # Integrity service
+    checks["integrity_service"] = {
+        "status": "ok" if container.integrity else "missing",
+        "type": "service"
+    }
+    # Notification service
+    checks["notification_service"] = {
+        "status": "ok" if container.notifications else "missing",
+        "type": "service"
+    }
+    # LLM service
+    checks["llm_service"] = {
+        "status": "ok" if container.llm else "missing",
+        "type": "core"
+    }
+    # Disk
+    history_dir = getattr(container.settings, 'HISTORY_DIR', None) or getattr(container.settings, 'history_path', None)
+    if history_dir:
+        checks["storage"] = {
+            "status": "ok" if os.path.isdir(str(history_dir)) else "error",
+            "type": "infrastructure"
+        }
+    all_ok = all(c["status"] == "ok" for c in checks.values())
+    return {"healthy": all_ok, "checks": checks}
 
 
 @router.get("/ready", summary="Hazırlık kontrolü (readiness probe)")
