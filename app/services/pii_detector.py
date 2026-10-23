@@ -78,6 +78,13 @@ class PIIDetector:
             masked = masked[:f.start] + f'[***{f.type.upper()}***]' + masked[f.end:]
         return masked
 
+    def redact_text(self, text: str, replacement: str = '[REDACTED]') -> str:
+        findings = self.detect(text)
+        result = text
+        for f in sorted(findings, key=lambda x: x.start, reverse=True):
+            result = result[:f.start] + replacement + result[f.end:]
+        return result
+
     def summary(self, text: str) -> dict:
         findings = self.detect(text)
         types_found = {}

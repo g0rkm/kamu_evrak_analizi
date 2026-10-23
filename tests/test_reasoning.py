@@ -664,3 +664,18 @@ def test_status_code_distribution():
     assert result['4xx'] == 1
     assert result['5xx'] == 1
     metrics.reset()
+
+
+def test_pii_redact_text():
+    from app.services.pii_detector import PIIDetector
+    d = PIIDetector()
+    result = d.redact_text('Email: test@test.com')
+    assert '[REDACTED]' in result
+    assert 'test@test.com' not in result
+
+
+def test_pii_redact_custom_replacement():
+    from app.services.pii_detector import PIIDetector
+    d = PIIDetector()
+    result = d.redact_text('Email: test@test.com', replacement='***')
+    assert '***' in result
