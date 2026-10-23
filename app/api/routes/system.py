@@ -1085,3 +1085,26 @@ async def cleanup_audit_logs(request: Request, days: int = 90, container: Servic
         return {'removed': 0}
     removed = audit.clear_old_logs(days=days)
     return {'removed': removed, 'older_than_days': days}
+
+
+@router.get("/notifications", tags=["Sistem"])
+async def get_notifications(request: Request, limit: int = 50, level: str = None, unread_only: bool = False, container: ServiceContainer = Depends(get_container)):
+    if not container.notifications:
+        return {"notifications": [], "count": 0}
+    notifications = container.notifications.get_notifications(limit=limit, level=level, unread_only=unread_only)
+    return {"notifications": notifications, "count": len(notifications)}
+
+
+@router.post("/notifications/mark-read", tags=["Sistem"])
+async def mark_notifications_read(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.notifications:
+        return {"marked": 0}
+    count = container.notifications.mark_all_read()
+    return {"marked": count}
+
+
+@router.get("/notifications/stats", tags=["Sistem"])
+async def notification_stats(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.notifications:
+        return {"total": 0, "unread": 0, "by_level": {}}
+    return container.notifications.stats()

@@ -27,6 +27,7 @@ class ServiceContainer:
     analysis: AnalysisService
     jobs: JobManager
     integrity: Any = None
+    notifications: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:
