@@ -826,3 +826,25 @@ class TestAuditLoggerClearOld:
             al.log('test2')
             count = al.clear_old_logs(days=0)
             assert count >= 0
+
+
+class TestTextAnalyzer:
+    def test_basic_analysis(self):
+        from app.services.text_analyzer import TextAnalyzer
+        result = TextAnalyzer.analyze('Bu bir test cumlesidir. Ikinci cumle burada.')
+        assert result['word_count'] > 0
+        assert result['sentence_count'] == 2
+        assert result['char_count'] > 0
+        assert 'top_words' in result
+
+    def test_empty_text(self):
+        from app.services.text_analyzer import TextAnalyzer
+        result = TextAnalyzer.analyze('')
+        assert result['word_count'] == 0
+        assert result['sentence_count'] == 0
+
+    def test_vocabulary_richness(self):
+        from app.services.text_analyzer import TextAnalyzer
+        result = TextAnalyzer.analyze('kelime kelime kelime farkli baska')
+        assert result['vocabulary_richness'] < 1.0
+        assert result['unique_words'] == 3

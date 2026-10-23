@@ -337,6 +337,14 @@ async def text_statistics(body: dict):
     }
 
 
+@router.post('/text/analyze', tags=['Metin'], summary='Detayli metin analizi')
+async def analyze_text_detailed(request: Request, body: dict):
+    from app.services.text_analyzer import TextAnalyzer
+    text = body.get('text', '')
+    result = TextAnalyzer.analyze(text)
+    return result
+
+
 @router.post('/text/extract-dates', tags=['Sistem'], summary='Tarih cikarma')
 async def extract_dates(body: dict):
     import re
