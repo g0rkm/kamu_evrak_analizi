@@ -1748,3 +1748,135 @@ class TestNewEndpoints:
         assert resp.status_code == 200
         data = resp.json()
         assert isinstance(data, dict)
+
+
+class TestRetryService:
+    def test_execute_success(self):
+        from app.services.retry_service import RetryService
+        rs = RetryService()
+        result = rs.execute(lambda: 42)
+        assert result == 42
+        assert rs.stats()["total_successes"] == 1
+
+    def test_execute_with_retries(self):
+        from app.services.retry_service import RetryService, RetryConfig
+        call_count = 0
+        def flaky():
+            nonlocal call_count
+            call_count += 1
+            if call_count < 3:
+                raise ValueError("fail")
+            return "ok"
+        config = RetryConfig(max_retries=3, base_delay=0.01, jitter=False)
+        rs = RetryService(config)
+        result = rs.execute(flaky)
+        assert result == "ok"
+        assert call_count == 3
+        assert rs.stats()["total_retries"] == 2
+
+    def test_execute_all_fail(self):
+        from app.services.retry_service import RetryService, RetryConfig
+        import pytest
+        config = RetryConfig(max_retries=2, base_delay=0.01, jitter=False)
+        rs = RetryService(config)
+        with pytest.raises(ValueError):
+            rs.execute(lambda: (_ for _ in ()).throw(ValueError("always fail")))
+        assert rs.stats()["total_failures"] == 1
+
+    def test_with_retry_decorator(self):
+        from app.services.retry_service import with_retry
+        call_count = 0
+        @with_retry(max_retries=2, base_delay=0.01, retryable_exceptions=(ValueError,))
+        def my_func():
+            nonlocal call_count
+            call_count += 1
+            if call_count < 2:
+                raise ValueError("once")
+            return "done"
+        result = my_func()
+        assert result == "done"
+        assert call_count == 2
+
+
+class TestCacheService:
+    def test_set_and_get(self):
+        from app.services.cache_service import CacheService
+        cs = CacheService()
+        cs.set("key1", "value1")
+        assert cs.get("key1") == "value1"
+        assert cs.get("nonexistent") is None
+
+    def test_expiration(self):
+        import time
+        from app.services.cache_service import CacheService
+        cs = CacheService(default_ttl=0.1)
+        cs.set("k", "v")
+        assert cs.get("k") == "v"
+        time.sleep(0.15)
+        assert cs.get("k") is None
+
+    def test_max_size(self):
+        from app.services.cache_service import CacheService
+        cs = CacheService(max_size=3)
+        cs.set("a", 1)
+        cs.set("b", 2)
+        cs.set("c", 3)
+        cs.set("d", 4)
+        assert cs.get("a") is None
+        assert cs.get("d") == 4
+        assert cs.stats()["size"] == 3
+
+    def test_delete(self):
+        from app.services.cache_service import CacheService
+        cs = CacheService()
+        cs.set("k", "v")
+        assert cs.delete("k") is True
+        assert cs.delete("k") is False
+        assert cs.get("k") is None
+
+    def test_clear(self):
+        from app.services.cache_service import CacheService
+        cs = CacheService()
+        cs.set("a", 1)
+        cs.set("b", 2)
+        cs.clear()
+        assert cs.stats()["size"] == 0
+
+    def test_get_or_set(self):
+        from app.services.cache_service import CacheService
+        cs = CacheService()
+        result = cs.get_or_set("k", lambda: "computed")
+        assert result == "computed"
+        result2 = cs.get_or_set("k", lambda: "other")
+        assert result2 == "computed"
+
+    def test_stats(self):
+        from app.services.cache_service import CacheService
+        cs = CacheService()
+        cs.set("a", 1)
+        cs.get("a")
+        cs.get("miss")
+        stats = cs.stats()
+        assert stats["hits"] == 1
+        assert stats["misses"] == 1
+        assert stats["size"] == 1
+
+
+class TestCacheRetryEndpoints:
+    def test_cache_stats_endpoint(self, client):
+        resp = client.get("/api/cache/stats")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "size" in data
+        assert "hits" in data
+
+    def test_clear_cache_endpoint(self, client):
+        resp = client.post("/api/cache/clear", json={})
+        assert resp.status_code == 200
+        assert resp.json()["status"] == "cleared"
+
+    def test_retry_stats_endpoint(self, client):
+        resp = client.get("/api/retry/stats")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "total_calls" in data
