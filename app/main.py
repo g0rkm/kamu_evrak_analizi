@@ -20,6 +20,7 @@ from app.core.metrics import metrics
 from app.core.rate_limit import RateLimitMiddleware
 from app.core.startup import verify_environment
 from app.services.audit_logger import AuditLogger
+from app.services.backup_service import BackupService
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -39,6 +40,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI):
         app.state.container = ServiceContainer.build(settings)
         app.state.container.audit = AuditLogger(log_dir=str(Path(settings.HISTORY_DIR) / 'audit'))
+        app.state.container.backup = BackupService(history_dir=str(Path(settings.HISTORY_DIR)))
         verify_environment(settings)
         import logging as _logging
         _logging.getLogger("startup").info("Uygulama başlatıldı, istekler kabul ediliyor.")

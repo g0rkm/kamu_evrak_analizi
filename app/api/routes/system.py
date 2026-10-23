@@ -3,6 +3,7 @@ import time
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, Query, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from app import __version__
@@ -781,3 +782,32 @@ async def security_headers_check(request: Request):
         'csrf_protection': True,
         'rate_limiting': True
     }
+
+
+@router.post('/backup/create', tags=['Yedekleme'], summary='Yedek olustur')
+async def create_backup(request: Request, container: ServiceContainer = Depends(get_container)):
+    backup = getattr(container, 'backup', None)
+    if not backup:
+        return JSONResponse(status_code=503, content={'detail': 'Backup service not configured'})
+    result = backup.create_backup()
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('backup_create', details={'file': result.get('backup_file', '')})
+    return result
+
+
+@router.get('/backup/list', tags=['Yedekleme'])
+async def list_backups(request: Request, container: ServiceContainer = Depends(get_container)):
+    backup = getattr(container, 'backup', None)
+    if not backup:
+        return {'backups': []}
+    return {'backups': backup.list_backups()}
+
+
+@router.post('/backup/cleanup', tags=['Yedekleme'])
+async def cleanup_backups(request: Request, keep: int = 5, container: ServiceContainer = Depends(get_container)):
+    backup = getattr(container, 'backup', None)
+    if not backup:
+        return {'deleted': 0}
+    deleted = backup.delete_old_backups(keep_count=keep)
+    return {'deleted': deleted}
