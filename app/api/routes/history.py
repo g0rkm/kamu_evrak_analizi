@@ -67,6 +67,16 @@ async def list_deleted_records(request: Request, limit: int = 50, container = De
     return {'records': records, 'count': len(records)}
 
 
+@router.get('/history/count', tags=['Gecmis'], summary='Toplam kayit sayisi')
+async def record_count(request: Request, container: ServiceContainer = Depends(get_container)):
+    all_records = container.history._load_all()
+    total = len(all_records)
+    active = len([r for r in all_records if not r.get('deleted')])
+    deleted = total - active
+    archived = len([r for r in all_records if r.get('archived') and not r.get('deleted')])
+    return {'total': total, 'active': active, 'deleted': deleted, 'archived': archived}
+
+
 @router.get("/history/search", summary="Gelişmiş geçmiş arama")
 async def search_history(
     q: str = Query("", min_length=1),
