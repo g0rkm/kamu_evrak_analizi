@@ -1880,3 +1880,38 @@ class TestCacheRetryEndpoints:
         assert resp.status_code == 200
         data = resp.json()
         assert "total_calls" in data
+
+
+class TestIPFilterMiddleware:
+    def test_parse_ips(self):
+        from app.core.ip_filter_middleware import IPFilterMiddleware
+        # Bos uygulama nesnesi olusturmak icin basit bir asgi app kullaniyoruz
+        async def dummy_app(scope, receive, send):
+            pass
+        mw = IPFilterMiddleware(dummy_app, whitelist="192.168.1.1, 10.0.0.1", blacklist="172.16.0.1")
+        assert "192.168.1.1" in mw.whitelist
+        assert "10.0.0.1" in mw.whitelist
+        assert "172.16.0.1" in mw.blacklist
+
+    def test_empty_whitelist_allows_all(self):
+        from app.core.ip_filter_middleware import IPFilterMiddleware
+        async def dummy_app(scope, receive, send):
+            pass
+        mw = IPFilterMiddleware(dummy_app, whitelist="", blacklist="")
+        assert mw._is_allowed("1.2.3.4") is True
+
+    def test_blacklist_blocks(self):
+        from app.core.ip_filter_middleware import IPFilterMiddleware
+        async def dummy_app(scope, receive, send):
+            pass
+        mw = IPFilterMiddleware(dummy_app, whitelist="", blacklist="1.2.3.4")
+        assert mw._is_allowed("1.2.3.4") is False
+        assert mw._is_allowed("5.6.7.8") is True
+
+    def test_whitelist_only_allows_listed(self):
+        from app.core.ip_filter_middleware import IPFilterMiddleware
+        async def dummy_app(scope, receive, send):
+            pass
+        mw = IPFilterMiddleware(dummy_app, whitelist="10.0.0.1", blacklist="")
+        assert mw._is_allowed("10.0.0.1") is True
+        assert mw._is_allowed("10.0.0.2") is False
