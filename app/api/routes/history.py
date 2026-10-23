@@ -427,6 +427,22 @@ async def bulk_restore(request: Request, body: BulkIdsBody, container: ServiceCo
     return {'restored': restored}
 
 
+@router.post('/history/bulk-validate', tags=['Gecmis'], summary='Toplu kayit dogrulama')
+async def bulk_validate(request: Request, body: BulkIdsBody, container: ServiceContainer = Depends(get_container)):
+    results = []
+    for rid in body.ids:
+        record = container.history.get(rid)
+        if not record:
+            results.append({'record_id': rid, 'valid': False, 'issues': [{'field': 'id', 'issue': 'Kayit bulunamadi'}]})
+            continue
+        issues = []
+        for f in ['id', 'file_name', 'status']:
+            if not record.get(f):
+                issues.append({'field': f, 'issue': 'Eksik'})
+        results.append({'record_id': rid, 'valid': len(issues) == 0, 'issues': issues})
+    return {'results': results, 'total': len(results), 'valid_count': sum(1 for r in results if r['valid'])}
+
+
 @router.patch('/history/bulk-tags', summary='Toplu etiket guncelleme')
 async def bulk_update_tags(body: dict, container: ServiceContainer = Depends(get_container)):
     ids = body.get('ids', [])
@@ -475,6 +491,23 @@ async def validate_record(record_id: str, request: Request, container: ServiceCo
     if tags and len(tags) > container.settings.MAX_TAGS_PER_RECORD:
         issues.append({'field': 'tags', 'issue': 'Etiket sınırı aşıldı'})
     return {'record_id': record_id, 'valid': len(issues) == 0, 'issues': issues}
+
+
+@router.post('/history/{record_id}/clone', tags=['Gecmis'], summary='Kaydi kopyala')
+async def clone_record(record_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
+    import uuid as uuid_mod
+    record = container.history.get(record_id)
+    if not record:
+        raise NotFoundError(f'{record_id} bulunamadi')
+    new_record = dict(record)
+    new_id = f'clone_{uuid_mod.uuid4().hex[:8]}'
+    new_record['id'] = new_id
+    new_record['cloned_from'] = record_id
+    container.history._write(new_id, new_record)
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('clone', record_id=new_id, details={'source': record_id})
+    return {'id': new_id, 'cloned_from': record_id}
 
 
 @router.delete('/history/{record_id}/soft', tags=['Gecmis'], summary='Kaydi soft delete yap')
