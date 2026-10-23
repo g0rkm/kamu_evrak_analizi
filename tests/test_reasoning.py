@@ -912,7 +912,7 @@ def test_ip_config_defaults():
 def test_records_by_priority(client):
     """Oncelige gore filtreleme testi."""
     resp = client.get("/api/history")
-    records = resp.json().get("records", [])
+    records = resp.json().get("items", [])
     if records:
         record_id = records[0]["id"]
         resp = client.patch(f"/api/history/{record_id}/priority", json={"priority": "high"})
@@ -934,7 +934,7 @@ def test_records_by_priority_invalid(client):
 def test_bulk_update_priority(client):
     """Toplu oncelik guncelleme testi."""
     resp = client.get("/api/history")
-    records = resp.json().get("records", [])
+    records = resp.json().get("items", [])
     if records:
         record_id = records[0]["id"]
         resp = client.post("/api/history/bulk-priority", json={"ids": [record_id], "priority": "urgent"})
@@ -1920,7 +1920,7 @@ class TestIPFilterMiddleware:
 class TestBulkOperations:
     def test_bulk_delete(self, client):
         resp = client.get("/api/history")
-        records = resp.json()
+        records = resp.json().get("items", [])
         if not records:
             return
         record_id = records[0]["id"]
@@ -1938,7 +1938,7 @@ class TestBulkOperations:
 
     def test_bulk_archive(self, client):
         resp = client.get("/api/history")
-        records = resp.json()
+        records = resp.json().get("items", [])
         if not records:
             return
         record_id = records[0]["id"]
@@ -1951,7 +1951,7 @@ class TestBulkOperations:
 
     def test_bulk_tag(self, client):
         resp = client.get("/api/history")
-        records = resp.json()
+        records = resp.json().get("items", [])
         if not records:
             return
         record_id = records[0]["id"]
