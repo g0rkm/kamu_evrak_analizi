@@ -705,3 +705,55 @@ def test_max_note_length_default():
     from app.config import Settings
     s = Settings()
     assert s.MAX_NOTE_LENGTH == 2000
+
+
+import tempfile, os
+
+class TestAuditLogger:
+    def test_audit_log_and_retrieve(self):
+        from app.services.audit_logger import AuditLogger
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            al = AuditLogger(td)
+            al.log('analyze', record_id='r1', details={'file': 'test.pdf'})
+            al.log('delete', record_id='r2')
+            logs = al.get_logs()
+            assert len(logs) == 2
+            assert logs[0]['action'] == 'delete'
+            assert logs[1]['action'] == 'analyze'
+
+    def test_audit_filter_by_action(self):
+        from app.services.audit_logger import AuditLogger
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            al = AuditLogger(td)
+            al.log('analyze')
+            al.log('delete')
+            al.log('analyze')
+            logs = al.get_logs(action='analyze')
+            assert len(logs) == 2
+            assert all(l['action'] == 'analyze' for l in logs)
+
+    def test_audit_filter_by_record_id(self):
+        from app.services.audit_logger import AuditLogger
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            al = AuditLogger(td)
+            al.log('analyze', record_id='r1')
+            al.log('delete', record_id='r2')
+            logs = al.get_logs(record_id='r1')
+            assert len(logs) == 1
+            assert logs[0]['record_id'] == 'r1'
+
+    def test_audit_stats(self):
+        from app.services.audit_logger import AuditLogger
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            al = AuditLogger(td)
+            al.log('analyze')
+            al.log('analyze')
+            al.log('delete')
+            s = al.stats()
+            assert s['total_entries'] == 3
+            assert s['by_action']['analyze'] == 2
+            assert s['by_action']['delete'] == 1

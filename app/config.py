@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     # Girdi sınırları ve dosya saklama
     UPLOAD_DIR: str = "uploads"
     KEEP_UPLOADS: bool = False
-    MAX_FILE_SIZE_MB: int = 20
+    MAX_FILE_SIZE_MB: int = 50
     MIN_TEXT_CHARS: int = 20
     MAX_TEXT_CHARS: int = 100_000
     MAX_BATCH_FILES: int = 10
@@ -103,6 +103,13 @@ class Settings(BaseSettings):
     def _validate_max_text(cls, v: int) -> int:
         if v < 100:
             raise ValueError("MAX_TEXT_CHARS en az 100 olmalıdır.")
+        return v
+
+    @field_validator("MAX_FILE_SIZE_MB")
+    @classmethod
+    def _validate_max_file_size(cls, v: int) -> int:
+        if not (1 <= v <= 500):
+            raise ValueError("MAX_FILE_SIZE_MB 1 ile 500 arasında olmalıdır.")
         return v
 
     @field_validator("MAX_TAGS_PER_RECORD")
