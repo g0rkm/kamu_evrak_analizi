@@ -34,6 +34,8 @@ class ServiceContainer:
     file_validator: Any = None
     session_manager: Any = None
     health_checker: Any = None
+    cache: Any = None
+    retry: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

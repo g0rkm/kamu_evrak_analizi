@@ -35,6 +35,8 @@ from app.services.migration_service import MigrationService
 from app.services.file_validator import FileValidator
 from app.services.session_manager import SessionManager
 from app.services.health_checker import HealthChecker
+from app.services.cache_service import CacheService
+from app.services.retry_service import RetryService
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -65,6 +67,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.file_validator = FileValidator(max_file_size_mb=settings.MAX_FILE_SIZE_MB)
         app.state.container.session_manager = SessionManager(timeout_minutes=settings.SESSION_TIMEOUT_MINUTES)
         app.state.container.health_checker = HealthChecker()
+        app.state.container.cache = CacheService(default_ttl=settings.CACHE_TTL)
+        app.state.container.retry = RetryService()
         migration_svc = MigrationService(settings.HISTORY_DIR)
         app.state.migration = migration_svc
         app.state.active_jobs = 0
