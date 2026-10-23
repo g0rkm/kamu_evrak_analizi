@@ -1244,3 +1244,8 @@ def test_archived_records(client):
     data = response.json()
     assert 'records' in data
     assert 'count' in data
+
+
+def test_unarchive_not_found(client):
+    response = client.post('/api/history/nonexistent/unarchive', json={})
+    assert response.status_code == 404

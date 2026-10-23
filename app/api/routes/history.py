@@ -329,6 +329,15 @@ async def archive_record(record_id: str, container: ServiceContainer = Depends(g
     return {'record_id': record_id, 'archived': True}
 
 
+@router.post('/history/{record_id}/unarchive', summary='Kaydi arsivden cikar')
+async def unarchive_record(record_id: str, container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if record is None:
+        raise NotFoundError('Kayit bulunamadi.')
+    container.history.update_field(record_id, 'archived', False)
+    return {'record_id': record_id, 'archived': False}
+
+
 @router.get("/history/{record_id}")
 async def get_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     return _require(history, record_id)
