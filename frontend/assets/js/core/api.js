@@ -166,14 +166,6 @@ export class ApiClient {
         return this.request('/config/export');
     }
 
-    bulkDelete(ids) {
-        return this.request('/history/bulk-delete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ids }),
-        });
-    }
-
     healthDetailed() {
         return this.request('/health/detailed');
     }
@@ -422,4 +414,8 @@ export class ApiClient {
     async systemHealthCheck() { return this.request("/system/health-check"); }
     async systemDirectories() { return this.request("/system/directories"); }
     async schedulerTasks() { return this.request("/scheduler/tasks"); }
+
+    async bulkDelete(ids) { return this.request("/history/bulk-delete", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids }) }); }
+    async bulkArchive(ids, archive = true) { return this.request("/history/bulk-archive", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids, archive }) }); }
+    async bulkTag(ids, tags) { return this.request("/history/bulk-tag", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids, tags }) }); }
 }
