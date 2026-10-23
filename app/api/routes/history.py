@@ -309,7 +309,7 @@ async def bulk_archive(request: Request, body: BulkIdsBody, container: ServiceCo
         record = repo.get(rid)
         if record and not record.get('archived'):
             record['archived'] = True
-            repo._save(rid, record)
+            repo._write(rid, record)
             archived += 1
     audit = getattr(container, 'audit', None)
     if audit:
