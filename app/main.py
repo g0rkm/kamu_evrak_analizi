@@ -3,6 +3,7 @@
 Çalıştırma:  python -m app.main   veya   uvicorn app.main:app
 """
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,6 +19,7 @@ from app.core.logging import configure_logging, new_request_id, request_id_var
 from app.core.metrics import metrics
 from app.core.rate_limit import RateLimitMiddleware
 from app.core.startup import verify_environment
+from app.services.audit_logger import AuditLogger
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -36,6 +38,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         app.state.container = ServiceContainer.build(settings)
+        app.state.container.audit = AuditLogger(log_dir=str(Path(settings.HISTORY_DIR) / 'audit'))
         verify_environment(settings)
         import logging as _logging
         _logging.getLogger("startup").info("Uygulama başlatıldı, istekler kabul ediliyor.")
