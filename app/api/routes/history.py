@@ -379,15 +379,15 @@ async def toggle_favorite(record_id: str, body: dict, history: HistoryRepository
 
 
 @router.patch("/history/{record_id}/notes", summary="Kayıda not ekle")
-async def update_notes(record_id: str, body: dict, history: HistoryRepository = Depends(get_history)):
+async def update_notes(record_id: str, body: dict, history: HistoryRepository = Depends(get_history), container: ServiceContainer = Depends(get_container)):
     record = _require(history, record_id)
     notes = body.get("notes", "")
+    if len(notes) > container.settings.MAX_NOTE_LENGTH:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError(f'Not uzunlugu en fazla {container.settings.MAX_NOTE_LENGTH} karakter olabilir.')
     if not isinstance(notes, str):
         from app.core.exceptions import InvalidInputError
         raise InvalidInputError("'notes' bir metin olmalıdır.")
-    if len(notes) > 2000:
-        from app.core.exceptions import InvalidInputError
-        raise InvalidInputError("Not en fazla 2000 karakter olabilir.")
     history.update_field(record_id, "notes", notes)
     return {"record_id": record_id, "notes": notes}
 
