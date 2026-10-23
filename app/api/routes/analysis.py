@@ -14,6 +14,7 @@ from app.models.api import (
 )
 from app.services.analysis_service import AnalysisService
 from app.services.upload_storage import UploadStorage
+from app.services.integrity_service import IntegrityService
 
 router = APIRouter(tags=["analiz"])
 logger = logging.getLogger(__name__)
@@ -35,6 +36,9 @@ async def analyze_document(
 
     stored = await storage.save(file)
     try:
+        file_path = getattr(stored, "path", None)
+        file_hash = IntegrityService.compute_hash(str(file_path)) if file_path else None
+
         # Dosya içeriğini okuyup content_hash hesapla ve deduplication kontrolü yap
         content = getattr(stored, "content", None)
         if content is None:
@@ -65,6 +69,8 @@ async def analyze_document(
         
         # Başarılı sonuç sonrası cache/dedup kaydı
         if result:
+            if isinstance(result, dict):
+                result["file_hash"] = file_hash
             result_hash = hashlib.sha256(json.dumps(result, sort_keys=True).encode()).hexdigest()
             container.llm._cache.set_dedup(content_hash, 'llm:' + content_hash)
             
@@ -142,3 +148,10 @@ async def batch_analysis_status(request: Request, body: dict):
 @router.post("/compare", response_model=ComparisonResult, summary="İki evrak metnini karşılaştır")
 async def compare_documents(body: CompareRequest, service: AnalysisService = Depends(get_analysis_service)):
     return await service.compare(body.text1, body.text2)
+
+
+@router.post("/compute-hash", tags=["Analiz"])
+async def compute_file_hash(request: Request, file: UploadFile = File(...)):
+    content = await file.read()
+    file_hash = IntegrityService.compute_hash_from_bytes(content)
+    return {"filename": file.filename, "hash": file_hash, "algorithm": "sha256", "size_bytes": len(content)}
