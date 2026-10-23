@@ -1274,3 +1274,28 @@ def test_full_text_search_with_fields(client):
     assert resp.status_code == 200
     data = resp.json()
     assert data["query"] == "test"
+
+def test_config_new_fields():
+    """Yeni konfigürasyon alanlari testi."""
+    from app.config import Settings
+    s = Settings(_env_file=None, LLM_API_KEY="test")
+    assert s.MAX_TEMPLATE_COUNT == 100
+    assert s.ENABLE_NOTIFICATIONS is True
+    assert s.AUTO_BACKUP_ENABLED is False
+    assert s.AUTO_BACKUP_INTERVAL_HOURS == 24
+    assert s.SESSION_TIMEOUT_MINUTES == 30
+
+def test_integrity_compute_hash_file():
+    """IntegrityService dosya hash testi."""
+    import tempfile, os
+    from app.services.integrity_service import IntegrityService
+    tmp = tempfile.mktemp(suffix=".txt")
+    with open(tmp, "w") as f:
+        f.write("test data for hash")
+    h = IntegrityService.compute_hash(tmp)
+    assert h is not None
+    assert len(h) == 64
+    assert IntegrityService.verify_hash(tmp, h) is True
+    assert IntegrityService.verify_hash(tmp, "wrong") is False
+    os.unlink(tmp)
+    assert IntegrityService.compute_hash(tmp) is None
