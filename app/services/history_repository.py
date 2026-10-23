@@ -97,6 +97,24 @@ class HistoryRepository:
             with path.open("w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
 
+    def soft_delete(self, record_id: str) -> bool:
+        record = self.get(record_id)
+        if not record:
+            return False
+        record['deleted'] = True
+        record['deleted_at'] = datetime.utcnow().isoformat()
+        self._write(record_id, record)
+        return True
+
+    def restore_deleted(self, record_id: str) -> bool:
+        record = self.get(record_id)
+        if not record or not record.get('deleted'):
+            return False
+        record.pop('deleted', None)
+        record.pop('deleted_at', None)
+        self._write(record_id, record)
+        return True
+
     def delete(self, record_id: str) -> bool:
         path = self._path(record_id)
         with self._lock:
@@ -142,10 +160,11 @@ class HistoryRepository:
 
     def recent_records(self, count: int = 5) -> list[dict]:
         items = self._summaries()
-        return items[:count]
+        return [i for i in items if not i.get("deleted")][:count]
 
     def list_records(self, limit: int = 50, offset: int = 0, query: str | None = None, document_type: str | None = None, draft_status: str | None = None, sort: str | None = None, date_from: str | None = None, date_to: str | None = None, min_confidence: float | None = None, favorite: bool | None = None, has_notes: bool | None = None) -> dict:
         items = self._summaries()
+        items = [r for r in items if not r.get('deleted')]
         if document_type:
             items = [i for i in items if i["document_type"] == document_type]
         if draft_status:
@@ -195,6 +214,8 @@ class HistoryRepository:
                 import json as _json
                 with path.open('r', encoding='utf-8') as f:
                     data = _json.load(f)
+                if data.get('deleted'):
+                    continue
                 content = _json.dumps(data.get('result', {}), ensure_ascii=False).lower()
                 if keyword.lower() in content:
                     items.append({
@@ -210,12 +231,13 @@ class HistoryRepository:
         return items
 
     def archived_records(self, limit: int = 50) -> list[dict]:
-        items = self._summaries()
         archived = []
         for path in sorted(self.directory.glob('*.json'), reverse=True):
             try:
                 with path.open('r', encoding='utf-8') as f:
                     data = json.load(f)
+                if data.get('deleted'):
+                    continue
                 if data.get('archived', False):
                     archived.append({
                         'id': data.get('id', path.stem),
@@ -230,8 +252,13 @@ class HistoryRepository:
                 pass
         return archived
 
+    def deleted_records(self, limit: int = 50) -> list:
+        all_recs = self._load_all()
+        return [r for r in all_recs if r.get('deleted')][:limit]
+
     def stats(self) -> dict:
         items = self._summaries()
+        items = [i for i in items if not i.get("deleted")]
         total = len(items)
         if total == 0:
             return {"total": 0, "avg_confidence": 0, "avg_processing_time": 0, "by_type": {}, "by_draft_status": {}, "favorites_count": 0}
@@ -253,6 +280,7 @@ class HistoryRepository:
     def count_by_status(self) -> dict:
         """Kayıtların draft_status dağılımını döner."""
         items = self._summaries()
+        items = [i for i in items if not i.get("deleted")]
         status_counts = {}
         for item in items:
             status = item.get('draft_status', 'pending')
@@ -260,6 +288,17 @@ class HistoryRepository:
         return status_counts
 
     # ── Yardımcılar ───────────────────────────────────────
+
+    def _load_all(self) -> list[dict]:
+        records = []
+        for path in sorted(self.directory.glob("*.json"), reverse=True):
+            try:
+                with path.open("r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    records.append(data)
+            except (json.JSONDecodeError, OSError):
+                continue
+        return records
 
     def _summaries(self) -> list[dict]:
         summaries = []
@@ -283,6 +322,7 @@ class HistoryRepository:
                 "favorite": data.get("favorite", False),
                 "tags": data.get("tags", []),
                 "notes": data.get("notes", ""),
+                "deleted": data.get("deleted", False),
             })
         return summaries
 
