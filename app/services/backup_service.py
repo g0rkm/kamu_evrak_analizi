@@ -3,6 +3,7 @@ import shutil
 import zipfile
 import os
 import time
+import uuid
 from pathlib import Path
 from datetime import datetime
 
@@ -13,7 +14,8 @@ class BackupService:
         self._backup_dir.mkdir(parents=True, exist_ok=True)
 
     def create_backup(self) -> dict:
-        timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+        unique_id = uuid.uuid4().hex[:6]
+        timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S') + '_' + unique_id
         zip_name = f'backup_{timestamp}.zip'
         zip_path = self._backup_dir / zip_name
         file_count = 0
