@@ -114,6 +114,31 @@ async def analyze_batch(
     return BatchResponse(total=len(results), results=results)
 
 
+@router.post('/analyze/batch-status', tags=['Analiz'], summary='Coklu analiz durum sorgulama')
+async def batch_analysis_status(request: Request, body: dict):
+    ids = body.get('ids', [])
+    if not ids:
+        return {'results': [], 'count': 0}
+    container = request.app.state.container
+    results = []
+    for rid in ids:
+        record = container.history.get(rid)
+        if record:
+            results.append({
+                'id': rid,
+                'status': record.get('status', 'unknown'),
+                'document_type': record.get('document_type', ''),
+                'confidence_score': record.get('confidence_score', 0)
+            })
+        else:
+            results.append({'id': rid, 'status': 'not_found'})
+    return {
+        'results': results,
+        'count': len(results),
+        'completed': sum(1 for r in results if r['status'] == 'completed')
+    }
+
+
 @router.post("/compare", response_model=ComparisonResult, summary="İki evrak metnini karşılaştır")
 async def compare_documents(body: CompareRequest, service: AnalysisService = Depends(get_analysis_service)):
     return await service.compare(body.text1, body.text2)
