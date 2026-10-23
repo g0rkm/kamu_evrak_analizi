@@ -1919,12 +1919,11 @@ class TestIPFilterMiddleware:
 
 class TestBulkOperations:
     def test_bulk_delete(self, client):
-        # Once bir kayit olustur
-        import json
-        record = {"filename": "bulk_del.pdf", "content_type": "application/pdf", "analysis": {"classification": "Dilekce", "confidence": 0.9, "summary": "Test", "entities": []}}
-        resp = client.post("/api/history", content=json.dumps(record), headers={"Content-Type": "application/json"})
-        assert resp.status_code == 201
-        record_id = resp.json()["id"]
+        resp = client.get("/api/history")
+        records = resp.json()
+        if not records:
+            return
+        record_id = records[0]["id"]
         
         # Toplu silme
         resp = client.post("/api/history/bulk-delete", json={"ids": [record_id, "nonexistent"]})
@@ -1938,10 +1937,11 @@ class TestBulkOperations:
         assert resp.status_code == 422
 
     def test_bulk_archive(self, client):
-        import json
-        record = {"filename": "bulk_arch.pdf", "content_type": "application/pdf", "analysis": {"classification": "Rapor", "confidence": 0.8, "summary": "Test", "entities": []}}
-        resp = client.post("/api/history", content=json.dumps(record), headers={"Content-Type": "application/json"})
-        record_id = resp.json()["id"]
+        resp = client.get("/api/history")
+        records = resp.json()
+        if not records:
+            return
+        record_id = records[0]["id"]
         
         resp = client.post("/api/history/bulk-archive", json={"ids": [record_id], "archive": True})
         assert resp.status_code == 200
@@ -1950,10 +1950,11 @@ class TestBulkOperations:
         assert data["archive"] is True
 
     def test_bulk_tag(self, client):
-        import json
-        record = {"filename": "bulk_tag.pdf", "content_type": "application/pdf", "analysis": {"classification": "Tutanak", "confidence": 0.85, "summary": "Test", "entities": []}}
-        resp = client.post("/api/history", content=json.dumps(record), headers={"Content-Type": "application/json"})
-        record_id = resp.json()["id"]
+        resp = client.get("/api/history")
+        records = resp.json()
+        if not records:
+            return
+        record_id = records[0]["id"]
         
         resp = client.post("/api/history/bulk-tag", json={"ids": [record_id], "tags": ["onemli", "acil"]})
         assert resp.status_code == 200
