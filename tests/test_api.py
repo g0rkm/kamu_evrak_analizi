@@ -1482,3 +1482,21 @@ def test_text_compare(client):
     data = resp.json()
     assert data['similarity_score'] > 0
     assert 'common_words' in data
+
+
+def test_webhook_register(client):
+    resp = client.post('/api/webhooks/register', json={'url': 'http://example.com/hook', 'name': 'Test Hook'})
+    assert resp.status_code == 200
+    assert 'id' in resp.json()
+
+
+def test_webhook_list(client):
+    resp = client.get('/api/webhooks/list')
+    assert resp.status_code == 200
+    assert 'webhooks' in resp.json()
+
+
+def test_webhook_history(client):
+    resp = client.get('/api/webhooks/history')
+    assert resp.status_code == 200
+    assert 'history' in resp.json()

@@ -848,3 +848,23 @@ class TestTextAnalyzer:
         result = TextAnalyzer.analyze('kelime kelime kelime farkli baska')
         assert result['vocabulary_richness'] < 1.0
         assert result['unique_words'] == 3
+
+
+class TestWebhookService:
+    def test_register_and_notify(self):
+        from app.services.webhook_service import WebhookService
+        ws = WebhookService()
+        wh = ws.register('http://test.com/hook', events=['analyze'])
+        assert wh['id']
+        assert wh['active'] is True
+        count = ws.notify('analyze', {'id': 'test'})
+        assert count == 1
+        hist = ws.history()
+        assert len(hist) == 1
+
+    def test_unregister(self):
+        from app.services.webhook_service import WebhookService
+        ws = WebhookService()
+        wh = ws.register('http://test.com/hook')
+        ws.unregister(wh['id'])
+        assert len(ws.list_webhooks()) == 0
