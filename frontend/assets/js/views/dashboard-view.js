@@ -7,10 +7,11 @@ export class DashboardView {
   }
 
   async render() {
-    this._container.innerHTML = '<div class="dashboard-grid" id="dashboardGrid"><p>Yükleniyor...</p></div>';
+    this._container.innerHTML = '<div class="dashboard-grid" id="dashboardGrid"><p>Yükleniyor...</p></div><div id="systemHealthPanel" class="dashboard-section"><h3>Sistem Sağlığı</h3><div id="healthCards" class="dashboard-grid"></div></div>';
     try {
       const summary = await this._api.systemSummary();
       this._renderCards(summary);
+      await this._loadHealthData();
     } catch (err) {
       this._container.innerHTML = '<p class="error-text">Dashboard verileri yüklenemedi.</p>';
     }
@@ -34,6 +35,18 @@ export class DashboardView {
         <div class="subtitle">${c.subtitle}</div>
       </div>
     `).join('');
+  }
+
+  async _loadHealthData() {
+    try {
+      const [healthResp, storageResp] = await Promise.all([this._api.request('/health'), this._api.storageHealth()]);
+      const health = await healthResp.json();
+      const storage = await storageResp.json();
+      const panel = document.getElementById('healthCards');
+      if (panel) {
+        panel.innerHTML = '<div class="dashboard-card"><h3>Sistem</h3><div class="value">' + health.status + '</div></div><div class="dashboard-card"><h3>Disk</h3><div class="value">' + (storage.disk_usage_percent || 0) + '%</div><div class="subtitle">' + (storage.disk_free_mb || 0) + ' MB boş</div></div><div class="dashboard-card"><h3>Kayıt Sayısı</h3><div class="value">' + (storage.history_file_count || 0) + '</div></div>';
+      }
+    } catch(e) {}
   }
 
   _formatUptime(seconds) {
