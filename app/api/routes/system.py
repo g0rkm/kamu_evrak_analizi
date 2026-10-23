@@ -658,6 +658,23 @@ async def query_logs(level: str = Query('INFO'), limit: int = Query(50, ge=1, le
     return {'logs': lines[-limit:], 'total_matched': len(lines), 'level_filter': level}
 
 
+@router.get('/audit/logs', tags=['Sistem'], summary='Denetim gunlugu sorgula')
+async def query_audit_logs(request: Request, limit: int = 100, action: str = None, record_id: str = None):
+    audit = getattr(request.app.state.container, 'audit', None)
+    if not audit:
+        return {'logs': [], 'message': 'Audit logger not configured'}
+    logs = audit.get_logs(limit=limit, action=action, record_id=record_id)
+    return {'logs': logs, 'total': len(logs)}
+
+
+@router.get('/audit/stats')
+async def audit_stats(request: Request):
+    audit = getattr(request.app.state.container, 'audit', None)
+    if not audit:
+        return {}
+    return audit.stats()
+
+
 @router.get('/cors-info', tags=['Sistem'], summary='CORS yapilandirmasi')
 async def cors_info(container: ServiceContainer = Depends(get_container)):
     return {

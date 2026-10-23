@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 import time
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, Request, UploadFile
 
 from app.api.dependencies import get_analysis_service, get_container, get_storage
 from app.container import ServiceContainer
@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 @router.post("/analyze", response_model=AnalysisResponse, summary="Dosya yükleyerek analiz et")
 async def analyze_document(
+    request: Request,
     file: UploadFile = File(...),
     storage: UploadStorage = Depends(get_storage),
     service: AnalysisService = Depends(get_analysis_service),
@@ -61,6 +62,10 @@ async def analyze_document(
             result_hash = hashlib.sha256(json.dumps(result, sort_keys=True).encode()).hexdigest()
             container.llm._cache.set_dedup(content_hash, 'llm:' + content_hash)
             
+        audit = getattr(request.app.state.container, 'audit', None)
+        if audit:
+            audit.log('analyze', record_id=result.get('id', ''), details={'file_name': file.filename, 'document_type': result.get('classification', {}).get('document_type', '')})
+
         return result
     except (asyncio.TimeoutError, TimeoutError):
         logger.warning("Analiz pipeline süresi aşıldı (dosya: %s)", getattr(stored, "filename", "bilinmiyor"))
