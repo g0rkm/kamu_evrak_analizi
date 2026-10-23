@@ -1214,3 +1214,63 @@ def test_daily_stats_endpoint(client):
     assert "daily_counts" in data
     assert "period_days" in data
     assert data["period_days"] == 7
+
+def test_template_service():
+    """TemplateService temel islemleri testi."""
+    import tempfile
+    from app.services.template_service import TemplateService
+    with tempfile.TemporaryDirectory() as d:
+        svc = TemplateService(d)
+        templates = svc.list_templates()
+        assert len(templates) >= 4
+        tpl = svc.get_template("tpl_dilekce")
+        assert tpl is not None
+        assert tpl["name"] == "Dilekce"
+        new_tpl = svc.create_template("Ozel Sablon", "ozel", description="Test sablonu", fields=["alan1"])
+        assert new_tpl["id"].startswith("tpl_")
+        assert not new_tpl["builtin"]
+        deleted = svc.delete_template(new_tpl["id"])
+        assert deleted is True
+        deleted2 = svc.delete_template("tpl_dilekce")
+        assert deleted2 is False
+
+def test_template_update():
+    """TemplateService guncelleme testi."""
+    import tempfile
+    from app.services.template_service import TemplateService
+    with tempfile.TemporaryDirectory() as d:
+        svc = TemplateService(d)
+        tpl = svc.create_template("Guncelle", "test")
+        updated = svc.update_template(tpl["id"], {"description": "guncellendi"})
+        assert updated is not None
+        assert updated["description"] == "guncellendi"
+        builtin_update = svc.update_template("tpl_dilekce", {"description": "x"})
+        assert builtin_update is None
+
+def test_template_endpoints(client):
+    """Template API endpoint'leri testi."""
+    resp = client.get("/api/templates")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "templates" in data
+    assert len(data["templates"]) >= 4
+    resp2 = client.get("/api/templates/tpl_dilekce")
+    assert resp2.status_code == 200
+    assert resp2.json()["name"] == "Dilekce"
+    resp3 = client.post("/api/templates", json={"name": "Test Sablon", "document_type": "test"})
+    assert resp3.status_code == 200
+    tpl_id = resp3.json()["id"]
+    resp4 = client.delete(f"/api/templates/{tpl_id}")
+    assert resp4.status_code == 200
+
+def test_template_not_found(client):
+    """Olmayan sablon testi."""
+    resp = client.get("/api/templates/nonexistent")
+    assert resp.status_code == 404
+
+def test_full_text_search_with_fields(client):
+    """Full-text arama belirli alanlarla testi."""
+    resp = client.post("/api/history/search", json={"query": "test", "fields": ["summary"], "limit": 5})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["query"] == "test"
