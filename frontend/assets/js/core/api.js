@@ -286,4 +286,25 @@ export class ApiClient {
     async environmentInfo() {
         return this.request('/environment');
     }
+
+    async auditLogs(action = '') {
+        const params = action ? '?action=' + action : '';
+        return this.request('/audit/logs' + params);
+    }
+
+    async auditStats() {
+        return this.request('/audit/stats');
+    }
+
+    async storageHealth() {
+        return this.request('/health/storage');
+    }
+
+    async rateLimitStatus() {
+        return this.request('/rate-limit-status');
+    }
+
+    async securityHeaders() {
+        return this.request('/security-headers');
+    }
 }
