@@ -1564,3 +1564,26 @@ def test_list_favorites(client):
     resp = client.get('/api/history/favorites')
     assert resp.status_code == 200
     assert 'records' in resp.json()
+
+
+def test_batch_analysis_status(client):
+    resp = client.post('/api/analyze/batch-status', json={'ids': ['nonexistent1', 'nonexistent2']})
+    assert resp.status_code == 200
+    d = resp.json()
+    assert d['count'] == 2
+    assert all(r['status'] == 'not_found' for r in d['results'])
+
+
+def test_advanced_search(client):
+    resp = client.post('/api/history/advanced-search', json={'limit': 10})
+    assert resp.status_code == 200
+    assert 'records' in resp.json()
+    assert 'total_matches' in resp.json()
+
+
+def test_advanced_search_with_filters(client):
+    client.post('/api/history/import', json={'records': [{'id': 'as1', 'file_name': 'test.pdf', 'status': 'completed', 'document_type': 'Dilekce', 'confidence_score': 0.95}]})
+    resp = client.post('/api/history/advanced-search', json={'document_type': 'Dilekce', 'min_confidence': 0.9})
+    assert resp.status_code == 200
+    d = resp.json()
+    assert d['total_matches'] >= 1
