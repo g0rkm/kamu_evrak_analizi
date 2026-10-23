@@ -78,13 +78,13 @@ class SystemStatus {
     }
 }
 
-/** Hash tabanlı yönlendirme: #/analiz, #/analiz/<kayıt>, #/gecmis, #/karsilastir */
+/** Hash tabanlı yönlendirme: #/dashboard, #/analiz, #/gecmis, #/karsilastir vb. */
 class App {
     constructor() {
         this.api = new ApiClient();
         this.toaster = new Toaster(document.getElementById('toaster'));
         this.root = document.getElementById('viewRoot');
-        this.navLinks = [...document.querySelectorAll('.main-nav a[data-route]')];
+        this.navLinks = [...document.querySelectorAll('.main-nav a[data-route], .main-nav a[data-view]')];
     }
 
     async start() {
@@ -116,6 +116,7 @@ class App {
             navigate: (hash) => this.navigate(hash),
         };
         this.views = {
+            dashboard: new DashboardView(context),
             analiz: new AnalyzeView(context),
             gecmis: new HistoryView(context),
             karsilastir: new CompareView(context),
@@ -127,6 +128,9 @@ class App {
         };
 
         window.addEventListener('hashchange', () => this.route());
+        if (!location.hash) {
+            location.hash = '#dashboard';
+        }
         this.route();
 
         // Klavye kısayolları
@@ -136,13 +140,14 @@ class App {
             if (e.ctrlKey || e.metaKey || e.altKey) return;
 
             switch (e.key) {
+                case '0': e.preventDefault(); this.navigate('#dashboard'); break;
                 case '1': e.preventDefault(); this.navigate('#/analiz'); break;
                 case '2': e.preventDefault(); this.navigate('#/gecmis'); break;
                 case '3': e.preventDefault(); this.navigate('#/karsilastir'); break;
                 case '4': e.preventDefault(); this.navigate('#/trends'); break;
                 case '?':
                     e.preventDefault();
-                    alert('Klavye kısayolları:\n\n1 — Analiz sayfası\n2 — Geçmiş sayfası\n3 — Karşılaştır sayfası\n4 — Trendler sayfası\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
+                    alert('Klavye kısayolları:\n\n0 — Kontrol Paneli\n1 — Analiz sayfası\n2 — Geçmiş sayfası\n3 — Karşılaştır sayfası\n4 — Trendler sayfası\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
                     break;
             }
         });
@@ -164,8 +169,9 @@ class App {
     }
 
     route() {
-        const [name, id] = location.hash.replace(/^#\/?/, '').split('/');
-        const routeName = this.views[name] ? name : 'analiz';
+        const rawHash = location.hash.replace(/^#\/?/, '');
+        const [name, id] = rawHash.split('/');
+        const routeName = this.views[name] ? name : 'dashboard';
         const view = this.views[routeName];
 
         if (this.currentView !== view) {
@@ -174,7 +180,8 @@ class App {
             window.scrollTo({ top: 0 });
         }
         this.navLinks.forEach((link) => {
-            if (link.dataset.route === routeName) link.setAttribute('aria-current', 'page');
+            const linkRoute = link.dataset.route || link.dataset.view;
+            if (linkRoute === routeName) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
         });
         document.title = `${view.title || routeName} · Kamu Evrak Analizi`;
