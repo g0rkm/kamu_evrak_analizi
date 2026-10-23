@@ -930,3 +930,31 @@ async def cleanup_backups(request: Request, keep: int = 5, container: ServiceCon
         return {'deleted': 0}
     deleted = backup.delete_old_backups(keep_count=keep)
     return {'deleted': deleted}
+
+
+@router.post('/webhooks/register', tags=['Webhook'], summary='Webhook kaydet')
+async def register_webhook(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    wh = getattr(container, 'webhooks', None)
+    if not wh:
+        return {'error': 'Webhook service not configured'}
+    url = body.get('url', '')
+    if not url:
+        return JSONResponse(status_code=400, content={'detail': 'url gerekli'})
+    result = wh.register(url=url, events=body.get('events'), name=body.get('name', ''))
+    return result
+
+
+@router.get('/webhooks/list', tags=['Webhook'])
+async def list_webhooks(request: Request, container: ServiceContainer = Depends(get_container)):
+    wh = getattr(container, 'webhooks', None)
+    if not wh:
+        return {'webhooks': []}
+    return {'webhooks': wh.list_webhooks()}
+
+
+@router.get('/webhooks/history', tags=['Webhook'])
+async def webhook_history(request: Request, limit: int = 50, container: ServiceContainer = Depends(get_container)):
+    wh = getattr(container, 'webhooks', None)
+    if not wh:
+        return {'history': []}
+    return {'history': wh.history(limit=limit)}
