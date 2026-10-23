@@ -1587,3 +1587,25 @@ def test_advanced_search_with_filters(client):
     assert resp.status_code == 200
     d = resp.json()
     assert d['total_matches'] >= 1
+
+
+def test_record_change_history(client):
+    client.post('/api/history/import', json={'records': [{'id': 'rch1', 'file_name': 'a.pdf', 'status': 'ok'}]})
+    resp = client.get('/api/history/rch1/history')
+    assert resp.status_code == 200
+    assert 'changes' in resp.json()
+
+
+def test_record_report(client):
+    client.post('/api/history/import', json={'records': [{'id': 'rr1', 'file_name': 'b.pdf', 'status': 'completed', 'document_type': 'Dilekce'}]})
+    resp = client.get('/api/history/rr1/report')
+    assert resp.status_code == 200
+    d = resp.json()
+    assert d['id'] == 'rr1'
+    assert 'document_type' in d
+
+
+def test_error_metrics(client):
+    resp = client.get('/api/metrics/errors')
+    assert resp.status_code == 200
+    assert 'total_errors' in resp.json()
