@@ -907,3 +907,42 @@ def test_ip_config_defaults():
     s = Settings(_env_file=None, LLM_API_KEY='t')
     assert s.IP_WHITELIST == ''
     assert s.IP_BLACKLIST == ''
+
+
+def test_records_by_priority(client, sample_record):
+    """Oncelige gore filtreleme testi."""
+    record_id = sample_record["id"]
+    # Oncelik ata
+    resp = client.patch(f"/history/{record_id}/priority", json={"priority": "high"})
+    assert resp.status_code == 200
+    # Filtrele
+    resp = client.get("/history/by-priority/high")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["priority"] == "high"
+    assert data["count"] >= 1
+    assert any(r["id"] == record_id for r in data["records"])
+
+def test_records_by_priority_invalid(client):
+    """Gecersiz oncelik filtrelemesi."""
+    resp = client.get("/history/by-priority/critical")
+    assert resp.status_code == 400
+
+def test_bulk_update_priority(client, sample_record):
+    """Toplu oncelik guncelleme testi."""
+    record_id = sample_record["id"]
+    resp = client.post("/history/bulk-priority", json={"ids": [record_id], "priority": "urgent"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["updated"] == 1
+    assert data["priority"] == "urgent"
+
+def test_bulk_update_priority_invalid(client):
+    """Gecersiz oncelik toplu guncelleme."""
+    resp = client.post("/history/bulk-priority", json={"ids": ["fake"], "priority": "xxx"})
+    assert resp.status_code == 400
+
+def test_bulk_update_priority_empty_ids(client):
+    """Bos id listesiyle toplu guncelleme."""
+    resp = client.post("/history/bulk-priority", json={"ids": [], "priority": "high"})
+    assert resp.status_code == 400
