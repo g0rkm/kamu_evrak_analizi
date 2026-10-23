@@ -754,6 +754,6 @@ class TestAuditLogger:
             al.log('analyze')
             al.log('delete')
             s = al.stats()
-            assert s['total_entries'] == 3
-            assert s['by_action']['analyze'] == 2
-            assert s['by_action']['delete'] == 1
+            assert s['total_logs'] == 3
+            assert s['action_counts']['analyze'] == 2
+            assert s['action_counts']['delete'] == 1
