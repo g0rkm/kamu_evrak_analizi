@@ -73,6 +73,12 @@ class Settings(BaseSettings):
     IP_WHITELIST: str = ""  # virgül ile ayrılmış izin verilen IP listesi, boş ise tüm IP'ler
     IP_BLACKLIST: str = ""  # virgül ile ayrılmış engellenen IP listesi
 
+    # Yeni eklenen alanlar
+    MAX_TEMPLATE_COUNT: int = 100
+    ENABLE_NOTIFICATIONS: bool = True
+    AUTO_BACKUP_ENABLED: bool = False
+    AUTO_BACKUP_INTERVAL_HOURS: int = 24
+
     @field_validator("LOG_LEVEL")
     @classmethod
     def _validate_log_level(cls, v: str) -> str:
@@ -179,7 +185,6 @@ class Settings(BaseSettings):
         v = v.strip()
         if not v:
             return ""
-        # Basitçe virgülle ayrılmış yapı kontrolü veya temizleme yapılabilir
         parts = [p.strip() for p in v.split(",") if p.strip()]
         return ",".join(parts)
 

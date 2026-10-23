@@ -14,11 +14,13 @@ services:
       - ADMIN_TOKEN=
       - ANALYSIS_TIMEOUT=60
       - ALLOWED_FILE_TYPES=pdf,png,jpg,jpeg,tiff,bmp
-      - SESSION_TIMEOUT_MINUTES=30
+      - SESSION_TIMEOUT_MINUTES=${SESSION_TIMEOUT_MINUTES:-30}
       - MAX_FILE_SIZE_MB=50
       - REQUEST_BODY_LIMIT_MB=100
       - CORS_ORIGINS=*
       - LOG_LEVEL=INFO
+      - ENABLE_NOTIFICATIONS=${ENABLE_NOTIFICATIONS:-true}
+      - AUTO_BACKUP_ENABLED=${AUTO_BACKUP_ENABLED:-false}
     volumes:
       - history_data:/app/data/history
       - upload_data:/app/uploads
