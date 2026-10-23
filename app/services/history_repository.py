@@ -146,6 +146,30 @@ class HistoryRepository:
             imported += 1
         return imported
 
+    def record_changelog(self, record_id: str) -> list:
+        """Kaydin degisiklik gecmisini dondurur."""
+        record = self.get(record_id)
+        if not record:
+            return []
+        changelog = record.get("changelog", [])
+        return sorted(changelog, key=lambda x: x.get("timestamp", ""), reverse=True)
+
+    def add_changelog_entry(self, record_id: str, action: str, details: dict = None):
+        """Kayda degisiklik kaydı ekler."""
+        record = self.get(record_id)
+        if not record:
+            return False
+        if "changelog" not in record:
+            record["changelog"] = []
+        entry = {
+            "action": action,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "details": details or {}
+        }
+        record["changelog"].append(entry)
+        self._write(record_id, record)
+        return True
+
     # ── Okuma ─────────────────────────────────────────────
 
     def get(self, record_id: str) -> dict | None:
