@@ -12,6 +12,7 @@ import { PiiView } from './views/pii-view.js';
 import { TimelineView } from './views/timeline-view.js';
 import { SettingsView } from './views/settings-view.js';
 import { LoginView } from './views/login-view.js';
+import { ProfileView } from './views/profile-view.js';
 
 /** Üst bardaki sistem durumu göstergesi; sağlık uç noktasını periyodik olarak sorgular. */
 class SystemStatus {
@@ -127,6 +128,7 @@ class App {
             timeline: new TimelineView(context),
             settings: new SettingsView(context),
             login: new LoginView(context),
+            profile: new ProfileView(context.toaster ? this.root : this.root),
         };
 
         window.addEventListener('hashchange', () => this.route());
