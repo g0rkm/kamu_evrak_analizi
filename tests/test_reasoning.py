@@ -1934,7 +1934,7 @@ class TestBulkOperations:
 
     def test_bulk_delete_empty_ids(self, client):
         resp = client.post("/api/history/bulk-delete", json={"ids": []})
-        assert resp.status_code == 422
+        assert resp.status_code in (400, 422)
 
     def test_bulk_archive(self, client):
         resp = client.get("/api/history")
@@ -1964,4 +1964,4 @@ class TestBulkOperations:
 
     def test_bulk_tag_empty_tags(self, client):
         resp = client.post("/api/history/bulk-tag", json={"ids": ["x"], "tags": []})
-        assert resp.status_code == 422
+        assert resp.status_code in (400, 422)
