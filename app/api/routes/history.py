@@ -78,27 +78,26 @@ async def record_count(request: Request, container: ServiceContainer = Depends(g
     return {'total': total, 'active': active, 'deleted': deleted, 'archived': archived}
 
 
-@router.get("/history/search", summary="Gelişmiş geçmiş arama")
-async def search_history(
-    q: str = Query("", min_length=1),
-    document_type: str = Query(None),
-    date_from: str = Query(None),
-    date_to: str = Query(None),
-    min_confidence: float = Query(None, ge=0, le=1),
-    limit: int = Query(20, ge=1, le=100),
-    offset: int = Query(0, ge=0),
-    container: ServiceContainer = Depends(get_container),
-):
-    results = container.history.list_records(
-        limit=limit,
-        offset=offset,
-        query=q,
-        document_type=document_type,
-        date_from=date_from,
-        date_to=date_to,
-        min_confidence=min_confidence,
-    )
-    return results
+@router.post("/history/search", tags=["Gecmis"])
+async def full_text_search(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    query = body.get("query", "").lower().strip()
+    if not query:
+        raise InvalidInputError("Arama sorgusu bos olamaz")
+    fields = body.get("fields", ["summary", "source_name", "notes", "document_type"])
+    limit = body.get("limit", 50)
+    records = container.history._load_all()
+    results = []
+    for r in records:
+        if r.get("deleted"):
+            continue
+        for field in fields:
+            val = r.get(field, "")
+            if isinstance(val, str) and query in val.lower():
+                results.append(r)
+                break
+        if len(results) >= limit:
+            break
+    return {"results": results, "count": len(results), "query": query}
 
 
 @router.get('/history/search-content', summary='İçerik bazlı arama')
@@ -133,6 +132,22 @@ async def advanced_search(request: Request, body: dict, container: ServiceContai
 @router.get("/history/stats", summary="Analiz istatistikleri")
 async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
+
+
+@router.get("/history/stats/daily", tags=["Gecmis"])
+async def daily_stats(request: Request, days: int = 30, container: ServiceContainer = Depends(get_container)):
+    from datetime import datetime, timedelta, timezone
+    records = container.history._load_all()
+    active = [r for r in records if not r.get("deleted")]
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    daily = {}
+    for r in active:
+        created = r.get("created_at", "")
+        if created >= cutoff:
+            day = created[:10]
+            daily[day] = daily.get(day, 0) + 1
+    sorted_days = sorted(daily.items())
+    return {"daily_counts": [{"date": d, "count": c} for d, c in sorted_days], "total_days": len(sorted_days), "period_days": days}
 
 
 @router.get('/history/processing-time-stats', summary='İşlem süresi istatistikleri')
