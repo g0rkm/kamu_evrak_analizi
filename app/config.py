@@ -49,6 +49,7 @@ class Settings(BaseSettings):
     SESSION_TIMEOUT_MINUTES: int = 30
     MAX_TAGS_PER_RECORD: int = 20
     MAX_NOTE_LENGTH: int = 2000
+    CACHE_TTL: int = 300
 
     # RAG
     RAG_INDEX_DIR: str = "app/data/rag"
