@@ -912,3 +912,12 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .notif-actions { margin-bottom: 1rem; }
 .notif-item.read { opacity: 0.6; }
 .notif-item.unread { font-weight: 500; }
+.templates-wrapper{padding:1rem}
+.templates-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.template-card{background:var(--card-bg,#fff);border:1px solid var(--border,#e0e0e0);border-radius:8px;padding:1rem}
+.template-card h4{margin:0 0 .3rem}
+.template-type{font-size:.85rem;color:var(--primary,#2563eb);margin:0}
+.template-desc{font-size:.85rem;color:var(--text-secondary,#666);margin:.3rem 0}
+.template-form{background:var(--card-bg,#fff);border:1px solid var(--border,#e0e0e0);border-radius:8px;padding:1rem;margin-bottom:1rem;display:flex;flex-wrap:wrap;gap:.5rem}
+.btn-sm{padding:2px 8px;font-size:.8rem}
+.btn-danger{background:#dc2626;color:#fff;border:none;border-radius:4px;cursor:pointer}
