@@ -434,9 +434,9 @@ def test_json_formatter_output():
 
 
 def test_app_version():
-    """Uygulama versiyonu 3.7.0 olmalı."""
+    """Uygulama versiyonu 3.8.0 olmalı."""
     from app import __version__
-    assert __version__ == "3.7.0"
+    assert __version__ == "3.8.0"
 
 
 def test_settings_has_all_new_fields():
@@ -1068,7 +1068,7 @@ def test_changelog_endpoint(client):
 def test_version_350():
     """Versiyon 3.5.0 veya 3.7.0 testi."""
     from app import __version__
-    assert __version__ == "3.7.0"
+    assert __version__ == "3.8.0"
 
 def test_dashboard_summary_endpoint(client):
     """Dashboard ozet endpoint testi."""
@@ -1399,7 +1399,7 @@ def test_auth_list_users():
 def test_version_360():
     """Versiyon 3.6.0 veya 3.7.0 testi."""
     from app import __version__
-    assert __version__ == "3.7.0"
+    assert __version__ == "3.8.0"
 
 def test_scheduler_service():
     """SchedulerService temel islemleri testi."""
@@ -1534,7 +1534,7 @@ def test_migration_schema_report():
 
 def test_version_370():
     from app import __version__
-    assert __version__ == '3.7.0'
+    assert __version__ == '3.8.0'
 
 def test_config_report_endpoint(client):
     resp = client.get('/api/system/config-report')
