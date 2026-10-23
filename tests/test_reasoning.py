@@ -1191,3 +1191,26 @@ def test_export_csv_with_data():
     assert len(lines) == 2
     assert "doc.pdf" in lines[1]
     assert "Evet" in lines[1]
+
+def test_full_text_search_endpoint(client):
+    """Full-text arama endpoint testi."""
+    resp = client.post("/api/history/search", json={"query": "test", "limit": 10})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "results" in data
+    assert "query" in data
+    assert data["query"] == "test"
+
+def test_full_text_search_empty_query(client):
+    """Bos arama sorgusu testi."""
+    resp = client.post("/api/history/search", json={"query": ""})
+    assert resp.status_code == 400
+
+def test_daily_stats_endpoint(client):
+    """Gunluk istatistik endpoint testi."""
+    resp = client.get("/api/history/stats/daily?days=7")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "daily_counts" in data
+    assert "period_days" in data
+    assert data["period_days"] == 7

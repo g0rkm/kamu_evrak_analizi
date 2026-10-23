@@ -160,12 +160,7 @@ export class ApiClient {
         return this.request('/stats/requests');
     }
 
-    exportCsv() {
-        return fetch(`${this.baseUrl}/history/export-csv`).then(r => {
-            if (!r.ok) throw new Error('CSV indirilemedi.');
-            return r.blob();
-        });
-    }
+    exportCsv() { return this.request('/history/export/csv'); }
 
     configExportData() {
         return this.request('/config/export');
@@ -408,4 +403,9 @@ export class ApiClient {
     async recordChangelog(recordId) { return this.request(`/history/${recordId}/changelog`); }
     async recordsByPriority(priority) { return this.request(`/history/by-priority/${priority}`); }
     async bulkPriority(ids, priority) { return this.request('/history/bulk-priority', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, priority }) }); }
+
+    async fullTextSearch(query, fields, limit) { return this.request('/history/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query, fields, limit }) }); }
+    async dailyStats(days = 30) { return this.request(`/history/stats/daily?days=${days}`); }
+    async exportJsonFile() { return this.request('/history/export/json-file'); }
+    async exportReport() { return this.request('/history/export/report'); }
 }
