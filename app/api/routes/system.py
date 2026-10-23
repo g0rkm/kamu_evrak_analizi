@@ -666,3 +666,15 @@ async def cors_info(container: ServiceContainer = Depends(get_container)):
         'allowed_methods': ['GET', 'POST', 'PATCH', 'DELETE'],
         'allowed_headers': ['Content-Type']
     }
+
+
+@router.get('/rate-limit-status', tags=['Sistem'], summary='Rate limit durumu')
+async def rate_limit_status(request: Request, container: ServiceContainer = Depends(get_container)):
+    client_ip = request.client.host if request.client else 'unknown'
+    settings = container.settings
+    return {
+        'client_ip': client_ip,
+        'max_requests': settings.RATE_LIMIT_REQUESTS,
+        'window_seconds': settings.RATE_LIMIT_WINDOW,
+        'limit_per_minute': round(settings.RATE_LIMIT_REQUESTS / settings.RATE_LIMIT_WINDOW * 60, 1)
+    }

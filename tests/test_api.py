@@ -1228,3 +1228,19 @@ def test_sanitize_text(client):
 def test_archive_record_not_found(client):
     response = client.post('/api/history/nonexistent/archive', json={})
     assert response.status_code == 404
+
+
+def test_rate_limit_status(client):
+    response = client.get('/api/rate-limit-status')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'max_requests' in data
+    assert 'window_seconds' in data
+
+
+def test_archived_records(client):
+    response = client.get('/api/history/archived')
+    assert response.status_code == 200
+    data = response.json()
+    assert 'records' in data
+    assert 'count' in data
