@@ -1455,3 +1455,57 @@ def test_scheduler_task_removal():
     assert svc.remove_task("temp") is True
     assert svc.remove_task("nonexist") is False
     assert len(svc.list_tasks()) == 0
+
+
+def test_migration_service():
+    """MigrationService temel islemleri testi."""
+    import tempfile
+    from app.services.migration_service import MigrationService
+    with tempfile.TemporaryDirectory() as d:
+        svc = MigrationService(d)
+        assert svc.get_current_version() == 1
+        old_record = {"id": "r1", "created_at": "2024-01-01"}
+        migrated = svc.migrate_record(old_record)
+        assert migrated["priority"] == "normal"
+        assert migrated["_schema_version"] == 2
+        assert "tags" in migrated
+        assert "changelog" in migrated
+
+def test_migration_validate():
+    """MigrationService dogrulama testi."""
+    import tempfile
+    from app.services.migration_service import MigrationService
+    with tempfile.TemporaryDirectory() as d:
+        svc = MigrationService(d)
+        valid = {"id": "r1", "created_at": "2024-01-01"}
+        result = svc.validate_record(valid)
+        assert result["valid"] is True
+        invalid = {"summary": "no id"}
+        result2 = svc.validate_record(invalid)
+        assert result2["valid"] is False
+
+def test_migration_all():
+    """MigrationService toplu migrasyon testi."""
+    import tempfile
+    from app.services.migration_service import MigrationService
+    with tempfile.TemporaryDirectory() as d:
+        svc = MigrationService(d)
+        records = [
+            {"id": "r1", "created_at": "2024-01-01"},
+            {"id": "r2", "created_at": "2024-01-02", "_schema_version": 2},
+        ]
+        result = svc.migrate_all(records)
+        assert result["migrated"] == 1
+        assert result["errors"] == 0
+
+def test_migration_status_endpoint(client):
+    """Migration status endpoint testi."""
+    resp = client.get("/api/migration/status")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "current_schema_version" in data or "error" in data
+
+def test_migration_validate_endpoint(client):
+    """Migration validate endpoint testi."""
+    resp = client.post("/api/migration/validate", json={})
+    assert resp.status_code == 200
