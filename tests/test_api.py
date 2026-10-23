@@ -950,11 +950,11 @@ def test_config_validate_endpoint(client):
 
 
 def test_search_history(client):
-    response = client.get('/api/history/search', params={'q': 'test'})
+    response = client.post('/api/history/search', json={'query': 'test'})
     assert response.status_code == 200
     data = response.json()
-    assert 'total' in data
-    assert 'items' in data
+    assert 'results' in data
+    assert 'query' in data
 
 
 def test_history_sort_by_name(client):
