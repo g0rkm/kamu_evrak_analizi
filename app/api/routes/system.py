@@ -1029,3 +1029,32 @@ async def webhook_history(request: Request, limit: int = 50, container: ServiceC
     if not wh:
         return {'history': []}
     return {'history': wh.history(limit=limit)}
+
+
+@router.post('/maintenance/cleanup-deleted', tags=['Bakim'], summary='Silinen kayitlari kalici olarak temizle')
+async def cleanup_deleted(request: Request, days: int = 30, container: ServiceContainer = Depends(get_container), admin: bool = Depends(verify_admin)):
+    from datetime import datetime, timedelta
+    records = container.history._load_all()
+    cutoff = (datetime.utcnow() - timedelta(days=days)).isoformat()
+    cleaned = 0
+    for r in records:
+        if r.get('deleted') and r.get('deleted_at', '') < cutoff:
+            rid = r.get('id')
+            if rid:
+                path = container.history.directory / f'{rid}.json'
+                if path.exists():
+                    path.unlink()
+                    cleaned += 1
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('cleanup_deleted', details={'cleaned': cleaned, 'older_than_days': days})
+    return {'cleaned': cleaned, 'older_than_days': days}
+
+
+@router.post('/maintenance/cleanup-audit', tags=['Bakim'], summary='Eski audit loglarini temizle')
+async def cleanup_audit_logs(request: Request, days: int = 90, container: ServiceContainer = Depends(get_container), admin: bool = Depends(verify_admin)):
+    audit = getattr(container, 'audit', None)
+    if not audit:
+        return {'removed': 0}
+    removed = audit.clear_old_logs(days=days)
+    return {'removed': removed, 'older_than_days': days}
