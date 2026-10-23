@@ -470,6 +470,25 @@ async def metrics_summary():
     }
 
 
+@router.get('/metrics/endpoints', tags=['Metrikler'], summary='Endpoint bazli metrikler')
+async def endpoint_metrics(request: Request, container: ServiceContainer = Depends(get_container)):
+    from app.core.metrics import metrics
+    snapshot = metrics.snapshot()
+    top = snapshot.get('top_endpoints', {})
+    result = []
+    for ep, count in top.items():
+        result.append({
+            'endpoint': ep,
+            'request_count': count,
+            'percentage': round(count / max(snapshot['total_requests'], 1) * 100, 1)
+        })
+    return {
+        'endpoints': result,
+        'total_requests': snapshot['total_requests'],
+        'avg_response_time_ms': snapshot['avg_response_time_ms']
+    }
+
+
 @router.get('/metrics/status-codes', tags=['Sistem'], summary='HTTP durum kodu dagilimi')
 async def status_codes_distribution():
     from app.core.metrics import metrics
