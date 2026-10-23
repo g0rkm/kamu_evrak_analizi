@@ -11,6 +11,10 @@ from app.core.exceptions import NotFoundError
 from app.models.api import HistoryPage, HistoryStats
 from app.models.review import ReviewState, ReviewUpdate
 from app.services.history_repository import HistoryRepository
+from pydantic import BaseModel
+
+class BulkIdsBody(BaseModel):
+    ids: list[str]
 
 router = APIRouter(tags=["geçmiş"])
 
@@ -295,6 +299,29 @@ async def bulk_delete_records(request: Request, body: dict, history: HistoryRepo
     if audit:
         audit.log('bulk_delete', details={'count': len(body.get('ids', []))})
     return {"deleted": deleted, "requested": len(ids)}
+
+
+@router.post('/history/bulk-archive')
+async def bulk_archive(request: Request, body: BulkIdsBody, container: ServiceContainer = Depends(get_container)):
+    repo = container.history
+    archived = 0
+    for rid in body.ids:
+        record = repo.get(rid)
+        if record and not record.get('archived'):
+            record['archived'] = True
+            repo._save(rid, record)
+            archived += 1
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('bulk_archive', details={'count': archived})
+    return {'archived': archived}
+
+
+@router.post('/history/bulk-export')
+async def bulk_export(request: Request, body: BulkIdsBody, container: ServiceContainer = Depends(get_container)):
+    records = [container.history.get(rid) for rid in body.ids]
+    records = [r for r in records if r]
+    return {'records': records, 'count': len(records)}
 
 
 @router.patch('/history/bulk-tags', summary='Toplu etiket guncelleme')
