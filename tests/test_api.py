@@ -1544,3 +1544,23 @@ def test_record_count(client):
     d = resp.json()
     assert 'total' in d
     assert 'active' in d
+
+
+def test_detect_text_type(client):
+    resp = client.post('/api/text/detect-type', json={'text': 'Sayin Baskanligina, basvurumu rica ederim'})
+    assert resp.status_code == 200
+    d = resp.json()
+    assert d['detected_type'] == 'dilekce'
+    assert d['confidence'] > 0
+
+
+def test_tag_statistics(client):
+    resp = client.get('/api/history/tag-stats')
+    assert resp.status_code == 200
+    assert 'tags' in resp.json()
+
+
+def test_list_favorites(client):
+    resp = client.get('/api/history/favorites')
+    assert resp.status_code == 200
+    assert 'records' in resp.json()
