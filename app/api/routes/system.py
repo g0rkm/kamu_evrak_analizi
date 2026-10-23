@@ -112,6 +112,61 @@ async def health_check(container: ServiceContainer = Depends(get_container)):
     return data
 
 
+@router.get('/health/comprehensive', tags=['Saglik'], summary='Kapsamli saglik kontrolu')
+async def comprehensive_health(request: Request, container: ServiceContainer = Depends(get_container)):
+    import time as time_mod
+    from app.core.metrics import metrics
+    uptime = time_mod.time() - getattr(request.app.state, 'startup_time', time_mod.time())
+    snapshot = metrics.snapshot()
+    health = metrics.health_summary()
+    audit = getattr(container, 'audit', None)
+    audit_ok = audit is not None
+    backup = getattr(container, 'backup', None)
+    backup_ok = backup is not None
+    return {
+        'status': health['status'],
+        'uptime_seconds': round(uptime, 1),
+        'metrics': {
+            'total_requests': snapshot['total_requests'],
+            'error_rate': snapshot['error_rate'],
+            'avg_response_time_ms': snapshot['avg_response_time_ms']
+        },
+        'services': {
+            'llm': container.llm is not None,
+            'audit_logger': audit_ok,
+            'backup_service': backup_ok,
+            'rag_available': hasattr(container, 'rag')
+        },
+        'version': container.settings.ENVIRONMENT
+    }
+
+
+@router.get('/system/capabilities', tags=['Sistem'], summary='Sistem yetenekleri')
+async def system_capabilities(request: Request, container: ServiceContainer = Depends(get_container)):
+    return {
+        'features': {
+            'file_analysis': True,
+            'pii_detection': True,
+            'audit_logging': getattr(container, 'audit', None) is not None,
+            'backup': getattr(container, 'backup', None) is not None,
+            'rate_limiting': True,
+            'soft_delete': True,
+            'bulk_operations': True,
+            'csv_export': True,
+            'json_export': True,
+            'timeline_view': True,
+            'duplicate_detection': True,
+            'content_search': True
+        },
+        'limits': {
+            'max_file_size_mb': container.settings.MAX_FILE_SIZE_MB,
+            'max_tags_per_record': container.settings.MAX_TAGS_PER_RECORD,
+            'max_note_length': container.settings.MAX_NOTE_LENGTH,
+            'rate_limit': f'{container.settings.RATE_LIMIT_REQUESTS}/{container.settings.RATE_LIMIT_WINDOW}s'
+        }
+    }
+
+
 @router.get('/health/dependencies', tags=['Sistem'], summary='Bagimliliklarin durumu')
 async def check_dependencies(container: ServiceContainer = Depends(get_container)):
     import shutil
