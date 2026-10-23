@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     KEEP_UPLOADS: bool = False
     MAX_FILE_SIZE_MB: int = 50
+    REQUEST_BODY_LIMIT_MB: int = 100
     MIN_TEXT_CHARS: int = 20
     MAX_TEXT_CHARS: int = 100_000
     MAX_BATCH_FILES: int = 10
@@ -110,6 +111,13 @@ class Settings(BaseSettings):
     def _validate_max_file_size(cls, v: int) -> int:
         if not (1 <= v <= 500):
             raise ValueError("MAX_FILE_SIZE_MB 1 ile 500 arasında olmalıdır.")
+        return v
+
+    @field_validator("REQUEST_BODY_LIMIT_MB")
+    @classmethod
+    def _validate_request_body_limit(cls, v: int) -> int:
+        if not (1 <= v <= 1000):
+            raise ValueError("REQUEST_BODY_LIMIT_MB 1 ile 1000 arasında olmalıdır.")
         return v
 
     @field_validator("MAX_TAGS_PER_RECORD")

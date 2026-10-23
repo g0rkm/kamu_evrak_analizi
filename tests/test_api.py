@@ -668,7 +668,7 @@ def test_api_version_header(client):
     """Her API yanıtı X-API-Version header'ı içermeli."""
     response = client.get("/api/health")
     assert "X-API-Version" in response.headers
-    assert response.headers["X-API-Version"] == "3.1.0"
+    assert response.headers["X-API-Version"] == "3.2.0"
 
 
 def test_admin_endpoint_without_token(client):
@@ -921,7 +921,7 @@ def test_version_endpoint(client):
     response = client.get('/api/version')
     assert response.status_code == 200
     data = response.json()
-    assert data['version'] == '3.1.0'
+    assert data['version'] == '3.2.0'
     assert data['api'] == 'v1'
 
 
@@ -1043,7 +1043,7 @@ def test_system_summary(client):
     response = client.get('/api/stats/summary')
     assert response.status_code == 200
     data = response.json()
-    assert data['version'] == '3.1.0'
+    assert data['version'] == '3.2.0'
     assert 'total_analyses' in data
     assert 'error_rate' in data
 
@@ -1299,3 +1299,17 @@ def test_audit_logs_with_filter(client):
     assert resp.status_code == 200
     data = resp.json()
     assert data['logs'] == [] or isinstance(data['logs'], list)
+
+
+def test_storage_health_endpoint(client):
+    resp = client.get('/api/health/storage')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'disk_free_mb' in data
+    assert 'status' in data
+
+
+def test_version_is_3_2_0(client):
+    resp = client.get('/api/version')
+    assert resp.status_code == 200
+    assert resp.json()['version'] == '3.2.0'
