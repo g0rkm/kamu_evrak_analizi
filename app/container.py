@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from app.config import Settings
 from app.services.analysis_service import AnalysisService
@@ -25,6 +26,7 @@ class ServiceContainer:
     storage: UploadStorage
     analysis: AnalysisService
     jobs: JobManager
+    integrity: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:
