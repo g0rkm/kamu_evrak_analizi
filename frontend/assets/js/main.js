@@ -16,6 +16,7 @@ import { ProfileView } from './views/profile-view.js';
 import { SearchView } from './views/search-view.js';
 import { NotificationsView } from './views/notifications-view.js';
 import { TemplatesView } from './views/templates-view.js';
+import { ExportView } from './views/export-view.js';
 
 /** Üst bardaki sistem durumu göstergesi; sağlık uç noktasını periyodik olarak sorgular. */
 class SystemStatus {
@@ -135,6 +136,7 @@ class App {
             search: new SearchView(context),
             notifications: new NotificationsView(context),
             templates: new TemplatesView(context),
+            export: new ExportView(context),
         };
 
         window.addEventListener('hashchange', () => this.route());
