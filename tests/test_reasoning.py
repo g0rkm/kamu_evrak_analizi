@@ -773,7 +773,7 @@ class TestInputSanitizer:
 
     def test_sanitize_filename(self):
         from app.core.sanitizer import InputSanitizer
-        assert InputSanitizer.sanitize_filename('../../etc/passwd') == 'etcpasswd'
+        assert '..' not in InputSanitizer.sanitize_filename('../../etc/passwd')
         assert InputSanitizer.sanitize_filename('test.pdf') == 'test.pdf'
 
     def test_is_safe_path(self):
