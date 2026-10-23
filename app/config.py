@@ -16,10 +16,10 @@ class Settings(BaseSettings):
     APP_HOST: str = "127.0.0.1"
     APP_PORT: int = 8080
     ENVIRONMENT: str = "development"  # "development", "staging", "production"
-    LOG_LEVEL: str = "INFO"
+    LOG_LEVEL: str = "INFO"  # loglama seviyesi, field_validator ile DEBUG, INFO, WARNING, ERROR, CRITICAL değerlerinden biri olmalı
     LOG_FORMAT: str = "text"  # "text" veya "json"
     LOG_FILE: str = ""
-    CORS_ORIGINS: list[str] = []
+    CORS_ORIGINS: str = "*"  # virgül ile ayrılmış izin verilen origin'ler, * ise tümü
 
     # LLM (OpenAI uyumlu uç nokta)
     LLM_API_BASE: str = "https://generativelanguage.googleapis.com/v1beta/openai"
@@ -72,6 +72,15 @@ class Settings(BaseSettings):
     ADMIN_TOKEN: str = ""
     IP_WHITELIST: str = ""  # virgül ile ayrılmış izin verilen IP listesi, boş ise tüm IP'ler
     IP_BLACKLIST: str = ""  # virgül ile ayrılmış engellenen IP listesi
+
+    @field_validator("LOG_LEVEL")
+    @classmethod
+    def _validate_log_level(cls, v: str) -> str:
+        allowed = ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")
+        v_upper = v.upper()
+        if v_upper not in allowed:
+            raise ValueError(f"LOG_LEVEL {', '.join(allowed)} değerlerinden biri olmalıdır.")
+        return v_upper
 
     @field_validator("LOG_FORMAT")
     @classmethod
