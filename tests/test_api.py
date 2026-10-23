@@ -1316,14 +1316,24 @@ def test_version_is_3_2_0(client):
 
 
 def test_soft_delete_and_restore(client):
-    import io
-    resp = client.post('/api/analyze', files={'file': ('test.pdf', io.BytesIO(b'%PDF-test content'), 'application/pdf')})
-    assert resp.status_code == 200
-    rid = resp.json()['id']
-    dr = client.delete(f'/api/history/{rid}/soft')
+    import json
+    record = {
+        'id': 'test-sd-001',
+        'file_name': 'test.pdf',
+        'status': 'completed',
+        'classification': {
+            'document_type': 'Dilekce',
+            'confidence': 0.9
+        }
+    }
+    client.post('/api/history/import', json={'records': [record]})
+    dr = client.delete('/api/history/test-sd-001/soft')
     assert dr.status_code == 200
     assert dr.json()['recoverable'] is True
-    rr = client.post(f'/api/history/{rid}/restore')
+    lr = client.get('/api/history/deleted')
+    assert lr.status_code == 200
+    assert any(r['id'] == 'test-sd-001' for r in lr.json()['records'])
+    rr = client.post('/api/history/test-sd-001/restore')
     assert rr.status_code == 200
     assert rr.json()['status'] == 'restored'
 
