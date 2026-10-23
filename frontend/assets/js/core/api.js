@@ -361,4 +361,40 @@ export class ApiClient {
     async duplicateRecords() {
         return this.request('/history/duplicates');
     }
+
+    async recordReport(recordId) {
+        return this.request('/history/' + recordId + '/report');
+    }
+
+    async recordChangeHistory(recordId) {
+        return this.request('/history/' + recordId + '/history');
+    }
+
+    async advancedSearch(filters) {
+        return this.request('/history/advanced-search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filters)
+        });
+    }
+
+    async tagStats() {
+        return this.request('/history/tag-stats');
+    }
+
+    async favoriteRecords() {
+        return this.request('/history/favorites');
+    }
+
+    async errorMetrics() {
+        return this.request('/metrics/errors');
+    }
+
+    async detectTextType(text) {
+        return this.request('/text/detect-type', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
+    }
 }
