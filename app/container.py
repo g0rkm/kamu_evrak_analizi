@@ -29,6 +29,7 @@ class ServiceContainer:
     integrity: Any = None
     notifications: Any = None
     templates: Any = None
+    auth: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

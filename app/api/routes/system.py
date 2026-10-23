@@ -15,7 +15,7 @@ from app.core.taxonomy import DOCUMENT_TYPES, DRAFT_TYPES, ORG_UNITS, PRIORITIES
 from app.models.api import HealthStatus
 from app.services.pii_detector import PIIDetector
 from app.services.upload_storage import ALLOWED_EXTENSIONS
-from app.core.exceptions import NotFoundError, InvalidInputError
+from app.core.exceptions import NotFoundError, InvalidInputError, AuthorizationError
 
 router = APIRouter(tags=["sistem"])
 _start_time = time.monotonic()
@@ -1228,3 +1228,66 @@ async def delete_template(template_id: str, request: Request, container: Service
     if not result:
         raise InvalidInputError("Sablon silinemedi (yerlesik veya bulunamadi)")
     return {"deleted": True, "template_id": template_id}
+
+
+@router.post("/auth/register", tags=["Yetkilendirme"])
+async def register_user(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    if not container.auth:
+        raise NotFoundError("Auth servisi yapilandirilmamis")
+    username = body.get("username")
+    password = body.get("password")
+    if not username or not password:
+        raise InvalidInputError("username ve password zorunludur")
+    try:
+        user = container.auth.create_user(
+            username=username,
+            password=password,
+            role=body.get("role", "memur"),
+            full_name=body.get("full_name", ""),
+        )
+        return user
+    except ValueError as e:
+        raise InvalidInputError(str(e))
+
+@router.post("/auth/login", tags=["Yetkilendirme"])
+async def login(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    if not container.auth:
+        raise NotFoundError("Auth servisi yapilandirilmamis")
+    username = body.get("username")
+    password = body.get("password")
+    if not username or not password:
+        raise InvalidInputError("username ve password zorunludur")
+    token = container.auth.authenticate(username, password)
+    if not token:
+        raise AuthorizationError("Gecersiz kimlik bilgileri")
+    return {"token": token, "username": username}
+
+@router.post("/auth/validate", tags=["Yetkilendirme"])
+async def validate_token(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    if not container.auth:
+        raise NotFoundError("Auth servisi yapilandirilmamis")
+    token = body.get("token")
+    if not token:
+        raise InvalidInputError("token zorunludur")
+    info = container.auth.validate_token(token)
+    if not info:
+        return {"valid": False}
+    return {"valid": True, "username": info["username"], "role": info["role"]}
+
+@router.get("/auth/users", tags=["Yetkilendirme"])
+async def list_users(request: Request, container: ServiceContainer = Depends(get_container), _admin=Depends(verify_admin)):
+    if not container.auth:
+        return {"users": []}
+    return {"users": container.auth.list_users()}
+
+@router.get("/auth/roles", tags=["Yetkilendirme"])
+async def list_roles(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.auth:
+        return {"roles": {}}
+    return {"roles": container.auth.ROLES}
+
+@router.get("/auth/permissions", tags=["Yetkilendirme"])
+async def list_permissions(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.auth:
+        return {"permissions": {}}
+    return {"permissions": container.auth.PERMISSIONS}

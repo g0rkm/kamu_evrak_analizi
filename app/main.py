@@ -23,6 +23,7 @@ from app.core.rate_limit import RateLimitMiddleware
 from app.core.startup import verify_environment
 from app.core.timeout_middleware import RequestTimeoutMiddleware, ActiveJobsMiddleware
 from app.services.audit_logger import AuditLogger
+from app.services.auth_service import AuthService
 from app.services.backup_service import BackupService
 from app.services.integrity_service import IntegrityService
 from app.services.notification_service import NotificationService
@@ -52,6 +53,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.integrity = IntegrityService()
         app.state.container.notifications = NotificationService(str(Path(settings.HISTORY_DIR).parent / "notifications"))
         app.state.container.templates = TemplateService(str(Path(settings.HISTORY_DIR).parent / "templates"))
+        app.state.container.auth = AuthService(str(Path(settings.HISTORY_DIR).parent / "auth"))
         app.state.active_jobs = 0
         app.state.startup_time = time.time()
         verify_environment(settings)
