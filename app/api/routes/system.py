@@ -623,6 +623,24 @@ async def metrics_summary():
     }
 
 
+@router.get('/metrics/errors', tags=['Metrikler'], summary='Hata metrikleri')
+async def error_metrics(request: Request, container: ServiceContainer = Depends(get_container)):
+    from app.core.metrics import metrics
+    snapshot = metrics.snapshot()
+    status_dist = metrics.status_code_distribution()
+    total_errors = snapshot['total_errors']
+    total_req = snapshot['total_requests']
+    return {
+        'total_errors': total_errors,
+        'error_rate': snapshot['error_rate'],
+        'client_errors_4xx': status_dist.get('4xx', 0),
+        'server_errors_5xx': status_dist.get('5xx', 0),
+        'status_distribution': status_dist.get('distribution', {}),
+        'total_requests': total_req,
+        'health_status': metrics.health_summary()['status']
+    }
+
+
 @router.get('/metrics/endpoints', tags=['Metrikler'], summary='Endpoint bazli metrikler')
 async def endpoint_metrics(request: Request, container: ServiceContainer = Depends(get_container)):
     from app.core.metrics import metrics
