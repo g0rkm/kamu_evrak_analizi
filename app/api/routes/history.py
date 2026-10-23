@@ -292,6 +292,16 @@ async def records_by_type(doc_type: str, request: Request, limit: int = 50, cont
     return {'records': filtered, 'count': len(filtered), 'document_type': doc_type}
 
 
+@router.get("/history/by-priority/{priority}", tags=["Gecmis"])
+async def records_by_priority(priority: str, request: Request, limit: int = 50, container: ServiceContainer = Depends(get_container)):
+    valid = ["low", "normal", "high", "urgent"]
+    if priority not in valid:
+        raise ValidationError(f"Gecersiz oncelik: {priority}. Gecerli: {valid}")
+    records = container.history._load_all()
+    filtered = [r for r in records if not r.get("deleted") and r.get("priority", "normal") == priority][:limit]
+    return {"records": filtered, "count": len(filtered), "priority": priority}
+
+
 @router.get('/history/tag-stats', tags=['Gecmis'], summary='Etiket istatistikleri')
 async def tag_statistics(request: Request, container: ServiceContainer = Depends(get_container)):
     records = container.history._load_all()
@@ -497,6 +507,26 @@ async def bulk_validate(request: Request, body: BulkIdsBody, container: ServiceC
                 issues.append({'field': f, 'issue': 'Eksik'})
         results.append({'record_id': rid, 'valid': len(issues) == 0, 'issues': issues})
     return {'results': results, 'total': len(results), 'valid_count': sum(1 for r in results if r['valid'])}
+
+
+@router.post("/history/bulk-priority", tags=["Gecmis"])
+async def bulk_update_priority(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    ids = body.get("ids", [])
+    priority = body.get("priority", "normal")
+    valid = ["low", "normal", "high", "urgent"]
+    if priority not in valid:
+        raise ValidationError(f"Gecersiz oncelik: {priority}")
+    if not ids:
+        raise ValidationError("ids listesi bos olamaz")
+    updated = 0
+    for rid in ids:
+        record = container.history.get(rid)
+        if record and not record.get("deleted"):
+            container.history.update_field(rid, "priority", priority)
+            updated += 1
+    if container.audit:
+        container.audit.log("bulk_priority", {"ids": ids, "priority": priority, "updated": updated})
+    return {"updated": updated, "priority": priority}
 
 
 @router.patch('/history/bulk-tags', summary='Toplu etiket guncelleme')
