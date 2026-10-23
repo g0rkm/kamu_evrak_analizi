@@ -1426,3 +1426,25 @@ def test_admin_protected_endpoint_without_token(client):
 def test_admin_protected_backup_list_accessible(client):
     resp = client.get('/api/backup/list')
     assert resp.status_code == 200
+
+
+def test_export_json(client):
+    resp = client.get('/api/history/export-json')
+    assert resp.status_code == 200
+    assert resp.headers.get('content-type', '').startswith('application/json')
+
+
+def test_date_range_query(client):
+    resp = client.get('/api/history/date-range')
+    assert resp.status_code == 200
+    assert 'records' in resp.json()
+
+
+def test_bulk_soft_delete_and_restore(client):
+    client.post('/api/history/import', json={'records': [{'id': 'bsd1', 'file_name': 'a.pdf', 'status': 'ok'}, {'id': 'bsd2', 'file_name': 'b.pdf', 'status': 'ok'}]})
+    resp = client.post('/api/history/bulk-soft-delete', json={'ids': ['bsd1', 'bsd2']})
+    assert resp.status_code == 200
+    assert resp.json()['deleted'] == 2
+    rr = client.post('/api/history/bulk-restore', json={'ids': ['bsd1', 'bsd2']})
+    assert rr.status_code == 200
+    assert rr.json()['restored'] == 2
