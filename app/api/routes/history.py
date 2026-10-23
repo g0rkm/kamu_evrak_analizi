@@ -106,6 +106,29 @@ async def search_content(keyword: str = Query(..., min_length=2), limit: int = Q
     return {'results': results, 'count': len(results), 'keyword': keyword}
 
 
+@router.post('/history/advanced-search', tags=['Gecmis'], summary='Gelismis arama')
+async def advanced_search(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    records = [r for r in records if not r.get('deleted')]
+    filters = body
+    if filters.get('document_type'):
+        records = [r for r in records if r.get('document_type', '').lower() == filters['document_type'].lower()]
+    if filters.get('min_confidence') is not None:
+        records = [r for r in records if r.get('confidence_score', 0) >= filters['min_confidence']]
+    if filters.get('max_confidence') is not None:
+        records = [r for r in records if r.get('confidence_score', 0) <= filters['max_confidence']]
+    if filters.get('tags'):
+        required_tags = set(filters['tags'])
+        records = [r for r in records if required_tags.issubset(set(r.get('tags', [])))]
+    if filters.get('keyword'):
+        kw = filters['keyword'].lower()
+        records = [r for r in records if kw in r.get('source_name', '').lower() or kw in r.get('summary', '').lower()]
+    if filters.get('status'):
+        records = [r for r in records if r.get('status') == filters['status']]
+    limit = filters.get('limit', 50)
+    return {'records': records[:limit], 'total_matches': len(records)}
+
+
 @router.get("/history/stats", summary="Analiz istatistikleri")
 async def history_stats(history: HistoryRepository = Depends(get_history)):
     return history.stats()
