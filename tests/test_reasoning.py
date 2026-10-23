@@ -1086,3 +1086,67 @@ def test_rate_limit_info_endpoint(client):
     assert resp.status_code == 200
     data = resp.json()
     assert "ip" in data
+
+def test_export_csv_endpoint(client):
+    """CSV export endpoint testi."""
+    resp = client.get("/api/history/export/csv")
+    assert resp.status_code == 200
+    assert "text/csv" in resp.headers.get("content-type", "")
+
+def test_export_json_file_endpoint(client):
+    """JSON file export endpoint testi."""
+    resp = client.get("/api/history/export/json-file")
+    assert resp.status_code == 200
+
+def test_export_report_endpoint(client):
+    """Export report endpoint testi."""
+    resp = client.get("/api/history/export/report")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "total_records" in data
+    assert "by_document_type" in data
+
+def test_dependency_check_endpoint(client):
+    """Dependency health check endpoint testi."""
+    resp = client.get("/api/health/dependencies")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "healthy" in data
+    assert "checks" in data
+    assert "history_repository" in data["checks"]
+
+def test_export_service_csv():
+    """ExportService CSV testi."""
+    from app.services.export_service import ExportService
+    records = [
+        {"id": "1", "created_at": "2024-01-01", "source_name": "test.pdf", "document_type": "dilekce", "summary": "Test", "tags": ["a", "b"]},
+        {"id": "2", "created_at": "2024-01-02", "source_name": "test2.pdf", "document_type": "rapor", "summary": "Test2", "tags": []},
+    ]
+    csv_str = ExportService.to_csv(records)
+    assert "id" in csv_str
+    assert "test.pdf" in csv_str
+    assert "a, b" in csv_str
+
+def test_export_service_json():
+    """ExportService JSON testi."""
+    from app.services.export_service import ExportService
+    import json
+    records = [{"id": "1", "created_at": "2024-01-01", "source_name": "test.pdf"}]
+    result = ExportService.to_json(records)
+    parsed = json.loads(result)
+    assert len(parsed) == 1
+    assert parsed[0]["id"] == "1"
+
+def test_export_service_report():
+    """ExportService rapor testi."""
+    from app.services.export_service import ExportService
+    records = [
+        {"id": "1", "document_type": "dilekce", "priority": "high", "tags": ["x"], "favorite": True, "archived": False},
+        {"id": "2", "document_type": "dilekce", "priority": "normal", "tags": ["x", "y"], "favorite": False, "archived": True},
+    ]
+    report = ExportService.summary_report(records)
+    assert report["total_records"] == 2
+    assert report["by_document_type"]["dilekce"] == 2
+    assert report["favorite_count"] == 1
+    assert report["archived_count"] == 1
+    assert report["top_tags"][0]["tag"] == "x"
