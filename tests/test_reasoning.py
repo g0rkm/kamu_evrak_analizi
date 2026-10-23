@@ -1736,7 +1736,7 @@ class TestNewEndpoints:
         assert "removed" in data
 
     def test_comprehensive_health(self, client):
-        resp = client.get("/api/health/comprehensive")
+        resp = client.get("/api/system/health-check")
         assert resp.status_code == 200
         data = resp.json()
         assert data["status"] in ("healthy", "degraded", "unhealthy")
@@ -1744,7 +1744,7 @@ class TestNewEndpoints:
         assert "services" in data
 
     def test_health_directories(self, client):
-        resp = client.get("/api/health/directories")
+        resp = client.get("/api/system/directories")
         assert resp.status_code == 200
         data = resp.json()
         assert isinstance(data, dict)
