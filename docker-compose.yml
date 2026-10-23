@@ -17,6 +17,8 @@ services:
       - SESSION_TIMEOUT_MINUTES=30
       - MAX_FILE_SIZE_MB=50
       - REQUEST_BODY_LIMIT_MB=100
+      - CORS_ORIGINS=*
+      - LOG_LEVEL=INFO
     volumes:
       - history_data:/app/data/history
       - upload_data:/app/uploads
