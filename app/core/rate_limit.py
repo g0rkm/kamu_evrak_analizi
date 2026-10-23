@@ -53,6 +53,30 @@ class RateLimiter:
         bucket.timestamps.append(now)
         return True
 
+    def get_client_info(self, request: Request) -> dict:
+        ip = self._client_ip(request)
+        now = time.monotonic()
+        bucket = self._buckets.get(ip)
+        if not bucket:
+            return {
+                'ip': ip,
+                'requests_made': 0,
+                'requests_remaining': self.max_requests,
+                'window_seconds': self.window,
+                'reset_in': 0,
+            }
+        cutoff = now - self.window
+        recent = [t for t in bucket.timestamps if t > cutoff]
+        remaining = max(0, self.max_requests - len(recent))
+        reset_in = round(self.window - (now - recent[0]), 1) if recent else 0
+        return {
+            'ip': ip,
+            'requests_made': len(recent),
+            'requests_remaining': remaining,
+            'window_seconds': self.window,
+            'reset_in': reset_in,
+        }
+
     @property
     def active_clients(self) -> int:
         """Aktif istemci sayısı."""
@@ -72,4 +96,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 content={"detail": "Çok fazla istek gönderildi. Lütfen biraz bekleyin.", "code": "rate_limited"},
                 headers={"Retry-After": str(self.limiter.window)},
             )
-        return await call_next(request)
+        response = await call_next(request)
+        info = self.limiter.get_client_info(request)
+        response.headers['X-RateLimit-Limit'] = str(self.limiter.max_requests)
+        response.headers['X-RateLimit-Remaining'] = str(info['requests_remaining'])
+        response.headers['X-RateLimit-Window'] = str(self.limiter.window)
+        return response
