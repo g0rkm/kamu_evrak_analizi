@@ -26,6 +26,7 @@ from app.services.audit_logger import AuditLogger
 from app.services.backup_service import BackupService
 from app.services.integrity_service import IntegrityService
 from app.services.notification_service import NotificationService
+from app.services.template_service import TemplateService
 from app.services.webhook_service import WebhookService
 
 FRONTEND_DIR = BASE_DIR / "frontend"
@@ -50,6 +51,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.webhooks = WebhookService()
         app.state.container.integrity = IntegrityService()
         app.state.container.notifications = NotificationService(str(Path(settings.HISTORY_DIR).parent / "notifications"))
+        app.state.container.templates = TemplateService(str(Path(settings.HISTORY_DIR).parent / "templates"))
         app.state.active_jobs = 0
         app.state.startup_time = time.time()
         verify_environment(settings)

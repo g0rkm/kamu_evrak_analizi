@@ -28,6 +28,7 @@ class ServiceContainer:
     jobs: JobManager
     integrity: Any = None
     notifications: Any = None
+    templates: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

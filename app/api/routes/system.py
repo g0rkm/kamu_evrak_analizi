@@ -15,7 +15,7 @@ from app.core.taxonomy import DOCUMENT_TYPES, DRAFT_TYPES, ORG_UNITS, PRIORITIES
 from app.models.api import HealthStatus
 from app.services.pii_detector import PIIDetector
 from app.services.upload_storage import ALLOWED_EXTENSIONS
-from app.core.exceptions import NotFoundError
+from app.core.exceptions import NotFoundError, InvalidInputError
 
 router = APIRouter(tags=["sistem"])
 _start_time = time.monotonic()
@@ -1185,3 +1185,46 @@ async def notification_stats(request: Request, container: ServiceContainer = Dep
     if not container.notifications:
         return {"total": 0, "unread": 0, "by_level": {}}
     return container.notifications.stats()
+
+
+@router.get("/templates", tags=["Sistem"])
+async def list_templates(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.templates:
+        return {"templates": []}
+    return {"templates": container.templates.list_templates()}
+
+@router.get("/templates/{template_id}", tags=["Sistem"])
+async def get_template(template_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.templates:
+        raise NotFoundError("Sablon servisi yapilandirilmamis")
+    tpl = container.templates.get_template(template_id)
+    if not tpl:
+        raise NotFoundError(f"Sablon bulunamadi: {template_id}")
+    return tpl
+
+@router.post("/templates", tags=["Sistem"])
+async def create_template(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    if not container.templates:
+        raise NotFoundError("Sablon servisi yapilandirilmamis")
+    name = body.get("name")
+    doc_type = body.get("document_type")
+    if not name or not doc_type:
+        raise InvalidInputError("name ve document_type zorunludur")
+    tpl = container.templates.create_template(
+        name=name,
+        document_type=doc_type,
+        description=body.get("description", ""),
+        default_tags=body.get("default_tags", []),
+        default_priority=body.get("default_priority", "normal"),
+        fields=body.get("fields", []),
+    )
+    return tpl
+
+@router.delete("/templates/{template_id}", tags=["Sistem"])
+async def delete_template(template_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.templates:
+        raise NotFoundError("Sablon servisi yapilandirilmamis")
+    result = container.templates.delete_template(template_id)
+    if not result:
+        raise InvalidInputError("Sablon silinemedi (yerlesik veya bulunamadi)")
+    return {"deleted": True, "template_id": template_id}
