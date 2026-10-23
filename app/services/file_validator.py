@@ -50,7 +50,7 @@ class FileValidator:
         
         # Tehlikeli karakterleri veya bosluklari temizleme (guvenli karakterler birakilabilir)
         # Guvenli bir dosyaadi olusturmak icin path guvenligi saglanir
-        clean_name = "".(c for c in normalized if c.isalnum() or c in (' ', '.', '_', '-')).strip()
+        clean_name = "".join(c for c in normalized if c.isalnum() or c in (' ', '.', '_', '-')).strip()
         if not clean_name:
             clean_name = "unnamed_file"
             
