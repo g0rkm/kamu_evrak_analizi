@@ -121,7 +121,7 @@ async def cleanup_sessions(container: ServiceContainer = Depends(get_container))
     return {"removed": removed, "remaining": sm.stats()["total_active"]}
 
 
-@router.get("/health/comprehensive")
+@router.get("/system/health-check")
 async def comprehensive_health(container: ServiceContainer = Depends(get_container)):
     hc = container.health_checker
     if not hc:
@@ -131,7 +131,7 @@ async def comprehensive_health(container: ServiceContainer = Depends(get_contain
     return hc.check_all(services)
 
 
-@router.get("/health/directories")
+@router.get("/system/directories")
 async def check_directories(container: ServiceContainer = Depends(get_container)):
     hc = container.health_checker
     if not hc:
