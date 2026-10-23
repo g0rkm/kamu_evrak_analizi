@@ -1154,13 +1154,17 @@ def test_export_service_report():
 def test_logging_config():
     """Structured logging konfigurasyonu testi."""
     import tempfile
+    import logging
     from app.core.logging_config import setup_logging, JSONFormatter
     with tempfile.TemporaryDirectory() as d:
         result = setup_logging("DEBUG", d, enable_file=True)
         assert result["level"] == "DEBUG"
         assert result["log_dir"] == d
+        root = logging.getLogger()
+        for h in root.handlers[:]:
+            h.close()
+            root.removeHandler(h)
     formatter = JSONFormatter()
-    import logging
     record = logging.LogRecord("test", logging.INFO, "test.py", 1, "Test msg", (), None)
     formatted = formatter.format(record)
     import json
