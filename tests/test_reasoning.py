@@ -1547,3 +1547,23 @@ def test_system_environment_endpoint(client):
     resp = client.get('/api/system/environment')
     assert resp.status_code == 200
     assert 'python_version' in resp.json()
+
+def test_api_summary_endpoint(client):
+    resp = client.get('/api/api-summary')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'total_endpoints' in data
+    assert data['total_endpoints'] > 0
+    assert 'endpoints' in data
+
+def test_system_uptime_endpoint(client):
+    resp = client.get('/api/system/uptime')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'uptime_seconds' in data
+    assert 'uptime_human' in data
+
+def test_system_active_jobs_endpoint(client):
+    resp = client.get('/api/system/active-jobs')
+    assert resp.status_code == 200
+    assert 'active_jobs' in resp.json()
