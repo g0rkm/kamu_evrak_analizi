@@ -141,38 +141,6 @@ async def comprehensive_health(request: Request, container: ServiceContainer = D
     }
 
 
-@router.get('/system/report', tags=['Sistem'], summary='Tam sistem raporu')
-async def system_report(request: Request, container: ServiceContainer = Depends(get_container)):
-    import time as time_mod
-    from app.core.metrics import metrics
-    from app import __version__
-    uptime = time_mod.time() - getattr(request.app.state, 'startup_time', time_mod.time())
-    snapshot = metrics.snapshot()
-    health = metrics.health_summary()
-    settings = container.settings
-    return {
-        'version': __version__,
-        'environment': settings.ENVIRONMENT,
-        'uptime_seconds': round(uptime, 1),
-        'health': health,
-        'metrics': snapshot,
-        'configuration': {
-            'rate_limit': f'{settings.RATE_LIMIT_REQUESTS}/{settings.RATE_LIMIT_WINDOW}s',
-            'max_file_size_mb': settings.MAX_FILE_SIZE_MB,
-            'max_tags': settings.MAX_TAGS_PER_RECORD,
-            'max_note_length': settings.MAX_NOTE_LENGTH,
-            'analysis_timeout': settings.ANALYSIS_TIMEOUT,
-            'maintenance_mode': settings.MAINTENANCE_MODE
-        },
-        'services': {
-            'llm': container.llm is not None,
-            'audit': getattr(container, 'audit', None) is not None,
-            'backup': getattr(container, 'backup', None) is not None,
-            'webhooks': getattr(container, 'webhooks', None) is not None
-        }
-    }
-
-
 @router.get('/system/capabilities', tags=['Sistem'], summary='Sistem yetenekleri')
 async def system_capabilities(request: Request, container: ServiceContainer = Depends(get_container)):
     return {
@@ -195,6 +163,34 @@ async def system_capabilities(request: Request, container: ServiceContainer = De
             'max_tags_per_record': container.settings.MAX_TAGS_PER_RECORD,
             'max_note_length': container.settings.MAX_NOTE_LENGTH,
             'rate_limit': f'{container.settings.RATE_LIMIT_REQUESTS}/{container.settings.RATE_LIMIT_WINDOW}s'
+        }
+    }
+
+
+@router.get('/system/report', tags=['Sistem'], summary='Tam sistem raporu')
+async def system_report(request: Request, container: ServiceContainer = Depends(get_container)):
+    import time as time_mod
+    from app.core.metrics import metrics
+    from app import __version__
+    uptime = time_mod.time() - getattr(request.app.state, 'startup_time', time_mod.time())
+    snapshot = metrics.snapshot()
+    health = metrics.health_summary()
+    s = container.settings
+    return {
+        'version': __version__,
+        'environment': s.ENVIRONMENT,
+        'uptime_seconds': round(uptime, 1),
+        'health': health,
+        'metrics': snapshot,
+        'configuration': {
+            'rate_limit': f'{s.RATE_LIMIT_REQUESTS}/{s.RATE_LIMIT_WINDOW}s',
+            'max_file_size_mb': s.MAX_FILE_SIZE_MB,
+            'maintenance_mode': s.MAINTENANCE_MODE
+        },
+        'services': {
+            'llm': container.llm is not None,
+            'audit': getattr(container, 'audit', None) is not None,
+            'backup': getattr(container, 'backup', None) is not None
         }
     }
 
