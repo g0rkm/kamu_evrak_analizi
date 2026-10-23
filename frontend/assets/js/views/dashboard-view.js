@@ -7,49 +7,78 @@ export class DashboardView {
   }
 
   async render() {
-    this._container.innerHTML = '<div class="dashboard-grid" id="dashboardGrid"><p>Yükleniyor...</p></div><div id="systemHealthPanel" class="dashboard-section"><h3>Sistem Sağlığı</h3><div id="healthCards" class="dashboard-grid"></div></div>';
+    this._container.innerHTML = `
+      <div class="dashboard-wrapper">
+        <h2>Kontrol Paneli</h2>
+        <div id="dashboardCards" class="dashboard-grid">
+          <div class="dash-card" id="cardRecords"><h3>Kayitlar</h3><p>Yukleniyor...</p></div>
+          <div class="dash-card" id="cardPriority"><h3>Oncelik Dagilimi</h3><p>Yukleniyor...</p></div>
+          <div class="dash-card" id="cardNotifications"><h3>Bildirimler</h3><p>Yukleniyor...</p></div>
+          <div class="dash-card" id="cardSystem"><h3>Sistem</h3><p>Yukleniyor...</p></div>
+        </div>
+        <div class="dashboard-section">
+          <h3>Son Bildirimler</h3>
+          <div id="recentNotifications"><p>Yukleniyor...</p></div>
+        </div>
+      </div>`;
+    await this._loadData();
+  }
+
+  async _loadData() {
     try {
-      const summary = await this._api.systemSummary();
+      const [summaryResp, notifResp] = await Promise.all([
+        this._api.request('/dashboard/summary'),
+        this._api.request('/notifications?limit=5')
+      ]);
+      const summary = await summaryResp.json();
+      const notifs = await notifResp.json();
       this._renderCards(summary);
-      await this._loadHealthData();
-    } catch (err) {
-      this._container.innerHTML = '<p class="error-text">Dashboard verileri yüklenemedi.</p>';
+      this._renderNotifications(notifs.notifications || []);
+    } catch (e) {
+      document.getElementById('cardRecords').innerHTML = '<h3>Kayitlar</h3><p class="error-text">Veri yuklenemedi</p>';
     }
   }
 
-  _renderCards(data) {
-    const grid = document.getElementById('dashboardGrid');
-    if (!grid) return;
-    const cards = [
-      { title: 'Toplam Analiz', value: data.total_analyses, subtitle: 'tüm zamanlar' },
-      { title: 'Ortalama Güven', value: (data.avg_confidence * 100).toFixed(0) + '%', subtitle: 'confidence score' },
-      { title: 'Favoriler', value: data.favorites_count, subtitle: 'işaretlenen kayıtlar' },
-      { title: 'Toplam İstek', value: data.total_requests, subtitle: 'API istekleri' },
-      { title: 'Hata Oranı', value: (data.error_rate * 100).toFixed(1) + '%', subtitle: 'son dönem' },
-      { title: 'Çalışma Süresi', value: this._formatUptime(data.uptime_seconds), subtitle: 'uptime' },
-    ];
-    grid.innerHTML = cards.map(c => `
-      <div class="dashboard-card">
-        <h3>${c.title}</h3>
-        <div class="value">${c.value}</div>
-        <div class="subtitle">${c.subtitle}</div>
-      </div>
-    `).join('');
+  _renderCards(s) {
+    document.getElementById('cardRecords').innerHTML = `
+      <h3>Kayitlar</h3>
+      <div class="dash-stat">${s.active_records || 0}</div>
+      <div class="dash-detail">Aktif: ${s.active_records || 0} | Arsiv: ${s.archived_records || 0} | Silinen: ${s.deleted_records || 0}</div>`;
+
+    const pd = s.priority_distribution || {};
+    document.getElementById('cardPriority').innerHTML = `
+      <h3>Oncelik Dagilimi</h3>
+      <div class="priority-bars">
+        ${['urgent','high','normal','low'].map(p =>
+          `<div class="pbar"><span class="pbar-label ${p}">${p}</span><span class="pbar-count">${pd[p] || 0}</span></div>`
+        ).join('')}
+      </div>`;
+
+    document.getElementById('cardNotifications').innerHTML = `
+      <h3>Bildirimler</h3>
+      <div class="dash-stat">${s.unread_notifications || 0}</div>
+      <div class="dash-detail">Okunmamis bildirim</div>`;
+
+    document.getElementById('cardSystem').innerHTML = `
+      <h3>Sistem</h3>
+      <div class="dash-detail">Calisma: ${this._formatUptime(s.uptime_seconds)}</div>
+      <div class="dash-detail">Denetim kaydi: ${s.audit_log_count || 0}</div>`;
   }
 
-  async _loadHealthData() {
-    try {
-      const [healthResp, storageResp] = await Promise.all([this._api.request('/health'), this._api.storageHealth()]);
-      const health = await healthResp.json();
-      const storage = await storageResp.json();
-      const panel = document.getElementById('healthCards');
-      if (panel) {
-        panel.innerHTML = '<div class="dashboard-card"><h3>Sistem</h3><div class="value">' + health.status + '</div></div><div class="dashboard-card"><h3>Disk</h3><div class="value">' + (storage.disk_usage_percent || 0) + '%</div><div class="subtitle">' + (storage.disk_free_mb || 0) + ' MB boş</div></div><div class="dashboard-card"><h3>Kayıt Sayısı</h3><div class="value">' + (storage.history_file_count || 0) + '</div></div>';
-      }
-    } catch(e) {}
+  _renderNotifications(notifs) {
+    const el = document.getElementById('recentNotifications');
+    if (!notifs.length) { el.innerHTML = '<p>Bildirim yok.</p>'; return; }
+    el.innerHTML = `<ul class="notif-list">${notifs.map(n =>
+      `<li class="notif-item notif-${n.level}">
+        <span class="notif-level">${n.level}</span>
+        <strong>${n.title}</strong> - ${n.message}
+        <small>${new Date(n.timestamp).toLocaleString('tr-TR')}</small>
+      </li>`
+    ).join('')}</ul>`;
   }
 
   _formatUptime(seconds) {
+    if (!seconds) return '-';
     if (seconds < 60) return Math.round(seconds) + 's';
     if (seconds < 3600) return Math.round(seconds / 60) + 'dk';
     const h = Math.floor(seconds / 3600);
