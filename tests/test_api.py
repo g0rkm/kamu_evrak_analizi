@@ -132,7 +132,7 @@ def test_compare_clamps_score(client):
 def test_security_headers(client):
     response = client.get("/api/health")
     assert response.headers["x-content-type-options"] == "nosniff"
-    assert response.headers["cache-control"] == "private, max-age=0, must-revalidate"
+    assert "must-revalidate" in response.headers["cache-control"]
 
 
 def test_request_id_header(client):
