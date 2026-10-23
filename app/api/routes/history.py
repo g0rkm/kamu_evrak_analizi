@@ -50,6 +50,12 @@ async def recent_analyses(count: int = Query(5, ge=1, le=20), container: Service
     return {'records': records, 'count': len(records)}
 
 
+@router.get('/history/archived', summary='Arsivlenmis kayitlar')
+async def list_archived(limit: int = Query(50, ge=1, le=200), container: ServiceContainer = Depends(get_container)):
+    records = container.history.archived_records(limit)
+    return {'records': records, 'count': len(records)}
+
+
 @router.get("/history/search", summary="Gelişmiş geçmiş arama")
 async def search_history(
     q: str = Query("", min_length=1),

@@ -209,6 +209,27 @@ class HistoryRepository:
                 pass
         return items
 
+    def archived_records(self, limit: int = 50) -> list[dict]:
+        items = self._summaries()
+        archived = []
+        for path in sorted(self.directory.glob('*.json'), reverse=True):
+            try:
+                with path.open('r', encoding='utf-8') as f:
+                    data = json.load(f)
+                if data.get('archived', False):
+                    archived.append({
+                        'id': data.get('id', path.stem),
+                        'source_name': data.get('source_name', ''),
+                        'document_type': data.get('document_type', ''),
+                        'archived_at': data.get('archived_at', ''),
+                        'timestamp': data.get('timestamp', '')
+                    })
+                    if len(archived) >= limit:
+                        break
+            except:
+                pass
+        return archived
+
     def stats(self) -> dict:
         items = self._summaries()
         total = len(items)
