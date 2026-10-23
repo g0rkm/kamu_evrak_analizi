@@ -900,3 +900,10 @@ class TestSanitizerEdgeCases:
         from app.core.sanitizer import InputSanitizer
         assert InputSanitizer.is_safe_path('documents/report.pdf') is True
         assert InputSanitizer.is_safe_path('') is True
+
+
+def test_ip_config_defaults():
+    from app.config import Settings
+    s = Settings(_env_file=None, LLM_API_KEY='t')
+    assert s.IP_WHITELIST == ''
+    assert s.IP_BLACKLIST == ''
