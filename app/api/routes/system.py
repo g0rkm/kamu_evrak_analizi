@@ -422,6 +422,29 @@ async def sanitize_text(body: dict):
     }
 
 
+@router.post('/text/compare', tags=['Metin'], summary='Iki metni karsilastir')
+async def compare_texts(request: Request, body: dict):
+    text1 = body.get('text1', '')
+    text2 = body.get('text2', '')
+    if not text1 or not text2:
+        return {'error': 'text1 ve text2 gerekli'}
+    words1 = set(text1.lower().split())
+    words2 = set(text2.lower().split())
+    common = words1 & words2
+    all_words = words1 | words2
+    jaccard = len(common) / len(all_words) if all_words else 0
+    only1 = words1 - words2
+    only2 = words2 - words1
+    return {
+        'similarity_score': round(jaccard, 4),
+        'common_words': list(common)[:20],
+        'unique_to_text1': list(only1)[:20],
+        'unique_to_text2': list(only2)[:20],
+        'text1_word_count': len(words1),
+        'text2_word_count': len(words2)
+    }
+
+
 @router.post('/validate-text', summary='Metin dogrulama')
 async def validate_text(body: MaskRequest):
     issues = []
