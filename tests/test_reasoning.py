@@ -1915,3 +1915,52 @@ class TestIPFilterMiddleware:
         mw = IPFilterMiddleware(dummy_app, whitelist="10.0.0.1", blacklist="")
         assert mw._is_allowed("10.0.0.1") is True
         assert mw._is_allowed("10.0.0.2") is False
+
+
+class TestBulkOperations:
+    def test_bulk_delete(self, client):
+        # Once bir kayit olustur
+        import json
+        record = {"filename": "bulk_del.pdf", "content_type": "application/pdf", "analysis": {"classification": "Dilekce", "confidence": 0.9, "summary": "Test", "entities": []}}
+        resp = client.post("/api/history", content=json.dumps(record), headers={"Content-Type": "application/json"})
+        assert resp.status_code == 201
+        record_id = resp.json()["id"]
+        
+        # Toplu silme
+        resp = client.post("/api/history/bulk-delete", json={"ids": [record_id, "nonexistent"]})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["deleted"] == 1
+        assert data["not_found"] == 1
+
+    def test_bulk_delete_empty_ids(self, client):
+        resp = client.post("/api/history/bulk-delete", json={"ids": []})
+        assert resp.status_code == 422
+
+    def test_bulk_archive(self, client):
+        import json
+        record = {"filename": "bulk_arch.pdf", "content_type": "application/pdf", "analysis": {"classification": "Rapor", "confidence": 0.8, "summary": "Test", "entities": []}}
+        resp = client.post("/api/history", content=json.dumps(record), headers={"Content-Type": "application/json"})
+        record_id = resp.json()["id"]
+        
+        resp = client.post("/api/history/bulk-archive", json={"ids": [record_id], "archive": True})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["updated"] == 1
+        assert data["archive"] is True
+
+    def test_bulk_tag(self, client):
+        import json
+        record = {"filename": "bulk_tag.pdf", "content_type": "application/pdf", "analysis": {"classification": "Tutanak", "confidence": 0.85, "summary": "Test", "entities": []}}
+        resp = client.post("/api/history", content=json.dumps(record), headers={"Content-Type": "application/json"})
+        record_id = resp.json()["id"]
+        
+        resp = client.post("/api/history/bulk-tag", json={"ids": [record_id], "tags": ["onemli", "acil"]})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["updated"] == 1
+        assert "onemli" in data["tags_added"]
+
+    def test_bulk_tag_empty_tags(self, client):
+        resp = client.post("/api/history/bulk-tag", json={"ids": ["x"], "tags": []})
+        assert resp.status_code == 422
