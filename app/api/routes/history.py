@@ -530,6 +530,24 @@ async def related_records(record_id: str, limit: int = Query(5, ge=1, le=20), co
     return {'record_id': record_id, 'document_type': doc_type, 'related': related, 'count': len(related)}
 
 
+@router.get('/history/{record_id}/history', tags=['Gecmis'], summary='Kayit degisiklik gecmisi')
+async def record_change_history(record_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if not record:
+        raise NotFoundError(f'{record_id} bulunamadi')
+    audit = getattr(container, 'audit', None)
+    changes = []
+    if audit:
+        logs = audit.get_logs(record_id=record_id)
+        changes = [{
+            'action': l.get('action'),
+            'timestamp': l.get('timestamp'),
+            'user': l.get('user', 'system'),
+            'details': l.get('details')
+        } for l in logs]
+    return {'record_id': record_id, 'changes': changes, 'total_changes': len(changes)}
+
+
 @router.post('/history/{record_id}/validate', tags=['Geçmiş'], summary='Kayıt geçerliliğini kontrol et')
 async def validate_record(record_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
     record = container.history.get(record_id)
