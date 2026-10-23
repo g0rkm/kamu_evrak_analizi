@@ -1011,8 +1011,8 @@ def test_health_dependencies(client):
     response = client.get('/api/health/dependencies')
     assert response.status_code == 200
     data = response.json()
+    assert 'healthy' in data
     assert 'checks' in data
-    assert 'dependencies' in data
     assert 'llm_service' in data['checks']
 
 
