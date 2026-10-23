@@ -891,3 +891,76 @@ async def bulk_toggle_favorite(body: dict, container: ServiceContainer = Depends
         except Exception:
             pass
     return {'updated': updated, 'total': len(ids), 'favorite': favorite}
+
+
+@router.post("/history/bulk-delete")
+async def bulk_delete(request: Request, container: ServiceContainer = Depends(get_container)):
+    """Toplu soft delete islemi."""
+    body = await request.json()
+    ids = body.get("ids", [])
+    if not ids or not isinstance(ids, list):
+        raise InvalidInputError("ids listesi gerekli")
+    deleted = []
+    not_found = []
+    for record_id in ids:
+        record = container.history.get(record_id)
+        if record:
+            record["deleted"] = True
+            record["deleted_at"] = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+            container.history.save(record)
+            deleted.append(record_id)
+        else:
+            not_found.append(record_id)
+    if container.audit:
+        container.audit.log(action="bulk_delete", details={"deleted": deleted, "not_found": not_found}, user="api")
+    return {"deleted": len(deleted), "not_found": len(not_found), "deleted_ids": deleted}
+
+
+@router.post("/history/bulk-archive")
+async def bulk_archive(request: Request, container: ServiceContainer = Depends(get_container)):
+    """Toplu arsivleme islemi."""
+    body = await request.json()
+    ids = body.get("ids", [])
+    archive = body.get("archive", True)
+    if not ids or not isinstance(ids, list):
+        raise InvalidInputError("ids listesi gerekli")
+    updated = []
+    not_found = []
+    for record_id in ids:
+        record = container.history.get(record_id)
+        if record:
+            record["archived"] = archive
+            container.history.save(record)
+            updated.append(record_id)
+        else:
+            not_found.append(record_id)
+    if container.audit:
+        container.audit.log(action="bulk_archive", details={"updated": updated, "archive": archive}, user="api")
+    return {"updated": len(updated), "not_found": len(not_found), "archive": archive}
+
+
+@router.post("/history/bulk-tag")
+async def bulk_tag(request: Request, container: ServiceContainer = Depends(get_container)):
+    """Toplu etiket ekleme islemi."""
+    body = await request.json()
+    ids = body.get("ids", [])
+    tags = body.get("tags", [])
+    if not ids or not isinstance(ids, list):
+        raise InvalidInputError("ids listesi gerekli")
+    if not tags or not isinstance(tags, list):
+        raise InvalidInputError("tags listesi gerekli")
+    updated = []
+    not_found = []
+    for record_id in ids:
+        record = container.history.get(record_id)
+        if record:
+            existing_tags = record.get("tags", [])
+            new_tags = list(set(existing_tags + tags))
+            record["tags"] = new_tags
+            container.history.save(record)
+            updated.append(record_id)
+        else:
+            not_found.append(record_id)
+    if container.audit:
+        container.audit.log(action="bulk_tag", details={"updated": updated, "tags": tags}, user="api")
+    return {"updated": len(updated), "not_found": len(not_found), "tags_added": tags}
