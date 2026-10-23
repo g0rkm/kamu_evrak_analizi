@@ -2,7 +2,7 @@ import shutil
 import time
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, Query, Request, Header
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
@@ -28,6 +28,17 @@ def _format_uptime(seconds: float) -> str:
     if minutes > 0:
         return f"{minutes} dk {secs} sn"
     return f"{secs} sn"
+
+
+def verify_admin(request: Request, container: ServiceContainer = Depends(get_container)) -> bool:
+    admin_token = container.settings.ADMIN_TOKEN
+    if not admin_token:
+        return True
+    auth = request.headers.get('Authorization', '')
+    if auth == f'Bearer {admin_token}':
+        return True
+    from app.core.exceptions import AuthorizationError
+    raise AuthorizationError('Admin yetkisi gerekli')
 
 
 @router.get('/version', tags=['Sistem'], summary='API surum bilgisi')
@@ -681,8 +692,8 @@ async def validate_config(container: ServiceContainer = Depends(get_container), 
     return {'valid': valid, 'issues': issues, 'checked_fields': 4}
 
 
-@router.post("/cache/clear", summary="LLM önbelleğini temizle", dependencies=[Depends(require_admin)])
-async def clear_cache(container: ServiceContainer = Depends(get_container)):
+@router.post("/cache/clear", summary="LLM önbelleğini temizle")
+async def clear_cache(container: ServiceContainer = Depends(get_container), admin: bool = Depends(verify_admin)):
     """LLM yanıt önbelleğini temizler."""
     stats_before = container.llm.get_usage_stats()
     container.llm._cache.clear()
@@ -739,7 +750,7 @@ async def query_logs(level: str = Query('INFO'), limit: int = Query(50, ge=1, le
 
 
 @router.get('/audit/logs', tags=['Sistem'], summary='Denetim gunlugu sorgula')
-async def query_audit_logs(request: Request, limit: int = 100, action: str = None, record_id: str = None):
+async def query_audit_logs(request: Request, limit: int = 100, action: str = None, record_id: str = None, admin: bool = Depends(verify_admin)):
     audit = getattr(request.app.state.container, 'audit', None)
     if not audit:
         return {'logs': [], 'message': 'Audit logger not configured'}
@@ -804,7 +815,7 @@ async def security_headers_check(request: Request):
 
 
 @router.post('/backup/create', tags=['Yedekleme'], summary='Yedek olustur')
-async def create_backup(request: Request, container: ServiceContainer = Depends(get_container)):
+async def create_backup(request: Request, container: ServiceContainer = Depends(get_container), admin: bool = Depends(verify_admin)):
     backup = getattr(container, 'backup', None)
     if not backup:
         return JSONResponse(status_code=503, content={'detail': 'Backup service not configured'})
@@ -824,7 +835,7 @@ async def list_backups(request: Request, container: ServiceContainer = Depends(g
 
 
 @router.post('/backup/cleanup', tags=['Yedekleme'])
-async def cleanup_backups(request: Request, keep: int = 5, container: ServiceContainer = Depends(get_container)):
+async def cleanup_backups(request: Request, keep: int = 5, container: ServiceContainer = Depends(get_container), admin: bool = Depends(verify_admin)):
     backup = getattr(container, 'backup', None)
     if not backup:
         return {'deleted': 0}
