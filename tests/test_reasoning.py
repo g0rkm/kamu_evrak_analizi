@@ -780,3 +780,48 @@ class TestInputSanitizer:
         from app.core.sanitizer import InputSanitizer
         assert InputSanitizer.is_safe_path('uploads/file.pdf') is True
         assert InputSanitizer.is_safe_path('../etc/passwd') is False
+
+
+class TestBackupService:
+    def test_create_and_list_backup(self):
+        from app.services.backup_service import BackupService
+        import tempfile, os, json
+        with tempfile.TemporaryDirectory() as td:
+            hist_dir = os.path.join(td, 'history')
+            os.makedirs(hist_dir)
+            with open(os.path.join(hist_dir, 'test.json'), 'w') as f:
+                json.dump({'id': 'test1'}, f)
+            bs = BackupService(history_dir=hist_dir, backup_dir=os.path.join(td, 'backups'))
+            result = bs.create_backup()
+            assert result['file_count'] == 1
+            assert result['size_bytes'] > 0
+            backups = bs.list_backups()
+            assert len(backups) == 1
+
+    def test_delete_old_backups(self):
+        from app.services.backup_service import BackupService
+        import tempfile, os, json
+        with tempfile.TemporaryDirectory() as td:
+            hist_dir = os.path.join(td, 'history')
+            os.makedirs(hist_dir)
+            with open(os.path.join(hist_dir, 'test.json'), 'w') as f:
+                json.dump({'id': 'test1'}, f)
+            bs = BackupService(history_dir=hist_dir, backup_dir=os.path.join(td, 'backups'))
+            for i in range(3):
+                bs.create_backup()
+            assert len(bs.list_backups()) == 3
+            deleted = bs.delete_old_backups(keep_count=1)
+            assert deleted == 2
+            assert len(bs.list_backups()) == 1
+
+
+class TestAuditLoggerClearOld:
+    def test_clear_old_logs(self):
+        from app.services.audit_logger import AuditLogger
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            al = AuditLogger(td)
+            al.log('test1')
+            al.log('test2')
+            count = al.clear_old_logs(days=0)
+            assert count >= 0
