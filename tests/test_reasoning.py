@@ -693,3 +693,15 @@ def test_authorization_error():
     e = AuthorizationError('Yetkisiz erisim')
     assert e.status_code == 403
     assert e.code == 'authorization_error'
+
+
+def test_max_tags_default():
+    from app.config import Settings
+    s = Settings()
+    assert s.MAX_TAGS_PER_RECORD == 20
+
+
+def test_max_note_length_default():
+    from app.config import Settings
+    s = Settings()
+    assert s.MAX_NOTE_LENGTH == 2000

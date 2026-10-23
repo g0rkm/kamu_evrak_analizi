@@ -46,6 +46,8 @@ class Settings(BaseSettings):
     ANALYSIS_TIMEOUT: int = 60
     ALLOWED_FILE_TYPES: str = 'pdf,png,jpg,jpeg,tiff,bmp'
     SESSION_TIMEOUT_MINUTES: int = 30
+    MAX_TAGS_PER_RECORD: int = 20
+    MAX_NOTE_LENGTH: int = 2000
 
     # RAG
     RAG_INDEX_DIR: str = "app/data/rag"
@@ -101,6 +103,20 @@ class Settings(BaseSettings):
     def _validate_max_text(cls, v: int) -> int:
         if v < 100:
             raise ValueError("MAX_TEXT_CHARS en az 100 olmalıdır.")
+        return v
+
+    @field_validator("MAX_TAGS_PER_RECORD")
+    @classmethod
+    def _validate_max_tags(cls, v: int) -> int:
+        if not (1 <= v <= 100):
+            raise ValueError("MAX_TAGS_PER_RECORD 1 ile 100 arasında olmalıdır.")
+        return v
+
+    @field_validator("MAX_NOTE_LENGTH")
+    @classmethod
+    def _validate_max_note_length(cls, v: int) -> int:
+        if not (100 <= v <= 10000):
+            raise ValueError("MAX_NOTE_LENGTH 100 ile 10000 arasında olmalıdır.")
         return v
 
     @field_validator("ENVIRONMENT")
