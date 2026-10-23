@@ -69,8 +69,12 @@ def verify_environment(settings: Settings) -> list[str]:
         logger.info("Geçici dosya temizliği: %d dosya silindi.", tmp_count)
 
     from app import __version__
+    
+    max_file_size = getattr(settings, "MAX_FILE_SIZE_MB", 0)
+    request_body_limit = getattr(settings, "REQUEST_BODY_LIMIT_MB", 0)
+
     logger.info(
-        "Yapılandırma: v%s env=%s model=%s timeout=%.0fs analysis_timeout=%ds cache_ttl=%ds rate_limit=%d/%ds maintenance=%s max_hist=%d",
+        "Yapılandırma: v%s env=%s model=%s timeout=%.0fs analysis_timeout=%ds cache_ttl=%ds rate_limit=%d/%ds maintenance=%s max_hist=%d max_file=%dMB body_limit=%dMB",
         __version__,
         settings.ENVIRONMENT,
         settings.LLM_MODEL,
@@ -81,6 +85,8 @@ def verify_environment(settings: Settings) -> list[str]:
         settings.RATE_LIMIT_WINDOW,
         settings.MAINTENANCE_MODE,
         settings.MAX_HISTORY_RECORDS,
+        max_file_size,
+        request_body_limit,
     )
 
     return warnings
