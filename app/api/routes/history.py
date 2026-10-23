@@ -56,6 +56,12 @@ async def list_archived(limit: int = Query(50, ge=1, le=200), container: Service
     return {'records': records, 'count': len(records)}
 
 
+@router.get('/history/deleted', tags=['Gecmis'], summary='Silinen kayitlari listele')
+async def list_deleted_records(request: Request, limit: int = 50, container = Depends(get_container)):
+    records = container.history.deleted_records(limit=limit)
+    return {'records': records, 'count': len(records)}
+
+
 @router.get("/history/search", summary="Gelişmiş geçmiş arama")
 async def search_history(
     q: str = Query("", min_length=1),
@@ -320,6 +326,28 @@ async def related_records(record_id: str, limit: int = Query(5, ge=1, le=20), co
     items = container.history.list_records(limit=limit + 1, document_type=doc_type)['items']
     related = [i for i in items if i['id'] != record_id][:limit]
     return {'record_id': record_id, 'document_type': doc_type, 'related': related, 'count': len(related)}
+
+
+@router.delete('/history/{record_id}/soft', tags=['Gecmis'], summary='Kaydi soft delete yap')
+async def soft_delete_record(record_id: str, request: Request, container = Depends(get_container)):
+    repo = container.history
+    if not repo.soft_delete(record_id):
+        raise NotFoundError(f'{record_id} bulunamadi')
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('soft_delete', record_id=record_id)
+    return {'status': 'deleted', 'record_id': record_id, 'recoverable': True}
+
+
+@router.post('/history/{record_id}/restore', tags=['Gecmis'], summary='Silinen kaydi geri yukle')
+async def restore_record(record_id: str, request: Request, container = Depends(get_container)):
+    repo = container.history
+    if not repo.restore_deleted(record_id):
+        raise NotFoundError(f'{record_id} bulunamadi veya silinmemis')
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('restore', record_id=record_id)
+    return {'status': 'restored', 'record_id': record_id}
 
 
 @router.post('/history/{record_id}/archive', summary='Kaydi arsivle')

@@ -1313,3 +1313,22 @@ def test_version_is_3_2_0(client):
     resp = client.get('/api/version')
     assert resp.status_code == 200
     assert resp.json()['version'] == '3.2.0'
+
+
+def test_soft_delete_and_restore(client):
+    import io
+    resp = client.post('/api/analyze', files={'file': ('test.pdf', io.BytesIO(b'%PDF-test content'), 'application/pdf')})
+    assert resp.status_code == 200
+    rid = resp.json()['id']
+    dr = client.delete(f'/api/history/{rid}/soft')
+    assert dr.status_code == 200
+    assert dr.json()['recoverable'] is True
+    rr = client.post(f'/api/history/{rid}/restore')
+    assert rr.status_code == 200
+    assert rr.json()['status'] == 'restored'
+
+
+def test_list_deleted_records(client):
+    resp = client.get('/api/history/deleted')
+    assert resp.status_code == 200
+    assert 'records' in resp.json()
