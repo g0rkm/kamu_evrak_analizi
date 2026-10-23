@@ -757,3 +757,26 @@ class TestAuditLogger:
             assert s['total_logs'] == 3
             assert s['action_counts']['analyze'] == 2
             assert s['action_counts']['delete'] == 1
+
+
+class TestInputSanitizer:
+    def test_sanitize_string_escapes_html(self):
+        from app.core.sanitizer import InputSanitizer
+        result = InputSanitizer.sanitize_string('<script>alert(1)</script>')
+        assert '<script>' not in result
+        assert 'alert' not in result or '<' in result
+
+    def test_strip_tags(self):
+        from app.core.sanitizer import InputSanitizer
+        result = InputSanitizer.strip_tags('<b>bold</b> text')
+        assert result == 'bold text'
+
+    def test_sanitize_filename(self):
+        from app.core.sanitizer import InputSanitizer
+        assert InputSanitizer.sanitize_filename('../../etc/passwd') == 'etcpasswd'
+        assert InputSanitizer.sanitize_filename('test.pdf') == 'test.pdf'
+
+    def test_is_safe_path(self):
+        from app.core.sanitizer import InputSanitizer
+        assert InputSanitizer.is_safe_path('uploads/file.pdf') is True
+        assert InputSanitizer.is_safe_path('../etc/passwd') is False

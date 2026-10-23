@@ -2,6 +2,7 @@
 
 Çalıştırma:  python -m app.main   veya   uvicorn app.main:app
 """
+import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -83,6 +84,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return await call_next(request)
 
     app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+    @app.middleware("http")
+    async def add_request_id(request: Request, call_next):
+        request_id = request.headers.get('X-Request-ID', str(uuid.uuid4()))
+        response = await call_next(request)
+        response.headers['X-Request-ID'] = request_id
+        return response
 
     @app.middleware("http")
     async def inject_request_id(request: Request, call_next):
