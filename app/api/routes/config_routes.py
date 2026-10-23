@@ -50,3 +50,19 @@ async def api_summary(request: Request):
         if hasattr(route, 'methods') and hasattr(route, 'path'):
             routes.append({'path': route.path, 'methods': list(route.methods), 'name': route.name})
     return {'total_endpoints': len(routes), 'endpoints': sorted(routes, key=lambda x: x['path'])}
+
+
+@router.get('/system/uptime')
+async def system_uptime(request: Request):
+    import time
+    startup = getattr(request.app.state, 'startup_time', time.time())
+    uptime = time.time() - startup
+    hours = int(uptime // 3600)
+    minutes = int((uptime % 3600) // 60)
+    return {'uptime_seconds': round(uptime, 1), 'uptime_human': f'{hours}sa {minutes}dk'}
+
+
+@router.get('/system/active-jobs')
+async def active_jobs(request: Request):
+    count = getattr(request.app.state, 'active_jobs', 0)
+    return {'active_jobs': count}
