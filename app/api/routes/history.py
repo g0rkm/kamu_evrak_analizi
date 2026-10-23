@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse, Response
 
 from app.api.dependencies import get_container, get_history
 from app.container import ServiceContainer
-from app.core.exceptions import NotFoundError
+from app.core.exceptions import NotFoundError, InvalidInputError
 from app.models.api import HistoryPage, HistoryStats
 from app.models.review import ReviewState, ReviewUpdate
 from app.services.history_repository import HistoryRepository
@@ -296,7 +296,7 @@ async def records_by_type(doc_type: str, request: Request, limit: int = 50, cont
 async def records_by_priority(priority: str, request: Request, limit: int = 50, container: ServiceContainer = Depends(get_container)):
     valid = ["low", "normal", "high", "urgent"]
     if priority not in valid:
-        raise ValidationError(f"Gecersiz oncelik: {priority}. Gecerli: {valid}")
+        raise InvalidInputError(f"Gecersiz oncelik: {priority}. Gecerli: {valid}")
     records = container.history._load_all()
     filtered = [r for r in records if not r.get("deleted") and r.get("priority", "normal") == priority][:limit]
     return {"records": filtered, "count": len(filtered), "priority": priority}
@@ -515,9 +515,9 @@ async def bulk_update_priority(request: Request, body: dict, container: ServiceC
     priority = body.get("priority", "normal")
     valid = ["low", "normal", "high", "urgent"]
     if priority not in valid:
-        raise ValidationError(f"Gecersiz oncelik: {priority}")
+        raise InvalidInputError(f"Gecersiz oncelik: {priority}")
     if not ids:
-        raise ValidationError("ids listesi bos olamaz")
+        raise InvalidInputError("ids listesi bos olamaz")
     updated = 0
     for rid in ids:
         record = container.history.get(rid)
