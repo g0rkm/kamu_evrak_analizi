@@ -1531,3 +1531,19 @@ def test_migration_schema_report():
         report = svc.schema_report(records)
         assert report["total_records"] == 2
         assert report["current_schema_version"] == 2
+
+def test_version_370():
+    from app import __version__
+    assert __version__ == '3.7.0'
+
+def test_config_report_endpoint(client):
+    resp = client.get('/api/system/config-report')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'services' in data
+    assert 'max_file_size_mb' in data
+
+def test_system_environment_endpoint(client):
+    resp = client.get('/api/system/environment')
+    assert resp.status_code == 200
+    assert 'python_version' in resp.json()
