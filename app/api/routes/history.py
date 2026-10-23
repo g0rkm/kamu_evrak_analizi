@@ -655,6 +655,21 @@ async def unarchive_record(request: Request, record_id: str, container: ServiceC
     return {'record_id': record_id, 'archived': False}
 
 
+@router.patch('/history/{record_id}/priority', tags=['Gecmis'])
+async def update_priority(record_id: str, request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    priority = body.get('priority', 'normal')
+    if priority not in ('low', 'normal', 'high', 'urgent'):
+        return JSONResponse(status_code=400, content={'detail': 'Gecersiz oncelik: low, normal, high, urgent'})
+    record = container.history.get(record_id)
+    if not record:
+        raise NotFoundError(f'{record_id} bulunamadi')
+    container.history.update_field(record_id, 'priority', priority)
+    audit = getattr(container, 'audit', None)
+    if audit:
+        audit.log('update_priority', record_id=record_id, details={'priority': priority})
+    return {'record_id': record_id, 'priority': priority}
+
+
 @router.get("/history/{record_id}")
 async def get_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
     return _require(history, record_id)
