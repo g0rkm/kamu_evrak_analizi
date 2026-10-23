@@ -679,7 +679,7 @@ def test_admin_endpoint_without_token(client):
 
 
 def test_admin_endpoint_with_wrong_token():
-    """Yanlış token ile admin endpoint'lere erişim 401 dönmeli."""
+    """Yanlış token ile admin endpoint'lere erişim 403 dönmeli."""
     from app.config import Settings
     from app.main import create_app
     from starlette.testclient import TestClient
@@ -687,7 +687,7 @@ def test_admin_endpoint_with_wrong_token():
     app = create_app(settings=settings)
     with TestClient(app) as mc:
         response = mc.post("/api/cache/clear", json={}, headers={"Authorization": "Bearer wrong-token"})
-        assert response.status_code == 401
+        assert response.status_code == 403
 
 
 def test_admin_endpoint_with_correct_token():
