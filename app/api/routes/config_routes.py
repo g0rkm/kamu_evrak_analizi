@@ -41,3 +41,12 @@ async def system_environment(request: Request, container: ServiceContainer = Dep
         "platform": platform.platform(),
         "architecture": platform.architecture()[0],
     }
+
+
+@router.get('/api-summary')
+async def api_summary(request: Request):
+    routes = []
+    for route in request.app.routes:
+        if hasattr(route, 'methods') and hasattr(route, 'path'):
+            routes.append({'path': route.path, 'methods': list(route.methods), 'name': route.name})
+    return {'total_endpoints': len(routes), 'endpoints': sorted(routes, key=lambda x: x['path'])}
