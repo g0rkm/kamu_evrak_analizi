@@ -1527,3 +1527,20 @@ def test_clone_record(client):
     d = resp.json()
     assert d['cloned_from'] == 'cl1'
     assert 'clone_' in d['id']
+
+
+def test_system_report(client):
+    resp = client.get('/api/system/report')
+    assert resp.status_code == 200
+    d = resp.json()
+    assert 'version' in d
+    assert 'health' in d
+    assert 'services' in d
+
+
+def test_record_count(client):
+    resp = client.get('/api/history/count')
+    assert resp.status_code == 200
+    d = resp.json()
+    assert 'total' in d
+    assert 'active' in d
