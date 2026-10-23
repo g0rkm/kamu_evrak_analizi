@@ -1356,3 +1356,28 @@ def test_bulk_export_records(client):
     resp = client.post('/api/history/bulk-export', json={'ids': ['be1']})
     assert resp.status_code == 200
     assert resp.json()['count'] == 1
+
+
+def test_backup_create(client):
+    resp = client.post('/api/backup/create', json={})
+    assert resp.status_code == 200
+    assert 'file_count' in resp.json()
+
+
+def test_backup_list(client):
+    resp = client.get('/api/backup/list')
+    assert resp.status_code == 200
+    assert 'backups' in resp.json()
+
+
+def test_backup_cleanup(client):
+    resp = client.post('/api/backup/cleanup', json={})
+    assert resp.status_code == 200
+
+
+def test_data_integrity_check(client):
+    resp = client.get('/api/health/data-integrity')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'total_records' in data
+    assert 'status' in data
