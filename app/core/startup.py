@@ -72,9 +72,11 @@ def verify_environment(settings: Settings) -> list[str]:
     
     max_file_size = getattr(settings, "MAX_FILE_SIZE_MB", 0)
     request_body_limit = getattr(settings, "REQUEST_BODY_LIMIT_MB", 0)
+    cors_origins = getattr(settings, "CORS_ORIGINS", None)
+    log_level = getattr(settings, "LOG_LEVEL", None)
 
     logger.info(
-        "Yapılandırma: v%s env=%s model=%s timeout=%.0fs analysis_timeout=%ds cache_ttl=%ds rate_limit=%d/%ds maintenance=%s max_hist=%d max_file=%dMB body_limit=%dMB",
+        "Yapılandırma: v%s env=%s model=%s timeout=%.0fs analysis_timeout=%ds cache_ttl=%ds rate_limit=%d/%ds maintenance=%s max_hist=%d max_file=%dMB body_limit=%dMB cors=%s log_level=%s",
         __version__,
         settings.ENVIRONMENT,
         settings.LLM_MODEL,
@@ -87,6 +89,8 @@ def verify_environment(settings: Settings) -> list[str]:
         settings.MAX_HISTORY_RECORDS,
         max_file_size,
         request_body_limit,
+        cors_origins,
+        log_level,
     )
 
     return warnings
