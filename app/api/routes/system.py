@@ -1,5 +1,6 @@
 import shutil
 import time
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, Query, Request
 from pydantic import BaseModel
@@ -142,6 +143,12 @@ async def startup_checks(container: ServiceContainer = Depends(get_container), r
         'name': 'Geçmiş Dizini',
         'status': 'ok' if container.settings.history_path.exists() else 'error',
         'detail': str(container.settings.history_path)
+    })
+    audit = getattr(request.app.state.container, 'audit', None) if request else None
+    checks.append({
+        'name': 'audit_logger',
+        'status': 'ok' if audit else 'warning',
+        'detail': 'Aktif' if audit else 'Yapilandirilmamis'
     })
     try:
         disk = shutil.disk_usage(container.settings.history_path)
@@ -515,7 +522,7 @@ async def llm_health(container: ServiceContainer = Depends(get_container)):
 
 
 @router.get("/health/detailed", summary="Detaylı sağlık kontrolleri")
-async def health_detailed(container: ServiceContainer = Depends(get_container)):
+async def health_detailed(request: Request, container: ServiceContainer = Depends(get_container)):
     """Tüm alt sistem sağlık kontrollerini tek yanıtta döndürür."""
     import shutil
     checks = {}
@@ -542,6 +549,10 @@ async def health_detailed(container: ServiceContainer = Depends(get_container)):
         "available": container.rag.available,
         "chunks": container.rag.chunk_count,
     }
+
+    # Audit logger kontrolü
+    audit = getattr(request.app.state.container, 'audit', None)
+    checks["audit_logger"] = audit is not None
     
     all_ok = (
         checks["llm"]["configured"]
@@ -555,6 +566,22 @@ async def health_detailed(container: ServiceContainer = Depends(get_container)):
         content={"status": "healthy" if all_ok else "degraded", "checks": checks},
         status_code=200 if all_ok else 503,
     )
+
+
+@router.get('/health/storage', tags=['Saglik'], summary='Depolama durumu')
+async def storage_health(request: Request, container: ServiceContainer = Depends(get_container)):
+    import shutil
+    disk = shutil.disk_usage('/')
+    history_dir = Path(container.settings.HISTORY_DIR) if hasattr(container.settings, 'HISTORY_DIR') else container.settings.history_path
+    file_count = len(list(history_dir.glob('*.json'))) if history_dir.exists() else 0
+    return {
+        'disk_free_mb': disk.free // (1024 * 1024),
+        'disk_total_mb': disk.total // (1024 * 1024),
+        'disk_usage_percent': round(disk.used / disk.total * 100, 1),
+        'history_file_count': file_count,
+        'warning_threshold_mb': container.settings.DISK_WARNING_THRESHOLD_MB,
+        'status': 'ok' if disk.free // (1024 * 1024) > container.settings.DISK_WARNING_THRESHOLD_MB else 'warning'
+    }
 
 
 @router.get('/config/allowed-types', tags=['Sistem'], summary='Izin verilen dosya turleri')
