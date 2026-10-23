@@ -13,6 +13,8 @@ import { TimelineView } from './views/timeline-view.js';
 import { SettingsView } from './views/settings-view.js';
 import { LoginView } from './views/login-view.js';
 import { ProfileView } from './views/profile-view.js';
+import { SearchView } from './views/search-view.js';
+import { NotificationsView } from './views/notifications-view.js';
 
 /** Üst bardaki sistem durumu göstergesi; sağlık uç noktasını periyodik olarak sorgular. */
 class SystemStatus {
@@ -129,6 +131,8 @@ class App {
             settings: new SettingsView(context),
             login: new LoginView(context),
             profile: new ProfileView(context.toaster ? this.root : this.root),
+            search: new SearchView(context),
+            notifications: new NotificationsView(context),
         };
 
         window.addEventListener('hashchange', () => this.route());
