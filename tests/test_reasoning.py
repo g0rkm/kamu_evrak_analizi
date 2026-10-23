@@ -433,10 +433,10 @@ def test_json_formatter_output():
     assert parsed["level"] == "INFO"
 
 
-def test_app_version_is_2_7():
-    """Uygulama versiyonu 3.1.0 olmalı."""
+def test_app_version():
+    """Uygulama versiyonu 3.2.0 olmalı."""
     from app import __version__
-    assert __version__ == "3.1.0"
+    assert __version__ == "3.2.0"
 
 
 def test_settings_has_all_new_fields():
