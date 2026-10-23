@@ -868,3 +868,35 @@ class TestWebhookService:
         wh = ws.register('http://test.com/hook')
         ws.unregister(wh['id'])
         assert len(ws.list_webhooks()) == 0
+
+
+class TestTextAnalyzerEdgeCases:
+    def test_single_word(self):
+        from app.services.text_analyzer import TextAnalyzer
+        r = TextAnalyzer.analyze('merhaba')
+        assert r['word_count'] == 1
+        assert r['sentence_count'] == 1
+        assert r['vocabulary_richness'] == 1.0
+
+    def test_long_text(self):
+        from app.services.text_analyzer import TextAnalyzer
+        text = 'Bu bir test cumlesi. ' * 100
+        r = TextAnalyzer.analyze(text)
+        assert r['word_count'] > 0
+        assert r['readability_score'] >= 0
+
+
+class TestSanitizerEdgeCases:
+    def test_sanitize_none_input(self):
+        from app.core.sanitizer import InputSanitizer
+        assert InputSanitizer.sanitize_string(123) == 123
+        assert InputSanitizer.strip_tags(None) is None
+
+    def test_empty_filename(self):
+        from app.core.sanitizer import InputSanitizer
+        assert InputSanitizer.sanitize_filename('') == ''
+
+    def test_safe_path_normal(self):
+        from app.core.sanitizer import InputSanitizer
+        assert InputSanitizer.is_safe_path('documents/report.pdf') is True
+        assert InputSanitizer.is_safe_path('') is True
