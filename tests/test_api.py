@@ -1466,3 +1466,19 @@ def test_system_capabilities(client):
     assert 'features' in data
     assert data['features']['file_analysis'] is True
     assert 'limits' in data
+
+
+def test_text_analyze_detailed(client):
+    resp = client.post('/api/text/analyze', json={'text': 'Bu bir test metnidir. Ikinci cumle burada yer almaktadir.'})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data['word_count'] > 0
+    assert 'readability_score' in data
+
+
+def test_text_compare(client):
+    resp = client.post('/api/text/compare', json={'text1': 'merhaba dunya test', 'text2': 'merhaba baska test'})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data['similarity_score'] > 0
+    assert 'common_words' in data
