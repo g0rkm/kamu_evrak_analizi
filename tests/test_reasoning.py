@@ -911,47 +911,47 @@ def test_ip_config_defaults():
 
 def test_records_by_priority(client):
     """Oncelige gore filtreleme testi."""
-    resp = client.get("/history")
+    resp = client.get("/api/history")
     records = resp.json().get("records", [])
     if records:
         record_id = records[0]["id"]
-        resp = client.patch(f"/history/{record_id}/priority", json={"priority": "high"})
+        resp = client.patch(f"/api/history/{record_id}/priority", json={"priority": "high"})
         if resp.status_code == 200:
-            resp2 = client.get("/history/by-priority/high")
+            resp2 = client.get("/api/history/by-priority/high")
             assert resp2.status_code == 200
             data = resp2.json()
             assert data["priority"] == "high"
         return
-    resp = client.get("/history/by-priority/normal")
+    resp = client.get("/api/history/by-priority/normal")
     assert resp.status_code == 200
     assert resp.json()["priority"] == "normal"
 
 def test_records_by_priority_invalid(client):
     """Gecersiz oncelik filtrelemesi."""
-    resp = client.get("/history/by-priority/critical")
+    resp = client.get("/api/history/by-priority/critical")
     assert resp.status_code == 400
 
 def test_bulk_update_priority(client):
     """Toplu oncelik guncelleme testi."""
-    resp = client.get("/history")
+    resp = client.get("/api/history")
     records = resp.json().get("records", [])
     if records:
         record_id = records[0]["id"]
-        resp = client.post("/history/bulk-priority", json={"ids": [record_id], "priority": "urgent"})
+        resp = client.post("/api/history/bulk-priority", json={"ids": [record_id], "priority": "urgent"})
         assert resp.status_code == 200
         data = resp.json()
         assert data["updated"] == 1
         return
-    resp = client.post("/history/bulk-priority", json={"ids": ["nonexistent"], "priority": "normal"})
+    resp = client.post("/api/history/bulk-priority", json={"ids": ["nonexistent"], "priority": "normal"})
     assert resp.status_code == 200
     assert resp.json()["updated"] == 0
 
 def test_bulk_update_priority_invalid(client):
     """Gecersiz oncelik toplu guncelleme."""
-    resp = client.post("/history/bulk-priority", json={"ids": ["fake"], "priority": "xxx"})
+    resp = client.post("/api/history/bulk-priority", json={"ids": ["fake"], "priority": "xxx"})
     assert resp.status_code == 400
 
 def test_bulk_update_priority_empty_ids(client):
     """Bos id listesiyle toplu guncelleme."""
-    resp = client.post("/history/bulk-priority", json={"ids": [], "priority": "high"})
+    resp = client.post("/api/history/bulk-priority", json={"ids": [], "priority": "high"})
     assert resp.status_code == 400
