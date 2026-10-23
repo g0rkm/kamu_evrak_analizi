@@ -568,6 +568,29 @@ async def health_detailed(request: Request, container: ServiceContainer = Depend
     )
 
 
+@router.get('/health/data-integrity', tags=['Saglik'], summary='Veri butunlugu kontrolu')
+async def data_integrity_check(request: Request, container: ServiceContainer = Depends(get_container)):
+    repo = container.history
+    all_records = repo._load_all()
+    issues = []
+    total = len(all_records)
+    for r in all_records:
+        rid = r.get('id', '')
+        if not rid:
+            issues.append({'type': 'missing_id', 'detail': 'ID alani eksik'})
+            continue
+        if not r.get('file_name'):
+            issues.append({'type': 'missing_file_name', 'record_id': rid})
+        if not r.get('status'):
+            issues.append({'type': 'missing_status', 'record_id': rid})
+    return {
+        'total_records': total,
+        'issues_found': len(issues),
+        'issues': issues[:50],
+        'status': 'healthy' if not issues else 'issues_detected'
+    }
+
+
 @router.get('/health/storage', tags=['Saglik'], summary='Depolama durumu')
 async def storage_health(request: Request, container: ServiceContainer = Depends(get_container)):
     import shutil
