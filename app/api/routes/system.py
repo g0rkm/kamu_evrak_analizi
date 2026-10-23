@@ -311,6 +311,27 @@ async def extract_keywords(body: dict):
     return {'keywords': top_keywords, 'total_words': len(words), 'unique_words': len(set(filtered))}
 
 
+@router.post('/text/sanitize', tags=['Sistem'], summary='Metin temizleme')
+async def sanitize_text(body: dict):
+    import re
+    text = body.get('text', '')
+    if not text:
+        from app.core.exceptions import InvalidInputError
+        raise InvalidInputError('text alani gereklidir.')
+    sanitized = text
+    sanitized = re.sub(r'<[^>]+>', '', sanitized)
+    sanitized = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', sanitized)
+    sanitized = sanitized.strip()
+    sanitized = re.sub(r'\n{3,}', '\n\n', sanitized)
+    sanitized = re.sub(r' {2,}', ' ', sanitized)
+    return {
+        'original_length': len(text),
+        'sanitized_length': len(sanitized),
+        'sanitized_text': sanitized,
+        'changes_made': len(text) != len(sanitized)
+    }
+
+
 @router.post('/validate-text', summary='Metin dogrulama')
 async def validate_text(body: MaskRequest):
     issues = []

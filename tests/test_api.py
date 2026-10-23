@@ -1215,3 +1215,11 @@ def test_status_codes_distribution(client):
     assert response.status_code == 200;
     data = response.json();
     assert '2xx' in data
+
+
+def test_sanitize_text(client):
+    response = client.post('/api/text/sanitize', json={'text': '<b>test</b>  extra   spaces'})
+    assert response.status_code == 200
+    data = response.json()
+    assert 'sanitized_text' in data
+    assert '<b>' not in data['sanitized_text']
