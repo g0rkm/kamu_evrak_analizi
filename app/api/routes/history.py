@@ -2,7 +2,7 @@ import csv
 import io
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import JSONResponse
 
 from app.api.dependencies import get_container, get_history
@@ -273,7 +273,7 @@ async def export_csv(history: HistoryRepository = Depends(get_history)):
 
 
 @router.post("/history/bulk-delete", summary="Seçili kayıtları toplu sil")
-async def bulk_delete_records(body: dict, history: HistoryRepository = Depends(get_history)):
+async def bulk_delete_records(request: Request, body: dict, history: HistoryRepository = Depends(get_history)):
     ids = body.get("ids")
     if not isinstance(ids, list) or not ids:
         from app.core.exceptions import InvalidInputError
@@ -285,6 +285,9 @@ async def bulk_delete_records(body: dict, history: HistoryRepository = Depends(g
     for record_id in ids:
         if history.delete(record_id):
             deleted += 1
+    audit = getattr(getattr(request.app.state, 'container', None), 'audit', None)
+    if audit:
+        audit.log('bulk_delete', details={'count': len(body.get('ids', []))})
     return {"deleted": deleted, "requested": len(ids)}
 
 
@@ -320,21 +323,27 @@ async def related_records(record_id: str, limit: int = Query(5, ge=1, le=20), co
 
 
 @router.post('/history/{record_id}/archive', summary='Kaydi arsivle')
-async def archive_record(record_id: str, container: ServiceContainer = Depends(get_container)):
+async def archive_record(request: Request, record_id: str, container: ServiceContainer = Depends(get_container)):
     record = container.history.get(record_id)
     if record is None:
         raise NotFoundError('Kayit bulunamadi.')
     container.history.update_field(record_id, 'archived', True)
     container.history.update_field(record_id, 'archived_at', datetime.now(timezone.utc).isoformat())
+    audit = getattr(getattr(request.app.state, 'container', None), 'audit', None)
+    if audit:
+        audit.log('archive', record_id=record_id)
     return {'record_id': record_id, 'archived': True}
 
 
 @router.post('/history/{record_id}/unarchive', summary='Kaydi arsivden cikar')
-async def unarchive_record(record_id: str, container: ServiceContainer = Depends(get_container)):
+async def unarchive_record(request: Request, record_id: str, container: ServiceContainer = Depends(get_container)):
     record = container.history.get(record_id)
     if record is None:
         raise NotFoundError('Kayit bulunamadi.')
     container.history.update_field(record_id, 'archived', False)
+    audit = getattr(getattr(request.app.state, 'container', None), 'audit', None)
+    if audit:
+        audit.log('unarchive', record_id=record_id)
     return {'record_id': record_id, 'archived': False}
 
 
@@ -349,7 +358,7 @@ async def update_review(record_id: str, body: ReviewUpdate, history: HistoryRepo
 
 
 @router.patch("/history/{record_id}/tags", summary="Kayıt etiketlerini güncelle")
-async def update_tags(record_id: str, body: dict, history: HistoryRepository = Depends(get_history), container: ServiceContainer = Depends(get_container)):
+async def update_tags(request: Request, record_id: str, body: dict, history: HistoryRepository = Depends(get_history), container: ServiceContainer = Depends(get_container)):
     record = _require(history, record_id)
     tags = body.get("tags")
     if len(tags) > container.settings.MAX_TAGS_PER_RECORD:
@@ -367,19 +376,25 @@ async def update_tags(record_id: str, body: dict, history: HistoryRepository = D
     # Etiketleri normalize et
     tags = [str(t).strip().lower()[:50] for t in tags if str(t).strip()]
     history.update_tags(record_id, tags)
+    audit = getattr(getattr(request.app.state, 'container', None), 'audit', None)
+    if audit:
+        audit.log('update_tags', record_id=record_id, details={'tags': tags})
     return {"record_id": record_id, "tags": tags}
 
 
 @router.patch("/history/{record_id}/favorite", summary="Kayıdı favorilere ekle/çıkar")
-async def toggle_favorite(record_id: str, body: dict, history: HistoryRepository = Depends(get_history)):
+async def toggle_favorite(request: Request, record_id: str, body: dict, history: HistoryRepository = Depends(get_history)):
     record = _require(history, record_id)
     favorite = body.get("favorite", False)
     history.update_field(record_id, "favorite", bool(favorite))
+    audit = getattr(getattr(request.app.state, 'container', None), 'audit', None)
+    if audit:
+        audit.log('favorite', record_id=record_id)
     return {"record_id": record_id, "favorite": bool(favorite)}
 
 
 @router.patch("/history/{record_id}/notes", summary="Kayıda not ekle")
-async def update_notes(record_id: str, body: dict, history: HistoryRepository = Depends(get_history), container: ServiceContainer = Depends(get_container)):
+async def update_notes(request: Request, record_id: str, body: dict, history: HistoryRepository = Depends(get_history), container: ServiceContainer = Depends(get_container)):
     record = _require(history, record_id)
     notes = body.get("notes", "")
     if len(notes) > container.settings.MAX_NOTE_LENGTH:
@@ -389,6 +404,9 @@ async def update_notes(record_id: str, body: dict, history: HistoryRepository = 
         from app.core.exceptions import InvalidInputError
         raise InvalidInputError("'notes' bir metin olmalıdır.")
     history.update_field(record_id, "notes", notes)
+    audit = getattr(getattr(request.app.state, 'container', None), 'audit', None)
+    if audit:
+        audit.log('update_notes', record_id=record_id)
     return {"record_id": record_id, "notes": notes}
 
 
@@ -403,9 +421,12 @@ async def duplicate_record(record_id: str, history: HistoryRepository = Depends(
 
 
 @router.delete("/history/{record_id}")
-async def delete_history_record(record_id: str, history: HistoryRepository = Depends(get_history)):
+async def delete_history_record(request: Request, record_id: str, history: HistoryRepository = Depends(get_history)):
     if not history.delete(record_id):
         raise NotFoundError("Analiz kaydı bulunamadı.")
+    audit = getattr(getattr(request.app.state, 'container', None), 'audit', None)
+    if audit:
+        audit.log('delete', record_id=record_id)
     return {"status": "deleted"}
 
 
@@ -430,7 +451,7 @@ async def get_audit_log(record_id: str, container: ServiceContainer = Depends(ge
 
 
 @router.post("/history/import", summary="Dışa aktarılmış kayıtları içe aktar")
-async def import_records(body: dict, container: ServiceContainer = Depends(get_container)):
+async def import_records(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
     records = body.get("records")
     if not isinstance(records, list):
         from app.core.exceptions import InvalidInputError
@@ -439,6 +460,9 @@ async def import_records(body: dict, container: ServiceContainer = Depends(get_c
         from app.core.exceptions import InvalidInputError
         raise InvalidInputError("Tek seferde en fazla 500 kayıt içe aktarılabilir.")
     imported = container.history.import_records(records)
+    audit = getattr(getattr(request.app.state, 'container', None), 'audit', None)
+    if audit:
+        audit.log('import_records', details={'count': len(records)})
     return {"imported": imported}
 
 
