@@ -313,4 +313,52 @@ export class ApiClient {
     async exportJson() { return this.request('/history/export-json'); }
     async dateRangeRecords(start, end) { const params = []; if (start) params.push('start=' + start); if (end) params.push('end=' + end); return this.request('/history/date-range' + (params.length ? '?' + params.join('&') : '')); }
     async endpointMetrics() { return this.request('/metrics/endpoints'); }
+
+    async validateRecord(recordId) {
+        return this.request('/history/' + recordId + '/validate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+        });
+    }
+
+    async cloneRecord(recordId) {
+        return this.request('/history/' + recordId + '/clone', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+        });
+    }
+
+    async bulkSoftDelete(ids) {
+        return this.request('/history/bulk-soft-delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids })
+        });
+    }
+
+    async bulkArchive(ids) {
+        return this.request('/history/bulk-archive', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids })
+        });
+    }
+
+    async createBackup() {
+        return this.request('/backup/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+        });
+    }
+
+    async deletedRecords() {
+        return this.request('/history/deleted');
+    }
+
+    async duplicateRecords() {
+        return this.request('/history/duplicates');
+    }
 }
