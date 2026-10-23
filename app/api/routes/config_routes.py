@@ -138,3 +138,25 @@ async def check_directories(container: ServiceContainer = Depends(get_container)
         from app.services.health_checker import HealthChecker
         hc = HealthChecker()
     return hc.check_data_directories()
+
+
+@router.get("/cache/stats")
+async def cache_stats(container: ServiceContainer = Depends(get_container)):
+    if not container.cache:
+        return {"error": "Cache service not available"}
+    return container.cache.stats()
+
+
+@router.post("/cache/clear")
+async def clear_cache(container: ServiceContainer = Depends(get_container)):
+    if not container.cache:
+        return {"error": "Cache service not available"}
+    container.cache.clear()
+    return {"status": "cleared"}
+
+
+@router.get("/retry/stats")
+async def retry_stats(container: ServiceContainer = Depends(get_container)):
+    if not container.retry:
+        return {"error": "Retry service not available"}
+    return container.retry.stats()
