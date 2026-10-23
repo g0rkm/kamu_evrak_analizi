@@ -302,6 +302,15 @@ async def records_by_priority(priority: str, request: Request, limit: int = 50, 
     return {"records": filtered, "count": len(filtered), "priority": priority}
 
 
+@router.get("/history/{record_id}/changelog", tags=["Gecmis"])
+async def record_changelog(record_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if not record:
+        raise NotFoundError(f"Kayit bulunamadi: {record_id}")
+    changelog = container.history.record_changelog(record_id)
+    return {"record_id": record_id, "changelog": changelog, "count": len(changelog)}
+
+
 @router.get('/history/tag-stats', tags=['Gecmis'], summary='Etiket istatistikleri')
 async def tag_statistics(request: Request, container: ServiceContainer = Depends(get_container)):
     records = container.history._load_all()
