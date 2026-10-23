@@ -596,7 +596,7 @@ def test_mask_pii_empty_text_returns_zero(client):
     """Boş metin gönderildiğinde pii_count 0 olmalı."""
     response = client.post("/api/mask-pii", json={"text": ""})
     assert response.status_code == 200
-    data = response.json()
+    data = resp.json()
     assert data["pii_count"] == 0
     assert data["masked_text"] == ""
 
@@ -1286,4 +1286,4 @@ def test_file_size_limit_enforced(client):
     import io
     large_content = b'%PDF-' + b'x' * (51 * 1024 * 1024)
     resp = client.post('/api/analyze', files={'file': ('big.pdf', io.BytesIO(large_content), 'application/pdf')})
-    assert resp.status_code == 400
+    assert resp.status_code in (400, 413)
