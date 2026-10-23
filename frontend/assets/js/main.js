@@ -10,6 +10,7 @@ import { TrendsView } from './views/trends-view.js';
 import { AuditView } from './views/audit-view.js';
 import { PiiView } from './views/pii-view.js';
 import { TimelineView } from './views/timeline-view.js';
+import { SettingsView } from './views/settings-view.js';
 
 /** Üst bardaki sistem durumu göstergesi; sağlık uç noktasını periyodik olarak sorgular. */
 class SystemStatus {
@@ -122,6 +123,7 @@ class App {
             audit: new AuditView(context),
             pii: new PiiView(context),
             timeline: new TimelineView(context),
+            settings: new SettingsView(context),
         };
 
         window.addEventListener('hashchange', () => this.route());
