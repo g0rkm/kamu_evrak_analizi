@@ -1567,3 +1567,184 @@ def test_system_active_jobs_endpoint(client):
     resp = client.get('/api/system/active-jobs')
     assert resp.status_code == 200
     assert 'active_jobs' in resp.json()
+
+
+class TestFileValidator:
+    def test_valid_extension(self):
+        from app.services.file_validator import FileValidator
+        v = FileValidator()
+        assert v.validate_extension("test.pdf") is True
+        assert v.validate_extension("test.docx") is True
+        assert v.validate_extension("test.exe") is False
+        assert v.validate_extension("test.py") is False
+
+    def test_validate_size(self):
+        from app.services.file_validator import FileValidator
+        v = FileValidator(max_file_size_mb=10)
+        assert v.validate_size(5 * 1024 * 1024) is True
+        assert v.validate_size(15 * 1024 * 1024) is False
+        assert v.validate_size(0) is True
+        assert v.validate_size(-1) is False
+
+    def test_validate_filename(self):
+        from app.services.file_validator import FileValidator
+        v = FileValidator()
+        assert v.validate_filename("test.pdf") == "test.pdf"
+        assert v.validate_filename("../../etc/passwd") == "passwd"
+        assert v.validate_filename("") == "unnamed_file"
+        name = v.validate_filename("a" * 300 + ".pdf")
+        assert len(name) <= 255
+
+    def test_validate_full(self):
+        from app.services.file_validator import FileValidator
+        v = FileValidator(max_file_size_mb=10)
+        result = v.validate("report.pdf", 1024)
+        assert result["valid"] is True
+        assert result["errors"] == []
+        result2 = v.validate("script.exe", 1024)
+        assert result2["valid"] is False
+        assert len(result2["errors"]) > 0
+
+    def test_file_type_label(self):
+        from app.services.file_validator import FileValidator
+        v = FileValidator()
+        assert v.get_file_type_label("test.pdf") == "PDF Belgesi"
+        assert v.get_file_type_label("test.docx") == "Word Belgesi"
+        assert v.get_file_type_label("test.txt") == "Metin Dosyası"
+        assert v.get_file_type_label("test.xlsx") == "Excel Tablosu"
+        assert "Gorsel" in v.get_file_type_label("test.png") or "rsel" in v.get_file_type_label("test.png")
+
+
+class TestSessionManager:
+    def test_create_and_validate(self):
+        from app.services.session_manager import SessionManager
+        sm = SessionManager(timeout_minutes=30)
+        session = sm.create_session("tok1", "admin", "admin")
+        assert session["username"] == "admin"
+        valid = sm.validate_session("tok1")
+        assert valid is not None
+        assert valid["username"] == "admin"
+
+    def test_session_timeout(self):
+        from app.services.session_manager import SessionManager
+        from datetime import datetime, timezone, timedelta
+        sm = SessionManager(timeout_minutes=1)
+        sm.create_session("tok1", "user1", "memur")
+        sm._sessions["tok1"]["last_activity"] = (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()
+        result = sm.validate_session("tok1")
+        assert result is None
+
+    def test_max_sessions_per_user(self):
+        from app.services.session_manager import SessionManager
+        sm = SessionManager(timeout_minutes=30, max_sessions_per_user=2)
+        sm.create_session("t1", "user1", "memur")
+        sm.create_session("t2", "user1", "memur")
+        sm.create_session("t3", "user1", "memur")
+        sessions = sm.get_active_sessions("user1")
+        assert len(sessions) == 2
+
+    def test_end_session(self):
+        from app.services.session_manager import SessionManager
+        sm = SessionManager()
+        sm.create_session("tok1", "admin", "admin")
+        assert sm.end_session("tok1") is True
+        assert sm.end_session("tok1") is False
+        assert sm.validate_session("tok1") is None
+
+    def test_stats(self):
+        from app.services.session_manager import SessionManager
+        sm = SessionManager()
+        sm.create_session("t1", "u1", "admin")
+        sm.create_session("t2", "u2", "memur")
+        stats = sm.stats()
+        assert stats["total_active"] == 2
+        assert stats["unique_users"] == 2
+
+
+class TestHealthChecker:
+    def test_check_disk(self):
+        from app.services.health_checker import HealthChecker
+        hc = HealthChecker()
+        result = hc.check_disk()
+        assert "free_mb" in result
+        assert "total_mb" in result
+        assert "used_percent" in result
+        assert isinstance(result["warning"], bool)
+
+    def test_check_python(self):
+        from app.services.health_checker import HealthChecker
+        hc = HealthChecker()
+        result = hc.check_python()
+        assert "version" in result
+        assert "platform" in result
+        assert "architecture" in result
+
+    def test_check_service(self):
+        from app.services.health_checker import HealthChecker
+        hc = HealthChecker()
+        result = hc.check_service("test", "some_obj")
+        assert result["available"] is True
+        assert result["name"] == "test"
+        result2 = hc.check_service("empty", None)
+        assert result2["available"] is False
+
+    def test_check_all(self):
+        from app.services.health_checker import HealthChecker
+        hc = HealthChecker()
+        result = hc.check_all({"svc1": "obj", "svc2": None})
+        assert result["status"] in ("healthy", "degraded", "unhealthy")
+        assert "disk" in result
+        assert "memory" in result
+        assert "services" in result
+        assert result["services"]["svc1"]["available"] is True
+        assert result["services"]["svc2"]["available"] is False
+
+
+class TestNewEndpoints:
+    def test_validate_file_endpoint(self, client):
+        resp = client.post("/api/validate-file", json={"filename": "test.pdf", "file_size": 1024})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["valid"] is True
+        assert "file_type" in data
+
+    def test_supported_file_types(self, client):
+        resp = client.get("/api/supported-file-types")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "extensions" in data
+        assert ".pdf" in data["extensions"]
+        assert "max_size_mb" in data
+
+    def test_session_stats(self, client):
+        resp = client.get("/api/sessions/stats")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "total_active" in data
+
+    def test_active_sessions(self, client):
+        resp = client.get("/api/sessions/active")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "sessions" in data
+        assert "count" in data
+
+    def test_cleanup_sessions(self, client):
+        resp = client.post("/api/sessions/cleanup", json={})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "removed" in data
+
+    def test_comprehensive_health(self, client):
+        resp = client.get("/api/health/comprehensive")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["status"] in ("healthy", "degraded", "unhealthy")
+        assert "disk" in data
+        assert "services" in data
+
+    def test_health_directories(self, client):
+        resp = client.get("/api/health/directories")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert isinstance(data, dict)
