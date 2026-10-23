@@ -413,4 +413,13 @@ export class ApiClient {
     async register(username, password, role, fullName) { return this.request('/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password, role, full_name: fullName }) }); }
     async validateToken(token) { return this.request('/auth/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) }); }
     async roles() { return this.request('/auth/roles'); }
+
+    async validateFile(filename, fileSize) { return this.request("/validate-file", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ filename, file_size: fileSize }) }); }
+    async supportedFileTypes() { return this.request("/supported-file-types"); }
+    async sessionStats() { return this.request("/sessions/stats"); }
+    async activeSessions() { return this.request("/sessions/active"); }
+    async cleanupSessions() { return this.request("/sessions/cleanup", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }); }
+    async systemHealthCheck() { return this.request("/system/health-check"); }
+    async systemDirectories() { return this.request("/system/directories"); }
+    async schedulerTasks() { return this.request("/scheduler/tasks"); }
 }
