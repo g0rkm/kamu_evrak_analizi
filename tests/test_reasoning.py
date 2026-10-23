@@ -434,9 +434,9 @@ def test_json_formatter_output():
 
 
 def test_app_version():
-    """Uygulama versiyonu 3.2.0 olmalı."""
+    """Uygulama versiyonu 3.3.0 olmalı."""
     from app import __version__
-    assert __version__ == "3.2.0"
+    assert __version__ == "3.3.0"
 
 
 def test_settings_has_all_new_fields():
