@@ -1,5 +1,6 @@
 import csv
 import io
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import JSONResponse
@@ -310,6 +311,16 @@ async def related_records(record_id: str, limit: int = Query(5, ge=1, le=20), co
     items = container.history.list_records(limit=limit + 1, document_type=doc_type)['items']
     related = [i for i in items if i['id'] != record_id][:limit]
     return {'record_id': record_id, 'document_type': doc_type, 'related': related, 'count': len(related)}
+
+
+@router.post('/history/{record_id}/archive', summary='Kaydi arsivle')
+async def archive_record(record_id: str, container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if record is None:
+        raise NotFoundError('Kayit bulunamadi.')
+    container.history.update_field(record_id, 'archived', True)
+    container.history.update_field(record_id, 'archived_at', datetime.now(timezone.utc).isoformat())
+    return {'record_id': record_id, 'archived': True}
 
 
 @router.get("/history/{record_id}")

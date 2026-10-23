@@ -749,7 +749,7 @@ def test_bulk_delete_invalid_body(client):
 
 
 def test_bulk_delete_nonexistent_ids(client):
-    """Var olmayan id'leri silmeye çalışmak 200 dönmeli (deleted=0)."""
+    """Var olan id'leri silmeye çalışmak 200 dönmeli (deleted=0)."""
     response = client.post("/api/history/bulk-delete", json={"ids": ["nonexistent-1", "nonexistent-2"]})
     assert response.status_code == 200
     data = response.json()
@@ -1223,3 +1223,8 @@ def test_sanitize_text(client):
     data = response.json()
     assert 'sanitized_text' in data
     assert '<b>' not in data['sanitized_text']
+
+
+def test_archive_record_not_found(client):
+    response = client.post('/api/history/nonexistent/archive', json={})
+    assert response.status_code == 404
