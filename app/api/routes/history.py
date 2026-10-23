@@ -12,6 +12,7 @@ from app.core.exceptions import NotFoundError, InvalidInputError
 from app.models.api import HistoryPage, HistoryStats
 from app.models.review import ReviewState, ReviewUpdate
 from app.services.history_repository import HistoryRepository
+from app.services.export_service import ExportService
 from pydantic import BaseModel
 
 class BulkIdsBody(BaseModel):
@@ -354,6 +355,38 @@ async def export_json(request: Request, container: ServiceContainer = Depends(ge
     records = [r for r in records if not r.get('deleted')]
     content = json_mod.dumps(records, ensure_ascii=False, indent=2)
     return Response(content=content, media_type='application/json', headers={'Content-Disposition': 'attachment; filename=export.json'})
+
+
+@router.get("/history/export/csv", tags=["Gecmis"])
+async def export_csv_endpoint(request: Request, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    active = [r for r in records if not r.get("deleted")]
+    csv_data = ExportService.to_csv(active)
+    return Response(
+        content=csv_data,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=kayitlar.csv"}
+    )
+
+
+@router.get("/history/export/json-file", tags=["Gecmis"])
+async def export_json_file(request: Request, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    active = [r for r in records if not r.get("deleted")]
+    json_data = ExportService.to_json(active)
+    return Response(
+        content=json_data,
+        media_type="application/json",
+        headers={"Content-Disposition": "attachment; filename=kayitlar.json"}
+    )
+
+
+@router.get("/history/export/report", tags=["Gecmis"])
+async def export_report(request: Request, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    active = [r for r in records if not r.get("deleted")]
+    report = ExportService.summary_report(active)
+    return report
 
 
 @router.get('/history/date-range', tags=['Gecmis'], summary='Tarih araliginda kayitlar')
