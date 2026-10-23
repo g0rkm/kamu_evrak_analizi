@@ -872,3 +872,14 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .notif-item.notif-critical { border-left-color: #991b1b; }
 .notif-level { font-size: 0.7rem; text-transform: uppercase; padding: 1px 4px; border-radius: 3px; background: #f3f4f6; margin-right: 0.5rem; }
 .notif-item small { display: block; color: var(--text-secondary, #666); margin-top: 0.25rem; }
+
+.login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 60vh; padding: 2rem; }
+.login-card { background: var(--card-bg, #fff); border: 1px solid var(--border, #e0e0e0); border-radius: 12px; padding: 2rem; width: 100%; max-width: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.login-card h2 { text-align: center; margin-bottom: 1.5rem; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.3rem; font-weight: 500; font-size: 0.9rem; }
+.form-group input { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--border, #d1d5db); border-radius: 6px; font-size: 1rem; }
+.form-group input:focus { outline: none; border-color: var(--primary, #2563eb); box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
+.btn-block { width: 100%; padding: 0.6rem; font-size: 1rem; }
+.error-text { color: #dc2626; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.success-text { color: #16a34a; font-size: 0.85rem; }

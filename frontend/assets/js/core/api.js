@@ -408,4 +408,9 @@ export class ApiClient {
     async dailyStats(days = 30) { return this.request(`/history/stats/daily?days=${days}`); }
     async exportJsonFile() { return this.request('/history/export/json-file'); }
     async exportReport() { return this.request('/history/export/report'); }
+
+    async login(username, password) { return this.request('/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) }); }
+    async register(username, password, role, fullName) { return this.request('/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password, role, full_name: fullName }) }); }
+    async validateToken(token) { return this.request('/auth/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) }); }
+    async roles() { return this.request('/auth/roles'); }
 }
