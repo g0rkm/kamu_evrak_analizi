@@ -70,6 +70,8 @@ class Settings(BaseSettings):
     CSP_REPORT_ONLY: bool = True
     MAINTENANCE_MODE: bool = False
     ADMIN_TOKEN: str = ""
+    IP_WHITELIST: str = ""  # virgül ile ayrılmış izin verilen IP listesi, boş ise tüm IP'ler
+    IP_BLACKLIST: str = ""  # virgül ile ayrılmış engellenen IP listesi
 
     @field_validator("LOG_FORMAT")
     @classmethod
@@ -159,6 +161,18 @@ class Settings(BaseSettings):
         if not (1 <= v <= 1440):
             raise ValueError("SESSION_TIMEOUT_MINUTES 1 ile 1440 arasında olmalıdır.")
         return v
+
+    @field_validator("IP_WHITELIST", "IP_BLACKLIST")
+    @classmethod
+    def _validate_ip_list(cls, v: str) -> str:
+        if v is None:
+            return ""
+        v = v.strip()
+        if not v:
+            return ""
+        # Basitçe virgülle ayrılmış yapı kontrolü veya temizleme yapılabilir
+        parts = [p.strip() for p in v.split(",") if p.strip()]
+        return ",".join(parts)
 
     @staticmethod
     def resolve(path: str) -> Path:
