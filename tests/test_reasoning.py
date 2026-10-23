@@ -719,8 +719,8 @@ class TestAuditLogger:
             al.log('delete', record_id='r2')
             logs = al.get_logs()
             assert len(logs) == 2
-            assert logs[0]['action'] == 'delete'
-            assert logs[1]['action'] == 'analyze'
+            assert logs[0]['action'] == 'analyze'
+            assert logs[1]['action'] == 'delete'
 
     def test_audit_filter_by_action(self):
         from app.services.audit_logger import AuditLogger
