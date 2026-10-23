@@ -24,6 +24,7 @@ from app.core.startup import verify_environment
 from app.core.timeout_middleware import RequestTimeoutMiddleware, ActiveJobsMiddleware
 from app.core.security_middleware import SecurityHeadersMiddleware
 from app.core.ip_filter_middleware import IPFilterMiddleware
+from app.core.audit_middleware import AuditMiddleware
 from app.services.audit_logger import AuditLogger
 from app.services.auth_service import AuthService
 from app.services.backup_service import BackupService
@@ -55,7 +56,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        app.state.container = ServiceContainer.build(settings)
+        container = ServiceContainer.build(settings)
+        app.state.container = container
         app.state.container.audit = AuditLogger(log_dir=str(Path(settings.HISTORY_DIR) / 'audit'))
         app.state.container.backup = BackupService(history_dir=str(Path(settings.HISTORY_DIR)))
         app.state.container.webhooks = WebhookService()
@@ -212,6 +214,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return await call_next(request)
 
     app.add_middleware(SecurityHeadersMiddleware)
+    app.add_middleware(AuditMiddleware, audit_service=lambda: app.state.container.audit)
 
     if settings.IP_WHITELIST or settings.IP_BLACKLIST:
         app.add_middleware(IPFilterMiddleware, whitelist=settings.IP_WHITELIST, blacklist=settings.IP_BLACKLIST)
