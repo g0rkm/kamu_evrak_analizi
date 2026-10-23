@@ -15,6 +15,7 @@ from app.core.taxonomy import DOCUMENT_TYPES, DRAFT_TYPES, ORG_UNITS, PRIORITIES
 from app.models.api import HealthStatus
 from app.services.pii_detector import PIIDetector
 from app.services.upload_storage import ALLOWED_EXTENSIONS
+from app.core.exceptions import NotFoundError
 
 router = APIRouter(tags=["sistem"])
 _start_time = time.monotonic()
@@ -780,6 +781,32 @@ async def data_integrity_check(request: Request, container: ServiceContainer = D
         'issues': issues[:50],
         'status': 'healthy' if not issues else 'issues_detected'
     }
+
+
+@router.post("/integrity/verify/{record_id}", tags=["Sistem"])
+async def verify_record_integrity(record_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
+    record = container.history.get(record_id)
+    if not record:
+        raise NotFoundError(f"Kayit bulunamadi: {record_id}")
+    result = container.integrity.verify_record_integrity(record)
+    result["record_id"] = record_id
+    return result
+
+
+@router.post("/integrity/verify-all", tags=["Sistem"])
+async def verify_all_integrity(request: Request, container: ServiceContainer = Depends(get_container)):
+    records = container.history._load_all()
+    results = {"total": len(records), "valid": 0, "invalid": 0, "issues": []}
+    for record in records:
+        if record.get("deleted"):
+            continue
+        check = container.integrity.verify_record_integrity(record)
+        if check["valid"]:
+            results["valid"] += 1
+        else:
+            results["invalid"] += 1
+            results["issues"].append({"record_id": record.get("id"), "issues": check["issues"]})
+    return results
 
 
 @router.get('/health/storage', tags=['Saglik'], summary='Depolama durumu')
