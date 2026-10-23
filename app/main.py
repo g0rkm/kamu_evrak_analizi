@@ -3,6 +3,7 @@
 Çalıştırma:  python -m app.main   veya   uvicorn app.main:app
 """
 import uuid
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -42,10 +43,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container = ServiceContainer.build(settings)
         app.state.container.audit = AuditLogger(log_dir=str(Path(settings.HISTORY_DIR) / 'audit'))
         app.state.container.backup = BackupService(history_dir=str(Path(settings.HISTORY_DIR)))
+        app.state.active_jobs = 0
+        app.state.startup_time = time.time()
         verify_environment(settings)
         import logging as _logging
         _logging.getLogger("startup").info("Uygulama başlatıldı, istekler kabul ediliyor.")
         yield
+        active_jobs = getattr(app.state, 'active_jobs', 0)
+        _logging.getLogger("startup").info('Kapatiliyor, aktif is sayisi: %d', active_jobs)
         active = len(app.state.container.jobs._tasks)
         if active > 0:
             _logging.getLogger("startup").info("Aktif iş sayısı: %d — tamamlanması bekleniyor…", active)
