@@ -434,9 +434,9 @@ def test_json_formatter_output():
 
 
 def test_app_version():
-    """Uygulama versiyonu 3.4.0 olmalı."""
+    """Uygulama versiyonu 3.6.0 olmalı."""
     from app import __version__
-    assert __version__ == "3.5.0"
+    assert __version__ == "3.6.0"
 
 
 def test_settings_has_all_new_fields():
@@ -1068,7 +1068,7 @@ def test_changelog_endpoint(client):
 def test_version_350():
     """Versiyon 3.5.0 testi."""
     from app import __version__
-    assert __version__ == "3.5.0"
+    assert __version__ == "3.6.0"
 
 def test_dashboard_summary_endpoint(client):
     """Dashboard ozet endpoint testi."""
@@ -1371,3 +1371,32 @@ def test_auth_duplicate_user(client):
     client.post("/api/auth/register", json={"username": "dupuser", "password": "pass"})
     resp = client.post("/api/auth/register", json={"username": "dupuser", "password": "pass2"})
     assert resp.status_code == 400
+
+def test_auth_token_revoke():
+    """AuthService token iptal testi."""
+    import tempfile
+    from app.services.auth_service import AuthService
+    with tempfile.TemporaryDirectory() as d:
+        svc = AuthService(d)
+        svc.create_user("revokeuser", "pass")
+        token = svc.authenticate("revokeuser", "pass")
+        assert svc.validate_token(token) is not None
+        assert svc.revoke_token(token) is True
+        assert svc.validate_token(token) is None
+
+def test_auth_list_users():
+    """AuthService kullanici listeleme testi."""
+    import tempfile
+    from app.services.auth_service import AuthService
+    with tempfile.TemporaryDirectory() as d:
+        svc = AuthService(d)
+        svc.create_user("user1", "pass1", role="memur")
+        svc.create_user("user2", "pass2", role="yonetici")
+        users = svc.list_users()
+        assert len(users) == 2
+        assert all("password_hash" not in u for u in users)
+
+def test_version_360():
+    """Versiyon 3.6.0 testi."""
+    from app import __version__
+    assert __version__ == "3.6.0"
