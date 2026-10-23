@@ -1150,3 +1150,40 @@ def test_export_service_report():
     assert report["favorite_count"] == 1
     assert report["archived_count"] == 1
     assert report["top_tags"][0]["tag"] == "x"
+
+def test_logging_config():
+    """Structured logging konfigurasyonu testi."""
+    import tempfile
+    from app.core.logging_config import setup_logging, JSONFormatter
+    with tempfile.TemporaryDirectory() as d:
+        result = setup_logging("DEBUG", d, enable_file=True)
+        assert result["level"] == "DEBUG"
+        assert result["log_dir"] == d
+    formatter = JSONFormatter()
+    import logging
+    record = logging.LogRecord("test", logging.INFO, "test.py", 1, "Test msg", (), None)
+    formatted = formatter.format(record)
+    import json
+    parsed = json.loads(formatted)
+    assert parsed["level"] == "INFO"
+    assert parsed["message"] == "Test msg"
+
+def test_active_jobs_middleware():
+    """ActiveJobsMiddleware testi."""
+    from app.core.timeout_middleware import ActiveJobsMiddleware
+    assert ActiveJobsMiddleware is not None
+
+def test_request_timeout_middleware():
+    """RequestTimeoutMiddleware testi."""
+    from app.core.timeout_middleware import RequestTimeoutMiddleware
+    assert RequestTimeoutMiddleware is not None
+
+def test_export_csv_with_data():
+    """CSV export bos olmayan veri ile testi."""
+    from app.services.export_service import ExportService
+    records = [{"id": "r1", "created_at": "2024-01-01", "source_name": "doc.pdf", "priority": "high", "favorite": True, "tags": ["hukuk"]}]
+    csv = ExportService.to_csv(records)
+    lines = csv.strip().split("\n")
+    assert len(lines) == 2
+    assert "doc.pdf" in lines[1]
+    assert "Evet" in lines[1]

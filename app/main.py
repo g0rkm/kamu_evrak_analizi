@@ -21,6 +21,7 @@ from app.core.logging import configure_logging, new_request_id, request_id_var
 from app.core.metrics import metrics
 from app.core.rate_limit import RateLimitMiddleware
 from app.core.startup import verify_environment
+from app.core.timeout_middleware import RequestTimeoutMiddleware, ActiveJobsMiddleware
 from app.services.audit_logger import AuditLogger
 from app.services.backup_service import BackupService
 from app.services.integrity_service import IntegrityService
@@ -72,6 +73,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_tags=TAGS_METADATA,
         lifespan=lifespan,
     )
+
+    app.add_middleware(ActiveJobsMiddleware)
 
     if settings.CORS_ORIGINS:
         app.add_middleware(
