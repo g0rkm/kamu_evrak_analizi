@@ -1509,3 +1509,25 @@ def test_migration_validate_endpoint(client):
     """Migration validate endpoint testi."""
     resp = client.post("/api/migration/validate", json={})
     assert resp.status_code == 200
+
+def test_security_headers_middleware(client):
+    """Guvenlik basliklari middleware testi."""
+    resp = client.get("/api/health")
+    assert resp.status_code == 200
+    assert resp.headers.get("X-Content-Type-Options") == "nosniff"
+    assert resp.headers.get("X-Frame-Options") == "DENY"
+    assert resp.headers.get("X-XSS-Protection") == "1; mode=block"
+
+def test_migration_schema_report():
+    """MigrationService sema raporu testi."""
+    import tempfile
+    from app.services.migration_service import MigrationService
+    with tempfile.TemporaryDirectory() as d:
+        svc = MigrationService(d)
+        records = [
+            {"id": "r1", "created_at": "2024-01-01"},
+            {"id": "r2", "created_at": "2024-01-02", "_schema_version": 2},
+        ]
+        report = svc.schema_report(records)
+        assert report["total_records"] == 2
+        assert report["current_schema_version"] == 2

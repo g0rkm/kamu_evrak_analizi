@@ -22,6 +22,7 @@ from app.core.metrics import metrics
 from app.core.rate_limit import RateLimitMiddleware
 from app.core.startup import verify_environment
 from app.core.timeout_middleware import RequestTimeoutMiddleware, ActiveJobsMiddleware
+from app.core.security_middleware import SecurityHeadersMiddleware
 from app.services.audit_logger import AuditLogger
 from app.services.auth_service import AuthService
 from app.services.backup_service import BackupService
@@ -198,6 +199,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     content={"detail": "İstek gövdesi çok büyük.", "code": "body_too_large"},
                 )
         return await call_next(request)
+
+    app.add_middleware(SecurityHeadersMiddleware)
 
     register_exception_handlers(app)
     app.include_router(router)
