@@ -826,3 +826,12 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .pii-masked-text { background: var(--bg-secondary, #f0f0f0); padding: 1rem; border-radius: 6px; white-space: pre-wrap; word-break: break-all; }
 .pii-details ul { list-style: disc; padding-left: 1.5rem; }
 .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 10px; background: var(--accent-color, #3182ce); color: white; font-size: 0.75rem; }
+
+@media (prefers-color-scheme: dark) { 
+    .audit-table th { background: var(--bg-dark-secondary, #2d2d2d); color: var(--text-dark, #e0e0e0); } 
+    .audit-table td { border-color: var(--border-dark, #444); color: var(--text-dark, #e0e0e0); } 
+    .pii-input-section textarea { background: var(--bg-dark, #1a1a1a); color: var(--text-dark, #e0e0e0); border-color: var(--border-dark, #444); } 
+    .pii-masked-text { background: var(--bg-dark-secondary, #2d2d2d); color: var(--text-dark, #e0e0e0); } 
+    .timeline-item { border-color: var(--border-dark, #444); } 
+    .audit-filters select { background: var(--bg-dark, #1a1a1a); color: var(--text-dark, #e0e0e0); border-color: var(--border-dark, #444); } 
+}
