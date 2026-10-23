@@ -39,10 +39,22 @@ class FileValidationError(AppError):
     default_message = "Dosya doğrulama hatası."
 
 
+class AuthenticationError(AppError):
+    status_code = 401
+    code = "authentication_error"
+    default_message = "Kimlik doğrulama hatası."
+
+
+class AuthorizationError(AppError):
+    status_code = 403
+    code = "authorization_error"
+    default_message = "Yetki hatası."
+
+
 class NotFoundError(AppError):
     status_code = 404
     code = "not_found"
-    default_message = "Kayıt bulunamadı."
+    default_message = "Kayıт bulunamadı."
 
 
 class DuplicateRecordError(AppError):

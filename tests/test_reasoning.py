@@ -679,3 +679,17 @@ def test_pii_redact_custom_replacement():
     d = PIIDetector()
     result = d.redact_text('Email: test@test.com', replacement='***')
     assert '***' in result
+
+
+def test_authentication_error():
+    from app.core.exceptions import AuthenticationError
+    e = AuthenticationError('Oturum suresi doldu')
+    assert e.status_code == 401
+    assert e.code == 'authentication_error'
+
+
+def test_authorization_error():
+    from app.core.exceptions import AuthorizationError
+    e = AuthorizationError('Yetkisiz erisim')
+    assert e.status_code == 403
+    assert e.code == 'authorization_error'
