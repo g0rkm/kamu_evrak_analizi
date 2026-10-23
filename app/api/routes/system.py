@@ -986,6 +986,43 @@ async def rate_limit_status(request: Request, container: ServiceContainer = Depe
     }
 
 
+@router.get("/rate-limit/info", tags=["Sistem"])
+async def rate_limit_info(request: Request, container: ServiceContainer = Depends(get_container)):
+    from app.core.rate_limit import get_client_info
+    info = get_client_info(request)
+    return info
+
+
+@router.get("/dashboard/summary", tags=["Sistem"])
+async def dashboard_summary(request: Request, container: ServiceContainer = Depends(get_container)):
+    import time
+    records = container.history._load_all()
+    active = [r for r in records if not r.get("deleted")]
+    deleted = [r for r in records if r.get("deleted")]
+    archived = [r for r in active if r.get("archived")]
+    favorited = [r for r in active if r.get("favorite")]
+    priority_counts = {}
+    for r in active:
+        p = r.get("priority", "normal")
+        priority_counts[p] = priority_counts.get(p, 0) + 1
+    uptime = time.time() - getattr(request.app.state, "startup_time", time.time())
+    summary = {
+        "total_records": len(records),
+        "active_records": len(active),
+        "deleted_records": len(deleted),
+        "archived_records": len(archived),
+        "favorited_records": len(favorited),
+        "priority_distribution": priority_counts,
+        "uptime_seconds": round(uptime, 1),
+    }
+    if container.notifications:
+        summary["unread_notifications"] = container.notifications.unread_count()
+    if container.audit:
+        stats = container.audit.stats()
+        summary["audit_log_count"] = stats.get("total_logs", 0)
+    return summary
+
+
 @router.get('/security-headers', tags=['Sistem'], summary='Guvenlik basliklari kontrol')
 async def security_headers_check(request: Request):
     return {
