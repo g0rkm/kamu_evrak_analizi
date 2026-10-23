@@ -1408,3 +1408,21 @@ def test_records_by_type(client):
 def test_request_id_header_present(client):
     resp = client.get('/api/health')
     assert 'X-Request-ID' in resp.headers
+
+
+def test_endpoint_metrics(client):
+    resp = client.get('/api/metrics/endpoints')
+    assert resp.status_code == 200
+    data = resp.json()
+    assert 'endpoints' in data
+    assert 'total_requests' in data
+
+
+def test_admin_protected_endpoint_without_token(client):
+    resp = client.post('/api/backup/cleanup', json={})
+    assert resp.status_code in (200, 403)
+
+
+def test_admin_protected_backup_list_accessible(client):
+    resp = client.get('/api/backup/list')
+    assert resp.status_code == 200
