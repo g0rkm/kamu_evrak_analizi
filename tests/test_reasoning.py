@@ -1299,3 +1299,75 @@ def test_integrity_compute_hash_file():
     assert IntegrityService.verify_hash(tmp, "wrong") is False
     os.unlink(tmp)
     assert IntegrityService.compute_hash(tmp) is None
+
+def test_auth_service():
+    """AuthService temel islemleri testi."""
+    import tempfile
+    from app.services.auth_service import AuthService
+    with tempfile.TemporaryDirectory() as d:
+        svc = AuthService(d)
+        user = svc.create_user("testuser", "pass123", role="memur", full_name="Test User")
+        assert user["username"] == "testuser"
+        assert user["role"] == "memur"
+        token = svc.authenticate("testuser", "pass123")
+        assert token is not None
+        info = svc.validate_token(token)
+        assert info is not None
+        assert info["username"] == "testuser"
+        bad_token = svc.authenticate("testuser", "wrong")
+        assert bad_token is None
+        bad_user = svc.authenticate("nouser", "pass123")
+        assert bad_user is None
+
+def test_auth_permissions():
+    """AuthService yetki kontrolu testi."""
+    from app.services.auth_service import AuthService
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        svc = AuthService(d)
+        assert svc.has_permission("admin", "system.admin") is True
+        assert svc.has_permission("memur", "system.admin") is False
+        assert svc.has_permission("memur", "record.create") is True
+        assert svc.has_permission("izleyici", "record.create") is False
+        assert svc.has_permission("izleyici", "record.read") is True
+
+def test_auth_deactivate():
+    """AuthService kullanici deaktivasyon testi."""
+    import tempfile
+    from app.services.auth_service import AuthService
+    with tempfile.TemporaryDirectory() as d:
+        svc = AuthService(d)
+        svc.create_user("deactuser", "pass")
+        assert svc.deactivate_user("deactuser") is True
+        token = svc.authenticate("deactuser", "pass")
+        assert token is None
+
+def test_auth_endpoints(client):
+    """Auth API endpoint'leri testi."""
+    resp = client.post("/api/auth/register", json={"username": "apiuser", "password": "secret", "role": "memur"})
+    assert resp.status_code == 200
+    assert resp.json()["username"] == "apiuser"
+    resp2 = client.post("/api/auth/login", json={"username": "apiuser", "password": "secret"})
+    assert resp2.status_code == 200
+    assert "token" in resp2.json()
+    token = resp2.json()["token"]
+    resp3 = client.post("/api/auth/validate", json={"token": token})
+    assert resp3.status_code == 200
+    assert resp3.json()["valid"] is True
+    resp4 = client.get("/api/auth/roles")
+    assert resp4.status_code == 200
+    assert "admin" in resp4.json()["roles"]
+    resp5 = client.get("/api/auth/permissions")
+    assert resp5.status_code == 200
+    assert "record.create" in resp5.json()["permissions"]
+
+def test_auth_login_invalid(client):
+    """Gecersiz giris denemesi testi."""
+    resp = client.post("/api/auth/login", json={"username": "nouser", "password": "wrong"})
+    assert resp.status_code == 403
+
+def test_auth_duplicate_user(client):
+    """Ayni kullanici tekrar kayit testi."""
+    client.post("/api/auth/register", json={"username": "dupuser", "password": "pass"})
+    resp = client.post("/api/auth/register", json={"username": "dupuser", "password": "pass2"})
+    assert resp.status_code == 400
