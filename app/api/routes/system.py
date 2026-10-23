@@ -373,6 +373,31 @@ async def analyze_text_detailed(request: Request, body: dict):
     return result
 
 
+@router.post('/text/detect-type', tags=['Metin'], summary='Metin turunu tahmin et')
+async def detect_text_type(request: Request, body: dict):
+    text = body.get('text', '').lower()
+    if not text:
+        return {'detected_type': 'bilinmiyor', 'confidence': 0}
+    type_keywords = {
+        'dilekce': ['sayin', 'rica ederim', 'basvuru', 'talep', 'dilekce', 'baskanligina'],
+        'rapor': ['rapor', 'sonuc', 'analiz', 'degerlendirme', 'bulgular', 'tespit'],
+        'sartname': ['sartname', 'teknik', 'idari', 'madde', 'yeterlilik', 'ihale'],
+        'tutanak': ['tutanak', 'karar', 'toplanti', 'gundem', 'oy', 'katilimci'],
+        'sozlesme': ['sozlesme', 'taraflar', 'yukumluluk', 'madde', 'suresi', 'taahhut']
+    }
+    scores = {}
+    for doc_type, keywords in type_keywords.items():
+        count = sum(1 for kw in keywords if kw in text)
+        scores[doc_type] = count / len(keywords)
+    best_type = max(scores, key=scores.get) if scores else 'bilinmiyor'
+    best_score = scores.get(best_type, 0)
+    return {
+        'detected_type': best_type if best_score > 0 else 'bilinmiyor',
+        'confidence': round(best_score, 3),
+        'all_scores': {k: round(v, 3) for k, v in sorted(scores.items(), key=lambda x: x[1], reverse=True)}
+    }
+
+
 @router.post('/text/extract-dates', tags=['Sistem'], summary='Tarih cikarma')
 async def extract_dates(body: dict):
     import re
