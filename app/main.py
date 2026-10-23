@@ -30,6 +30,7 @@ from app.services.notification_service import NotificationService
 from app.services.scheduler_service import SchedulerService
 from app.services.template_service import TemplateService
 from app.services.webhook_service import WebhookService
+from app.services.migration_service import MigrationService
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -57,6 +58,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.auth = AuthService(str(Path(settings.HISTORY_DIR).parent / "auth"))
         app.state.container.scheduler = SchedulerService()
         app.state.container.scheduler.start()
+        migration_svc = MigrationService(settings.HISTORY_DIR)
+        app.state.migration = migration_svc
         app.state.active_jobs = 0
         app.state.startup_time = time.time()
         verify_environment(settings)

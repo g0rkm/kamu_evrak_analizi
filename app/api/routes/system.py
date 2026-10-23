@@ -1304,3 +1304,36 @@ async def scheduler_stats(request: Request, container: ServiceContainer = Depend
     if not container.scheduler:
         return {"total_tasks": 0, "active_tasks": 0}
     return container.scheduler.task_stats()
+
+
+@router.get("/migration/status", tags=["Sistem"])
+async def migration_status(request: Request, container: ServiceContainer = Depends(get_container)):
+    migration = getattr(request.app.state, "migration", None)
+    if not migration:
+        return {"error": "Migrasyon servisi mevcut degil"}
+    records = container.history._load_all()
+    return migration.schema_report(records)
+
+@router.post("/migration/run", tags=["Sistem"])
+async def run_migration(request: Request, container: ServiceContainer = Depends(get_container), _admin=Depends(verify_admin)):
+    migration = getattr(request.app.state, "migration", None)
+    if not migration:
+        return {"error": "Migrasyon servisi mevcut degil"}
+    records = container.history._load_all()
+    result = migration.migrate_all(records)
+    for record in records:
+        container.history._write(record["id"], record)
+    return result
+
+@router.post("/migration/validate", tags=["Sistem"])
+async def validate_records(request: Request, container: ServiceContainer = Depends(get_container)):
+    migration = getattr(request.app.state, "migration", None)
+    if not migration:
+        return {"error": "Migrasyon servisi mevcut degil"}
+    records = container.history._load_all()
+    issues = []
+    for r in records:
+        result = migration.validate_record(r)
+        if not result["valid"]:
+            issues.append({"record_id": r.get("id"), "issues": result["issues"]})
+    return {"total": len(records), "invalid": len(issues), "details": issues[:50]}
