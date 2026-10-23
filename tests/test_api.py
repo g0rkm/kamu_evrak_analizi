@@ -1509,3 +1509,21 @@ def test_validate_record(client):
     result = resp.json()
     assert result['valid'] is True
     assert result['issues'] == []
+
+
+def test_bulk_validate(client):
+    client.post('/api/history/import', json={'records': [{'id': 'bv1', 'file_name': 'a.pdf', 'status': 'ok'}]})
+    resp = client.post('/api/history/bulk-validate', json={'ids': ['bv1', 'nonexistent']})
+    assert resp.status_code == 200
+    d = resp.json()
+    assert d['total'] == 2
+    assert d['valid_count'] == 1
+
+
+def test_clone_record(client):
+    client.post('/api/history/import', json={'records': [{'id': 'cl1', 'file_name': 'c.pdf', 'status': 'ok'}]})
+    resp = client.post('/api/history/cl1/clone', json={})
+    assert resp.status_code == 200
+    d = resp.json()
+    assert d['cloned_from'] == 'cl1'
+    assert 'clone_' in d['id']
