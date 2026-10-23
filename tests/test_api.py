@@ -1342,3 +1342,17 @@ def test_list_deleted_records(client):
     resp = client.get('/api/history/deleted')
     assert resp.status_code == 200
     assert 'records' in resp.json()
+
+
+def test_bulk_archive_records(client):
+    client.post('/api/history/import', json={'records': [{'id': 'ba1', 'file_name': 'a.pdf', 'status': 'ok'}, {'id': 'ba2', 'file_name': 'b.pdf', 'status': 'ok'}]})
+    resp = client.post('/api/history/bulk-archive', json={'ids': ['ba1', 'ba2']})
+    assert resp.status_code == 200
+    assert resp.json()['archived'] == 2
+
+
+def test_bulk_export_records(client):
+    client.post('/api/history/import', json={'records': [{'id': 'be1', 'file_name': 'c.pdf', 'status': 'ok'}]})
+    resp = client.post('/api/history/bulk-export', json={'ids': ['be1']})
+    assert resp.status_code == 200
+    assert resp.json()['count'] == 1
