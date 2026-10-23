@@ -1333,7 +1333,7 @@ def test_soft_delete_and_restore(client):
     lr = client.get('/api/history/deleted')
     assert lr.status_code == 200
     assert any(r['id'] == 'test-sd-001' for r in lr.json()['records'])
-    rr = client.post('/api/history/test-sd-001/restore')
+    rr = client.post('/api/history/test-sd-001/restore', json={})
     assert rr.status_code == 200
     assert rr.json()['status'] == 'restored'
 
