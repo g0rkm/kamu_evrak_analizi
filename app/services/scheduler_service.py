@@ -59,7 +59,7 @@ class SchedulerService:
         """Zamanlayiciyi durdurur."""
         self._running = False
         if self._thread:
-            self._thread.join(timeout=5)
+            self._thread.join(timeout=1)
         logger.info("Zamanlayici durduruldu")
 
     def _run_loop(self):
