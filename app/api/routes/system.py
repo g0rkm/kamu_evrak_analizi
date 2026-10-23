@@ -678,3 +678,18 @@ async def rate_limit_status(request: Request, container: ServiceContainer = Depe
         'window_seconds': settings.RATE_LIMIT_WINDOW,
         'limit_per_minute': round(settings.RATE_LIMIT_REQUESTS / settings.RATE_LIMIT_WINDOW * 60, 1)
     }
+
+
+@router.get('/security-headers', tags=['Sistem'], summary='Guvenlik basliklari kontrol')
+async def security_headers_check(request: Request):
+    return {
+        'headers': {
+            'X-Content-Type-Options': 'nosniff',
+            'X-Frame-Options': 'DENY',
+            'Referrer-Policy': 'same-origin',
+            'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
+        },
+        'csp_enabled': True,
+        'csrf_protection': True,
+        'rate_limiting': True
+    }

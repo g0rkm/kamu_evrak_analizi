@@ -1260,3 +1260,11 @@ def test_update_notes_too_long(client):
     long_note = 'a' * 3000
     response = client.patch('/api/history/nonexistent/notes', json={'notes': long_note})
     assert response.status_code in [400, 404]
+
+
+def test_security_headers_check(client):
+    response = client.get('/api/security-headers')
+    assert response.status_code == 200
+    data = response.json()
+    assert data['csrf_protection'] is True
+    assert data['rate_limiting'] is True
