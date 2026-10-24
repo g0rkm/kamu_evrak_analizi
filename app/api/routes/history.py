@@ -376,7 +376,8 @@ async def export_json(request: Request, container: ServiceContainer = Depends(ge
 async def export_csv_endpoint(request: Request, container: ServiceContainer = Depends(get_container)):
     records = container.history._load_all()
     active = [r for r in records if not r.get("deleted")]
-    csv_data = ExportService.to_csv(active)
+    svc = container.export_service or ExportService()
+    csv_data = svc.export_csv(active)
     return Response(
         content=csv_data,
         media_type="text/csv",
@@ -388,7 +389,8 @@ async def export_csv_endpoint(request: Request, container: ServiceContainer = De
 async def export_json_file(request: Request, container: ServiceContainer = Depends(get_container)):
     records = container.history._load_all()
     active = [r for r in records if not r.get("deleted")]
-    json_data = ExportService.to_json(active)
+    svc = container.export_service or ExportService()
+    json_data = svc.export_json(active)
     return Response(
         content=json_data,
         media_type="application/json",
@@ -400,7 +402,8 @@ async def export_json_file(request: Request, container: ServiceContainer = Depen
 async def export_report(request: Request, container: ServiceContainer = Depends(get_container)):
     records = container.history._load_all()
     active = [r for r in records if not r.get("deleted")]
-    report = ExportService.summary_report(active)
+    svc = container.export_service or ExportService()
+    report = svc.export_summary(active)
     return report
 
 
