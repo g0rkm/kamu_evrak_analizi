@@ -25,6 +25,18 @@ export default class AdminView {
                         <div class="card__body" id="recentLogs">Yukleniyor...</div>
                     </div>
                 </div>
+                <div class="card" style="margin-top:1.5rem">
+                  <h3>Performans Profiler</h3>
+                  <div id="profiler-stats" class="stat-grid">Yukleniyor...</div>
+                </div>
+                <div class="card" style="margin-top:1.5rem">
+                  <h3>Girdi Dogrulama</h3>
+                  <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+                    <input type="text" id="validate-input" placeholder="Metin girin..." style="flex:1;padding:0.5rem;border:1px solid var(--border);border-radius:4px">
+                    <button id="btn-validate" class="btn btn-primary">Dogrula</button>
+                  </div>
+                  <div id="validate-result" style="display:none;padding:1rem;border-radius:4px"></div>
+                </div>
             </section>`;
         await this.loadData();
     }
@@ -41,6 +53,50 @@ export default class AdminView {
             this.renderServices(config.status === 'fulfilled' ? config.value : null);
             this.renderSystemInfo(uptime.status === 'fulfilled' ? uptime.value : null);
             this.renderLogs(logs.status === 'fulfilled' ? logs.value : null);
+
+            try {
+              const profilerResp = await fetch('/api/profiler/summary');
+              const profilerData = await profilerResp.json();
+              const profilerEl = document.getElementById('profiler-stats');
+              if (profilerEl) {
+                profilerEl.innerHTML = `
+                  <div class="stat-item"><span class="stat-value">${profilerData.total_profiled || 0}</span><span class="stat-label">Toplam Istek</span></div>
+                  <div class="stat-item"><span class="stat-value">${profilerData.unique_endpoints || 0}</span><span class="stat-label">Endpoint</span></div>
+                  <div class="stat-item"><span class="stat-value">${profilerData.slow_requests_count || 0}</span><span class="stat-label">Yavas Istek</span></div>
+                  <div class="stat-item"><span class="stat-value">${profilerData.global_avg_ms || 0}ms</span><span class="stat-label">Ort. Sure</span></div>
+                `;
+              }
+            } catch(e) { console.error('Profiler verisi alinamadi:', e); }
+
+            const btnValidate = document.getElementById('btn-validate');
+            if (btnValidate) {
+              btnValidate.addEventListener('click', async () => {
+                const input = document.getElementById('validate-input').value;
+                const resultEl = document.getElementById('validate-result');
+                try {
+                  const resp = await fetch('/api/sanitize/check', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({text: input})
+                  });
+                  const data = await resp.json();
+                  resultEl.style.display = 'block';
+                  if (data.safe) {
+                    resultEl.style.background = '#d4edda';
+                    resultEl.style.color = '#155724';
+                    resultEl.textContent = 'Guvenli girdi';
+                  } else {
+                    resultEl.style.background = '#f8d7da';
+                    resultEl.style.color = '#721c24';
+                    resultEl.innerHTML = 'Tehdit tespit edildi:<br>' + data.threats.map(t => '- ' + t).join('<br>');
+                  }
+                } catch(e) {
+                  resultEl.style.display = 'block';
+                  resultEl.style.background = '#fff3cd';
+                  resultEl.textContent = 'Dogrulama hatasi: ' + e.message;
+                }
+              });
+            }
         } catch (e) {
             console.error('Admin load error:', e);
         }
