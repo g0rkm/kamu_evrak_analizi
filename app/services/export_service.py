@@ -1,66 +1,77 @@
+import json
 import csv
 import io
-import json
-from typing import List
-
+import threading
+from datetime import datetime
+from pathlib import Path
 
 class ExportService:
-    """Kayitlari CSV ve JSON formatinda disariya aktarma servisi."""
-
-    EXPORT_FIELDS = [
-        "id", "created_at", "source_name", "document_type", "summary",
-        "priority", "favorite", "archived", "tags", "notes",
-    ]
-
-    @staticmethod
-    def to_csv(records: List[dict]) -> str:
-        """Kayitlari CSV formatinda dondurur."""
-        output = io.StringIO()
-        writer = csv.DictWriter(output, fieldnames=ExportService.EXPORT_FIELDS, extrasaction="ignore")
-        writer.writeheader()
-        for record in records:
-            row = {}
-            for field in ExportService.EXPORT_FIELDS:
-                val = record.get(field, "")
-                if isinstance(val, list):
-                    val = ", ".join(str(v) for v in val)
-                elif isinstance(val, bool):
-                    val = "Evet" if val else "Hayir"
-                row[field] = val
-            writer.writerow(row)
-        return output.getvalue()
-
-    @staticmethod
-    def to_json(records: List[dict], pretty: bool = True) -> str:
-        """Kayitlari JSON formatinda dondurur."""
-        export_data = []
-        for record in records:
-            item = {field: record.get(field, "") for field in ExportService.EXPORT_FIELDS}
-            export_data.append(item)
+    def __init__(self, history_dir: str = "data/history"):
+        self.history_dir = Path(history_dir)
+        self._lock = threading.Lock()
+    
+    def export_json(self, records: list, pretty: bool = True) -> str:
         if pretty:
-            return json.dumps(export_data, indent=2, ensure_ascii=False, default=str)
-        return json.dumps(export_data, ensure_ascii=False, default=str)
-
-    @staticmethod
-    def summary_report(records: List[dict]) -> dict:
-        """Kayitlarin ozet raporunu olusturur."""
-        total = len(records)
-        by_type = {}
-        by_priority = {}
-        tags_count = {}
+            return json.dumps(records, ensure_ascii=False, indent=2, default=str)
+        return json.dumps(records, ensure_ascii=False, default=str)
+    
+    def export_csv(self, records: list) -> str:
+        if not records:
+            return ""
+        output = io.StringIO()
+        all_keys = set()
         for r in records:
-            dt = r.get("document_type", "bilinmiyor")
-            by_type[dt] = by_type.get(dt, 0) + 1
-            pr = r.get("priority", "normal")
-            by_priority[pr] = by_priority.get(pr, 0) + 1
-            for tag in r.get("tags", []):
-                tags_count[tag] = tags_count.get(tag, 0) + 1
-        top_tags = sorted(tags_count.items(), key=lambda x: x[1], reverse=True)[:10]
+            if isinstance(r, dict):
+                all_keys.update(r.keys())
+        fieldnames = sorted(all_keys)
+        writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
+        writer.writeheader()
+        for r in records:
+            if isinstance(r, dict):
+                flat = {}
+                for k, v in r.items():
+                    if isinstance(v, (dict, list)):
+                        flat[k] = json.dumps(v, ensure_ascii=False, default=str)
+                    else:
+                        flat[k] = v
+                writer.writerow(flat)
+        return output.getvalue()
+    
+    def export_summary(self, records: list) -> dict:
+        total = len(records)
+        if total == 0:
+            return {"total": 0, "date_range": None, "categories": {}}
+        categories = {}
+        dates = []
+        for r in records:
+            if isinstance(r, dict):
+                cat = r.get("category", r.get("siniflandirma", {}).get("kategori", "bilinmiyor"))
+                if isinstance(cat, dict):
+                    cat = cat.get("kategori", "bilinmiyor")
+                categories[cat] = categories.get(cat, 0) + 1
+                ts = r.get("timestamp", r.get("created_at", ""))
+                if ts:
+                    dates.append(str(ts))
+        dates.sort()
         return {
-            "total_records": total,
-            "by_document_type": by_type,
-            "by_priority": by_priority,
-            "top_tags": [{"tag": t, "count": c} for t, c in top_tags],
-            "archived_count": sum(1 for r in records if r.get("archived")),
-            "favorite_count": sum(1 for r in records if r.get("favorite")),
+            "total": total,
+            "date_range": {"start": dates[0], "end": dates[-1]} if dates else None,
+            "categories": categories,
+            "exported_at": datetime.now().isoformat()
         }
+    
+    def get_all_records(self) -> list:
+        records = []
+        if not self.history_dir.exists():
+            return records
+        for f in sorted(self.history_dir.glob("*.json")):
+            try:
+                with open(f, "r", encoding="utf-8") as fh:
+                    data = json.load(fh)
+                    if isinstance(data, list):
+                        records.extend(data)
+                    elif isinstance(data, dict):
+                        records.append(data)
+            except (json.JSONDecodeError, OSError):
+                pass
+        return records
