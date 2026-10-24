@@ -952,3 +952,52 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 .status-bars { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .status-bar { display: flex; align-items: center; gap: 0.5rem; }
 .status-count { font-weight: 600; }
+
+/* Profiler ve Validator bileşenleri */
+.profiler-card { margin-top: 1.5rem; }
+.validate-result { padding: 1rem; border-radius: 4px; margin-top: 0.5rem; }
+.validate-result--safe { background: #d4edda; color: #155724; }
+.validate-result--danger { background: #f8d7da; color: #721c24; }
+.validate-result--warning { background: #fff3cd; color: #856404; }
+
+.input-group { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.input-group input[type="text"] {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+.input-group input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+.service-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    background: var(--bg-secondary, #f8f9fa);
+    font-size: 0.8125rem;
+}
+.service-badge--active::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #28a745;
+}
+.service-badge--inactive::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #dc3545;
+}
