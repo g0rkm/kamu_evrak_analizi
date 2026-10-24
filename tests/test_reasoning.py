@@ -2191,7 +2191,6 @@ class TestSanitizerService:
         s = Sanitizer()
         result = s.sanitize_html('<script>alert("xss")</script>')
         assert "<script>" not in result
-        assert "<script>" in result
 
     def test_check_xss_detects_script(self):
         from app.services.sanitizer import Sanitizer
