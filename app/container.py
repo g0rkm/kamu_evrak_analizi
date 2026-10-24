@@ -40,6 +40,7 @@ class ServiceContainer:
     log_service: Any = None
     export_service: Any = None
     maintenance: Any = None
+    error_tracker: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

@@ -35,6 +35,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "log_service": container.log_service is not None,
             "export_service": container.export_service is not None,
             "maintenance": container.maintenance is not None,
+            "error_tracker": container.error_tracker is not None,
         },
     }
 
@@ -287,3 +288,32 @@ async def maintenance_history(container: ServiceContainer = Depends(get_containe
     if not container.maintenance:
         return {"history": []}
     return {"history": container.maintenance.get_history()}
+
+
+@router.get("/errors/summary")
+async def error_summary(container: ServiceContainer = Depends(get_container)):
+    if not container.error_tracker:
+        return {"total_errors": 0, "error_types": {}}
+    return container.error_tracker.get_summary()
+
+
+@router.get("/errors/recent")
+async def recent_errors(container: ServiceContainer = Depends(get_container)):
+    if not container.error_tracker:
+        return {"errors": []}
+    return {"errors": container.error_tracker.get_recent()}
+
+
+@router.get("/errors/top")
+async def top_errors(container: ServiceContainer = Depends(get_container)):
+    if not container.error_tracker:
+        return {"top": []}
+    return {"top": container.error_tracker.get_top_errors()}
+
+
+@router.post("/errors/clear")
+async def clear_errors(container: ServiceContainer = Depends(get_container)):
+    if not container.error_tracker:
+        return {"error": "Error tracker not available"}
+    container.error_tracker.clear()
+    return {"status": "cleared"}

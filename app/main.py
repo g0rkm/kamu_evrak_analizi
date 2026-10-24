@@ -45,6 +45,7 @@ from app.services.metrics_service import MetricsService
 from app.services.log_service import LogService
 from app.services.export_service import ExportService
 from app.services.maintenance_service import MaintenanceService
+from app.services.error_tracker import ErrorTracker
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -82,6 +83,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.log_service = LogService()
         app.state.container.export_service = ExportService(history_dir=str(settings.HISTORY_DIR))
         app.state.container.maintenance = MaintenanceService(initial_mode=settings.MAINTENANCE_MODE)
+        app.state.container.error_tracker = ErrorTracker()
         migration_svc = MigrationService(settings.HISTORY_DIR)
         app.state.migration = migration_svc
         app.state.active_jobs = 0
