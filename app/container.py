@@ -36,6 +36,7 @@ class ServiceContainer:
     health_checker: Any = None
     cache: Any = None
     retry: Any = None
+    metrics: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

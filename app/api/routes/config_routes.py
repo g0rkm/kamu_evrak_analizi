@@ -160,3 +160,38 @@ async def retry_stats(container: ServiceContainer = Depends(get_container)):
     if not container.retry:
         return {"error": "Retry service not available"}
     return container.retry.stats()
+
+
+@router.get("/metrics/summary")
+async def metrics_summary(container: ServiceContainer = Depends(get_container)):
+    if not container.metrics:
+        return {"error": "Metrics service not available"}
+    return container.metrics.get_summary()
+
+
+@router.get("/metrics/endpoints")
+async def metrics_endpoints(container: ServiceContainer = Depends(get_container)):
+    if not container.metrics:
+        return {"error": "Metrics service not available"}
+    return {"endpoints": container.metrics.get_endpoint_stats()}
+
+
+@router.get("/metrics/top-endpoints")
+async def metrics_top(container: ServiceContainer = Depends(get_container)):
+    if not container.metrics:
+        return {"error": "Metrics service not available"}
+    return {"top": container.metrics.get_top_endpoints(10)}
+
+
+@router.get("/metrics/slowest")
+async def metrics_slowest(container: ServiceContainer = Depends(get_container)):
+    if not container.metrics:
+        return {"error": "Metrics service not available"}
+    return {"slowest": container.metrics.get_slowest_endpoints(10)}
+
+
+@router.get("/metrics/status-distribution")
+async def metrics_status(container: ServiceContainer = Depends(get_container)):
+    if not container.metrics:
+        return {"error": "Metrics service not available"}
+    return container.metrics.get_status_distribution()
