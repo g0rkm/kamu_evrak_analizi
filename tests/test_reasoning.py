@@ -2083,3 +2083,40 @@ class TestBodyLimitMiddleware:
     def test_content_length_header_check(self, client):
         resp = client.post("/api/analyze/text", json={"text": "a"}, headers={"Content-Type": "application/json", "Content-Length": "999999999999"})
         assert resp.status_code == 413
+
+
+class TestMaintenanceEndpoints:
+    def test_maintenance_status(self, client):
+        resp = client.get("/api/maintenance/status")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "maintenance_mode" in data
+        assert data["maintenance_mode"] is False
+
+    def test_enable_disable_maintenance(self, client):
+        resp = client.post("/api/maintenance/enable", json={"reason": "Sistem guncelleme"}, headers={"Content-Type": "application/json"})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["maintenance_mode"] is True
+        assert data["reason"] == "Sistem guncelleme"
+        resp2 = client.post("/api/maintenance/disable", json={}, headers={"Content-Type": "application/json"})
+        assert resp2.status_code == 200
+        data2 = resp2.json()
+        assert data2["maintenance_mode"] is False
+
+    def test_maintenance_history(self, client):
+        client.post("/api/maintenance/enable", json={"reason": "test"}, headers={"Content-Type": "application/json"})
+        client.post("/api/maintenance/disable", json={}, headers={"Content-Type": "application/json"})
+        resp = client.get("/api/maintenance/history")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "history" in data
+        assert len(data["history"]) >= 2
+
+class TestLogServiceEndpoints:
+    def test_log_service_in_config(self, client):
+        resp = client.get("/api/system/config-report")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["services"]["log_service"] is True
+        assert data["services"]["maintenance"] is True
