@@ -36,6 +36,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "export_service": container.export_service is not None,
             "maintenance": container.maintenance is not None,
             "error_tracker": container.error_tracker is not None,
+            "correlation": container.correlation is not None,
         },
     }
 
@@ -317,3 +318,17 @@ async def clear_errors(container: ServiceContainer = Depends(get_container)):
         return {"error": "Error tracker not available"}
     container.error_tracker.clear()
     return {"status": "cleared"}
+
+
+@router.get("/correlation/stats")
+async def correlation_stats(container: ServiceContainer = Depends(get_container)):
+    if not container.correlation:
+        return {"tracked_requests": 0}
+    return container.correlation.stats()
+
+
+@router.get("/correlation/recent")
+async def correlation_recent(container: ServiceContainer = Depends(get_container)):
+    if not container.correlation:
+        return {"requests": []}
+    return {"requests": container.correlation.get_recent()}
