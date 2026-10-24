@@ -2646,3 +2646,29 @@ class TestDiagnosticsEndpoints:
         assert "system" in data
         assert "disk" in data
 
+
+
+def test_gemma4_local_llm_settings_and_thinking_strip():
+    """Varsayılan yerel LLM ayarları (gemma4:12b) ve düşünme bloğu temizleme çalışmalı."""
+    from app.config import Settings
+    from app.services.llm_service import LLMService
+
+    s = Settings(_env_file=None)
+    assert s.LLM_MODEL == "gemma4:12b"
+    assert s.LLM_API_BASE == "http://localhost:11434/v1"
+    assert s.LLM_NUM_CTX == 16384
+    assert s.LLM_KEEP_ALIVE == "30m"
+
+    llm = LLMService(s)
+    assert llm.is_local is True
+    assert llm.is_configured is True
+
+    # Gemma 4 disabled-thinking ve aktif-thinking bloklarını temizlemeli
+    gemma_empty = "<|channel>thought\n<channel|>Vatandaş kaldırım onarımı talep etmektedir."
+    assert LLMService.strip_thinking(gemma_empty) == "Vatandaş kaldırım onarımı talep etmektedir."
+
+    gemma_json = '<|channel>thought\n{"ignore": true}<channel|>{"document_type": "dilekce", "confidence": 0.95}'
+    assert LLMService.parse_json(gemma_json) == {"document_type": "dilekce", "confidence": 0.95}
+
+    qwen_json = '<think>\nÖnce düşünelim: {"fake": 1}\n</think>\n```json\n{"ok": true}\n```'
+    assert LLMService.parse_json(qwen_json) == {"ok": True}

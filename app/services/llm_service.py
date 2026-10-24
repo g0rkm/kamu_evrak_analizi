@@ -7,6 +7,7 @@ import json
 import logging
 import re
 import time as _time
+from contextvars import ContextVar
 from dataclasses import asdict, dataclass
 from typing import Any
 
@@ -19,6 +20,9 @@ logger = logging.getLogger("llm_service")
 
 _RETRYABLE_STATUS = frozenset({408, 409, 425, 429, 500, 502, 503, 504})
 _FENCE_PATTERN = re.compile(r"```(?:json)?\s*\n?(.*?)\n?\s*```", re.DOTALL)
+_THINK_PATTERN = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
+_GEMMA_THOUGHT_PATTERN = re.compile(r"<\|channel>thought.*?<channel\|>", re.DOTALL | re.IGNORECASE)
+_json_mode_var: ContextVar[bool] = ContextVar("_json_mode_var", default=False)
 
 
 class _LLMCache:
@@ -158,6 +162,14 @@ class LLMService:
         self._cache = _LLMCache(ttl=settings.LLM_CACHE_TTL_SECONDS)
         self._breaker = self._CircuitBreaker(threshold=max(3, self.max_retries + 1), cooldown=60.0)
         self._token_budget = settings.LLM_TOKEN_BUDGET if settings else 0
+        self.num_ctx = getattr(settings, "LLM_NUM_CTX", 16384)
+        self.keep_alive = getattr(settings, "LLM_KEEP_ALIVE", "30m")
+        self._semaphore = asyncio.Semaphore(max(1, getattr(settings, "LLM_MAX_CONCURRENT_REQUESTS", 2)))
+
+    @property
+    def is_local(self) -> bool:
+        base = self.api_base.lower()
+        return any(h in base for h in ("localhost", "127.0.0.1", "0.0.0.0", "host.docker.internal", ":11434"))
 
     @property
     def is_configured(self) -> bool:
@@ -176,7 +188,7 @@ class LLMService:
             return cached
 
         url = f"{self.api_base}/chat/completions"
-        payload = {
+        payload: dict[str, Any] = {
             "model": self.model,
             "messages": [
                 {"role": "system", "content": system_prompt},
@@ -184,6 +196,13 @@ class LLMService:
             ],
             "temperature": temp,
         }
+        if _json_mode_var.get():
+            payload["response_format"] = {"type": "json_object"}
+        if self.is_local:
+            payload["options"] = {"num_ctx": self.num_ctx}
+            if self.keep_alive:
+                payload["keep_alive"] = self.keep_alive
+
         from app.core.logging import request_id_var
         rid = request_id_var.get("-")
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json", "X-Request-ID": rid}
@@ -192,7 +211,8 @@ class LLMService:
         for attempt in range(1, self.max_retries + 1):
             retry_after: float | None = None
             try:
-                response = await self.client.post(url, json=payload, headers=headers)
+                async with self._semaphore:
+                    response = await self.client.post(url, json=payload, headers=headers)
             except httpx.TimeoutException:
                 last_error = LLMUnavailableError("Yapay zekâ servisi zamanında yanıt vermedi.")
             except httpx.TransportError:
@@ -230,18 +250,29 @@ class LLMService:
 
     async def chat_json(self, system_prompt: str, user_prompt: str) -> Any:
         """Yanıtı JSON olarak ayrıştırır; biçim bozuksa bir kez daha ister."""
-        raw = await self.chat(system_prompt, user_prompt)
+        token = _json_mode_var.set(True)
         try:
-            return self.parse_json(raw)
-        except LLMResponseError:
-            logger.warning("LLM yanıtı JSON olarak ayrıştırılamadı, yeniden isteniyor")
-            raw = await self.chat(system_prompt, f"{user_prompt}\n\nYanıtını YALNIZCA geçerli JSON olarak ver.")
-            return self.parse_json(raw)
+            raw = await self.chat(system_prompt, user_prompt)
+            try:
+                return self.parse_json(raw)
+            except LLMResponseError:
+                logger.warning("LLM yanıtı JSON olarak ayrıştırılamadı, yeniden isteniyor")
+                raw = await self.chat(system_prompt, f"{user_prompt}\n\nYanıtını YALNIZCA geçerli JSON olarak ver.")
+                return self.parse_json(raw)
+        finally:
+            _json_mode_var.reset(token)
+
+    @staticmethod
+    def strip_thinking(raw: str) -> str:
+        """Gemma 4 (<|channel>thought...<channel|>) ve Qwen/R1 (<think>...</think>) düşünme bloklarını temizler."""
+        cleaned = _GEMMA_THOUGHT_PATTERN.sub("", raw)
+        cleaned = _THINK_PATTERN.sub("", cleaned)
+        return cleaned.strip()
 
     @staticmethod
     def parse_json(raw: str) -> Any:
         """Kod bloğu veya açıklama metni içindeki JSON'u ayıklayıp çözer."""
-        cleaned = raw.strip()
+        cleaned = LLMService.strip_thinking(raw)
         if "```" in cleaned:
             match = _FENCE_PATTERN.search(cleaned)
             if match:
@@ -299,7 +330,7 @@ class LLMService:
         usage = data.get("usage") or {}
         self.usage.total_requests += 1
         self.usage.total_tokens += int(usage.get("total_tokens", 0) or 0)
-        return content
+        return self.strip_thinking(content)
 
     @staticmethod
     def _status_message(status: int) -> str:

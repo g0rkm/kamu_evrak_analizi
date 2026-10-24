@@ -30,6 +30,8 @@ services:
       - audit_data:/app/data/audit
       - log_data:/app/data/logs
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     deploy:
       resources:
         limits:

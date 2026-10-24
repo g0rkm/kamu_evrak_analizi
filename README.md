@@ -66,7 +66,7 @@ Metin çıkarma → Sınıflandırma ‖ İçerik analizi → Mevzuat ‖ Özet 
 
 - Python 3.11+
 - Tesseract OCR (`tesseract` komutunun PATH'te olması ve `tur` dil paketi)
-- Gemini API anahtarı (veya OpenAI uyumlu herhangi bir LLM uç noktası)
+- Ollama (`ollama pull gemma4:12b`) veya OpenAI uyumlu herhangi bir yerel/uzak LLM uç noktası
 
 ### Adımlar
 
@@ -78,7 +78,8 @@ python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-cp .env.example .env      # LLM_API_KEY değerini kendi anahtarınızla değiştirin
+ollama pull gemma4:12b    # Yerel Gemma 4 12B modelini indirin
+cp .env.example .env      # Varsayılan olarak yerel Ollama (gemma4:12b) yapılandırılmıştır
 
 python -m app.main        # veya: uvicorn app.main:app --host 127.0.0.1 --port 8080
 ```
@@ -182,7 +183,7 @@ python scripts/build_index.py    # app/data/rag/ (RAG indeksi)
 
 - **Backend**: FastAPI, Pydantic v2, httpx
 - **Frontend**: Bağımlılıksız vanilla JS (ES modülleri), özel CSS tasarım sistemi
-- **LLM**: Gemini API (OpenAI uyumlu uç nokta, retry ve Retry-After desteği)
+- **LLM**: Yerel LLM — Ollama `gemma4:12b` (OpenAI uyumlu `/v1/chat/completions`, 16K bağlam penceresi, JSON mod ve düşünme bloğu temizleme desteği)
 - **RAG**: scikit-learn TF-IDF, kosinüs benzerliği
 - **OCR**: Tesseract, PyMuPDF, Pillow
 - **Scraping**: Playwright (Chromium)
