@@ -1103,8 +1103,8 @@ def test_export_report_endpoint(client):
     resp = client.get("/api/history/export/report")
     assert resp.status_code == 200
     data = resp.json()
-    assert "total_records" in data
-    assert "by_document_type" in data
+    assert 'total' in data
+    assert 'categories' in data
 
 def test_dependency_check_endpoint(client):
     """Dependency health check endpoint testi."""
