@@ -2455,3 +2455,92 @@ class TestProfilerEndpoints:
         assert resp.status_code == 200
         assert resp.json()["status"] == "reset"
 
+
+class TestWebhookRetry:
+    def test_send_success(self):
+        from app.services.webhook_retry import WebhookRetry
+        wr = WebhookRetry()
+        result = wr.send_with_retry("http://test.com", {"data": 1}, lambda u, p: "ok")
+        assert result["success"] is True
+        assert result["attempts"] == 1
+
+    def test_send_failure_then_success(self):
+        from app.services.webhook_retry import WebhookRetry
+        wr = WebhookRetry(max_retries=2, base_delay=0.01)
+        call_count = [0]
+        def flaky_fn(url, payload):
+            call_count[0] += 1
+            if call_count[0] < 2:
+                raise Exception("fail")
+            return "ok"
+        result = wr.send_with_retry("http://test.com", {}, flaky_fn)
+        assert result["success"] is True
+        assert result["attempts"] == 2
+
+    def test_send_all_fail(self):
+        from app.services.webhook_retry import WebhookRetry
+        wr = WebhookRetry(max_retries=1, base_delay=0.01)
+        result = wr.send_with_retry("http://test.com", {}, lambda u, p: (_ for _ in ()).throw(Exception("fail")))
+        assert result["success"] is False
+
+    def test_queue_and_stats(self):
+        from app.services.webhook_retry import WebhookRetry
+        wr = WebhookRetry()
+        wr.queue_webhook("http://test.com", {"data": 1})
+        stats = wr.get_stats()
+        assert stats["pending_count"] == 1
+
+
+class TestBackupVerifier:
+    def test_verify_nonexistent(self):
+        from app.services.backup_verifier import BackupVerifier
+        bv = BackupVerifier()
+        result = bv.verify_backup("/nonexistent/path.json")
+        assert result["valid"] is False
+        assert len(result["errors"]) > 0
+
+    def test_verify_valid_json(self, tmp_path):
+        import json
+        from app.services.backup_verifier import BackupVerifier
+        bv = BackupVerifier()
+        f = tmp_path / "test_backup.json"
+        f.write_text(json.dumps([{"id": "1"}]))
+        result = bv.verify_backup(str(f))
+        assert result["valid"] is True
+        assert result["record_count"] == 1
+
+    def test_stats(self):
+        from app.services.backup_verifier import BackupVerifier
+        bv = BackupVerifier()
+        bv.verify_backup("/nonexistent.json")
+        stats = bv.stats()
+        assert stats["total_verifications"] == 1
+        assert stats["invalid_count"] == 1
+
+    def test_list_backups_empty(self):
+        from app.services.backup_verifier import BackupVerifier
+        bv = BackupVerifier(backup_dir="/nonexistent_dir")
+        assert bv.list_backups() == []
+
+
+class TestWebhookBackupEndpoints:
+    def test_webhook_retry_stats(self, client):
+        resp = client.get("/api/webhooks/retry-stats")
+        assert resp.status_code == 200
+
+    def test_webhook_retry_history(self, client):
+        resp = client.get("/api/webhooks/retry-history")
+        assert resp.status_code == 200
+
+    def test_backup_list(self, client):
+        resp = client.get("/api/backups/list")
+        assert resp.status_code == 200
+
+    def test_backup_stats(self, client):
+        resp = client.get("/api/backups/stats")
+        assert resp.status_code == 200
+
+    def test_backup_verification_history(self, client):
+        resp = client.get("/api/backups/verification-history")
+        assert resp.status_code == 200
+
