@@ -338,7 +338,7 @@ async def correlation_stats(container: ServiceContainer = Depends(get_container)
 async def correlation_recent(container: ServiceContainer = Depends(get_container)):
     if not container.correlation:
         return {"requests": []}
-    return container.correlation.get_recent()}
+    return {"requests": container.correlation.get_recent()}
 
 
 @router.get("/system/service-count")
