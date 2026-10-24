@@ -2396,3 +2396,69 @@ class TestValidationEndpoints:
         resp = client.get("/api/health-monitor/history")
         assert resp.status_code == 200
         assert "history" in resp.json()
+
+
+class TestPerformanceProfiler:
+    def test_profiler_record_and_summary(self):
+        from app.services.performance_profiler import PerformanceProfiler
+        pp = PerformanceProfiler(slow_threshold_ms=100)
+        pp.record("GET", "/api/test", 50.0)
+        pp.record("GET", "/api/test", 150.0)
+        summary = pp.get_summary()
+        assert summary["total_profiled"] == 2
+        assert summary["slow_requests_count"] == 1
+
+    def test_profiler_slow_requests(self):
+        from app.services.performance_profiler import PerformanceProfiler
+        pp = PerformanceProfiler(slow_threshold_ms=100)
+        pp.record("GET", "/api/slow", 500.0)
+        slow = pp.get_slow_requests()
+        assert len(slow) == 1
+        assert slow[0]["path"] == "/api/slow"
+
+    def test_profiler_endpoint_stats(self):
+        from app.services.performance_profiler import PerformanceProfiler
+        pp = PerformanceProfiler()
+        pp.record("GET", "/api/test", 10.0)
+        pp.record("GET", "/api/test", 20.0)
+        profile = pp.get_endpoint_profile()
+        assert "GET /api/test" in profile
+        stats = profile["GET /api/test"]
+        assert stats["count"] == 2
+        assert stats["avg_ms"] == 15.0
+
+    def test_profiler_reset(self):
+        from app.services.performance_profiler import PerformanceProfiler
+        pp = PerformanceProfiler()
+        pp.record("GET", "/api/test", 10.0)
+        pp.reset()
+        assert pp.get_summary()["total_profiled"] == 0
+
+
+class TestProfilerEndpoints:
+    def test_profiler_summary_endpoint(self, client):
+        resp = client.get("/api/profiler/summary")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "total_profiled" in data
+
+    def test_profiler_slow_requests_endpoint(self, client):
+        resp = client.get("/api/profiler/slow-requests")
+        assert resp.status_code == 200
+
+    def test_profiler_endpoints_endpoint(self, client):
+        resp = client.get("/api/profiler/endpoints")
+        assert resp.status_code == 200
+
+    def test_profiler_reset_endpoint(self, client):
+        resp = client.post("/api/profiler/reset", json={})
+        assert resp.status_code == 200
+        assert resp.json()["status"] == "reset"
+
+
+class TestVersionUpdate:
+    def test_version_is_4_1_0(self, client):
+        resp = client.get("/api/health")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["version"] == "4.1.0"
