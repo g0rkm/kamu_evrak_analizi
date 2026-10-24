@@ -2263,7 +2263,7 @@ class TestSanitizerEndpoints:
         resp = client.post("/api/sanitize/html", json={"text": "<b>bold</b>"})
         assert resp.status_code == 200
         data = resp.json()
-        assert "<b>" in data["sanitized"]
+        assert "&lt;b&gt;" in data["sanitized"]
 
 
 class TestRequestValidator:
