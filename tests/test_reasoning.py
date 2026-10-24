@@ -2013,3 +2013,37 @@ class TestMetricsEndpoints:
         data = resp.json()
         assert "metrics" in data["services"]
         assert data["services"]["metrics"] is True
+
+
+class TestLogService:
+    def test_log_stats(self, client):
+        resp = client.get("/api/logs/stats")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "recent_in_memory" in data
+        assert "log_files" in data
+
+    def test_log_files(self, client):
+        resp = client.get("/api/logs/files")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "files" in data
+
+    def test_recent_logs(self, client):
+        resp = client.get("/api/logs/recent")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "logs" in data
+
+    def test_cleanup_logs(self, client):
+        resp = client.post("/api/logs/cleanup", json={"days": 30}, headers={"Content-Type": "application/json"})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "removed_files" in data
+
+class TestVersionUpdate:
+    def test_version_is_3_9_0(self, client):
+        resp = client.get("/api/health")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["version"] == "3.9.0"
