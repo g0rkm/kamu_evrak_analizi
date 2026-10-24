@@ -87,12 +87,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         verify_environment(settings)
         import logging as _logging
         _logging.getLogger("startup").info("Uygulama başlatıldı, istekler kabul ediliyor.")
+        if container.log_service:
+            container.log_service.log("INFO", "Uygulama baslatildi", source="startup", details={"version": __version__, "environment": settings.ENVIRONMENT})
         yield
         if container := getattr(app.state, 'container', None):
             if getattr(container, 'scheduler', None):
                 container.scheduler.stop()
         active_jobs = getattr(app.state, 'active_jobs', 0)
         _logging.getLogger("startup").info('Kapatiliyor, aktif is sayisi: %d', active_jobs)
+        if hasattr(app.state, 'container') and app.state.container.log_service:
+            app.state.container.log_service.log("INFO", "Uygulama kapatiliyor", source="shutdown", details={"active_jobs": getattr(app.state, 'active_jobs', 0)})
         active = len(app.state.container.jobs._tasks)
         if active > 0:
             _logging.getLogger("startup").info("Aktif iş sayısı: %d — tamamlanması bekleniyor…", active)
