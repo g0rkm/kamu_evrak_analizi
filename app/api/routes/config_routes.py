@@ -34,6 +34,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "metrics": container.metrics is not None,
             "log_service": container.log_service is not None,
             "export_service": container.export_service is not None,
+            "maintenance": container.maintenance is not None,
         },
     }
 
@@ -256,3 +257,33 @@ async def export_csv(container: ServiceContainer = Depends(get_container)):
     records = container.export_service.get_all_records()
     csv_data = container.export_service.export_csv(records)
     return PlainTextResponse(csv_data, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=evrak_export.csv"})
+
+
+@router.get("/maintenance/status")
+async def maintenance_status(container: ServiceContainer = Depends(get_container)):
+    if not container.maintenance:
+        return {"maintenance_mode": False}
+    return container.maintenance.status()
+
+
+@router.post("/maintenance/enable")
+async def enable_maintenance(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.maintenance:
+        return {"error": "Maintenance service not available"}
+    body = await request.json()
+    reason = body.get("reason", "")
+    return container.maintenance.enable(reason=reason)
+
+
+@router.post("/maintenance/disable")
+async def disable_maintenance(container: ServiceContainer = Depends(get_container)):
+    if not container.maintenance:
+        return {"error": "Maintenance service not available"}
+    return container.maintenance.disable()
+
+
+@router.get("/maintenance/history")
+async def maintenance_history(container: ServiceContainer = Depends(get_container)):
+    if not container.maintenance:
+        return {"history": []}
+    return {"history": container.maintenance.get_history()}
