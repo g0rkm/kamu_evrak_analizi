@@ -309,14 +309,14 @@ async def error_summary(container: ServiceContainer = Depends(get_container)):
 async def recent_errors(container: ServiceContainer = Depends(get_container)):
     if not container.error_tracker:
         return {"errors": []}
-    return container.error_tracker.get_recent()
+    return {"errors": container.error_tracker.get_recent()}
 
 
 @router.get("/errors/top")
 async def top_errors(container: ServiceContainer = Depends(get_container)):
     if not container.error_tracker:
         return {"top": []}
-    return container.error_tracker.get_top_errors()
+    return {"top": container.error_tracker.get_top_errors()}
 
 
 @router.post("/errors/clear")
@@ -338,7 +338,7 @@ async def correlation_stats(container: ServiceContainer = Depends(get_container)
 async def correlation_recent(container: ServiceContainer = Depends(get_container)):
     if not container.correlation:
         return {"requests": []}
-    return container.correlation.get_recent()
+    return {"requests": container.correlation.get_recent()}
 
 
 @router.get("/system/service-count")
@@ -476,7 +476,7 @@ async def run_health_checks(container: ServiceContainer = Depends(get_container)
 async def health_monitor_history(container: ServiceContainer = Depends(get_container)):
     if not container.health_monitor:
         return {"history": []}
-    return container.health_monitor.get_history()
+    return {"history": container.health_monitor.get_history()}
 
 
 @router.get("/profiler/summary")
