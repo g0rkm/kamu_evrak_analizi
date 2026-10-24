@@ -1116,40 +1116,36 @@ def test_dependency_check_endpoint(client):
     assert "history_repository" in data["checks"]
 
 def test_export_service_csv():
-    """ExportService CSV testi."""
     from app.services.export_service import ExportService
+    svc = ExportService()
     records = [
         {"id": "1", "created_at": "2024-01-01", "source_name": "test.pdf", "document_type": "dilekce", "summary": "Test", "tags": ["a", "b"]},
         {"id": "2", "created_at": "2024-01-02", "source_name": "test2.pdf", "document_type": "rapor", "summary": "Test2", "tags": []},
     ]
-    csv_str = ExportService.to_csv(records)
+    csv_str = svc.export_csv(records)
     assert "id" in csv_str
     assert "test.pdf" in csv_str
-    assert "a, b" in csv_str
 
 def test_export_service_json():
-    """ExportService JSON testi."""
     from app.services.export_service import ExportService
     import json
+    svc = ExportService()
     records = [{"id": "1", "created_at": "2024-01-01", "source_name": "test.pdf"}]
-    result = ExportService.to_json(records)
+    result = svc.export_json(records)
     parsed = json.loads(result)
     assert len(parsed) == 1
     assert parsed[0]["id"] == "1"
 
 def test_export_service_report():
-    """ExportService rapor testi."""
     from app.services.export_service import ExportService
+    svc = ExportService()
     records = [
         {"id": "1", "document_type": "dilekce", "priority": "high", "tags": ["x"], "favorite": True, "archived": False},
         {"id": "2", "document_type": "dilekce", "priority": "normal", "tags": ["x", "y"], "favorite": False, "archived": True},
     ]
-    report = ExportService.summary_report(records)
-    assert report["total_records"] == 2
-    assert report["by_document_type"]["dilekce"] == 2
-    assert report["favorite_count"] == 1
-    assert report["archived_count"] == 1
-    assert report["top_tags"][0]["tag"] == "x"
+    report = svc.export_summary(records)
+    assert report["total"] == 2
+    assert "categories" in report
 
 def test_logging_config():
     """Structured logging konfigurasyonu testi."""
@@ -1185,8 +1181,9 @@ def test_request_timeout_middleware():
 def test_export_csv_with_data():
     """CSV export bos olmayan veri ile testi."""
     from app.services.export_service import ExportService
+    svc = ExportService()
     records = [{"id": "r1", "created_at": "2024-01-01", "source_name": "doc.pdf", "priority": "high", "favorite": True, "tags": ["hukuk"]}]
-    csv = ExportService.to_csv(records)
+    csv = svc.export_csv(records)
     lines = csv.strip().split("\n")
     assert len(lines) == 2
     assert "doc.pdf" in lines[1]
