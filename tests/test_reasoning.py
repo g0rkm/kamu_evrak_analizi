@@ -2047,3 +2047,39 @@ class TestVersionUpdate:
         assert resp.status_code == 200
         data = resp.json()
         assert data["version"] == "3.9.0"
+
+class TestExportEndpoints:
+    def test_export_summary(self, client):
+        resp = client.get("/api/export/summary")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "total" in data
+        assert "categories" in data
+
+    def test_export_json(self, client):
+        resp = client.get("/api/export/json")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "records" in data
+        assert "count" in data
+
+    def test_export_csv(self, client):
+        resp = client.get("/api/export/csv")
+        assert resp.status_code == 200
+        assert "text/csv" in resp.headers.get("content-type", "")
+
+    def test_config_report_includes_export(self, client):
+        resp = client.get("/api/system/config-report")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "export_service" in data["services"]
+        assert data["services"]["export_service"] is True
+
+class TestBodyLimitMiddleware:
+    def test_small_request_passes(self, client):
+        resp = client.post("/api/analyze/text", json={"text": "test metin"}, headers={"Content-Type": "application/json"})
+        assert resp.status_code != 413
+
+    def test_content_length_header_check(self, client):
+        resp = client.post("/api/analyze/text", json={"text": "a"}, headers={"Content-Type": "application/json", "Content-Length": "999999999999"})
+        assert resp.status_code == 413
