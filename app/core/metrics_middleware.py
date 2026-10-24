@@ -4,9 +4,10 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 class MetricsMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app, metrics_service_getter):
+    def __init__(self, app, metrics_service_getter, error_tracker_getter=None):
         super().__init__(app)
         self.metrics_service_getter = metrics_service_getter
+        self.error_tracker_getter = error_tracker_getter
 
     async def dispatch(self, request: Request, call_next) -> Response:
         path = request.url.path
@@ -26,6 +27,15 @@ class MetricsMiddleware(BaseHTTPMiddleware):
                     status_code=response.status_code,
                     duration_ms=duration_ms
                 )
+
+            if response.status_code >= 400 and self.error_tracker_getter is not None:
+                error_tracker = self.error_tracker_getter()
+                if error_tracker is not None:
+                    error_tracker.track(
+                        error_type=str(response.status_code),
+                        message=path,
+                        path=path
+                    )
         except Exception:
             pass
 
