@@ -235,7 +235,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     if settings.IP_WHITELIST or settings.IP_BLACKLIST:
         app.add_middleware(IPFilterMiddleware, whitelist=settings.IP_WHITELIST, blacklist=settings.IP_BLACKLIST)
 
-    app.add_middleware(MetricsMiddleware, metrics_service_getter=lambda: app.state.container.metrics)
+    app.add_middleware(MetricsMiddleware, metrics_service_getter=lambda: app.state.container.metrics, error_tracker_getter=lambda: getattr(app.state.container, 'error_tracker', None))
     app.add_middleware(BodyLimitMiddleware, max_body_bytes=settings.REQUEST_BODY_LIMIT_MB * 1024 * 1024)
 
     register_exception_handlers(app)
