@@ -27,6 +27,8 @@ services:
     volumes:
       - history_data:/app/data/history
       - upload_data:/app/uploads
+      - audit_data:/app/data/audit
+      - log_data:/app/data/logs
     restart: unless-stopped
     deploy:
       resources:
@@ -44,3 +46,5 @@ services:
 volumes:
   history_data:
   upload_data:
+  audit_data:
+  log_data:
