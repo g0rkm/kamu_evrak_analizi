@@ -199,6 +199,7 @@ class LLMService:
         if _json_mode_var.get():
             payload["response_format"] = {"type": "json_object"}
         if self.is_local:
+            payload["reasoning_effort"] = "none"
             payload["options"] = {"num_ctx": self.num_ctx}
             if self.keep_alive:
                 payload["keep_alive"] = self.keep_alive
