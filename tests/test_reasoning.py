@@ -2265,3 +2265,135 @@ class TestSanitizerEndpoints:
         assert resp.status_code == 200
         data = resp.json()
         assert "<b>" in data["sanitized"]
+
+
+class TestRequestValidator:
+    def test_validate_text_valid(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_text("Gecerli metin")
+        assert result["valid"] is True
+
+    def test_validate_text_none(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_text(None)
+        assert result["valid"] is False
+
+    def test_validate_text_empty(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_text("")
+        assert result["valid"] is False
+
+    def test_validate_text_too_long(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_text("a" * 200000)
+        assert result["valid"] is False
+
+    def test_validate_pagination_valid(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_pagination(0, 20)
+        assert result["valid"] is True
+
+    def test_validate_pagination_invalid(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_pagination(-1, 0)
+        assert result["valid"] is False
+
+    def test_validate_id_valid(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_id("abc-123")
+        assert result["valid"] is True
+
+    def test_validate_id_invalid(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_id("abc<script>")
+        assert result["valid"] is False
+
+    def test_validate_ids(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_ids(["id1", "id2"])
+        assert result["valid"] is True
+
+    def test_validate_date_range_valid(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_date_range("2024-01-01", "2024-12-31")
+        assert result["valid"] is True
+
+    def test_validate_date_range_invalid(self):
+        from app.services.request_validator import RequestValidator
+        rv = RequestValidator()
+        result = rv.validate_date_range("2024-12-31", "2024-01-01")
+        assert result["valid"] is False
+
+
+class TestHealthMonitor:
+    def test_initial_status(self):
+        from app.services.health_monitor import HealthMonitor
+        hm = HealthMonitor()
+        status = hm.get_status()
+        assert status["status"] == "healthy"
+
+    def test_register_and_run(self):
+        from app.services.health_monitor import HealthMonitor
+        hm = HealthMonitor()
+        hm.register_check("test_check", lambda: True)
+        result = hm.run_checks()
+        assert result["status"] == "healthy"
+        assert "test_check" in result["results"]
+
+    def test_failing_check(self):
+        from app.services.health_monitor import HealthMonitor
+        hm = HealthMonitor()
+        hm.register_check("bad", lambda: False)
+        result = hm.run_checks()
+        assert result["status"] == "degraded"
+        assert hm.is_healthy() is False
+
+    def test_history(self):
+        from app.services.health_monitor import HealthMonitor
+        hm = HealthMonitor()
+        hm.register_check("ok", lambda: True)
+        hm.run_checks()
+        hm.run_checks()
+        history = hm.get_history()
+        assert len(history) == 2
+
+
+class TestValidationEndpoints:
+    def test_validate_text_endpoint(self, client):
+        resp = client.post("/api/validate/text", json={"text": "Gecerli metin"})
+        assert resp.status_code == 200
+        assert resp.json()["valid"] is True
+
+    def test_validate_pagination_endpoint(self, client):
+        resp = client.post("/api/validate/pagination", json={"offset": 0, "limit": 20})
+        assert resp.status_code == 200
+        assert resp.json()["valid"] is True
+
+    def test_validate_ids_endpoint(self, client):
+        resp = client.post("/api/validate/ids", json={"ids": ["id1"]})
+        assert resp.status_code == 200
+        assert resp.json()["valid"] is True
+
+    def test_health_monitor_status(self, client):
+        resp = client.get("/api/health-monitor/status")
+        assert resp.status_code == 200
+        assert "status" in resp.json()
+
+    def test_health_monitor_run(self, client):
+        resp = client.post("/api/health-monitor/run", json={})
+        assert resp.status_code == 200
+
+    def test_health_monitor_history(self, client):
+        resp = client.get("/api/health-monitor/history")
+        assert resp.status_code == 200
+        assert "history" in resp.json()
