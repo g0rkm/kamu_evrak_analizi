@@ -38,6 +38,8 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "error_tracker": container.error_tracker is not None,
             "correlation": container.correlation is not None,
             "sanitizer": container.sanitizer is not None,
+            "request_validator": container.request_validator is not None,
+            "health_monitor": container.health_monitor is not None,
         },
     }
 
@@ -346,7 +348,8 @@ async def service_count(container: ServiceContainer = Depends(get_container)):
         "metrics": container.metrics, "log_service": container.log_service,
         "export_service": container.export_service, "maintenance": container.maintenance,
         "error_tracker": container.error_tracker, "correlation": container.correlation,
-        "sanitizer": container.sanitizer
+        "sanitizer": container.sanitizer, "request_validator": container.request_validator,
+        "health_monitor": container.health_monitor
     }
     active = sum(1 for v in services.values() if v is not None)
     return {"total_services": len(services), "active_services": active, "inactive_services": len(services) - active}
@@ -366,7 +369,7 @@ async def full_system_status(request: Request, container: ServiceContainer = Dep
         "metrics": None,
         "errors": None
     }
-    services = {"audit": container.audit, "backup": container.backup, "cache": container.cache, "metrics": container.metrics, "log_service": container.log_service, "maintenance": container.maintenance, "error_tracker": container.error_tracker, "sanitizer": container.sanitizer}
+    services = {"audit": container.audit, "backup": container.backup, "cache": container.cache, "metrics": container.metrics, "log_service": container.log_service, "maintenance": container.maintenance, "error_tracker": container.error_tracker, "sanitizer": container.sanitizer, "health_monitor": container.health_monitor}
     result["services"] = {k: v is not None for k, v in services.items()}
     if container.metrics:
         result["metrics"] = container.metrics.get_summary()
@@ -415,3 +418,55 @@ async def sanitize_html_endpoint(request: Request, container: ServiceContainer =
     body = await request.json()
     text = body.get("text", "")
     return {"original_length": len(text), "sanitized": svc.sanitize_html(text)}
+
+
+@router.post("/validate/text")
+async def validate_text(request: Request, container: ServiceContainer = Depends(get_container)):
+    svc = container.request_validator
+    if not svc:
+        from app.services.request_validator import RequestValidator
+        svc = RequestValidator()
+    body = await request.json()
+    text = body.get("text")
+    return svc.validate_text(text)
+
+
+@router.post("/validate/pagination")
+async def validate_pagination(request: Request, container: ServiceContainer = Depends(get_container)):
+    svc = container.request_validator
+    if not svc:
+        from app.services.request_validator import RequestValidator
+        svc = RequestValidator()
+    body = await request.json()
+    return svc.validate_pagination(body.get("offset", 0), body.get("limit", 20))
+
+
+@router.post("/validate/ids")
+async def validate_ids(request: Request, container: ServiceContainer = Depends(get_container)):
+    svc = container.request_validator
+    if not svc:
+        from app.services.request_validator import RequestValidator
+        svc = RequestValidator()
+    body = await request.json()
+    return svc.validate_ids(body.get("ids", []))
+
+
+@router.get("/health-monitor/status")
+async def health_monitor_status(container: ServiceContainer = Depends(get_container)):
+    if not container.health_monitor:
+        return {"status": "unavailable"}
+    return container.health_monitor.get_status()
+
+
+@router.post("/health-monitor/run")
+async def run_health_checks(container: ServiceContainer = Depends(get_container)):
+    if not container.health_monitor:
+        return {"error": "Health monitor not available"}
+    return container.health_monitor.run_checks()
+
+
+@router.get("/health-monitor/history")
+async def health_monitor_history(container: ServiceContainer = Depends(get_container)):
+    if not container.health_monitor:
+        return {"history": []}
+    return {"history": container.health_monitor.get_history()}

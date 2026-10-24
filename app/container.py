@@ -44,6 +44,8 @@ class ServiceContainer:
     correlation: Any = None
     config_validator: Any = None
     sanitizer: Any = None
+    request_validator: Any = None
+    health_monitor: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

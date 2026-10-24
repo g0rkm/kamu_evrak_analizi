@@ -49,6 +49,8 @@ from app.services.error_tracker import ErrorTracker
 from app.services.correlation_service import CorrelationService
 from app.services.config_validator import ConfigValidator
 from app.services.sanitizer import Sanitizer
+from app.services.request_validator import RequestValidator
+from app.services.health_monitor import HealthMonitor
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -89,6 +91,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.error_tracker = ErrorTracker()
         app.state.container.correlation = CorrelationService()
         app.state.container.sanitizer = Sanitizer()
+        app.state.container.request_validator = RequestValidator()
+        app.state.container.health_monitor = HealthMonitor()
         
         validator = ConfigValidator()
         config_result = validator.validate(settings)
