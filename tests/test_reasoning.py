@@ -2050,21 +2050,21 @@ class TestVersionUpdate:
 
 class TestExportEndpoints:
     def test_export_summary(self, client):
-        resp = client.get("/api/export/summary")
+        resp = client.get("/api/data-export/summary")
         assert resp.status_code == 200
         data = resp.json()
         assert "total" in data
         assert "categories" in data
 
     def test_export_json(self, client):
-        resp = client.get("/api/export/json")
+        resp = client.get("/api/data-export/json")
         assert resp.status_code == 200
         data = resp.json()
         assert "records" in data
         assert "count" in data
 
     def test_export_csv(self, client):
-        resp = client.get("/api/export/csv")
+        resp = client.get("/api/data-export/csv")
         assert resp.status_code == 200
         assert "text/csv" in resp.headers.get("content-type", "")
 
