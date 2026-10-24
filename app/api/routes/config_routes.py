@@ -31,6 +31,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "file_validator": container.file_validator is not None,
             "session_manager": container.session_manager is not None,
             "health_checker": container.health_checker is not None,
+            "metrics": container.metrics is not None,
         },
     }
 
