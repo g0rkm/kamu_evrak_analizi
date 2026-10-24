@@ -37,6 +37,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "maintenance": container.maintenance is not None,
             "error_tracker": container.error_tracker is not None,
             "correlation": container.correlation is not None,
+            "sanitizer": container.sanitizer is not None,
         },
     }
 
@@ -331,7 +332,7 @@ async def correlation_stats(container: ServiceContainer = Depends(get_container)
 async def correlation_recent(container: ServiceContainer = Depends(get_container)):
     if not container.correlation:
         return {"requests": []}
-    return {"requests": container.correlation.get_recent()}
+    return container.correlation.get_recent()}
 
 
 @router.get("/system/service-count")
@@ -344,7 +345,8 @@ async def service_count(container: ServiceContainer = Depends(get_container)):
         "health_checker": container.health_checker, "cache": container.cache, "retry": container.retry,
         "metrics": container.metrics, "log_service": container.log_service,
         "export_service": container.export_service, "maintenance": container.maintenance,
-        "error_tracker": container.error_tracker, "correlation": container.correlation
+        "error_tracker": container.error_tracker, "correlation": container.correlation,
+        "sanitizer": container.sanitizer
     }
     active = sum(1 for v in services.values() if v is not None)
     return {"total_services": len(services), "active_services": active, "inactive_services": len(services) - active}
@@ -364,7 +366,7 @@ async def full_system_status(request: Request, container: ServiceContainer = Dep
         "metrics": None,
         "errors": None
     }
-    services = {"audit": container.audit, "backup": container.backup, "cache": container.cache, "metrics": container.metrics, "log_service": container.log_service, "maintenance": container.maintenance, "error_tracker": container.error_tracker}
+    services = {"audit": container.audit, "backup": container.backup, "cache": container.cache, "metrics": container.metrics, "log_service": container.log_service, "maintenance": container.maintenance, "error_tracker": container.error_tracker, "sanitizer": container.sanitizer}
     result["services"] = {k: v is not None for k, v in services.items()}
     if container.metrics:
         result["metrics"] = container.metrics.get_summary()
@@ -380,3 +382,36 @@ async def config_validation(container: ServiceContainer = Depends(get_container)
     if not container.config_validator:
         return {"valid": True, "errors": [], "warnings": []}
     return container.config_validator.validate(container.settings)
+
+
+@router.post("/sanitize/check")
+async def sanitize_check(request: Request, container: ServiceContainer = Depends(get_container)):
+    svc = container.sanitizer
+    if not svc:
+        from app.services.sanitizer import Sanitizer
+        svc = Sanitizer()
+    body = await request.json()
+    text = body.get("text", "")
+    return svc.sanitize_input(text)
+
+
+@router.post("/sanitize/filename")
+async def sanitize_filename(request: Request, container: ServiceContainer = Depends(get_container)):
+    svc = container.sanitizer
+    if not svc:
+        from app.services.sanitizer import Sanitizer
+        svc = Sanitizer()
+    body = await request.json()
+    filename = body.get("filename", "")
+    return {"original": filename, "sanitized": svc.sanitize_filename(filename)}
+
+
+@router.post("/sanitize/html")
+async def sanitize_html_endpoint(request: Request, container: ServiceContainer = Depends(get_container)):
+    svc = container.sanitizer
+    if not svc:
+        from app.services.sanitizer import Sanitizer
+        svc = Sanitizer()
+    body = await request.json()
+    text = body.get("text", "")
+    return {"original_length": len(text), "sanitized": svc.sanitize_html(text)}

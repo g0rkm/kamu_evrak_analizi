@@ -48,6 +48,7 @@ from app.services.maintenance_service import MaintenanceService
 from app.services.error_tracker import ErrorTracker
 from app.services.correlation_service import CorrelationService
 from app.services.config_validator import ConfigValidator
+from app.services.sanitizer import Sanitizer
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -87,6 +88,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.maintenance = MaintenanceService(initial_mode=settings.MAINTENANCE_MODE)
         app.state.container.error_tracker = ErrorTracker()
         app.state.container.correlation = CorrelationService()
+        app.state.container.sanitizer = Sanitizer()
         
         validator = ConfigValidator()
         config_result = validator.validate(settings)

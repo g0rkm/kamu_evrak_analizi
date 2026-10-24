@@ -43,6 +43,7 @@ class ServiceContainer:
     error_tracker: Any = None
     correlation: Any = None
     config_validator: Any = None
+    sanitizer: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:
