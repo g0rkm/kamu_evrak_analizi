@@ -25,6 +25,7 @@ from app.core.timeout_middleware import RequestTimeoutMiddleware, ActiveJobsMidd
 from app.core.security_middleware import SecurityHeadersMiddleware
 from app.core.ip_filter_middleware import IPFilterMiddleware
 from app.core.audit_middleware import AuditMiddleware
+from app.core.metrics_middleware import MetricsMiddleware
 from app.services.audit_logger import AuditLogger
 from app.services.auth_service import AuthService
 from app.services.backup_service import BackupService
@@ -220,6 +221,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     if settings.IP_WHITELIST or settings.IP_BLACKLIST:
         app.add_middleware(IPFilterMiddleware, whitelist=settings.IP_WHITELIST, blacklist=settings.IP_BLACKLIST)
+
+    app.add_middleware(MetricsMiddleware, metrics_service_getter=lambda: app.state.container.metrics)
 
     register_exception_handlers(app)
     app.include_router(router)
