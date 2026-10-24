@@ -2183,3 +2183,85 @@ class TestSystemDashboard:
         assert resp.status_code == 200
         data = resp.json()
         assert "requests" in data
+
+
+class TestSanitizerService:
+    def test_sanitize_html_escapes(self):
+        from app.services.sanitizer import Sanitizer
+        s = Sanitizer()
+        result = s.sanitize_html('<script>alert("xss")</script>')
+        assert "<script>" not in result
+        assert "<script>" in result
+
+    def test_check_xss_detects_script(self):
+        from app.services.sanitizer import Sanitizer
+        s = Sanitizer()
+        result = s.check_xss('<script>alert(1)</script>')
+        assert result["safe"] is False
+        assert len(result["threats"]) > 0
+
+    def test_check_xss_safe_text(self):
+        from app.services.sanitizer import Sanitizer
+        s = Sanitizer()
+        result = s.check_xss("Normal metin")
+        assert result["safe"] is True
+        assert result["threats"] == []
+
+    def test_check_sql_injection(self):
+        from app.services.sanitizer import Sanitizer
+        s = Sanitizer()
+        result = s.check_sql_injection("' OR 1=1")
+        assert result["safe"] is False
+
+    def test_check_sql_safe(self):
+        from app.services.sanitizer import Sanitizer
+        s = Sanitizer()
+        result = s.check_sql_injection("SELECT ismi FROM tablo")
+        assert result["safe"] is True
+
+    def test_sanitize_input_combined(self):
+        from app.services.sanitizer import Sanitizer
+        s = Sanitizer()
+        result = s.sanitize_input('<script>alert(1)</script>')
+        assert result["safe"] is False
+        assert "<script>" in result["sanitized"]
+
+    def test_sanitize_filename(self):
+        from app.services.sanitizer import Sanitizer
+        s = Sanitizer()
+        assert s.sanitize_filename("test<>.pdf") == "test.pdf"
+        assert s.sanitize_filename("") == "unnamed"
+        assert s.sanitize_filename("normal.txt") == "normal.txt"
+
+    def test_sanitize_input_empty(self):
+        from app.services.sanitizer import Sanitizer
+        s = Sanitizer()
+        result = s.sanitize_input("")
+        assert result["safe"] is True
+
+
+class TestSanitizerEndpoints:
+    def test_sanitize_check_safe(self, client):
+        resp = client.post("/api/sanitize/check", json={"text": "Guvenli metin"})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["safe"] is True
+
+    def test_sanitize_check_xss(self, client):
+        resp = client.post("/api/sanitize/check", json={"text": "<script>alert(1)</script>"})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["safe"] is False
+        assert len(data["threats"]) > 0
+
+    def test_sanitize_filename_endpoint(self, client):
+        resp = client.post("/api/sanitize/filename", json={"filename": "test<script>.pdf"})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "<script>" not in data["sanitized"]
+
+    def test_sanitize_html_endpoint(self, client):
+        resp = client.post("/api/sanitize/html", json={"text": "<b>bold</b>"})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "<b>" in data["sanitized"]
