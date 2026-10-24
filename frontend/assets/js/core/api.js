@@ -418,4 +418,14 @@ export class ApiClient {
     async bulkDelete(ids) { return this.request("/history/bulk-delete", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids }) }); }
     async bulkArchive(ids, archive = true) { return this.request("/history/bulk-archive", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids, archive }) }); }
     async bulkTag(ids, tags) { return this.request("/history/bulk-tag", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids, tags }) }); }
+
+    metricsEndpoints = () => this.request('/metrics/endpoints');
+    metricsSummary = () => this.request('/metrics/summary');
+    metricsTopEndpoints = () => this.request('/metrics/top-endpoints');
+    metricsSlowest = () => this.request('/metrics/slowest');
+    metricsStatusDist = () => this.request('/metrics/status-distribution');
+    logsRecent = () => this.request('/logs/recent');
+    logsFiles = () => this.request('/logs/files');
+    logsStats = () => this.request('/logs/stats');
+    logsCleanup = (days = 30) => this.request('/logs/cleanup', { method: 'POST', json: { days } });
 }
