@@ -332,3 +332,44 @@ async def correlation_recent(container: ServiceContainer = Depends(get_container
     if not container.correlation:
         return {"requests": []}
     return {"requests": container.correlation.get_recent()}
+
+
+@router.get("/system/service-count")
+async def service_count(container: ServiceContainer = Depends(get_container)):
+    services = {
+        "audit": container.audit, "backup": container.backup, "webhooks": container.webhooks,
+        "integrity": container.integrity, "notifications": container.notifications,
+        "templates": container.templates, "auth": container.auth, "scheduler": container.scheduler,
+        "file_validator": container.file_validator, "session_manager": container.session_manager,
+        "health_checker": container.health_checker, "cache": container.cache, "retry": container.retry,
+        "metrics": container.metrics, "log_service": container.log_service,
+        "export_service": container.export_service, "maintenance": container.maintenance,
+        "error_tracker": container.error_tracker, "correlation": container.correlation
+    }
+    active = sum(1 for v in services.values() if v is not None)
+    return {"total_services": len(services), "active_services": active, "inactive_services": len(services) - active}
+
+
+@router.get("/system/full-status")
+async def full_system_status(request: Request, container: ServiceContainer = Depends(get_container)):
+    import time as _time
+    startup = getattr(request.app.state, 'startup_time', _time.time())
+    uptime = _time.time() - startup
+    result = {
+        "status": "healthy",
+        "version": container.settings.VERSION if hasattr(container.settings, 'VERSION') else "unknown",
+        "uptime_seconds": round(uptime, 1),
+        "active_jobs": getattr(request.app.state, 'active_jobs', 0),
+        "services": {},
+        "metrics": None,
+        "errors": None
+    }
+    services = {"audit": container.audit, "backup": container.backup, "cache": container.cache, "metrics": container.metrics, "log_service": container.log_service, "maintenance": container.maintenance, "error_tracker": container.error_tracker}
+    result["services"] = {k: v is not None for k, v in services.items()}
+    if container.metrics:
+        result["metrics"] = container.metrics.get_summary()
+    if container.error_tracker:
+        result["errors"] = container.error_tracker.get_summary()
+    if container.maintenance and container.maintenance.is_active:
+        result["status"] = "maintenance"
+    return result
