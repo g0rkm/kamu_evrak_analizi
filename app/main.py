@@ -52,6 +52,8 @@ from app.services.sanitizer import Sanitizer
 from app.services.request_validator import RequestValidator
 from app.services.health_monitor import HealthMonitor
 from app.services.performance_profiler import PerformanceProfiler
+from app.services.webhook_retry import WebhookRetry
+from app.services.backup_verifier import BackupVerifier
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -95,6 +97,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.request_validator = RequestValidator()
         app.state.container.health_monitor = HealthMonitor()
         app.state.container.performance_profiler = PerformanceProfiler(slow_threshold_ms=2000)
+        app.state.container.webhook_retry = WebhookRetry()
+        app.state.container.backup_verifier = BackupVerifier(backup_dir=str(Path(settings.HISTORY_DIR) / 'backups'))
         
         hm = app.state.container.health_monitor
         hm.register_check("history_dir", lambda: Path(settings.HISTORY_DIR).exists())

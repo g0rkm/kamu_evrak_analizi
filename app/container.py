@@ -47,6 +47,8 @@ class ServiceContainer:
     request_validator: Any = None
     health_monitor: Any = None
     performance_profiler: Any = None
+    webhook_retry: Any = None
+    backup_verifier: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

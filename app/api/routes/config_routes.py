@@ -41,6 +41,8 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "request_validator": container.request_validator is not None,
             "health_monitor": container.health_monitor is not None,
             "performance_profiler": container.performance_profiler is not None,
+            "webhook_retry": container.webhook_retry is not None,
+            "backup_verifier": container.backup_verifier is not None,
         },
     }
 
@@ -351,7 +353,8 @@ async def service_count(container: ServiceContainer = Depends(get_container)):
         "error_tracker": container.error_tracker, "correlation": container.correlation,
         "sanitizer": container.sanitizer, "request_validator": container.request_validator,
         "health_monitor": container.health_monitor,
-        "performance_profiler": container.performance_profiler
+        "performance_profiler": container.performance_profiler,
+        "webhook_retry": container.webhook_retry, "backup_verifier": container.backup_verifier
     }
     active = sum(1 for v in services.values() if v is not None)
     return {"total_services": len(services), "active_services": active, "inactive_services": len(services) - active}
@@ -471,7 +474,7 @@ async def run_health_checks(container: ServiceContainer = Depends(get_container)
 async def health_monitor_history(container: ServiceContainer = Depends(get_container)):
     if not container.health_monitor:
         return {"history": []}
-    return {"history": container.health_monitor.get_history()}
+    return container.health_monitor.get_history()
 
 
 @router.get("/profiler/summary")
@@ -501,3 +504,47 @@ async def profiler_reset(container: ServiceContainer = Depends(get_container)):
         return {"error": "Performance profiler not available"}
     container.performance_profiler.reset()
     return {"status": "reset"}
+
+
+@router.get("/webhooks/retry-stats")
+async def webhook_retry_stats(container: ServiceContainer = Depends(get_container)):
+    if not container.webhook_retry:
+        return {"error": "Webhook retry not available"}
+    return container.webhook_retry.get_stats()
+
+
+@router.get("/webhooks/retry-history")
+async def webhook_retry_history(container: ServiceContainer = Depends(get_container)):
+    if not container.webhook_retry:
+        return {"history": []}
+    return {"history": container.webhook_retry.get_history()}
+
+
+@router.get("/backups/list")
+async def list_backups(container: ServiceContainer = Depends(get_container)):
+    if not container.backup_verifier:
+        return {"backups": []}
+    return {"backups": container.backup_verifier.list_backups()}
+
+
+@router.post("/backups/verify")
+async def verify_backup(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.backup_verifier:
+        return {"error": "Backup verifier not available"}
+    body = await request.json()
+    path = body.get("path", "")
+    return container.backup_verifier.verify_backup(path)
+
+
+@router.get("/backups/verification-history")
+async def backup_verification_history(container: ServiceContainer = Depends(get_container)):
+    if not container.backup_verifier:
+        return {"history": []}
+    return {"history": container.backup_verifier.get_verification_history()}
+
+
+@router.get("/backups/stats")
+async def backup_stats(container: ServiceContainer = Depends(get_container)):
+    if not container.backup_verifier:
+        return {"error": "Backup verifier not available"}
+    return container.backup_verifier.stats()
