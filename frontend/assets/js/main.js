@@ -18,6 +18,7 @@ import { NotificationsView } from './views/notifications-view.js';
 import { TemplatesView } from './views/templates-view.js';
 import { ExportView } from './views/export-view.js';
 import { SystemView } from "./views/system-view.js";
+import MetricsView from './views/metrics-view.js';
 
 /** Üst bardaki sistem durumu göstergesi; sağlık uç noktasını periyodik olarak sorgular. */
 class SystemStatus {
@@ -139,6 +140,7 @@ class App {
             templates: new TemplatesView(context),
             export: new ExportView(context),
             system: new SystemView(context),
+            metrics: new MetricsView(this.api),
         };
 
         window.addEventListener('hashchange', () => this.route());
@@ -182,26 +184,35 @@ class App {
         if (location.hash !== hash) location.hash = hash;
     }
 
-    route() {
+    async route() {
         const rawHash = location.hash.replace(/^#\/?/, '');
         const [name, id] = rawHash.split('/');
         const routeName = this.views[name] ? name : 'dashboard';
         const view = this.views[routeName];
 
-        if (this.currentView !== view) {
-            this.root.replaceChildren(view.element || view.render());
-            this.currentView = view;
-            window.scrollTo({ top: 0 });
+        if (routeName === 'metrics') {
+            if (this.currentView !== view) {
+                this.currentView = view;
+                window.scrollTo({ top: 0 });
+            }
+            await view.render(this.root);
+        } else {
+            if (this.currentView !== view) {
+                this.root.replaceChildren(view.element || view.render());
+                this.currentView = view;
+                window.scrollTo({ top: 0 });
+            }
+            if (typeof view.show === 'function') {
+                view.show({ id: id ? decodeURIComponent(id) : null });
+            }
         }
+
         this.navLinks.forEach((link) => {
             const linkRoute = link.dataset.route || link.dataset.view;
             if (linkRoute === routeName) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
         });
         document.title = `${view.title || routeName} · Kamu Evrak Analizi`;
-        if (typeof view.show === 'function') {
-            view.show({ id: id ? decodeURIComponent(id) : null });
-        }
     }
 }
 
