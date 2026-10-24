@@ -2544,3 +2544,62 @@ class TestWebhookBackupEndpoints:
         resp = client.get("/api/backups/verification-history")
         assert resp.status_code == 200
 
+
+class TestDataEncryption:
+    def test_encrypt_decrypt(self):
+        from app.services.data_encryption import DataEncryption
+        enc = DataEncryption(secret_key="test-key")
+        original = "Hassas veri"
+        encrypted = enc.encrypt(original)
+        assert encrypted != original
+        decrypted = enc.decrypt(encrypted)
+        assert decrypted == original
+
+    def test_compute_hash(self):
+        from app.services.data_encryption import DataEncryption
+        enc = DataEncryption()
+        h = enc.compute_hash("test data")
+        assert len(h) == 64
+
+    def test_verify_hash(self):
+        from app.services.data_encryption import DataEncryption
+        enc = DataEncryption()
+        h = enc.compute_hash("test data")
+        assert enc.verify_hash("test data", h) is True
+        assert enc.verify_hash("wrong data", h) is False
+
+    def test_empty_encrypt(self):
+        from app.services.data_encryption import DataEncryption
+        enc = DataEncryption()
+        assert enc.encrypt("") == ""
+        assert enc.decrypt("") == ""
+
+    def test_stats(self):
+        from app.services.data_encryption import DataEncryption
+        enc = DataEncryption()
+        enc.encrypt("test")
+        enc.compute_hash("test")
+        stats = enc.get_stats()
+        assert stats["encrypted"] == 1
+        assert stats["hash_computed"] == 1
+
+
+class TestEncryptionEndpoints:
+    def test_hash_endpoint(self, client):
+        resp = client.post("/api/encryption/hash", json={"data": "test"})
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "hash" in data
+        assert len(data["hash"]) == 64
+
+    def test_verify_hash_endpoint(self, client):
+        resp1 = client.post("/api/encryption/hash", json={"data": "test"})
+        h = resp1.json()["hash"]
+        resp2 = client.post("/api/encryption/verify-hash", json={"data": "test", "hash": h})
+        assert resp2.status_code == 200
+        assert resp2.json()["valid"] is True
+
+    def test_encryption_stats(self, client):
+        resp = client.get("/api/encryption/stats")
+        assert resp.status_code == 200
+
