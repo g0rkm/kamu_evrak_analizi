@@ -43,6 +43,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "performance_profiler": container.performance_profiler is not None,
             "webhook_retry": container.webhook_retry is not None,
             "backup_verifier": container.backup_verifier is not None,
+            "data_encryption": container.data_encryption is not None,
         },
     }
 
@@ -337,7 +338,7 @@ async def correlation_stats(container: ServiceContainer = Depends(get_container)
 async def correlation_recent(container: ServiceContainer = Depends(get_container)):
     if not container.correlation:
         return {"requests": []}
-    return {"requests": container.correlation.get_recent()}
+    return container.correlation.get_recent()}
 
 
 @router.get("/system/service-count")
@@ -354,7 +355,8 @@ async def service_count(container: ServiceContainer = Depends(get_container)):
         "sanitizer": container.sanitizer, "request_validator": container.request_validator,
         "health_monitor": container.health_monitor,
         "performance_profiler": container.performance_profiler,
-        "webhook_retry": container.webhook_retry, "backup_verifier": container.backup_verifier
+        "webhook_retry": container.webhook_retry, "backup_verifier": container.backup_verifier,
+        "data_encryption": container.data_encryption
     }
     active = sum(1 for v in services.values() if v is not None)
     return {"total_services": len(services), "active_services": active, "inactive_services": len(services) - active}
@@ -548,3 +550,31 @@ async def backup_stats(container: ServiceContainer = Depends(get_container)):
     if not container.backup_verifier:
         return {"error": "Backup verifier not available"}
     return container.backup_verifier.stats()
+
+
+@router.post("/encryption/hash")
+async def compute_hash(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.data_encryption:
+        return {"error": "Encryption service not available"}
+    body = await request.json()
+    data = body.get("data", "")
+    algorithm = body.get("algorithm", "sha256")
+    return {"hash": container.data_encryption.compute_hash(data, algorithm), "algorithm": algorithm}
+
+
+@router.post("/encryption/verify-hash")
+async def verify_hash(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.data_encryption:
+        return {"error": "Encryption service not available"}
+    body = await request.json()
+    data = body.get("data", "")
+    expected = body.get("hash", "")
+    algorithm = body.get("algorithm", "sha256")
+    return {"valid": container.data_encryption.verify_hash(data, expected, algorithm)}
+
+
+@router.get("/encryption/stats")
+async def encryption_stats(container: ServiceContainer = Depends(get_container)):
+    if not container.data_encryption:
+        return {"error": "Encryption service not available"}
+    return container.data_encryption.get_stats()
