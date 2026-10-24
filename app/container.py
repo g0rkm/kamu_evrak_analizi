@@ -46,6 +46,7 @@ class ServiceContainer:
     sanitizer: Any = None
     request_validator: Any = None
     health_monitor: Any = None
+    performance_profiler: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

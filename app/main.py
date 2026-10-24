@@ -51,6 +51,7 @@ from app.services.config_validator import ConfigValidator
 from app.services.sanitizer import Sanitizer
 from app.services.request_validator import RequestValidator
 from app.services.health_monitor import HealthMonitor
+from app.services.performance_profiler import PerformanceProfiler
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -93,6 +94,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.sanitizer = Sanitizer()
         app.state.container.request_validator = RequestValidator()
         app.state.container.health_monitor = HealthMonitor()
+        app.state.container.performance_profiler = PerformanceProfiler(slow_threshold_ms=2000)
         
         validator = ConfigValidator()
         config_result = validator.validate(settings)

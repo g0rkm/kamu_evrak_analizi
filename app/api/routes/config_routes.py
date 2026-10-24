@@ -40,6 +40,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "sanitizer": container.sanitizer is not None,
             "request_validator": container.request_validator is not None,
             "health_monitor": container.health_monitor is not None,
+            "performance_profiler": container.performance_profiler is not None,
         },
     }
 
@@ -305,14 +306,14 @@ async def error_summary(container: ServiceContainer = Depends(get_container)):
 async def recent_errors(container: ServiceContainer = Depends(get_container)):
     if not container.error_tracker:
         return {"errors": []}
-    return {"errors": container.error_tracker.get_recent()}
+    return container.error_tracker.get_recent()
 
 
 @router.get("/errors/top")
 async def top_errors(container: ServiceContainer = Depends(get_container)):
     if not container.error_tracker:
         return {"top": []}
-    return {"top": container.error_tracker.get_top_errors()}
+    return container.error_tracker.get_top_errors()
 
 
 @router.post("/errors/clear")
@@ -334,7 +335,7 @@ async def correlation_stats(container: ServiceContainer = Depends(get_container)
 async def correlation_recent(container: ServiceContainer = Depends(get_container)):
     if not container.correlation:
         return {"requests": []}
-    return {"requests": container.correlation.get_recent()}
+    return container.correlation.get_recent()
 
 
 @router.get("/system/service-count")
@@ -349,7 +350,8 @@ async def service_count(container: ServiceContainer = Depends(get_container)):
         "export_service": container.export_service, "maintenance": container.maintenance,
         "error_tracker": container.error_tracker, "correlation": container.correlation,
         "sanitizer": container.sanitizer, "request_validator": container.request_validator,
-        "health_monitor": container.health_monitor
+        "health_monitor": container.health_monitor,
+        "performance_profiler": container.performance_profiler
     }
     active = sum(1 for v in services.values() if v is not None)
     return {"total_services": len(services), "active_services": active, "inactive_services": len(services) - active}
@@ -469,4 +471,33 @@ async def run_health_checks(container: ServiceContainer = Depends(get_container)
 async def health_monitor_history(container: ServiceContainer = Depends(get_container)):
     if not container.health_monitor:
         return {"history": []}
-    return {"history": container.health_monitor.get_history()}
+    return container.health_monitor.get_history()
+
+
+@router.get("/profiler/summary")
+async def profiler_summary(container: ServiceContainer = Depends(get_container)):
+    if not container.performance_profiler:
+        return {"error": "Performance profiler not available"}
+    return container.performance_profiler.get_summary()
+
+
+@router.get("/profiler/slow-requests")
+async def profiler_slow_requests(container: ServiceContainer = Depends(get_container)):
+    if not container.performance_profiler:
+        return {"requests": []}
+    return container.performance_profiler.get_slow_requests()
+
+
+@router.get("/profiler/endpoints")
+async def profiler_endpoints(container: ServiceContainer = Depends(get_container)):
+    if not container.performance_profiler:
+        return {"endpoints": {}}
+    return container.performance_profiler.get_endpoint_profile()
+
+
+@router.post("/profiler/reset")
+async def profiler_reset(container: ServiceContainer = Depends(get_container)):
+    if not container.performance_profiler:
+        return {"error": "Performance profiler not available"}
+    container.performance_profiler.reset()
+    return {"status": "reset"}
