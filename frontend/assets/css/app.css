@@ -943,3 +943,12 @@ svg.icon { width: 1em; height: 1em; flex-shrink: 0; stroke: currentColor; fill: 
 /* Export View */
 .export-view-container { padding: 1rem 0; }
 .export-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; text-align: center; }
+.stat-item { padding: 0.5rem; }
+.stat-value { display: block; font-size: 1.5rem; font-weight: 700; color: var(--clr-primary); }
+.stat-label { display: block; font-size: 0.8rem; color: var(--clr-text-muted); margin-top: 0.25rem; }
+.status-bars { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.status-bar { display: flex; align-items: center; gap: 0.5rem; }
+.status-count { font-weight: 600; }
