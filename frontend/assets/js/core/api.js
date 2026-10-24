@@ -428,4 +428,8 @@ export class ApiClient {
     logsFiles = () => this.request('/logs/files');
     logsStats = () => this.request('/logs/stats');
     logsCleanup = (days = 30) => this.request('/logs/cleanup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ days }) });
+
+    dataExportSummary = () => this.request('/data-export/summary');
+    dataExportJson = () => this.request('/data-export/json');
+    dataExportCsv = () => this.request('/data-export/csv');
 }
