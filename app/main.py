@@ -42,6 +42,7 @@ from app.services.cache_service import CacheService
 from app.services.retry_service import RetryService
 from app.services.metrics_service import MetricsService
 from app.services.log_service import LogService
+from app.services.export_service import ExportService
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -77,6 +78,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.retry = RetryService()
         app.state.container.metrics = MetricsService()
         app.state.container.log_service = LogService()
+        app.state.container.export_service = ExportService(history_dir=str(settings.HISTORY_DIR))
         migration_svc = MigrationService(settings.HISTORY_DIR)
         app.state.migration = migration_svc
         app.state.active_jobs = 0

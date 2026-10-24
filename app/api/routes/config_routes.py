@@ -33,6 +33,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "health_checker": container.health_checker is not None,
             "metrics": container.metrics is not None,
             "log_service": container.log_service is not None,
+            "export_service": container.export_service is not None,
         },
     }
 
@@ -229,3 +230,29 @@ async def cleanup_logs(request: Request, container: ServiceContainer = Depends(g
     days = body.get("days", 30)
     removed = container.log_service.cleanup_old_logs(days=days)
     return {"removed_files": removed, "retention_days": days}
+
+
+@router.get("/export/summary")
+async def export_summary(container: ServiceContainer = Depends(get_container)):
+    if not container.export_service:
+        return {"error": "Export service not available"}
+    records = container.export_service.get_all_records()
+    return container.export_service.export_summary(records)
+
+
+@router.get("/export/json")
+async def export_json(container: ServiceContainer = Depends(get_container)):
+    if not container.export_service:
+        return {"error": "Export service not available"}
+    records = container.export_service.get_all_records()
+    return {"records": records, "count": len(records)}
+
+
+@router.get("/export/csv")
+async def export_csv(container: ServiceContainer = Depends(get_container)):
+    from fastapi.responses import PlainTextResponse
+    if not container.export_service:
+        return PlainTextResponse("Export service not available", status_code=500)
+    records = container.export_service.get_all_records()
+    csv_data = container.export_service.export_csv(records)
+    return PlainTextResponse(csv_data, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=evrak_export.csv"})

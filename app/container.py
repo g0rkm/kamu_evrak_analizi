@@ -38,6 +38,7 @@ class ServiceContainer:
     retry: Any = None
     metrics: Any = None
     log_service: Any = None
+    export_service: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:
