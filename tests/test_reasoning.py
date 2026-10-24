@@ -2223,7 +2223,7 @@ class TestSanitizerService:
         s = Sanitizer()
         result = s.sanitize_input('<script>alert(1)</script>')
         assert result["safe"] is False
-        assert "<script>" in result["sanitized"]
+        assert "&lt;script&gt;" in result["sanitized"]
 
     def test_sanitize_filename(self):
         from app.services.sanitizer import Sanitizer
