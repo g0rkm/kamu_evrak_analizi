@@ -41,6 +41,7 @@ from app.services.health_checker import HealthChecker
 from app.services.cache_service import CacheService
 from app.services.retry_service import RetryService
 from app.services.metrics_service import MetricsService
+from app.services.log_service import LogService
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -75,6 +76,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.cache = CacheService(default_ttl=settings.CACHE_TTL)
         app.state.container.retry = RetryService()
         app.state.container.metrics = MetricsService()
+        app.state.container.log_service = LogService()
         migration_svc = MigrationService(settings.HISTORY_DIR)
         app.state.migration = migration_svc
         app.state.active_jobs = 0

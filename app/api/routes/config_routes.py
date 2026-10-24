@@ -32,6 +32,7 @@ async def config_report(request: Request, container: ServiceContainer = Depends(
             "session_manager": container.session_manager is not None,
             "health_checker": container.health_checker is not None,
             "metrics": container.metrics is not None,
+            "log_service": container.log_service is not None,
         },
     }
 
@@ -196,3 +197,35 @@ async def metrics_status(container: ServiceContainer = Depends(get_container)):
     if not container.metrics:
         return {"error": "Metrics service not available"}
     return container.metrics.get_status_distribution()
+
+
+@router.get("/logs/recent")
+async def recent_logs(container: ServiceContainer = Depends(get_container)):
+    if not container.log_service:
+        return {"error": "Log service not available"}
+    limit = 50
+    return {"logs": container.log_service.get_recent(limit=limit)}
+
+
+@router.get("/logs/files")
+async def log_files(container: ServiceContainer = Depends(get_container)):
+    if not container.log_service:
+        return {"error": "Log service not available"}
+    return {"files": container.log_service.get_log_files()}
+
+
+@router.get("/logs/stats")
+async def log_stats(container: ServiceContainer = Depends(get_container)):
+    if not container.log_service:
+        return {"error": "Log service not available"}
+    return container.log_service.stats()
+
+
+@router.post("/logs/cleanup")
+async def cleanup_logs(request: Request, container: ServiceContainer = Depends(get_container)):
+    if not container.log_service:
+        return {"error": "Log service not available"}
+    body = await request.json()
+    days = body.get("days", 30)
+    removed = container.log_service.cleanup_old_logs(days=days)
+    return {"removed_files": removed, "retention_days": days}
