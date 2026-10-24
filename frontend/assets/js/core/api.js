@@ -206,7 +206,6 @@ export class ApiClient {
         });
     }
 
-    validateText(text) { return this.request('/validate-text', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) }); }
     historyNotes(recordId) { return this.request('/history/' + encodeURIComponent(recordId)); }
 
     async compareTwoRecords(id1, id2) {
@@ -444,4 +443,17 @@ export class ApiClient {
     maintenanceStatus = () => this.request('/maintenance/status');
     maintenanceEnable = (reason) => this.request('/maintenance/enable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
     maintenanceDisable = () => this.request('/maintenance/disable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+
+    async profilerSummary() { return this.request('/profiler/summary'); }
+    async profilerSlowRequests() { return this.request('/profiler/slow-requests'); }
+    async profilerEndpoints() { return this.request('/profiler/endpoints'); }
+    async profilerReset() { return this.request('/profiler/reset', { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' }); }
+    async sanitizeCheck(text) { return this.request('/sanitize/check', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text}) }); }
+    async sanitizeFilename(filename) { return this.request('/sanitize/filename', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({filename}) }); }
+    async sanitizeHtml(text) { return this.request('/sanitize/html', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text}) }); }
+    async validateText(text) { return this.request('/validate/text', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text}) }); }
+    async validatePagination(offset, limit) { return this.request('/validate/pagination', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({offset, limit}) }); }
+    async healthMonitorStatus() { return this.request('/health-monitor/status'); }
+    async healthMonitorRun() { return this.request('/health-monitor/run', { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' }); }
+    async healthMonitorHistory() { return this.request('/health-monitor/history'); }
 }
