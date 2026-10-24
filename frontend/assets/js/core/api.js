@@ -432,4 +432,16 @@ export class ApiClient {
     dataExportSummary = () => this.request('/data-export/summary');
     dataExportJson = () => this.request('/data-export/json');
     dataExportCsv = () => this.request('/data-export/csv');
+
+    errorsSummary = () => this.request('/errors/summary');
+    errorsRecent = () => this.request('/errors/recent');
+    errorsTop = () => this.request('/errors/top');
+    errorsClear = () => this.request('/errors/clear', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    correlationStats = () => this.request('/correlation/stats');
+    correlationRecent = () => this.request('/correlation/recent');
+    serviceCount = () => this.request('/system/service-count');
+    fullStatus = () => this.request('/system/full-status');
+    maintenanceStatus = () => this.request('/maintenance/status');
+    maintenanceEnable = (reason) => this.request('/maintenance/enable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
+    maintenanceDisable = () => this.request('/maintenance/disable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
 }
