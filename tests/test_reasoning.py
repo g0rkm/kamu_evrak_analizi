@@ -1965,3 +1965,51 @@ class TestBulkOperations:
     def test_bulk_tag_empty_tags(self, client):
         resp = client.post("/api/history/bulk-tag", json={"ids": ["x"], "tags": []})
         assert resp.status_code in (400, 422)
+
+
+class TestMetricsEndpoints:
+    def test_metrics_summary(self, client):
+        resp = client.get("/api/metrics/summary")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "total_requests" in data
+
+    def test_metrics_endpoints(self, client):
+        client.get("/api/health")
+        resp = client.get("/api/metrics/endpoints")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "endpoints" in data
+
+    def test_metrics_top_endpoints(self, client):
+        resp = client.get("/api/metrics/top-endpoints")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "top" in data
+        assert isinstance(data["top"], list)
+
+    def test_metrics_slowest(self, client):
+        resp = client.get("/api/metrics/slowest")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "slowest" in data
+        assert isinstance(data["slowest"], list)
+
+    def test_metrics_status_distribution(self, client):
+        resp = client.get("/api/metrics/status-distribution")
+        assert resp.status_code == 200
+
+    def test_metrics_records_requests(self, client):
+        """MetricsMiddleware istekleri kaydediyor mu kontrol et"""
+        for _ in range(3):
+            client.get("/api/health")
+        resp = client.get("/api/metrics/summary")
+        data = resp.json()
+        assert data["total_requests"] >= 3
+
+    def test_config_report_includes_metrics(self, client):
+        resp = client.get("/api/system/config-report")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "metrics" in data["services"]
+        assert data["services"]["metrics"] is True
