@@ -668,7 +668,7 @@ def test_api_version_header(client):
     """Her API yanıtı X-API-Version header'ı içermeli."""
     response = client.get("/api/health")
     assert "X-API-Version" in response.headers
-    assert response.headers["X-API-Version"] == "4.0.0"
+    assert response.headers["X-API-Version"] == "4.1.0"
 
 
 def test_admin_endpoint_without_token(client):
@@ -921,7 +921,7 @@ def test_version_is_4_0_0(client):
     response = client.get('/api/version')
     assert response.status_code == 200
     data = response.json()
-    assert data['version'] == '4.0.0'
+    assert data['version'] == '4.1.0'
     assert data['api'] == 'v1'
 
 
@@ -1043,7 +1043,7 @@ def test_system_summary(client):
     response = client.get('/api/stats/summary')
     assert response.status_code == 200
     data = response.json()
-    assert data['version'] == '4.0.0'
+    assert data['version'] == '4.1.0'
     assert 'total_analyses' in data
     assert 'error_rate' in data
 
@@ -1312,7 +1312,7 @@ def test_storage_health_endpoint(client):
 def test_version_is_4_0_0(client):
     resp = client.get('/api/version')
     assert resp.status_code == 200
-    assert resp.json()['version'] == '4.0.0'
+    assert resp.json()['version'] == '4.1.0'
 
 
 def test_soft_delete_and_restore(client):
