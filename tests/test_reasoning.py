@@ -2603,3 +2603,46 @@ class TestEncryptionEndpoints:
         resp = client.get("/api/encryption/stats")
         assert resp.status_code == 200
 
+
+class TestSystemDiagnostics:
+    def test_system_info(self):
+        from app.services.system_diagnostics import SystemDiagnostics
+        sd = SystemDiagnostics()
+        info = sd.get_system_info()
+        assert "python_version" in info
+        assert "pid" in info
+        assert info["pid"] > 0
+
+    def test_disk_usage(self):
+        from app.services.system_diagnostics import SystemDiagnostics
+        sd = SystemDiagnostics()
+        disk = sd.get_disk_usage(".")
+        assert "total_gb" in disk
+        assert disk["total_gb"] > 0
+
+    def test_full_diagnostics(self):
+        from app.services.system_diagnostics import SystemDiagnostics
+        sd = SystemDiagnostics()
+        diag = sd.get_full_diagnostics()
+        assert "system" in diag
+        assert "disk" in diag
+        assert "timestamp" in diag
+
+
+class TestDiagnosticsEndpoints:
+    def test_diagnostics_system(self, client):
+        resp = client.get("/api/diagnostics/system")
+        assert resp.status_code == 200
+        assert "python_version" in resp.json()
+
+    def test_diagnostics_disk(self, client):
+        resp = client.get("/api/diagnostics/disk")
+        assert resp.status_code == 200
+
+    def test_diagnostics_full(self, client):
+        resp = client.get("/api/diagnostics/full")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "system" in data
+        assert "disk" in data
+
