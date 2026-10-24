@@ -1187,7 +1187,7 @@ def test_export_csv_with_data():
     lines = csv.strip().split("\n")
     assert len(lines) == 2
     assert "doc.pdf" in lines[1]
-    assert "Evet" in lines[1]
+    assert 'True' in lines[1]
 
 def test_full_text_search_endpoint(client):
     """Full-text arama endpoint testi."""
