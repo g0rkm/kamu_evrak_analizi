@@ -19,6 +19,7 @@ import { TemplatesView } from './views/templates-view.js';
 import { ExportView } from './views/export-view.js';
 import { SystemView } from "./views/system-view.js";
 import MetricsView from './views/metrics-view.js';
+import AdminView from './views/admin-view.js';
 
 /** Üst bardaki sistem durumu göstergesi; sağlık uç noktasını periyodik olarak sorgular. */
 class SystemStatus {
@@ -141,6 +142,7 @@ class App {
             export: new ExportView(context),
             system: new SystemView(context),
             metrics: new MetricsView(this.api),
+            admin: new AdminView(this.api),
         };
 
         window.addEventListener('hashchange', () => this.route());
@@ -190,7 +192,7 @@ class App {
         const routeName = this.views[name] ? name : 'dashboard';
         const view = this.views[routeName];
 
-        if (routeName === 'metrics') {
+        if (routeName === 'metrics' || routeName === 'admin') {
             if (this.currentView !== view) {
                 this.currentView = view;
                 window.scrollTo({ top: 0 });
