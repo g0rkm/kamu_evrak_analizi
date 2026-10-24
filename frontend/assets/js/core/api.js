@@ -427,5 +427,5 @@ export class ApiClient {
     logsRecent = () => this.request('/logs/recent');
     logsFiles = () => this.request('/logs/files');
     logsStats = () => this.request('/logs/stats');
-    logsCleanup = (days = 30) => this.request('/logs/cleanup', { method: 'POST', json: { days } });
+    logsCleanup = (days = 30) => this.request('/logs/cleanup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ days }) });
 }
