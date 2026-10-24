@@ -2120,3 +2120,38 @@ class TestLogServiceEndpoints:
         data = resp.json()
         assert data["services"]["log_service"] is True
         assert data["services"]["maintenance"] is True
+
+
+class TestErrorTracker:
+    def test_error_summary(self, client):
+        resp = client.get("/api/errors/summary")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "total_errors" in data
+        assert "error_types" in data
+
+    def test_recent_errors(self, client):
+        resp = client.get("/api/errors/recent")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "errors" in data
+
+    def test_top_errors(self, client):
+        resp = client.get("/api/errors/top")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "top" in data
+
+    def test_error_tracking_on_404(self, client):
+        client.get("/api/nonexistent-endpoint-xyz")
+        resp = client.get("/api/errors/summary")
+        data = resp.json()
+        assert data["total_errors"] >= 1
+        assert "404" in data["error_types"]
+
+    def test_clear_errors(self, client):
+        client.get("/api/nonexistent-endpoint-xyz")
+        resp = client.post("/api/errors/clear", json={}, headers={"Content-Type": "application/json"})
+        assert resp.status_code == 200
+        resp2 = client.get("/api/errors/summary")
+        assert resp2.json()["total_errors"] == 0
