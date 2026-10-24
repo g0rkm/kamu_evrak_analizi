@@ -96,6 +96,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.health_monitor = HealthMonitor()
         app.state.container.performance_profiler = PerformanceProfiler(slow_threshold_ms=2000)
         
+        hm = app.state.container.health_monitor
+        hm.register_check("history_dir", lambda: Path(settings.HISTORY_DIR).exists())
+        hm.register_check("llm_service", lambda: container.llm is not None)
+        hm.register_check("rag_service", lambda: container.rag is not None)
+        hm.register_check("metrics", lambda: container.metrics is not None)
+        hm.register_check("scheduler", lambda: container.scheduler is not None and container.scheduler._running)
+        
         validator = ConfigValidator()
         config_result = validator.validate(settings)
         container.config_validator = validator
