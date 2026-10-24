@@ -50,6 +50,7 @@ class ServiceContainer:
     webhook_retry: Any = None
     backup_verifier: Any = None
     data_encryption: Any = None
+    system_diagnostics: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

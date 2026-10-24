@@ -55,6 +55,7 @@ from app.services.performance_profiler import PerformanceProfiler
 from app.services.webhook_retry import WebhookRetry
 from app.services.backup_verifier import BackupVerifier
 from app.services.data_encryption import DataEncryption
+from app.services.system_diagnostics import SystemDiagnostics
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -101,6 +102,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.webhook_retry = WebhookRetry()
         app.state.container.backup_verifier = BackupVerifier(backup_dir=str(Path(settings.HISTORY_DIR) / 'backups'))
         app.state.container.data_encryption = DataEncryption(secret_key=settings.LLM_API_KEY[:16] if settings.LLM_API_KEY else None)
+        app.state.container.system_diagnostics = SystemDiagnostics()
         
         hm = app.state.container.health_monitor
         hm.register_check("history_dir", lambda: Path(settings.HISTORY_DIR).exists())

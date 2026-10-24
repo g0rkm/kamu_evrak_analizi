@@ -309,14 +309,14 @@ async def error_summary(container: ServiceContainer = Depends(get_container)):
 async def recent_errors(container: ServiceContainer = Depends(get_container)):
     if not container.error_tracker:
         return {"errors": []}
-    return {"errors": container.error_tracker.get_recent()}
+    return container.error_tracker.get_recent()
 
 
 @router.get("/errors/top")
 async def top_errors(container: ServiceContainer = Depends(get_container)):
     if not container.error_tracker:
         return {"top": []}
-    return {"top": container.error_tracker.get_top_errors()}
+    return container.error_tracker.get_top_errors()
 
 
 @router.post("/errors/clear")
@@ -338,7 +338,7 @@ async def correlation_stats(container: ServiceContainer = Depends(get_container)
 async def correlation_recent(container: ServiceContainer = Depends(get_container)):
     if not container.correlation:
         return {"requests": []}
-    return {"requests": container.correlation.get_recent()}
+    return container.correlation.get_recent()
 
 
 @router.get("/system/service-count")
@@ -476,7 +476,7 @@ async def run_health_checks(container: ServiceContainer = Depends(get_container)
 async def health_monitor_history(container: ServiceContainer = Depends(get_container)):
     if not container.health_monitor:
         return {"history": []}
-    return {"history": container.health_monitor.get_history()}
+    return container.health_monitor.get_history()
 
 
 @router.get("/profiler/summary")
@@ -519,7 +519,7 @@ async def webhook_retry_stats(container: ServiceContainer = Depends(get_containe
 async def webhook_retry_history(container: ServiceContainer = Depends(get_container)):
     if not container.webhook_retry:
         return {"history": []}
-    return {"history": container.webhook_retry.get_history()}
+    return container.webhook_retry.get_history()
 
 
 @router.get("/backups/list")
@@ -578,3 +578,31 @@ async def encryption_stats(container: ServiceContainer = Depends(get_container))
     if not container.data_encryption:
         return {"error": "Encryption service not available"}
     return container.data_encryption.get_stats()
+
+
+@router.get("/diagnostics/system")
+async def diagnostics_system(container: ServiceContainer = Depends(get_container)):
+    if not container.system_diagnostics:
+        return {"error": "Diagnostics not available"}
+    return container.system_diagnostics.get_system_info()
+
+
+@router.get("/diagnostics/disk")
+async def diagnostics_disk(container: ServiceContainer = Depends(get_container)):
+    if not container.system_diagnostics:
+        return {"error": "Diagnostics not available"}
+    return container.system_diagnostics.get_disk_usage()
+
+
+@router.get("/diagnostics/data-directory")
+async def diagnostics_data_dir(container: ServiceContainer = Depends(get_container)):
+    if not container.system_diagnostics:
+        return {"error": "Diagnostics not available"}
+    return container.system_diagnostics.get_data_dir_stats(str(container.settings.HISTORY_DIR))
+
+
+@router.get("/diagnostics/full")
+async def diagnostics_full(container: ServiceContainer = Depends(get_container)):
+    if not container.system_diagnostics:
+        return {"error": "Diagnostics not available"}
+    return container.system_diagnostics.get_full_diagnostics(str(container.settings.HISTORY_DIR))
