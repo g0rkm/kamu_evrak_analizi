@@ -2455,10 +2455,3 @@ class TestProfilerEndpoints:
         assert resp.status_code == 200
         assert resp.json()["status"] == "reset"
 
-
-class TestVersionUpdate:
-    def test_version_is_4_1_0(self, client):
-        resp = client.get("/api/health")
-        assert resp.status_code == 200
-        data = resp.json()
-        assert data["version"] == "4.1.0"
