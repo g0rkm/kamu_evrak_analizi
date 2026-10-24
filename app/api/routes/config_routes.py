@@ -306,14 +306,14 @@ async def error_summary(container: ServiceContainer = Depends(get_container)):
 async def recent_errors(container: ServiceContainer = Depends(get_container)):
     if not container.error_tracker:
         return {"errors": []}
-    return {"errors": container.error_tracker.get_recent()}
+    return container.error_tracker.get_recent()
 
 
 @router.get("/errors/top")
 async def top_errors(container: ServiceContainer = Depends(get_container)):
     if not container.error_tracker:
         return {"top": []}
-    return {"top": container.error_tracker.get_top_errors()}
+    return container.error_tracker.get_top_errors()
 
 
 @router.post("/errors/clear")
@@ -335,7 +335,7 @@ async def correlation_stats(container: ServiceContainer = Depends(get_container)
 async def correlation_recent(container: ServiceContainer = Depends(get_container)):
     if not container.correlation:
         return {"requests": []}
-    return {"requests": container.correlation.get_recent()}
+    return container.correlation.get_recent()
 
 
 @router.get("/system/service-count")
@@ -423,7 +423,7 @@ async def sanitize_html_endpoint(request: Request, container: ServiceContainer =
 
 
 @router.post("/validate/text")
-async def validate_text(request: Request, container: ServiceContainer = Depends(get_container)):
+async def validate_text_input(request: Request, container: ServiceContainer = Depends(get_container)):
     svc = container.request_validator
     if not svc:
         from app.services.request_validator import RequestValidator
@@ -471,7 +471,7 @@ async def run_health_checks(container: ServiceContainer = Depends(get_container)
 async def health_monitor_history(container: ServiceContainer = Depends(get_container)):
     if not container.health_monitor:
         return {"history": []}
-    return {"history": container.health_monitor.get_history()}
+    return container.health_monitor.get_history()
 
 
 @router.get("/profiler/summary")
