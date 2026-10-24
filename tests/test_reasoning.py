@@ -2155,3 +2155,34 @@ class TestErrorTracker:
         assert resp.status_code == 200
         resp2 = client.get("/api/errors/summary")
         assert resp2.json()["total_errors"] == 0
+
+
+class TestSystemDashboard:
+    def test_service_count(self, client):
+        resp = client.get("/api/system/service-count")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "total_services" in data
+        assert "active_services" in data
+        assert data["active_services"] > 0
+
+    def test_full_status(self, client):
+        resp = client.get("/api/system/full-status")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["status"] == "healthy"
+        assert "uptime_seconds" in data
+        assert "services" in data
+        assert "metrics" in data
+
+    def test_correlation_stats(self, client):
+        resp = client.get("/api/correlation/stats")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "tracked_requests" in data
+
+    def test_correlation_recent(self, client):
+        resp = client.get("/api/correlation/recent")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "requests" in data
