@@ -474,7 +474,7 @@ async def run_health_checks(container: ServiceContainer = Depends(get_container)
 async def health_monitor_history(container: ServiceContainer = Depends(get_container)):
     if not container.health_monitor:
         return {"history": []}
-    return container.health_monitor.get_history()
+    return {"history": container.health_monitor.get_history()}
 
 
 @router.get("/profiler/summary")
