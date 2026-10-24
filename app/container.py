@@ -42,6 +42,7 @@ class ServiceContainer:
     maintenance: Any = None
     error_tracker: Any = None
     correlation: Any = None
+    config_validator: Any = None
 
     @classmethod
     def build(cls, settings: Settings) -> ServiceContainer:

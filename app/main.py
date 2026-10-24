@@ -47,6 +47,7 @@ from app.services.export_service import ExportService
 from app.services.maintenance_service import MaintenanceService
 from app.services.error_tracker import ErrorTracker
 from app.services.correlation_service import CorrelationService
+from app.services.config_validator import ConfigValidator
 
 FRONTEND_DIR = BASE_DIR / "frontend"
 
@@ -86,6 +87,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.container.maintenance = MaintenanceService(initial_mode=settings.MAINTENANCE_MODE)
         app.state.container.error_tracker = ErrorTracker()
         app.state.container.correlation = CorrelationService()
+        
+        validator = ConfigValidator()
+        config_result = validator.validate(settings)
+        container.config_validator = validator
+        if config_result["errors"]:
+            for err in config_result["errors"]:
+                import logging as _log
+                _log.getLogger("startup").error("Config hatasi: %s", err)
+
         migration_svc = MigrationService(settings.HISTORY_DIR)
         app.state.migration = migration_svc
         app.state.active_jobs = 0

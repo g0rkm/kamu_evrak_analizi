@@ -373,3 +373,10 @@ async def full_system_status(request: Request, container: ServiceContainer = Dep
     if container.maintenance and container.maintenance.is_active:
         result["status"] = "maintenance"
     return result
+
+
+@router.get("/system/config-validation")
+async def config_validation(container: ServiceContainer = Depends(get_container)):
+    if not container.config_validator:
+        return {"valid": True, "errors": [], "warnings": []}
+    return container.config_validator.validate(container.settings)
