@@ -232,7 +232,7 @@ async def cleanup_logs(request: Request, container: ServiceContainer = Depends(g
     return {"removed_files": removed, "retention_days": days}
 
 
-@router.get("/export/summary")
+@router.get("/data-export/summary")
 async def export_summary(container: ServiceContainer = Depends(get_container)):
     if not container.export_service:
         return {"error": "Export service not available"}
@@ -240,7 +240,7 @@ async def export_summary(container: ServiceContainer = Depends(get_container)):
     return container.export_service.export_summary(records)
 
 
-@router.get("/export/json")
+@router.get("/data-export/json")
 async def export_json(container: ServiceContainer = Depends(get_container)):
     if not container.export_service:
         return {"error": "Export service not available"}
@@ -248,7 +248,7 @@ async def export_json(container: ServiceContainer = Depends(get_container)):
     return {"records": records, "count": len(records)}
 
 
-@router.get("/export/csv")
+@router.get("/data-export/csv")
 async def export_csv(container: ServiceContainer = Depends(get_container)):
     from fastapi.responses import PlainTextResponse
     if not container.export_service:
