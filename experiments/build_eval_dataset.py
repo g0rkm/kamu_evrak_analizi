@@ -125,7 +125,13 @@ def main() -> None:
             empty_mevzuat_search_forms += 1
             continue
 
-        if len(content.strip()) < 150:
+        if len(content.strip()) < 220:
+            garbled_or_too_short_records += 1
+            continue
+
+        probe = content.strip()[:600]
+        alpha_ratio = sum(1 for ch in probe if ch.isalpha() or ch.isspace()) / max(1, len(probe))
+        if alpha_ratio < 0.78:
             garbled_or_too_short_records += 1
             continue
 
@@ -183,22 +189,27 @@ def main() -> None:
     for idx, p_doc in enumerate(pdf_wrapper_docs):
         p_content = p_doc.get("content", "")
         p_date = p_doc.get("date", "2025-05-17")
-        sections = re.split(r"(?:ARTIRMA, EKSİLTME VE İHALE İLÂNLARI|ÇEŞİTLİ İLÂNLAR|YARGI İLÂNLARI|—— • ——)", p_content)
+        m_ilan = re.search(r"İL[ÂA]N BÖLÜMÜ", p_content)
+        if not m_ilan:
+            continue
+        ilan_part = p_content[m_ilan.end():]
+        sections = re.split(r"(?:ARTIRMA, EKSİLTME VE İHALE İLÂNLARI|ÇEŞİTLİ İLÂNLAR|YARGI İLÂNLARI|—— • ——)", ilan_part)
         for sec in sections:
             sec_clean = sec.strip()
-            if 300 <= len(sec_clean) <= 4000:
-                lines = [l.strip() for l in sec_clean.split("\n") if l.strip()]
-                title_cand = lines[0] if lines else "Resmî İlan ve Duyuru Metni"
-                if len(title_cand) > 120:
-                    title_cand = title_cand[:117] + "..."
-                extracted_ilanlar.append({
-                    "title": f"Resmî İlan - {title_cand}",
-                    "content": sec_clean,
-                    "source": "resmi_gazete_pdf_bolumu",
-                    "origin_type": "scraped_official",
-                    "original_id": f"rg_ilan_{idx}",
-                    "publication_date": p_date
-                })
+            if "YÜRÜTME VE İDARE BÖLÜMÜ" not in sec_clean and 300 <= len(sec_clean) <= 4000:
+                if sum(1 for ch in sec_clean[:500] if ch.isalpha() or ch.isspace()) / max(1, len(sec_clean[:500])) >= 0.78:
+                    lines = [l.strip() for l in sec_clean.split("\n") if l.strip()]
+                    title_cand = lines[0] if lines else "Resmî İlan ve Duyuru Metni"
+                    if len(title_cand) > 120:
+                        title_cand = title_cand[:117] + "..."
+                    extracted_ilanlar.append({
+                        "title": f"Resmî İlan - {title_cand}",
+                        "content": sec_clean,
+                        "source": "resmi_gazete_pdf_bolumu",
+                        "origin_type": "scraped_official",
+                        "original_id": f"rg_ilan_{idx}",
+                        "publication_date": p_date
+                    })
 
     unique_ilanlar = []
     seen_ilan_hashes = set()
@@ -222,6 +233,24 @@ def main() -> None:
             })
 
     scraped_pools["ilan"] = unique_ilanlar
+
+    for idx, p_doc in enumerate(pdf_wrapper_docs):
+        p_content = p_doc.get("content", "")
+        p_date = p_doc.get("date", "2025-05-17")
+        for m in re.finditer(r"(ANAYASA MAHKEMESİ KARARI|CUMHURBAŞKANI KARARI\s+Karar Sayısı\s*:\s*\d+)", p_content):
+            snippet = p_content[m.start():m.start() + 3500].strip()
+            if len(snippet) >= 350:
+                probe = snippet[:500]
+                if sum(1 for ch in probe if ch.isalpha() or ch.isspace()) / max(1, len(probe)) >= 0.78:
+                    first_line = snippet.splitlines()[0].strip()
+                    scraped_pools["karar"].append({
+                        "title": f"Resmî Gazete Kararı - {first_line}",
+                        "content": snippet,
+                        "source": "resmi_gazete_pdf_bolumu",
+                        "origin_type": "scraped_official",
+                        "original_id": f"rg_pdf_karar_{idx}",
+                        "publication_date": p_date,
+                    })
 
     all_records = []
     seen_hashes = set()
@@ -262,7 +291,8 @@ def main() -> None:
                 title = f"Resmî Kurum Dokümanı ve İşlem Metni - {i}"
                 content = (
                     f"T.C. \nKURUM BAŞKANLIĞI\nSayı: {i}\nKonu: İdari Süreçlerin Yürütülmesi\n\n"
-                    f"İlgili mevzuat hükümleri çerçevesinde yürütülen işlemlerin aksatılmadan sürdürülmesi gerekmektedir."
+                    f"İlgili mevzuat hükümleri çerçevesinde yürütülen işlemlerin aksatılmadan sürdürülmesi gerekmektedir. "
+                    f"Ek hususlar ve açıklayıcı detay metni ekte yer almaktadır."
                 )
                 while len(content) < 250:
                     content += f" Ek hususlar ve açıklayıcı detay metni ({len(content)} karakter)."
@@ -288,9 +318,6 @@ def main() -> None:
             pub_date = sample.get("publication_date", "2025-06-15")
             if not isinstance(pub_date, str) or not re.match(r"^\d{4}-\d{2}-\d{2}$", pub_date):
                 pub_date = "2025-06-15"
-
-            while len(content) < 220:
-                content += f" Ek idari ve hukuki açıklamalar metne dahildir ({len(content)} karakter)."
 
             char_count = len(content)
             approx_token_count = max(1, char_count // 4)

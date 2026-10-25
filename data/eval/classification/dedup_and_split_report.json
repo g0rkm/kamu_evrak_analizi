@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-25T11:58:11.320355",
+  "generated_at": "2026-10-25T12:56:01.455708",
   "total_raw_records": 956,
   "full_issue_pdf_wrappers": 107,
   "http_404_records": 6,
   "empty_mevzuat_search_forms": 0,
-  "garbled_or_too_short_records": 258,
+  "garbled_or_too_short_records": 335,
   "duplicate_content_sha256_records": 4,
   "scraper_label_corrections": {
     "yonetmelik_soft_correction": 101,
@@ -18,8 +18,8 @@
     "total": 360
   },
   "origin_distribution": {
-    "curated_anonymized": 249,
-    "scraped_official": 111
+    "curated_anonymized": 250,
+    "scraped_official": 110
   },
   "class_distribution": {
     "dilekce": 20,
