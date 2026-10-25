@@ -57,7 +57,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 0 — Hazırlık ve altyapı
+## [X] FAZ 0 — Hazırlık ve altyapı
 
 **Amaç:** Deney ve yazım işinin üzerine kurulacağı iskeleti kurmak.
 
