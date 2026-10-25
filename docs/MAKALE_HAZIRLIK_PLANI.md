@@ -147,7 +147,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 5 — E2: Baseline karşılaştırmaları (P3)
+## [X] FAZ 5 — E2: Baseline karşılaştırmaları (P3)
 
 **Amaç:** 0.935'in göreli değerini göstermek — hakem §3.2, Tablo 7-E2.
 
