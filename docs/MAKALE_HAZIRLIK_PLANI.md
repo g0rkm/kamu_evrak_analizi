@@ -5,6 +5,7 @@
 > **Hakem kararı:** MAJOR REVISION — *konu uygun, mevcut sunumuyla gönderime hazır değil*
 > **Branch:** `makale-hazirlik` (Develop'tan türetildi)
 > **Bu dosyanın amacı:** Rapordaki her eleştiriyi, repodaki somut dosyalara ve ölçülebilir çıktılara bağlayan, adım adım uygulanabilir bir yol haritası sunmak. (Henüz hiçbir düzeltme yapılmadı — bu yalnızca plandır.)
+> **İlerleme işareti:** Faz başlıklarında `[ ]` = yapılmadı, `[X]` = tamamlandı. (Şu an tüm fazlar `[ ]`.)
 
 ---
 
@@ -56,7 +57,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 0 — Hazırlık ve altyapı
+## [ ] FAZ 0 — Hazırlık ve altyapı
 
 **Amaç:** Deney ve yazım işinin üzerine kurulacağı iskeleti kurmak.
 
@@ -71,7 +72,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 1 — İddiaların düzeltilmesi (P0) · kod/deney gerektirmez
+## [ ] FAZ 1 — İddiaların düzeltilmesi (P0) · kod/deney gerektirmez
 
 **Amaç:** Yanıltıcı genellemeleri kaldırmak — hakem §3.1, §2, §3.5, §5.5, Tablo 5. Bu faz **önce** yapılmalı çünkü makale iddiaları buradan türeyecek.
 
@@ -95,7 +96,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 2 — Araştırma sorusu, özgünlük ve literatür (P1)
+## [ ] FAZ 2 — Araştırma sorusu, özgünlük ve literatür (P1)
 
 **Amaç:** "Yazılım yaptık" anlatımından bilimsel soruya geçmek — hakem §7, Tablo 6, Tablo 12-P1.
 
@@ -110,7 +111,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 3 — Veri kümesi ve etiketleme protokolü (P2)
+## [ ] FAZ 3 — Veri kümesi ve etiketleme protokolü (P2)
 
 **Amaç:** Ana sınıflandırma iddiasını doğrulayacak, savunulabilir bir etiketli küme kurmak — hakem §4.2, Tablo 12-P2.
 
@@ -129,7 +130,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 4 — E1: 18 sınıf sınıflandırma deneyi (P2)
+## [ ] FAZ 4 — E1: 18 sınıf sınıflandırma deneyi (P2)
 
 **Amaç:** Ana sınıflandırma iddiasını 18 sınıfta doğrulamak — hakem Tablo 7-E1.
 
@@ -146,7 +147,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 5 — E2: Baseline karşılaştırmaları (P3)
+## [ ] FAZ 5 — E2: Baseline karşılaştırmaları (P3)
 
 **Amaç:** 0.935'in göreli değerini göstermek — hakem §3.2, Tablo 7-E2.
 
@@ -163,7 +164,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 6 — E3 + E4: RAG değerlendirmesi ve ReasoningAgent ablation (P4, P5)
+## [ ] FAZ 6 — E3 + E4: RAG değerlendirmesi ve ReasoningAgent ablation (P4, P5)
 
 **Amaç:** "956 belge/3056 parça" sayısını kalite kanıtına çevirmek ve kontrol katmanının katkısını ölçmek — hakem §3.4, §5.1, Tablo 7-E3/E4.
 
@@ -186,7 +187,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 7 — E5(güvenlik) + PII/KVKK + Prompt injection doğrulaması (P5)
+## [ ] FAZ 7 — E5(güvenlik) + PII/KVKK + Prompt injection doğrulaması (P5)
 
 **Amaç:** Güvenlik iddialarını saldırı testleriyle kanıtlamak — hakem §5.2, §5.3, Tablo 4.
 
@@ -203,7 +204,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 8 — E6: Performans ve tekrarlanabilirlik protokolü (P6)
+## [ ] FAZ 8 — E6: Performans ve tekrarlanabilirlik protokolü (P6)
 
 **Amaç:** Çelişkili/tekil ölçümleri tekrarlanabilir protokole bağlamak — hakem §3.3, §6, Tablo 8, Tablo 7-E6.
 
@@ -221,7 +222,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 9 — E5(taslak kalitesi) + Human-in-the-loop analizi (P5)
+## [ ] FAZ 9 — E5(taslak kalitesi) + Human-in-the-loop analizi (P5)
 
 **Amaç:** Taslak güvenilirliğini ve insan denetimi katkısını veriyle göstermek — hakem §5.4, Tablo 7-E5.
 
@@ -236,7 +237,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 10 — Makale yazımı (P1)
+## [ ] FAZ 10 — Makale yazımı (P1)
 
 **Amaç:** Kanıtları JOINSSR yapısında bir makaleye dönüştürmek — hakem §7, Tablo 9/10/11.
 
@@ -254,7 +255,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## FAZ 11 — Gönderim öncesi teknik hazırlık (P7)
+## [ ] FAZ 11 — Gönderim öncesi teknik hazırlık (P7)
 
 **Amaç:** Teknik ön kontrolde eksik belge/format nedeniyle reddi önlemek — hakem §7, Tablo 12-P7.
 
