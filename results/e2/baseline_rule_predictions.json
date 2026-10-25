@@ -1,0 +1,5340 @@
+{
+  "timestamp": "2026-10-25T13:27:12.994019",
+  "split": "test",
+  "predictions_a1": [
+    {
+      "doc_id": "eval_dilekce_006",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_003",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_008",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_013",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_007",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_009",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_012",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_014",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "sikayet"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_010",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_020",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "sikayet"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_011",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_018",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_017",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_015",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_018",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_019",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_010",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_006",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_013",
+      "ground_truth": "resmi_yazi",
+      "predicted": "sozlesme",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_004",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_005",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_012",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_002",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_015",
+      "ground_truth": "resmi_yazi",
+      "predicted": "kanun",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_009",
+      "ground_truth": "resmi_yazi",
+      "predicted": "talep_yazisi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_008",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_016",
+      "ground_truth": "resmi_yazi",
+      "predicted": "kanun",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_017",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_015",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_012",
+      "ground_truth": "talep_yazisi",
+      "predicted": "sozlesme",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_010",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_013",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_004",
+      "ground_truth": "talep_yazisi",
+      "predicted": "talep_yazisi",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_001",
+      "ground_truth": "talep_yazisi",
+      "predicted": "talep_yazisi",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_020",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_008",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_009",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_011",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_018",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_014",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_003",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 1.0004
+    },
+    {
+      "doc_id": "eval_talep_yazisi_007",
+      "ground_truth": "talep_yazisi",
+      "predicted": "talep_yazisi",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_009",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "genelge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_020",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_006",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_019",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_001",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_017",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_007",
+      "ground_truth": "bilgilendirme",
+      "predicted": "bilgilendirme",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_005",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_004",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_016",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "genelge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_008",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_014",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_013",
+      "ground_truth": "bilgilendirme",
+      "predicted": "kurum_ici",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_010",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_002",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_006",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_007",
+      "ground_truth": "gorus_sorma",
+      "predicted": "resmi_yazi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_005",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_018",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 14.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_015",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_008",
+      "ground_truth": "gorus_sorma",
+      "predicted": "gorus_sorma",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_016",
+      "ground_truth": "gorus_sorma",
+      "predicted": "karar",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_017",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_014",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 14.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_003",
+      "ground_truth": "gorus_sorma",
+      "predicted": "gorus_sorma",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "sikayet"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_001",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_019",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 10.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_013",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_010",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_020",
+      "ground_truth": "sikayet",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_013",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_002",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_004",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_006",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_017",
+      "ground_truth": "sikayet",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_019",
+      "ground_truth": "sikayet",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_012",
+      "ground_truth": "sikayet",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.9992
+    },
+    {
+      "doc_id": "eval_sikayet_001",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_016",
+      "ground_truth": "sikayet",
+      "predicted": "resmi_yazi",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_003",
+      "ground_truth": "sikayet",
+      "predicted": "dilekce",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_009",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_014",
+      "ground_truth": "sikayet",
+      "predicted": "kanun",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_001",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_005",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_017",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_002",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "genelge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_012",
+      "ground_truth": "kurum_ici",
+      "predicted": "talep_yazisi",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_010",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_003",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_006",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_013",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_009",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_015",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_007",
+      "ground_truth": "kurum_ici",
+      "predicted": "tutanak",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_004",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_016",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_014",
+      "ground_truth": "genelge",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.9997
+    },
+    {
+      "doc_id": "eval_genelge_006",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_001",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_002",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_010",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_011",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_005",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_020",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_012",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_004",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_008",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_003",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_007",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_013",
+      "ground_truth": "genelge",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_013",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_005",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 10.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_018",
+      "ground_truth": "rapor",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_007",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_003",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_012",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 10.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_008",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_011",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_006",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_019",
+      "ground_truth": "rapor",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_004",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_016",
+      "ground_truth": "rapor",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_014",
+      "ground_truth": "rapor",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_001",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_016",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_001",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_006",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_007",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_012",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "sikayet"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_010",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_019",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_013",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_004",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_015",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_009",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_003",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_008",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.9999
+    },
+    {
+      "doc_id": "eval_tutanak_011",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 2.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_006",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 12.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_012",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_015",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_008",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 12.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_007",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_014",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 12.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_002",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.9997
+    },
+    {
+      "doc_id": "eval_yonetmelik_004",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_017",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_001",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 11.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_018",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 13.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_020",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_011",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 1.0002
+    },
+    {
+      "doc_id": "eval_yonetmelik_009",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 15.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_014",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_007",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 10.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_018",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_015",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_009",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 13.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_017",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_006",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 10.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_016",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 12.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.9999
+    },
+    {
+      "doc_id": "eval_teblig_011",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_020",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_019",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_013",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 11.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_008",
+      "ground_truth": "teblig",
+      "predicted": "kanun",
+      "confidence": 18.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_010",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 9.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_013",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 9.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_011",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 19.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_014",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 16.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.9999
+    },
+    {
+      "doc_id": "eval_kanun_003",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 18.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_018",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 16.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_002",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 16.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_006",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 4.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_016",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 18.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_012",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 16.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_004",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 16.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.9999
+    },
+    {
+      "doc_id": "eval_kanun_008",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 11.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_020",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_010",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 13.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_009",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 16.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_017",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_011",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_016",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 12.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_015",
+      "ground_truth": "karar",
+      "predicted": "yonetmelik",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 1.0016
+    },
+    {
+      "doc_id": "eval_karar_005",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_003",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 11.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_009",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_018",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_001",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_020",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_006",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_012",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_008",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 10.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 1.0011
+    },
+    {
+      "doc_id": "eval_karar_010",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_014",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_017",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_013",
+      "ground_truth": "kararname",
+      "predicted": "karar",
+      "confidence": 6.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_007",
+      "ground_truth": "kararname",
+      "predicted": "karar",
+      "confidence": 13.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_012",
+      "ground_truth": "kararname",
+      "predicted": "kararname",
+      "confidence": 14.0,
+      "secondary_candidates": [
+        "kanun"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_002",
+      "ground_truth": "kararname",
+      "predicted": "karar",
+      "confidence": 13.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_008",
+      "ground_truth": "kararname",
+      "predicted": "karar",
+      "confidence": 13.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_005",
+      "ground_truth": "kararname",
+      "predicted": "karar",
+      "confidence": 6.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_001",
+      "ground_truth": "kararname",
+      "predicted": "yonetmelik",
+      "confidence": 4.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_006",
+      "ground_truth": "kararname",
+      "predicted": "kanun",
+      "confidence": 8.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_011",
+      "ground_truth": "kararname",
+      "predicted": "karar",
+      "confidence": 13.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_015",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_020",
+      "ground_truth": "kararname",
+      "predicted": "karar",
+      "confidence": 13.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_016",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "kanun"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_011",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 3.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_010",
+      "ground_truth": "ilan",
+      "predicted": "kanun",
+      "confidence": 4.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_015",
+      "ground_truth": "ilan",
+      "predicted": "yonetmelik",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_005",
+      "ground_truth": "ilan",
+      "predicted": "karar",
+      "confidence": 3.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_012",
+      "ground_truth": "ilan",
+      "predicted": "karar",
+      "confidence": 6.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.9997
+    },
+    {
+      "doc_id": "eval_ilan_016",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 3.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_007",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 3.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_009",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 4.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_013",
+      "ground_truth": "ilan",
+      "predicted": "kanun",
+      "confidence": 6.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_019",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_014",
+      "ground_truth": "ilan",
+      "predicted": "rapor",
+      "confidence": 4.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_004",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 3.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_008",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 6.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_003",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 4.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.9999
+    },
+    {
+      "doc_id": "eval_yonerge_012",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_005",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "genelge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_010",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_017",
+      "ground_truth": "yonerge",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_007",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_001",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_019",
+      "ground_truth": "yonerge",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_002",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_020",
+      "ground_truth": "yonerge",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_018",
+      "ground_truth": "yonerge",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_008",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_006",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_003",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_009",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_001",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 10.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_015",
+      "ground_truth": "sozlesme",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_012",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_005",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_020",
+      "ground_truth": "sozlesme",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_011",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_004",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_018",
+      "ground_truth": "sozlesme",
+      "predicted": "resmi_yazi",
+      "confidence": 5.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_002",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_014",
+      "ground_truth": "sozlesme",
+      "predicted": "yonetmelik",
+      "confidence": 7.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_007",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_009",
+      "ground_truth": "sozlesme",
+      "predicted": "kanun",
+      "confidence": 11.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_008",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 8.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_003",
+      "ground_truth": "sozlesme",
+      "predicted": "kanun",
+      "confidence": 9.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    }
+  ],
+  "predictions_a2": [
+    {
+      "doc_id": "eval_dilekce_006",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_003",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.9997
+    },
+    {
+      "doc_id": "eval_dilekce_008",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_013",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_007",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_009",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_012",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_014",
+      "ground_truth": "dilekce",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sikayet"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_010",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_020",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sikayet"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_011",
+      "ground_truth": "dilekce",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_018",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_017",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_dilekce_015",
+      "ground_truth": "dilekce",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_018",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_019",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_010",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_006",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_013",
+      "ground_truth": "resmi_yazi",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_004",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_005",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_012",
+      "ground_truth": "resmi_yazi",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_002",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_015",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_009",
+      "ground_truth": "resmi_yazi",
+      "predicted": "talep_yazisi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_008",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_016",
+      "ground_truth": "resmi_yazi",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_resmi_yazi_017",
+      "ground_truth": "resmi_yazi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_015",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_012",
+      "ground_truth": "talep_yazisi",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_010",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_013",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_004",
+      "ground_truth": "talep_yazisi",
+      "predicted": "talep_yazisi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_001",
+      "ground_truth": "talep_yazisi",
+      "predicted": "talep_yazisi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_020",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_008",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_009",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_011",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_018",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_014",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_003",
+      "ground_truth": "talep_yazisi",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_talep_yazisi_007",
+      "ground_truth": "talep_yazisi",
+      "predicted": "talep_yazisi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_009",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "genelge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_020",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_006",
+      "ground_truth": "bilgilendirme",
+      "predicted": "bilgilendirme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_019",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_001",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_017",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_007",
+      "ground_truth": "bilgilendirme",
+      "predicted": "bilgilendirme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_005",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_004",
+      "ground_truth": "bilgilendirme",
+      "predicted": "bilgilendirme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_016",
+      "ground_truth": "bilgilendirme",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "genelge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_008",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_014",
+      "ground_truth": "bilgilendirme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_013",
+      "ground_truth": "bilgilendirme",
+      "predicted": "bilgilendirme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_bilgilendirme_010",
+      "ground_truth": "bilgilendirme",
+      "predicted": "bilgilendirme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_002",
+      "ground_truth": "gorus_sorma",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_006",
+      "ground_truth": "gorus_sorma",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_007",
+      "ground_truth": "gorus_sorma",
+      "predicted": "gorus_sorma",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_005",
+      "ground_truth": "gorus_sorma",
+      "predicted": "gorus_sorma",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 1.0004
+    },
+    {
+      "doc_id": "eval_gorus_sorma_018",
+      "ground_truth": "gorus_sorma",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_015",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_008",
+      "ground_truth": "gorus_sorma",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_016",
+      "ground_truth": "gorus_sorma",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_017",
+      "ground_truth": "gorus_sorma",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_014",
+      "ground_truth": "gorus_sorma",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_003",
+      "ground_truth": "gorus_sorma",
+      "predicted": "gorus_sorma",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sikayet"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_001",
+      "ground_truth": "gorus_sorma",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_019",
+      "ground_truth": "gorus_sorma",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_gorus_sorma_013",
+      "ground_truth": "gorus_sorma",
+      "predicted": "gorus_sorma",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_010",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_020",
+      "ground_truth": "sikayet",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_013",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_002",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_004",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_006",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_017",
+      "ground_truth": "sikayet",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_019",
+      "ground_truth": "sikayet",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_012",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_001",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_016",
+      "ground_truth": "sikayet",
+      "predicted": "dilekce",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_003",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_009",
+      "ground_truth": "sikayet",
+      "predicted": "sikayet",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sikayet_014",
+      "ground_truth": "sikayet",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "dilekce"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_001",
+      "ground_truth": "kurum_ici",
+      "predicted": "kurum_ici",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_005",
+      "ground_truth": "kurum_ici",
+      "predicted": "kurum_ici",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_017",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_002",
+      "ground_truth": "kurum_ici",
+      "predicted": "kurum_ici",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "genelge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_012",
+      "ground_truth": "kurum_ici",
+      "predicted": "talep_yazisi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_010",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": true,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_003",
+      "ground_truth": "kurum_ici",
+      "predicted": "talep_yazisi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_006",
+      "ground_truth": "kurum_ici",
+      "predicted": "kurum_ici",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_013",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_009",
+      "ground_truth": "kurum_ici",
+      "predicted": "kurum_ici",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_015",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_007",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_004",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kurum_ici_016",
+      "ground_truth": "kurum_ici",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_014",
+      "ground_truth": "genelge",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_006",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_001",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_002",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_010",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_011",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "teblig"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_005",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_020",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_012",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_004",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_008",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_003",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_007",
+      "ground_truth": "genelge",
+      "predicted": "genelge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_genelge_013",
+      "ground_truth": "genelge",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_013",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_005",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_018",
+      "ground_truth": "rapor",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_007",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_003",
+      "ground_truth": "rapor",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_012",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_008",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 1.0002
+    },
+    {
+      "doc_id": "eval_rapor_011",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_006",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_019",
+      "ground_truth": "rapor",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_004",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_016",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "talep_yazisi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_014",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_rapor_001",
+      "ground_truth": "rapor",
+      "predicted": "rapor",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_016",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_001",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_006",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_007",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_012",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sikayet"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_010",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_019",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_013",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_004",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_015",
+      "ground_truth": "tutanak",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_009",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_003",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_008",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_tutanak_011",
+      "ground_truth": "tutanak",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_006",
+      "ground_truth": "yonetmelik",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_012",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_015",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_008",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_007",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_014",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_002",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_004",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_017",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_001",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_018",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_020",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_011",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonetmelik_009",
+      "ground_truth": "yonetmelik",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_014",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_007",
+      "ground_truth": "teblig",
+      "predicted": "yonetmelik",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_018",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_015",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_009",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_017",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_006",
+      "ground_truth": "teblig",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_016",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_011",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_020",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_019",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_013",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_008",
+      "ground_truth": "teblig",
+      "predicted": "teblig",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_teblig_010",
+      "ground_truth": "teblig",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_013",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_011",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_014",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_003",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_018",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_002",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_006",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_016",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_012",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_004",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_008",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_020",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_010",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kanun_009",
+      "ground_truth": "kanun",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_017",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_011",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_016",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_015",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_005",
+      "ground_truth": "karar",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_003",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_009",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_018",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_001",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_020",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kararname"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_006",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_012",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_008",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_karar_010",
+      "ground_truth": "karar",
+      "predicted": "karar",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_014",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_017",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_013",
+      "ground_truth": "kararname",
+      "predicted": "kararname",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_007",
+      "ground_truth": "kararname",
+      "predicted": "kararname",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_012",
+      "ground_truth": "kararname",
+      "predicted": "kararname",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kanun"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_002",
+      "ground_truth": "kararname",
+      "predicted": "kararname",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_008",
+      "ground_truth": "kararname",
+      "predicted": "kararname",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_005",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_001",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.999
+    },
+    {
+      "doc_id": "eval_kararname_006",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_011",
+      "ground_truth": "kararname",
+      "predicted": "kararname",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_015",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_020",
+      "ground_truth": "kararname",
+      "predicted": "kararname",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_kararname_016",
+      "ground_truth": "kararname",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kanun"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_011",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_010",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_015",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_005",
+      "ground_truth": "ilan",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_012",
+      "ground_truth": "ilan",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_016",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_007",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_009",
+      "ground_truth": "ilan",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_013",
+      "ground_truth": "ilan",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_019",
+      "ground_truth": "ilan",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_014",
+      "ground_truth": "ilan",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "bilgilendirme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_004",
+      "ground_truth": "ilan",
+      "predicted": "ilan",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_008",
+      "ground_truth": "ilan",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_ilan_003",
+      "ground_truth": "ilan",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_012",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_005",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "genelge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_010",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_017",
+      "ground_truth": "yonerge",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_007",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_001",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_019",
+      "ground_truth": "yonerge",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "sozlesme"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_002",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_020",
+      "ground_truth": "yonerge",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_018",
+      "ground_truth": "yonerge",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_008",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "rapor"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_006",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_003",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_yonerge_009",
+      "ground_truth": "yonerge",
+      "predicted": "yonerge",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonetmelik"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_001",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_015",
+      "ground_truth": "sozlesme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_012",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.9999
+    },
+    {
+      "doc_id": "eval_sozlesme_005",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "resmi_yazi"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_020",
+      "ground_truth": "sozlesme",
+      "predicted": "tutanak",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "kurum_ici"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_011",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "tutanak"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_004",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_018",
+      "ground_truth": "sozlesme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "ilan"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_002",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_014",
+      "ground_truth": "sozlesme",
+      "predicted": "resmi_yazi",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_007",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_009",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_008",
+      "ground_truth": "sozlesme",
+      "predicted": "sozlesme",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "yonerge"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    },
+    {
+      "doc_id": "eval_sozlesme_003",
+      "ground_truth": "sozlesme",
+      "predicted": "kanun",
+      "confidence": 1.0,
+      "secondary_candidates": [
+        "karar"
+      ],
+      "is_boundary_match": false,
+      "latency_ms": 0.0
+    }
+  ]
+}
