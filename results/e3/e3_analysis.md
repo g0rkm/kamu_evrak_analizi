@@ -58,8 +58,8 @@
 **Yorum (koşullu):** Otomatik qrels altında, Türkçe-duyarlı ön işleme ve BM25 sıralama kalitesini (MRR, nDCG) R1'e göre artırmaktadır; R5 tüm metriklerde en yüksek değeri verir. Ancak qrels'in başlık yayılımlı korpus üzerinde sözcüksel olarak üretilmiş olması, R3–R6 lehine sistematik yanlılık yaratabilir. Bu farklar insan etiketiyle doğrulanmadan "R5 üretim sistemini %X iyileştirir" biçiminde raporlanmamalıdır.
 
 **Bilinen ölçüm sınırlılıkları:**
-- `experiments/e3_rag_eval.py` gecikmeyi `time.time()` ile ölçer; Windows'ta çözünürlük ~1 ms olduğundan medyanlar 0, p95 değerleri ~1 ms çıkmıştır. Alt-milisaniye gecikme karşılaştırması **güvenilir değildir** ve raporlanmamalıdır (düzeltme: `time.perf_counter()`).
-- R2'nin MRR@10 $p$ değeri betikte 2,0 olarak hesaplanmıştır (tüm farklar 0 iken formül hatası); tanımsız kabul edilmelidir.
+- `experiments/e3_rag_eval.py` eskiden gecikmeyi `time.time()` ile ölçüyordu; Windows'ta çözünürlük ~1 ms olduğundan medyanlar 0, p95 değerleri ~1 ms çıkmıştı. **Betik `time.perf_counter()` kullanacak şekilde düzeltildi** (commit sonrası); `results/e3/*` içindeki mevcut gecikme değerleri eski koşudan kaldığından geçerli gecikme için E3 yeniden üretilmelidir. Yine de alt-milisaniye tek-sorgu gecikmeleri raporlanmamalıdır.
+- R2'nin MRR@10 $p$ değeri eski betikte 2,0 çıkıyordu (tüm farklar 0 iken `2·min(...)` üst sınırlandırılmamıştı). **Betikte `min(1.0, 2·min(...))` ile düzeltildi**; `retrieval_metrics.json` içindeki 2,0 değeri yeniden üretilene kadar eski kalır ve tanımsız (p=1,0) kabul edilmelidir.
 
 ---
 

@@ -487,7 +487,7 @@ def evaluate_retrieval_methods(chunks):
 
         # Compute top30 candidates ONCE per query outside k loop
         # R1 top 30
-        t0 = time.time()
+        t0 = time.perf_counter()
         r1_30 = []
         seen_titles = set()
         for idx in np.argsort(sims)[::-1]:
@@ -500,10 +500,10 @@ def evaluate_retrieval_methods(chunks):
             r1_30.append(idx)
             if len(r1_30) >= 30:
                 break
-        lat_r1_base = (time.time() - t0) * 1000
+        lat_r1_base = (time.perf_counter() - t0) * 1000
 
         # R2 top 30
-        t0 = time.time()
+        t0 = time.perf_counter()
         r2_30 = []
         seen_h2 = set()
         for idx in np.argsort(sims)[::-1]:
@@ -514,10 +514,10 @@ def evaluate_retrieval_methods(chunks):
             r2_30.append(idx)
             if len(r2_30) >= 30:
                 break
-        lat_r2_base = (time.time() - t0) * 1000
+        lat_r2_base = (time.perf_counter() - t0) * 1000
 
         # R3 top 30
-        t0 = time.time()
+        t0 = time.perf_counter()
         r3_30 = []
         seen_h3 = set()
         for idx in np.argsort(sims3)[::-1]:
@@ -528,10 +528,10 @@ def evaluate_retrieval_methods(chunks):
             r3_30.append(idx)
             if len(r3_30) >= 30:
                 break
-        lat_r3_base = (time.time() - t0) * 1000
+        lat_r3_base = (time.perf_counter() - t0) * 1000
 
         # R4 top 30
-        t0 = time.time()
+        t0 = time.perf_counter()
         r4_30 = []
         seen_h4 = set()
         for idx in np.argsort(bm25_scores)[::-1]:
@@ -542,10 +542,10 @@ def evaluate_retrieval_methods(chunks):
             r4_30.append(idx)
             if len(r4_30) >= 30:
                 break
-        lat_r4_base = (time.time() - t0) * 1000
+        lat_r4_base = (time.perf_counter() - t0) * 1000
 
         # R5 top 30
-        t0 = time.time()
+        t0 = time.perf_counter()
         r5_30 = []
         seen_h5 = set()
         for idx in np.argsort(bm25_p_scores)[::-1]:
@@ -556,10 +556,10 @@ def evaluate_retrieval_methods(chunks):
             r5_30.append(idx)
             if len(r5_30) >= 30:
                 break
-        lat_r5_base = (time.time() - t0) * 1000
+        lat_r5_base = (time.perf_counter() - t0) * 1000
 
         # R6 hybrid RRF top 30 (weighting BM25 1.2 and TFIDF 1.0, deduplicated by content MD5 hash)
-        t0 = time.time()
+        t0 = time.perf_counter()
         k_rrf = 60
         rrf_scores = defaultdict(float)
         for rank, idx in enumerate(r3_30[:30]):
@@ -709,7 +709,7 @@ def evaluate_retrieval_methods(chunks):
                 diffs.append(np.mean(comp[idxs]) - np.mean(base[idxs]))
             low = float(np.percentile(diffs, 2.5))
             high = float(np.percentile(diffs, 97.5))
-            p_val = float(2 * min(np.mean(np.array(diffs) >= 0), np.mean(np.array(diffs) <= 0)))
+            p_val = float(min(1.0, 2 * min(np.mean(np.array(diffs) >= 0), np.mean(np.array(diffs) <= 0))))
             return float(np.mean(comp) - np.mean(base)), [low, high], p_val
 
         paired_comparisons[m_name] = {
