@@ -2,10 +2,11 @@
 
 **Kapsam:** FAZ 6A (`MAKALE_HAZIRLIK_PLANI.md` §3.3, §5.1)  
 **Korpus:** `app/data/rag/chunks.json` (3.056 parça), `app/data/scraped/documents.json` (956 belge)  
-**Sorgu seti:** `data/eval/rag/queries_and_qrels.json` (48 cevaplanabilir + 12 cevaplanamaz) — **otomatik etiketli gümüş standart**, bkz. `data/eval/rag/README_rag_eval.md`
+**Sorgu seti:** `data/eval/rag/queries_and_qrels.json` (48 cevaplanabilir + 12 cevaplanamaz) — **otomatik etiketli gümüş standart**, bkz. `data/eval/rag/README_rag_eval.md`  
+**Durum:** Bu sonuçlar, S2 üretim düzeltmeleri (Türkçe-duyarlı tokenizasyon, başlık türetme, kaynak izlenebilirliği alanları) **uygulandıktan ve indeks yeniden üretildikten sonra** yeniden koşulan E3'e aittir. Dolayısıyla R1 (üretim) artık Türkçe `İ` düzeltmesini içerir.
 
 > [!WARNING]
-> **Bölüm 2'deki geri getirme metrikleri insan etiketine dayanmaz.** Alaka etiketleri, R3–R6'nın da kullandığı başlık yayılımlı korpus üzerinde sözcüksel eşleşmeyle otomatik üretilmiştir (döngüsellik riski). Dosyadaki `κ = 0.9863` iki otomatik kural arasındadır ve değerlendiriciler arası uyum olarak raporlanamaz. Bu sayılar makalede **yalnızca uzman etiketlemesiyle yeniden hesaplandıktan sonra** kullanılmalıdır. Bölüm 1 (indeks denetimi) bu sorundan etkilenmez.
+> **Bölüm 2'deki geri getirme metrikleri insan etiketine dayanmaz.** Alaka etiketleri, R3–R6'nın da kullandığı başlık yayılımlı korpus üzerinde sözcüksel eşleşmeyle otomatik üretilmiştir (döngüsellik riski). Dosyadaki `κ = 0.9935` iki otomatik kural arasındadır ve değerlendiriciler arası uyum olarak raporlanamaz. Bu sayılar makalede **yalnızca uzman etiketlemesiyle yeniden hesaplandıktan sonra** kullanılmalıdır. Bölüm 1 (indeks denetimi) bu sorundan etkilenmez.
 
 ---
 
@@ -13,75 +14,78 @@
 
 | Bulgu | Değer |
 |---|---:|
-| Jenerik `"PDF Görüntüle"` başlıklı parça | 1.279 / 3.056 (%41,85) |
+| Jenerik `"PDF Görüntüle"` başlıklı parça | **0 / 3.056** *(düzeltme öncesi: 1.279; içerikten başlık türetiliyor)* |
 | Menü/navigasyon artığı olarak işaretlenen parça | 53 |
 | Birebir MD5 kopya grubu / fazladan kopya parça | 44 / 54 |
 | Alfabetik oranı < 0,50 (bozuk PDF kodlaması şüphesi) | 243 (%7,95) |
 | Kazımada 50.000 karakterde kesilmiş belge | 148 / 956 |
 | `documents.json` içinde `date` / `url` bulunan belge | 909 / 956 (%95,1) |
-| `chunks.json` içinde `date` / `url` / `indexed_at` alanı bulunan parça | **0 / 3.056** |
-| Metinde `Madde N` kalıbı geçen parça (regex ile kurtarılabilir) | 2.196 (%71,9) |
-| Metinde kanun numarası kalıbı geçen parça | 1.304 (%42,7) |
+| Parçada `indexed_at` alanı | **3.056 / 3.056** |
+| Parçada `source_url` / `publish_date` (belge düzeyinden aktarıldı) | **909 / 956 belge kaynaklı** |
+| Parçada `law_no` (regex) | 1.304 (%42,7) |
+| Parçada `article_refs` (`Madde N` regex) | 2.196 (%71,9) |
+
+> **Not:** `provenance_audit.json` içindeki `chunks_with_date_field` / `chunks_with_url_field` sayaçları eski `date`/`url` anahtar adlarını arar (bu nedenle 0); güncel kaynak alanları `source_url` / `publish_date` adlarıyla tutulur ve `attribution_fields_status` bölümünde doğru raporlanır.
 
 **Gözlemler:**
-1. **Başlık çakışması:** `RAGService.search` aynı başlıktan en fazla `max(1, top_k // 2)` parça döndürür; `search_multi` tekilleştirmeyi `(title, chunk_index)` ile yapar. Yüzlerce farklı PDF aynı `"PDF Görüntüle"` başlığını taşıdığından, bu PDF'lerin parçaları birbirini bastırır/ezer.
-2. **Türkçe `İ` tokenizasyon hatası (doğrulandı):** Üretim `tfidf.pkl` vektörleyicisi (`lowercase=True`, `token_pattern=(?u)\b\w\w+\b`) `"İDARİ İHALE İLAN İŞ İL YARGILAMA"` girdisini `['dari', 'hale', 'lan', 'yargilama']` olarak ayrıştırır: Python `str.lower()` `İ`'yi `i + U+0307` dizisine çevirir, regex birleştirici noktada keser; `İŞ`/`İL` tamamen düşer; `I` → `i` olur (`yargılama` ile eşleşmez). **→ DÜZELTİLDİ (commit sonrası):** `app/core/text_normalize.turkish_lower` preprocessor'ı + `lowercase=False` ile üretim artık `['idari','ihale','ilan','iş','il','yargılama']` üretir; güncel retrieval sayıları için E3 yeniden koşulmalıdır.
-3. **Kaynak meta verisi kaybı:** `scripts/build_index.py`, `documents.json` içinde mevcut olan `url` ve `date` alanlarını parçalara aktarmaz; `indexed_at` hiç üretilmez. Dolayısıyla üretim sistemi bir retrieval sonucunda yayım tarihi, kaynak URL'si veya indeksleme tarihi **gösteremez** (§5.1 gereksinimi karşılanmıyor).
+1. **Başlık çakışması → DÜZELTİLDİ:** Yüzlerce farklı PDF aynı `"PDF Görüntüle"` başlığını taşıyordu; `search`/`search_multi` başlık tabanlı bastırma/tekilleştirme yaptığından farklı belgelerin parçaları birbirini eziyordu. `scripts/build_index.py` artık içeriğin ilk anlamlı satırından başlık türetir (jenerik başlık sayısı 1.279 → 0) ve `search_multi` kararlı `chunk_id` ile tekilleştirir.
+2. **Türkçe `İ` tokenizasyon hatası → DÜZELTİLDİ:** Eski üretim vektörleyicisi (`lowercase=True`) `"İDARİ İHALE İLAN İŞ İL YARGILAMA"` → `['dari','hale','lan','yargilama']` üretiyordu (Python `str.lower()` `İ`'yi `i + U+0307`'ye çevirir; `İŞ`/`İL` düşer; `I`→`i`). `app/core/text_normalize.turkish_lower` preprocessor'ı + `lowercase=False` ile artık `['idari','ihale','ilan','iş','il','yargılama']` üretilir. Düzeltme hem indeks hem sorgu tarafında geçerlidir (preprocessor pickle ile taşınır).
+3. **Kaynak meta verisi → DÜZELTİLDİ (§5.1):** `build_index.py` artık her parçaya `source_url`, `publish_date`, `indexed_at`, `chunk_id`, `law_no`, `article_refs`, `content_md5` alanlarını ekler; `RAGService` bunları sonuçta döndürür ve `LegislationAgent` RAG bağlamına (kaynak/kanun no/yayım tarihi/URL) yazar. Böylece bir retrieval sonucu kaynağına izlenebilir.
 
-**§5.1 için önerilen şema iyileştirmesi (UYGULANDI — commit sonrası; `scripts/build_index.py` + `app/services/rag_service.py`):** Her parçaya `chunk_id` (kararlı kimlik), `source_url`, `publish_date`, `indexed_at`, `law_no` (belge düzeyinden), `article_refs` (regex) ve `content_md5` alanları eklenmeli; `"PDF Görüntüle"` başlıkları belge ilk satırından türetilen başlıkla değiştirilmeli; `search`/`search_multi` tekilleştirmesi `chunk_id` veya `content_md5` ile yapılmalı. Bu iyileştirmeler commit sonrası uygulanmıştır (yeni chunk şeması: `chunk_id`, `source_url`, `publish_date`, `indexed_at`, `law_no`, `article_refs`, `content_md5`; içerikten türetilen başlık; Türkçe-duyarlı vektörleyici; `search_multi` için `chunk_id` tekilleştirme). Mevcut `results/e3/*` eski indeks üzerinden hesaplandığından güncel sayılar için E3 yeniden üretilmelidir.
+**Kalan sınırlılık:** Mevzuatın yürürlük/mülga durumunun **dinamik** denetimi hâlâ yapılmaz; `publish_date` yalnızca yayım tarihidir, güncel hukuki geçerlilik garantisi değildir (makalede sınırlılık olarak belirtilmelidir).
 
 ---
 
 ## 2. Geri getirme karşılaştırması (48 cevaplanabilir sorgu, otomatik qrels)
 
-`results/e3/retrieval_metrics.json`. GA: 2.000 tekrarlı bootstrap %95. Δ ve $p$: R1'e karşı eşleştirilmiş bootstrap farkı; $p = 2\min(P(\Delta \ge 0), P(\Delta \le 0))$ (permütasyon testi değildir). 2.000 örneklemin hiçbiri ters işaretli değilse $p<0{,}001$ yazılmıştır.
+`results/e3/retrieval_metrics.json` (nokta tahminleri; %95 bootstrap GA'leri ve eşleştirilmiş farklar aynı dosyadadır). Δ ve $p$: R1'e karşı 2.000 tekrarlı eşleştirilmiş bootstrap farkı; $p = \min(1, 2\min(P(\Delta\ge0), P(\Delta\le0)))$ (permütasyon testi değildir).
 
-| Kod | Yöntem | Recall@5 [%95 GA] | Recall@10 | Hit@5 | Hit@10 | MRR@10 [%95 GA] | nDCG@10 [%95 GA] | Dup@10 |
+| Kod | Yöntem | Recall@5 | Recall@10 | Hit@5 | Hit@10 | MRR@10 | nDCG@10 | Dup@10 |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| R1 | Üretim TF-IDF (`RAGService` davranışı) | 0,4735 [0,379–0,575] | 0,6081 | 0,9375 | 0,9375 | 0,8142 [0,717–0,898] | 0,6667 [0,586–0,745] | 0,0438 |
-| R2 | TF-IDF + MD5 tekilleştirme, başlık bastırma yok | 0,4770 [0,382–0,576] | 0,6081 | 0,9375 | 0,9375 | 0,8142 [0,722–0,901] | 0,6744 [0,589–0,752] | 0 |
-| R3 | TF-IDF + Türkçe küçük harf + başlık/kanun no yayılımı | 0,4926 [0,404–0,583] | 0,6668 | 0,9792 | 0,9792 | 0,8889 [0,819–0,955] | 0,7460 [0,673–0,814] | 0 |
-| R4 | BM25 ($k_1=1{,}5$, $b=0{,}75$) + R3 ön işleme | 0,5490 [0,451–0,647] | 0,7167 | 0,9792 | 0,9792 | 0,9201 [0,851–0,976] | 0,7908 [0,724–0,853] | 0 |
-| R5 | R4 + Türkçe ek budama (önek belirteçleri) | **0,5786** [0,484–0,674] | **0,7472** | 0,9792 | 0,9792 | **0,9340** [0,868–0,979] | **0,8128** [0,750–0,870] | 0 |
-| R6 | Hibrit RRF (R3 + R4) | 0,4926 [0,401–0,589] | 0,6740 | 0,9792 | **1,0000** | 0,9329 [0,874–0,986] | 0,7684 [0,699–0,833] | 0 |
+| R1 | Üretim TF-IDF (`RAGService` — artık Türkçe-düzeltmeli) | 0,4655 | 0,6311 | 0,8958 | 0,9583 | 0,7664 | 0,6129 | 0,0417 |
+| R2 | TF-IDF + MD5 tekilleştirme | 0,4708 | 0,6311 | 0,8958 | 0,9583 | 0,7664 | 0,6207 | 0 |
+| R3 | TF-IDF + başlık/kanun no yayılımı | 0,4771 | 0,6688 | 0,8958 | 0,9375 | 0,7943 | 0,6661 | 0 |
+| R4 | BM25 ($k_1=1{,}5$, $b=0{,}75$) + ön işleme | 0,5865 | 0,7195 | 0,9583 | 0,9792 | 0,9095 | 0,7456 | 0 |
+| R5 | R4 + Türkçe ek budama (önek belirteçleri) | **0,6032** | 0,7180 | 0,9583 | 0,9792 | 0,8910 | **0,7503** | 0 |
+| R6 | Hibrit RRF (R3 + R4) | 0,4709 | 0,6355 | 0,8958 | 0,9375 | 0,8377 | 0,6682 | 0 |
 
-**R1'e göre farklar:**
+**R1'e göre farklar (Δ, %95 GA, $p$):**
 
 | Kod | ΔRecall@5 ($p$) | ΔMRR@10 ($p$) | ΔnDCG@10 [%95 GA] ($p$) |
 |---|---:|---:|---:|
-| R2 | +0,0035 (0,741) | 0,0000 (tanımsız — tüm farklar sıfır) | +0,0077 [0,002–0,015] (<0,001) |
-| R3 | +0,0191 (0,325) | +0,0747 (0,011) | +0,0793 [0,043–0,117] (<0,001) |
-| R4 | +0,0755 (0,002) | +0,1059 (0,008) | +0,1241 [0,070–0,180] (<0,001) |
-| R5 | +0,1051 (<0,001) | +0,1198 (0,004) | +0,1462 [0,091–0,206] (<0,001) |
-| R6 | +0,0191 (0,615) | +0,1186 (0,003) | +0,1017 [0,051–0,154] (0,001) |
+| R2 | +0,0052 (0,741) | 0,0000 (1,000) | +0,0078 [0,002–0,015] (0,010) |
+| R3 | +0,0116 (0,535) | +0,0279 (0,267) | +0,0532 [0,022–0,088] (<0,001) |
+| R4 | +0,1209 (0,003) | +0,1431 (<0,001) | +0,1327 [0,071–0,209] (<0,001) |
+| R5 | +0,1376 (0,001) | +0,1246 (0,010) | +0,1374 [0,078–0,210] (<0,001) |
+| R6 | +0,0054 (0,857) | +0,0713 (0,103) | +0,0553 [−0,012–0,117] (0,096) |
 
-**Yorum (koşullu):** Otomatik qrels altında, Türkçe-duyarlı ön işleme ve BM25 sıralama kalitesini (MRR, nDCG) R1'e göre artırmaktadır; R5 tüm metriklerde en yüksek değeri verir. Ancak qrels'in başlık yayılımlı korpus üzerinde sözcüksel olarak üretilmiş olması, R3–R6 lehine sistematik yanlılık yaratabilir. Bu farklar insan etiketiyle doğrulanmadan "R5 üretim sistemini %X iyileştirir" biçiminde raporlanmamalıdır.
+**Yorum (koşullu):** Türkçe `İ` düzeltmesi artık **üretimde (R1)** olduğundan, eski koşuda görünen "Türkçe küçük harf" kazancı taban çizgisine dâhil oldu: R2 ve R3'ün R1'e göre Recall@5/MRR farkları artık küçük ve çoğunlukla istatistiksel olarak anlamsızdır (R3 ΔMRR@10 $p=0{,}267$). **Kalan anlamlı iyileştirme BM25 sıralamasından gelir:** R4 ve R5, R1'e göre Recall@5'i ~+0,12–0,14, MRR@10'u ~+0,12–0,14 ve nDCG@10'u ~+0,13 artırır ($p\le0{,}01$). Hibrit RRF (R6) tutarlı bir kazanç sağlamaz. Yine de qrels'in sözcüksel/otomatik üretilmiş olması R3–R6 lehine yanlılık taşıyabilir; bu farklar insan etiketiyle doğrulanmadan "%X iyileştirir" biçiminde kesin raporlanmamalıdır.
 
-**Bilinen ölçüm sınırlılıkları:**
-- `experiments/e3_rag_eval.py` eskiden gecikmeyi `time.time()` ile ölçüyordu; Windows'ta çözünürlük ~1 ms olduğundan medyanlar 0, p95 değerleri ~1 ms çıkmıştı. **Betik `time.perf_counter()` kullanacak şekilde düzeltildi** (commit sonrası); `results/e3/*` içindeki mevcut gecikme değerleri eski koşudan kaldığından geçerli gecikme için E3 yeniden üretilmelidir. Yine de alt-milisaniye tek-sorgu gecikmeleri raporlanmamalıdır.
-- R2'nin MRR@10 $p$ değeri eski betikte 2,0 çıkıyordu (tüm farklar 0 iken `2·min(...)` üst sınırlandırılmamıştı). **Betikte `min(1.0, 2·min(...))` ile düzeltildi**; `retrieval_metrics.json` içindeki 2,0 değeri yeniden üretilene kadar eski kalır ve tanımsız (p=1,0) kabul edilmelidir.
+**Ölçüm notları:**
+- Gecikme artık `time.perf_counter()` ile ölçülür (düzeltildi): belge başına ortalama ~0,16 ms (R1) – ~0,76 ms (R6, hibrit). Değerler yine de alt-milisaniye düzeyinde olduğundan tek-sorgu gecikmesi ana bulgu olarak sunulmamalıdır.
+- Eşleştirilmiş bootstrap $p$ değeri artık `min(1, 2·min(...))` ile sınırlandırılmıştır (düzeltildi); R2 MRR@10 için tüm farklar sıfır olduğundan $p=1{,}000$ (tanımsız/fark yok).
 
 ---
 
 ## 3. Cevaplanamaz sorgular ve kanıta dayalı çekimser kalma (`results/e3/unsupported_behavior.json`)
 
 ### 3.1. Skor eşiği
-- Üretimdeki `MIN_SCORE = 0,05` eşiğinde 12 cevaplanamaz sorgunun **12'si** (%100) en az bir parça döndürür.
-- top-1 skoruna göre en iyi Youden eşiği: R1 için $\tau^*=0{,}182$, $J=0{,}250$; R3 için $\tau^*=0{,}182$, $J=0{,}396$. Yalnızca sözcüksel benzerlik skoruyla cevaplanabilir/cevaplanamaz ayrımı zayıftır.
+- Üretimdeki `MIN_SCORE = 0,05` eşiğinde 12 cevaplanamaz sorgunun **12'si** (%100) en az bir parça döndürür (yanlış pozitif oranı 1,0).
+- top-1 skoruna göre en iyi Youden eşiği: R1 için $\tau^*=0{,}182$, $J=0{,}292$; R3 için $\tau^*=0{,}187$, $J=0{,}375$; genel $\tau^*=0{,}14$. Yalnızca sözcüksel benzerlik skoruyla cevaplanabilir/cevaplanamaz ayrımı zayıftır.
 
 ### 3.2. LLM davranışı (`gemma4:12b`, 8 cevaplanabilir + 8 cevaplanamaz sorgu)
 
-| İstem | Cevaplanabilirde eşleşme döndürme | Cevaplanamazda çekimser kalma | Cevaplanamazda eşleşme uydurma |
+| İstem | Cevaplanabilirde yanıt döndürme | Cevaplanamazda çekimser kalma | Cevaplanamazda eşleşme uydurma |
 |---|---:|---:|---:|
-| Kısıtsız (üretim `LegislationAgent` istemine benzer) | 8/8 | 0/8 | 8/8 |
-| Kanıta dayalı çekimser kalma istemi | 8/8 | 7/8 | 1/8 |
+| Kısıtsız (üretim `LegislationAgent` istemine benzer) | 7/8 (0,875) | 5/8 | 3/8 (0,375) |
+| Kanıta dayalı çekimser kalma istemi | **0/8 (0,000)** | **8/8 (1,000)** | **0/8 (0,000)** |
 
-**Sınırlılıklar:** Örneklem çok küçüktür (her kolda $n=8$; 7/8 için Wilson %95 GA ≈ [0,53–0,98]). "Cevaplanabilirde eşleşme döndürme" yalnızca boş olmayan bir `matches` listesi demektir; döndürülen mevzuatın doğruluğu ayrıca puanlanmamıştır. Çekimser kalma istemi ayrıca $\tau^*=0{,}14$ altındaki skorlar için sert bir eşik kuralı içerir (BM25 ham skoru ile TF-IDF kosinüs eşiği aynı ölçekte değildir; bu eşik pratikte etkisiz olabilir). Gecikme ölçülmemiştir.
+**Bulgu ve sınırlılıklar:** Kanıta dayalı istem, cevaplanamaz sorgularda halüsinasyonu tamamen ortadan kaldırır (0/8) **ancak aşırı çekimser kalır**: cevaplanabilir 8 sorgunun da tamamında yanıt vermez (0/8). Yani bu istem, halüsinasyonu sıfırlarken cevaplanabilir sorulardaki faydayı da yok eder — pratikte kullanılabilir bir denge için eşik/istem ayarı gerekir. Örneklem çok küçüktür (her kolda $n=8$; 0/8 ve 8/8 için Wilson %95 GA'leri geniştir). Çekimser kalma istemi $\tau^*=0{,}14$ altındaki skorlar için sert bir eşik içerir; BM25 ham skoru ile TF-IDF kosinüs eşiği aynı ölçekte olmadığından bu eşik aşırı çekimserliğin bir nedeni olabilir. Döndürülen mevzuatın doğruluğu ayrıca puanlanmamıştır.
 
 ---
 
 ## 4. Makale için sonuç
 
-- **Doğrudan raporlanabilir:** Bölüm 1 (indeks denetimi, `İ` hatası, meta veri kaybı) ve Bölüm 3.1 (sabit eşiğin yetersizliği).
-- **Ön bulgu olarak, sınırlılıkla birlikte:** Bölüm 3.2 (küçük örneklem).
-- **Uzman etiketlemesi olmadan raporlanmamalı:** Bölüm 2'deki mutlak değerler ve yöntem farkları.
+- **Doğrudan raporlanabilir:** Bölüm 1 (indeks denetimi ve uygulanan düzeltmeler: başlık türetme, Türkçe tokenizasyon, kaynak izlenebilirliği) ve Bölüm 3.1 (sabit `MIN_SCORE` eşiğinin cevaplanamaz sorguları ayırmada yetersizliği).
+- **Ön bulgu olarak, sınırlılıkla birlikte:** Bölüm 2'de BM25'in (R4/R5) üretim TF-IDF'e (R1) göre anlamlı sıralama kazancı; Bölüm 3.2'de kanıta dayalı istemin halüsinasyonu sıfırlarken aşırı çekimser kalması (küçük örneklem).
+- **Uzman etiketlemesi olmadan kesin raporlanmamalı:** Bölüm 2'deki mutlak değerler ve yöntem farkları (otomatik qrels döngüselliği).
