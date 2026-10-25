@@ -164,7 +164,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 6 — E3 + E4: RAG değerlendirmesi ve ReasoningAgent ablation (P4, P5)
+## [X] FAZ 6 — E3 + E4: RAG değerlendirmesi ve ReasoningAgent ablation (P4, P5)
 
 **Amaç:** "956 belge/3056 parça" sayısını kalite kanıtına çevirmek ve kontrol katmanının katkısını ölçmek — hakem §3.4, §5.1, Tablo 7-E3/E4.
 
