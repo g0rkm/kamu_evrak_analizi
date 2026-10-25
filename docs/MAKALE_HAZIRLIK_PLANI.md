@@ -111,7 +111,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 3 — Veri kümesi ve etiketleme protokolü (P2)
+## [X] FAZ 3 — Veri kümesi ve etiketleme protokolü (P2)
 
 **Amaç:** Ana sınıflandırma iddiasını doğrulayacak, savunulabilir bir etiketli küme kurmak — hakem §4.2, Tablo 12-P2.
 
