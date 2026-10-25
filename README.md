@@ -5,7 +5,7 @@ Kamu kurumlarına gelen evrakların **yerel büyük dil modeli (Local LLM — Ge
 ## Özellikler
 
 - **Yerel Yapay Zekâ Yapılandırması (Local LLM — Gemma 4 12B)**: Varsayılan olarak Ollama (`gemma4:12b`) üzerinde kurum içi / çevrimdışı çalışacak şekilde yapılandırılmıştır. *Yerel Ollama yapılandırmasında, uzak LLM uç noktası kapalı ve dış veri akışı ayrıca doğrulanmışsa evrak içeriği yerel işlenebilir.*
-- **Evrak Sınıflandırma**: Sistem taksonomisinde 18 evrak türü tanımlıdır (`app/core/taxonomy.py`, dilekçe, resmî yazı, kanun, yönetmelik, kararname, tebliğ, genelge vb.); **6 kategorilik pilot benchmark (`n=54`): Macro-F1=0.935; 18 sınıflı tam değerlendirme (`n=252` test kümesi, E1): Macro-F1=0.898 (%95 Bootstrap GA: 0.860–0.929), Accuracy=0.905 (%95 Wilson GA: 0.862–0.935).**
+- **Evrak Sınıflandırma**: Sistem taksonomisinde 18 evrak türü tanımlıdır (`app/core/taxonomy.py`). Kanıtlanmış başarım **gerçek resmî belgeler** üzerindedir: **6 kategorilik pilot (`n=54`): Macro-F1=0.935; E1 gerçek-belge alt kümesi (`n=78`): Macro-F1=0.834.** 18 sınıfa genişletilmiş kümede (`n=252`) toplam Macro-F1=0.898'dir; ancak bu kümenin %69'u (11 sınıf tamamen) KVKK nedeniyle sentetik/temsilî şablondan oluştuğundan toplam değer gerçek dünya 18-sınıf başarımı sayılmamalıdır (bkz. Bölüm 1.A).
 - **İçerik Analizi**: Varlık çıkarma (tarih, kurum, kişi, referans no), eksik alan tespiti, anahtar kelime belirleme
 - **RAG Destekli Mevzuat Eşleştirme**: TF-IDF tabanlı retrieval ile 956 belgeden 3056 parça üzerinde yerel arama (scikit-learn)
 - **PII/KVKK Tespiti**: TC Kimlik (sağlama doğrulamalı), IBAN, telefon, e-posta tespiti ve maskeleme; taslağa kişisel veri sızıntısı kontrolü
@@ -62,18 +62,25 @@ Metin çıkarma → Sınıflandırma ‖ İçerik analizi → Mevzuat ‖ Özet 
 
 **Tek kaynak sözlük**: Evrak türleri, birimler, taslak türleri ve öncelikler `app/core/taxonomy.py` içinde tanımlıdır. LLM prompt'ları, doğrulama kuralları ve arayüz etiketleri (`/api/meta`) buradan üretilir; yeni bir evrak türü eklemek için tek bir kayıt yeterlidir.
 
-## Performans ve Sınıflandırma Başarımı (E1 Tam Benchmark ve Pilot Ölçüm)
+## Performans ve Sınıflandırma Başarımı (E1 Genişletilmiş Değerlendirme ve Pilot Ölçüm)
 
-### 1.A. 18 Sınıflı Tam Değerlendirme (`E1` — `gemma4:12b`, `n=252` Kör Test Kümesi)
+### 1.A. 18 Sınıfa Genişletilmiş Değerlendirme (`E1` — `gemma4:12b`, `n=252`)
 
-[`docs/etiketleme_protokolu.md`](docs/etiketleme_protokolu.md) uyarınca tekilleştirilmiş 360 belgelik değerlendirme kümesinden `seed=42` ile ayrılan **252 belgelik kör test kümesi** (`data/eval/classification/test.json`, 18 sınıf × 14 örnek) üzerinde `experiments/e1_classification.py` ile elde edilen sonuçlar ([`results/e1/metrics.json`](results/e1/metrics.json), [`results/e1/error_analysis.md`](results/e1/error_analysis.md)):
+> **⚠️ Veri bileşimi uyarısı (önce okuyun):** Bu değerlendirme kümesinin yalnızca **%31'i (78/252) gerçek resmî belgedir** (Resmî Gazete / Mevzuat Bilgi Sistemi). Kalan **%69'u (174/252), KVKK gereği kamuya açık olmayan idari yazışma sınıfları için yazılmış temsilî/sentetik şablondur** (`source: curated_templates`). 18 sınıfın **11'inde test örneklerinin tamamı sentetiktir**; yalnızca `ilan, kanun, karar, teblig, yonetmelik` sınıfları tümüyle gerçek belgeye dayanır. Bu nedenle **toplam skorlar gerçek dünya 18-sınıf başarımı olarak okunmamalıdır.**
 
-- **Macro-F1 (18 Sınıf, `n=252`):** **`0.8979`** (%95 Bootstrap GA, `B=2000`: **`[0.8598, 0.9294]`**)
-- **Genel Doğruluk (Accuracy / Micro-F1):** **`0.9048`** (`228 / 252`, %95 Wilson GA: **`[0.8622, 0.9352]`**, %95 Bootstrap GA: **`[0.8690, 0.9405]`**)
-- **Sınır Toleranslı Doğruluk (Top-2 / İkincil Aday Eşleşmeli):** **`0.9286`** (`234 / 252`)
-- **Hata Analizi Özeti:** Toplam 24 hatanın 8'i (`%33.3`) `karar` ↔ `kararname` (`Cumhurbaşkanı Kararı` vs `Cumhurbaşkanlığı Kararnamesi`) geçişkenliğinden, 9'u ise kurum içi/kurumlar arası idari yazışma alt türleri (`resmi_yazi` ↔ `bilgilendirme` ↔ `kurum_ici` ↔ `gorus_sorma` ↔ `talep_yazisi`) arasındaki sınır örneklerinden kaynaklanmaktadır. `karar` ve `kararname` dışındaki 16 sınıfta ortalama F1 skoru **`0.9462`** düzeyindedir.
+[`docs/etiketleme_protokolu.md`](docs/etiketleme_protokolu.md) uyarınca tekilleştirilmiş 360 belgelik kümeden `seed=42` ile ayrılan 252 belgelik test kümesi (`data/eval/classification/test.json`, 18 sınıf × 14 örnek) üzerinde `experiments/e1_classification.py` ile elde edilen sonuçlar ([`results/e1/metrics.json`](results/e1/metrics.json)):
 
-18 sınıflı tam E1 deneyini tekrar çalıştırmak için:
+| Alt küme | n | Accuracy | Macro-F1 |
+|---|---:|---:|---:|
+| **Gerçek resmî belgeler** (≈6 mevzuat sınıfı) | 78 | 0.859 | **`0.834`** |
+| Sentetik/temsilî idari şablonlar (12 idari sınıf) | 174 | 0.925 | 0.930 |
+| Toplam (sentetik çoğunluk etkili) | 252 | 0.905 | 0.898 |
+
+- **Kanıtlanmış asıl sonuç — gerçek belgelerde Macro-F1 = `0.834`** (acc 0.859, `n=78`); bu değer 6 kategorilik pilot ölçümle (Bölüm 1.B, 0.935) tutarlıdır. Makalede ana sonuç olarak **gerçek-belge alt kümesi ile sınıf başı örneklem/GA değerleri** verilmelidir.
+- Toplam `0.898` (Bootstrap GA `B=2000`: `[0.860, 0.929]`; Accuracy 0.905, Wilson GA `[0.862, 0.935]`) sentetik çoğunluk tarafından yukarı çekilmiştir ve tek başına raporlanmamalıdır.
+- **Hata dağılımı:** 24 hatanın 8'i `karar` ↔ `kararname`, 9'u idari yazışma alt türleri (`resmi_yazi`/`bilgilendirme`/`kurum_ici`/`gorus_sorma`/`talep_yazisi`) sınır örnekleridir.
+
+18 sınıfa genişletilmiş E1 deneyini tekrar çalıştırmak için:
 
 ```bash
 python -m experiments.e1_classification --split test

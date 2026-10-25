@@ -6,7 +6,7 @@ Bu betik:
 3. Gerçek Resmî Gazete ilanlarını ve belgelerini filtrelenmiş havuzdan seçer.
 4. 18 sınıfın her biri için tam 20 adet örnek (`N = 360`, 6 dev + 14 test, seed=42) oluşturur.
 5. Zorlayıcı (hard/boundary) ve çapraz çeldirici sınır örnekleri üretir.
-6. Cohen's kappa ve veri kümesi istatistiklerini hesaplayarak raporlar ve çıktı JSON dosyalarını kaydeder.
+6. Veri kümesi istatistiklerini ve etiketleme sağlayıcılığını (tek etiketleyici; gerçek inter-annotator Cohen's kappa YOK) raporlar ve çıktı JSON dosyalarını kaydeder.
 """
 from __future__ import annotations
 
@@ -397,10 +397,13 @@ def main() -> None:
                 rec["split"] = "test"
                 test_records.append(rec)
 
+    # NOT: Veri tek araştırmacı tarafından etiketlenmiştir; bağımsız ikinci insan
+    # etiketleyici YOKTUR. Aşağıdaki oran yalnızca otomatik `annotator_secondary`
+    # katmanının ground-truth ile tutarlılığıdır; gerçek bir değerlendiriciler arası
+    # uyum (Cohen's kappa) DEĞİLDİR ve öyle raporlanmamalıdır (bkz. limitations_notes.md).
     primary_list = [r["annotator_primary"] for r in all_records]
     secondary_list = [r["annotator_secondary"] for r in all_records]
-    cohens_kappa = calculate_cohen_kappa(primary_list, secondary_list, class_codes)
-    agreement_rate = sum(1 for p, s in zip(primary_list, secondary_list) if p == s) / len(all_records)
+    automatic_layer_agreement = sum(1 for p, s in zip(primary_list, secondary_list) if p == s) / len(all_records)
 
     split_dist = {"dev": len(dev_records), "test": len(test_records), "total": len(all_records)}
     origin_dist = {}
@@ -424,10 +427,18 @@ def main() -> None:
         "split_distribution": split_dist,
         "origin_distribution": origin_dist,
         "class_distribution": class_dist,
-        "inter_annotator_agreement": {
-            "cohens_kappa": cohens_kappa,
-            "agreement_rate": round(agreement_rate, 4),
+        "annotation_provenance": {
+            "annotators": 1,
+            "independent_second_annotator": False,
+            "cohens_kappa": None,
+            "automatic_layer_agreement_rate": round(automatic_layer_agreement, 4),
             "total_annotated_samples": len(all_records),
+            "note": (
+                "Tek arastirmaci tarafindan etiketlendi; bagimsiz ikinci insan "
+                "etiketleyici yoktur. curated_templates ornekleri tanim geregi etiketlidir. "
+                "Gercek bir degerlendiriciler arasi uyum (Cohen's kappa) raporlanamaz. "
+                "Tek etiketleyici siniri paper/limitations_notes.md'de belirtilmistir."
+            ),
         },
     }
 
@@ -452,7 +463,7 @@ def main() -> None:
     print(f"  - {full_path} ({len(all_records)} kayıt)")
     print(f"  - {dev_path} ({len(dev_records)} kayıt)")
     print(f"  - {test_path} ({len(test_records)} kayıt)")
-    print(f"  - {report_path} (Cohen's Kappa: {cohens_kappa})")
+    print(f"  - {report_path} (tek etiketleyici; otomatik katman uyumu: {automatic_layer_agreement:.4f}, gercek kappa yok)")
 
 
 if __name__ == "__main__":

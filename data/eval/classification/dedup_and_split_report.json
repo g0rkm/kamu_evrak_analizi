@@ -41,9 +41,12 @@
     "yonerge": 20,
     "sozlesme": 20
   },
-  "inter_annotator_agreement": {
-    "cohens_kappa": 0.8235,
-    "agreement_rate": 0.8333,
-    "total_annotated_samples": 360
+  "annotation_provenance": {
+    "annotators": 1,
+    "independent_second_annotator": false,
+    "cohens_kappa": null,
+    "automatic_layer_agreement_rate": 0.8333,
+    "total_annotated_samples": 360,
+    "note": "Tek arastirmaci tarafindan etiketlendi; bagimsiz ikinci insan etiketleyici yoktur. curated_templates ornekleri tanim geregi (by construction) etiketlidir. Gercek bir degerlendiriciler arasi uyum (Cohen's kappa) raporlanamaz. Onceki surumdeki 0.8235 degeri iki otomatik katman (primary=ground-truth; secondary=kodla uretilen perturbasyon) arasindaydi ve gecersizdir. Tek etiketleyici siniri paper/limitations_notes.md'de belirtilmistir."
   }
 }
