@@ -1,4 +1,4 @@
-﻿# Aider & dev tools
+# Aider & dev tools
 .aider*
 .aider_task.md
 CLAUDE.md
@@ -44,8 +44,24 @@ app/data/scraped/
 # RAG index (regenerate with scripts/build_index.py)
 app/data/rag/
 
-# Analysis history (runtime generated)
+# Runtime application data (never versioned — may contain PII/logs/session data)
 data/history/
+data/logs/
+data/backups/
+data/auth/
+data/notifications/
+data/templates/
+
+# Paper evaluation datasets & experiment results policy (Faz 0 / Faz 3):
+# - Anonymized label/schema/metric/table/figure files under data/eval/ and results/ ARE tracked.
+# - Raw documents or un-anonymized / PII-containing files are NEVER tracked.
+data/eval/**/raw/
+results/**/raw/
+*.raw.json
+*.raw.jsonl
+*.raw.csv
+*.raw.txt
+*.pii.*
 
 # OS
 .DS_Store
@@ -59,3 +75,7 @@ desktop.ini
 htmlcov/
 .coverage
 .pytest_cache/
+
+# Documents (local reference files)
+JOINSSR_guncel_hakem_raporu.docx
+2026_TYDA_SARTNAME_Birinci_Senaryo_TR_1_7nAIy.pdf
