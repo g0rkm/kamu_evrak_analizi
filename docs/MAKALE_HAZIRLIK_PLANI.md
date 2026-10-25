@@ -96,7 +96,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 2 — Araştırma sorusu, özgünlük ve literatür (P1)
+## [X] FAZ 2 — Araştırma sorusu, özgünlük ve literatür (P1)
 
 **Amaç:** "Yazılım yaptık" anlatımından bilimsel soruya geçmek — hakem §7, Tablo 6, Tablo 12-P1.
 
