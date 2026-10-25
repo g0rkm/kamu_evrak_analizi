@@ -22,13 +22,16 @@ class Settings(BaseSettings):
     CORS_ORIGINS: str = "*"  # virgül ile ayrılmış izin verilen origin'ler, * ise tümü
 
     # LLM (OpenAI uyumlu uç nokta)
-    LLM_API_BASE: str = "https://generativelanguage.googleapis.com/v1beta/openai"
-    LLM_API_KEY: str = "not-set"
-    LLM_MODEL: str = "gemini-3.5-flash"
+    LLM_API_BASE: str = "http://localhost:11434/v1"
+    LLM_API_KEY: str = "ollama"
+    LLM_MODEL: str = "gemma4:12b"
     LLM_TIMEOUT_SECONDS: float = 180.0
     LLM_MAX_RETRIES: int = 3
     LLM_TEMPERATURE: float = 0.3
     LLM_CACHE_TTL_SECONDS: int = 3600
+    LLM_NUM_CTX: int = 16384
+    LLM_KEEP_ALIVE: str = "30m"
+    LLM_MAX_CONCURRENT_REQUESTS: int = 2
 
     # OCR
     TESSERACT_CMD: str = "tesseract"

@@ -33,7 +33,7 @@ def load_and_sample(path):
     by_type = defaultdict(list)
     for d in docs:
         t = d.get("type", d.get("source", "unknown"))
-        if t not in SKIP_TYPES:
+        if t not in SKIP_TYPES and "404 - Sayfa Bulunamadı" not in d.get("content", ""):
             by_type[t].append(d)
 
     samples = []
@@ -127,7 +127,7 @@ async def main():
     results = []
     for i, (doc, gt_label) in enumerate(samples):
         title = doc.get("title", "")[:60]
-        content = doc.get("content", "")
+        content = f"{doc.get('title', '')}\n\n{doc.get('content', '')}".strip()
         print(f"[{i+1}/{len(samples)}] {title}...")
 
         for attempt in range(5):
@@ -147,7 +147,8 @@ async def main():
                     print(f"  HATA: {e}")
                     break
 
-        await asyncio.sleep(3)
+        if not llm.is_local:
+            await asyncio.sleep(3)
 
     await llm.close()
     compute_metrics(results)
