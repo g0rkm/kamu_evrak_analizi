@@ -130,7 +130,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 4 — E1: 18 sınıf sınıflandırma deneyi (P2)
+## [X] FAZ 4 — E1: 18 sınıf sınıflandırma deneyi (P2)
 
 **Amaç:** Ana sınıflandırma iddiasını 18 sınıfta doğrulamak — hakem Tablo 7-E1.
 
