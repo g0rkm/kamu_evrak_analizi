@@ -118,6 +118,8 @@ python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
+python scripts/setup_data.py  # RAG korpusunu HF'ten indir + indeksi kur (opsiyonel ama önerilir)
+
 ollama pull gemma4:12b    # Yerel Gemma 4 12B modelini indirin (~7.7 GB)
 cp .env.example .env      # Varsayılan olarak yerel Ollama (gemma4:12b) yapılandırılmıştır
 
@@ -225,7 +227,22 @@ Testler gerçek LLM'e istek atmaz; `tests/conftest.py` içindeki sahte LLM ile p
 - CORS varsayılan olarak kapalıdır; gerekiyorsa `CORS_ORIGINS` ile açıkça izin verilir
 - Yanıtlara `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` başlıkları eklenir
 
-## Veri Toplama (Opsiyonel)
+## Veri Kurulumu (Korpus ve RAG İndeksi)
+
+RAG mevzuat eşleştirmesi için gereken korpus (taranmış kamu belgeleri) boyutu nedeniyle git deposuna dahil **edilmez**; HuggingFace'te yayımlanır: [`g0rkm/kamu-evrak-korpus`](https://huggingface.co/datasets/g0rkm/kamu-evrak-korpus). RAG indeksi (`chunks.json`, `tfidf.pkl`) güvenlik nedeniyle (`tfidf.pkl` bir pickle'dır) HF'e yüklenmez; aşağıdaki betik korpusu indirdikten sonra indeksi **yerelde** üretir.
+
+### Hızlı yol (önerilen)
+
+```bash
+python scripts/setup_data.py          # korpusu HF'ten indirir + RAG indeksini kurar
+python scripts/setup_data.py --force  # korpusu yeniden indirir
+```
+
+Farklı bir dataset kullanmak için `HF_DATASET_REPO` ortam değişkenini ayarlayın (ör. `HF_DATASET_REPO=kullanici/depo`).
+
+> Korpus olmadan uygulama yine çalışır; yalnızca RAG tabanlı mevzuat eşleştirmesi devre dışı kalır ([`app/services/rag_service.py`](app/services/rag_service.py)).
+
+### Alternatif: korpusu sıfırdan yeniden üretme
 
 ```bash
 pip install playwright
@@ -241,7 +258,7 @@ python scripts/build_index.py    # app/data/rag/ (RAG indeksi)
 - **LLM**: Yerel LLM — Ollama `gemma4:12b` (OpenAI uyumlu `/v1/chat/completions`, 16K bağlam penceresi, `reasoning_effort="none"`, JSON mod ve düşünme bloğu temizleme desteği)
 - **RAG**: scikit-learn TF-IDF, kosinüs benzerliği
 - **OCR**: Tesseract (`tur`), PyMuPDF, Pillow
-- **Scraping**: Playwright (Chromium)
+- **Scraping / Veri dağıtımı**: Playwright (Chromium), HuggingFace Hub
 
 ## Lisans
 
