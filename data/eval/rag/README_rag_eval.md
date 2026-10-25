@@ -1,64 +1,43 @@
-# E3 RAG Değerlendirme Kümesi ve Etiketleme Protokolü (`queries_and_qrels.json`)
+# E3 RAG Değerlendirme Kümesi (`queries_and_qrels.json`) — Gümüş Standart (Otomatik Etiketli)
 
-Bu dizin, **FAZ 6 (Deney E3)** kapsamında Türk kamu mevzuatı RAG (Retrieval-Augmented Generation) alt sisteminin geri getirme (retrieval), kaynak izlenebilirliği (provenance) ve kapsam dışı sorgularda çekimser kalma (grounded abstention) başarımını ölçmek üzere oluşturulan değerlendirme veri kümesini içerir.
+> [!WARNING]
+> **Bu küme uzman etiketli bir altın standart (gold standard) DEĞİLDİR.** Alaka etiketleri (`qrels`), `experiments/e3_rag_eval.py::build_or_load_benchmark` içindeki deterministik metin eşleştirme sezgileriyle **otomatik** üretilmiştir. Dosyadaki `cohens_kappa = 0.9863` değeri iki **insan** değerlendirici arasındaki uyumu değil, aynı başlık-alt-dizgi koşulunu paylaşan iki otomatik kuralın birbiriyle uyumunu gösterir. Bu nedenle bir değerlendiriciler arası uyum (inter-annotator agreement) kanıtı olarak **raporlanamaz**. `MAKALE_HAZIRLIK_PLANI.md` FAZ 6A adım 1'in istediği "uzman/ikinci değerlendirici" etiketlemesi henüz yapılmamıştır.
 
-## 1. Veri Kümesi Özeti
+## 1. Sorgu seti
 
 - **Dosya:** `data/eval/rag/queries_and_qrels.json`
-- **Toplam Sorgu Sayısı ($Q$):** `60`
-  - **Kapsam İçi / Cevaplanabilir Sorgular ($Q_{\text{ans}}$):** `48` (indekslenen `3.056` mevzuat parçası / `956` belge içerisinde doğrudan normatif dayanağı bulunan sorular)
-  - **Kapsam Dışı / Cevaplanamaz Sorgular ($Q_{\text{unans}}$):** `12` (indekste yer almayan kanunlar, yürürlüğe girmemiş kurgusal düzenlemeler veya kamu hukuku dışı özel hukuk/teknik konular)
-- **Aday Havuzu (Pooling) ve Uzlaşma:**
-  - 6 farklı geri getirme yönteminin (`R1`–`R6`) ilk 15 sonucu (`top-15`) ile kanun numarası/madde eşleşmelerinden oluşan toplam `851` `(sorgu, chunk_id)` çifti iki bağımsız değerlendirici kural seti (`Annotator A`: normatif madde/konu eşleşmesi; `Annotator B`: terim yoğunluğu ve başlık/madde doğrulaması) tarafından ikili (`ilgili >= 1` vs `ilgisiz = 0`) ve dereceli (`0, 1, 2`) olarak etiketlenmiştir.
-  - **Değerlendiriciler Arası Uzlaşma (Cohen's $\kappa$):** $\kappa = 0.9863$ (`851` aday çift üzerinde).
+- **Toplam sorgu:** 60
+  - **Cevaplanabilir (`Q01`–`Q48`):** Sorguların çoğu kanun numarasını açıkça içeren kısa anahtar ifadelerdir (ör. `"657 Sayılı Kanun sadakat ve tarafsızlık yükümlülüğü"`). Kapsam: 657, 5018, 4734, 2886, 3071, 4982, 7201, 2577, 6698, 5393, 5302, 5216, 6085, 4483, 3628, 5176, 5070, 6245, 4857, 5510, 2547, 7245, 6325, 2709 sayılı kanunlar; CBK-1…CBK-5; 2024/7 ve 2024/14 genelgeleri; iki ikincil düzenleme (tebliğ/yönetmelik).
+  - **Cevaplanamaz (`U01`–`U12`):** 6 tanesi gerçek ama indekste olduğu varsayılan dışı mevzuat (5442, 213, 193, 1136, 2918 sayılı kanunlar ve Resmi Yazışma Yönetmeliği), 6 tanesi kurgusal düzenleme adı.
+  - **Not:** `U06` (Resmi Yazışmalarda Uygulanacak Usul ve Esaslar Hakkında Yönetmelik) için indekste gerçekten bulunmadığı elle doğrulanmamıştır; makalede kullanmadan önce kontrol edilmelidir.
+- Sorgu başına `qrels` boyutu 2 ile 206 arasında değişir (çok geniş `qrels`, Recall@k değerlerini düşük gösterir).
 
-## 2. Alaka Düzeyi Derecelendirme Ölçeği (Relevance Grading Rubric)
+## 2. Otomatik alaka etiketleme yöntemi (gerçekte uygulanan)
 
-TREC / CLEF hukuki bilgi erişimi standartlarına uygun olarak 3 seviyeli derecelendirme kullanılmıştır:
+Her cevaplanabilir sorgu için `(sorgu metni, title_kw, primary_terms, secondary_terms)` dörtlüsü elle tanımlanmıştır. Ardından **başlık/kanun numarası yayılımı uygulanmış zenginleştirilmiş korpus** (`build_enriched_corpus_texts`) üzerinde:
 
-| Derece | Etiket | Tanım |
-|---|---|---|
-| `2` | **Tam İlgili (Highly Relevant / Exact Provision)** | Sorguda sorulan hukuki kuralı, süreyi, yetkiyi veya istisnayı doğrudan düzenleyen kanun/CBK/yönetmelik maddesini içeren parça (`chunk`). |
-| `1` | **Kısmen İlgili (Partially Relevant / Contextual)** | Aynı kanun veya düzenlemenin genel çerçevesini, tanımlarını veya bağlantılı hükümlerini içeren ancak sorunun spesifik cevabını tek başına tamamlamayan parça. |
-| `0` | **İlgisiz (Non-Relevant)** | Sorgu konusuyla ilgisi olmayan, farklı bir mevzuata ait veya yalnızca şablon/başlık benzerliği taşıyan parça. |
+1. `title_kw` alt dizgisi geçen ve bir `primary_term` içeren parça → derece `2`
+2. `title_kw` geçen ve yalnızca bir `secondary_term` içeren parça → derece `1`
+3. Hiç `primary` bulunamazsa geri çekilme (fallback) kuralları uygulanır; en son çare olarak **`[0, 1]` indeksli parçalar** derece `2` atanır (anlamsal bir dayanağı yoktur).
+4. Aynı MD5 içeriğe sahip kopyalar aynı dereceyi alır.
 
-*Not:* İkili (binary) geri getirme metriklerinde (`Recall@k`, `HitRate@k`, `MRR@10`) alaka eşiği $\text{grade} \ge 1$ olarak alınmış; sıralama kalitesi metriği `nDCG@10` hesabında ise $\text{gain} = 2^{\text{grade}} - 1$ ($\text{grade} \in \{0, 1, 2\}$) formülü kullanılmıştır.
+`nDCG@10` hesabında kazanç $2^{\text{grade}}-1$ kullanılmıştır; ikili metriklerde eşik $\text{grade} \ge 1$'dir.
 
-## 3. Sorgu Kategorileri ve Dağılımı
+## 3. "κ" değerinin gerçek anlamı
 
-| Kategori Kodu | Açıklama | Sorgu Sayısı | Örnek Mevzuat / Konu |
-|---|---|---:|---|
-| `kanun_maddesi` | Temel kamu kanunlarında spesifik madde/hüküm aramaları | 18 | 657 DMK, 4734 KİK, 5018 KMYKK, 2577 İYUK, 3071 Dilekçe K., 4982 Bilgi Edinme K., 6698 KVKK, 5326 Kabahatler K. |
-| `cbk_teskilat` | Cumhurbaşkanlığı Kararnameleri ve idari teşkilat yetkileri | 10 | CBK-1, CBK-2, CBK-4, Devlet Denetleme Kurulu, Strateji ve Bütçe Başkanlığı |
-| `ikincil_mevzuat` | Resmi Gazete'de yayımlanan yönetmelik, tebliğ ve kurul kararları | 12 | Resmi Yazışmalarda Uygulanacak Usul ve Esaslar, Disiplin Yönetmeliği, İhale Uygulama Yönetmelikleri |
-| `vaka_senaryosu` | Kamu görevlisinin karşılaştığı somut idari işlem/süre senaryoları | 8 | Bilgi edinme cevap süresi, ihale şikayet süresi, disiplin savunma hakkı süresi, dilekçe incelenmeme halleri |
-| `kapsam_disi` | İndekste bulunmayan mevzuat veya kurgusal idari düzenlemeler | 12 | 2029 Ulusal Kuantum İdare Kanunu, Uzay Madenciliği Ruhsat Yönetmeliği, Kripto Varlık Vergi Usul Tebliği vb. |
+`inter_annotator_agreement` alanı (`n_pairs = 2136`, `κ = 0.9863`) şu iki kural arasındadır:
+- **"Annotator A":** yukarıdaki otomatik `qrels` (≥1 ise ilgili)
+- **"Annotator B":** `title_kw` alt dizgisi geçiyor **ve** sorgudan en az bir içerik belirteci geçiyor
 
-## 4. Dosya Şeması (`queries_and_qrels.json`)
+İki kural da aynı `title_kw` koşuluna dayandığından yüksek uyum yapısal olarak beklenir; bağımsız bir doğrulama değildir.
 
-```json
-{
-  "metadata": {
-    "version": "1.0",
-    "total_queries": 60,
-    "answerable_queries": 48,
-    "unanswerable_queries": 12,
-    "cohens_kappa": 0.9863,
-    "total_judged_pairs": 851
-  },
-  "queries": [
-    {
-      "query_id": "Q01",
-      "category": "kanun_maddesi",
-      "is_answerable": true,
-      "query_text": "3071 sayılı Dilekçe Hakkının Kullanılmasına Dair Kanun'a göre dilekçelerde bulunması zorunlu şartlar nelerdir ve hangi dilekçeler incelenemez?",
-      "target_law_no": "3071",
-      "qrels": {
-        "12": 2,
-        "13": 2,
-        "14": 1
-      }
-    }
-  ]
-}
-```
+## 4. Geçerliliğe yönelik tehditler
+
+- **Döngüsellik:** `qrels`, R3–R6 yöntemlerinin de indekslediği başlık yayılımlı korpus üzerinde sözcüksel eşleşmeyle üretilmiştir. Bu durum sözcüksel/başlık yayılımlı yöntemleri (R3–R6) sistematik olarak kayırabilir; R1'e karşı gözlenen farkların bir kısmı etiketleme yönteminden kaynaklanıyor olabilir.
+- **Sorgu biçimi:** Sorgular gerçek memur sorularından değil, kanun numarası + anahtar ifade kalıbından oluşur.
+
+## 5. Makaleye girmeden önce yapılması gereken
+
+1. 48 cevaplanabilir sorgunun her biri için R1–R6 birleşik top-10 havuzunu (pooling) çıkarmak.
+2. Havuzu en az bir alan uzmanı (tercihen iki) ile 0/1/2 ölçeğinde **kör** etiketlemek; iki insan etiketleyici varsa gerçek Cohen's κ hesaplamak.
+3. E3 metriklerini bu insan etiketleriyle yeniden hesaplamak.

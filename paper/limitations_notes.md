@@ -41,6 +41,9 @@
   2. **Mimari kapsam (§5.5):** Sistem, otonom planlama veya dinamik görev müzakeresi yapan çok etmenli bir sistem değil, `OrchestratorAgent` denetiminde sabit aşamalı ve paralel yürütmeli **ajan tabanlı çok aşamalı bir pipeline**'dır.
   3. **Donanım ve eşzamanlılık sınırı (§6):** Bildirilen gecikme ve VRAM değerleri tek GPU'lu (`12 GB VRAM`, `LLM_MAX_CONCURRENT_REQUESTS=2`) iş istasyonu profiline aittir; yalnızca CPU kullanılan ortamlarda veya yüksek eşzamanlı kurumsal yük altında kuyruk süreleri doğrusal olmayan biçimde artacaktır.
   4. **Uzman değerlendirmesi ve HITL (§5.4):** Taslak kalitesi puanlaması sınırlı sayıda değerlendirici ve örneklem (`n=30–50`) üzerinden yürütülmekte olup, gerçek kurumsal kullanımda uzun dönemli memur onay/düzeltme davranışlarını ölçmek için saha çalışması gereklidir.
+  5. **E3 retrieval etiketleri (Faz 6A):** `data/eval/rag/queries_and_qrels.json` alaka etiketleri insan değil, sözcüksel eşleşme sezgileriyle otomatik üretilmiştir; dosyadaki `κ = 0.9863` iki otomatik kural arasındadır ve değerlendiriciler arası uyum değildir. Etiketler R3–R6'nın kullandığı başlık yayılımlı korpus üzerinde üretildiğinden bu yöntemler lehine yanlılık olabilir. Retrieval metrikleri uzman etiketlemesi yapılmadan kesin bulgu olarak sunulmamalıdır. Alt-milisaniye retrieval gecikmeleri `time.time()` çözünürlüğü nedeniyle güvenilir değildir.
+  6. **E4 ablation (Faz 6B):** Taslak türü, yönlendirme ve öncelik girdileri sentetiktir (gerçek ajan çıktısı değil); bu kurallara ait sonuçlar gerçek sistem davranışını ölçmez. Önerilen `C3` kural seti test kümesi hata analizi görülerek tasarlanmış ve aynı kümede değerlendirilmiştir; +8 belgelik kazanç iyimser yanlıdır. Sağlam bulgu, üretim `ClassificationConsistencyRule`'un doğruluğu 0,905'ten 0,325'e düşürmesidir.
+  7. **Çekimser kalma testi (Faz 6A):** Kanıta dayalı çekimser kalma istemi yalnızca 8+8 sorguda denenmiştir; döndürülen mevzuatın doğruluğu ayrıca puanlanmamıştır.
 
 ---
 

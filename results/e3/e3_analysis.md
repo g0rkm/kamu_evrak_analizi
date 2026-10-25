@@ -1,85 +1,87 @@
-# Deney E3 — Mevzuat RAG Alt Sistemi Değerlendirme ve Kaynak İzlenebilirliği (Provenance) Analiz Raporu
+# Deney E3 — Mevzuat RAG Alt Sistemi: Geri Getirme, Kaynak İzlenebilirliği ve Çekimser Kalma
 
-**Tarih:** 2026-10-25  
-**Kapsam:** FAZ 6A — Deney E3 (`MAKALE_HAZIRLIK_PLANI.md` §3.3, §5.1)  
-**Veri Kümesi:** `app/data/rag/chunks.json` ($N=3.056$ parça / `956` kazınmış belge), `data/eval/rag/queries_and_qrels.json` ($Q=60$ sorgu: $48$ cevaplanabilir + $12$ kapsam dışı; $\text{Cohen's }\kappa = 0.9863$)
+**Kapsam:** FAZ 6A (`MAKALE_HAZIRLIK_PLANI.md` §3.3, §5.1)  
+**Korpus:** `app/data/rag/chunks.json` (3.056 parça), `app/data/scraped/documents.json` (956 belge)  
+**Sorgu seti:** `data/eval/rag/queries_and_qrels.json` (48 cevaplanabilir + 12 cevaplanamaz) — **otomatik etiketli gümüş standart**, bkz. `data/eval/rag/README_rag_eval.md`
 
----
-
-## 1. İndeks Hijyeni ve Kaynak İzlenebilirliği (Provenance) Denetimi Bulguları (§5.1)
-
-`results/e3/provenance_audit.json` üzerinde yürütülen tam indeks denetimi, mevcut üretim RAG indeksinde (`app/data/rag/chunks.json` ve `app/data/rag/tfidf.pkl`) hem arama isabetini hem de hukuki izlenebilirliği doğrudan etkileyen **5 yapısal bulgu** ortaya koymuştur:
-
-### 1.1. Jenerik Başlık Çakışması (`"PDF Görüntüle"`) ve Tekilleştirme Hatası
-- `3.056` parçanın **`1.279`'u (`%41,85`)** kazıma sırasında PDF görüntüleyici pencere başlığı olan `"PDF Görüntüle"` başlığıyla indekslenmiştir.
-- Üretimdeki `RAGService.search` (`app/services/rag_service.py`) aynı `title` değerine sahip parçaları `max_per_title = max(1, top_k // 2)` (`top_k=5` için en fazla `2` parça) ile sınırlandırmaktadır. Bu durum, `"PDF Görüntüle"` başlıklı yüzlerce farklı Resmi Gazete PDF'inden yalnızca ilk 2 tanesinin sonuç listesine girmesine, geri kalan tüm PDF mevzuat parçalarının yanlışlıkla bastırılmasına yol açmaktadır.
-- Ayrıca `RAGService.search_multi` fonksiyonu tekilleştirme anahtarı olarak `(hit.title, hit.chunk_index)` çiftini kullandığından, farklı PDF belgelerinin aynı indeksli parçaları (`("PDF Görüntüle", 0)`) birbirinin üzerine yazılmaktadır.
-
-### 1.2. Mükerrer Parçalar, Menü Artıkları ve Bozuk PDF Karakter Kodlaması (CMap)
-- **Tam İçerik Tekrarı (MD5):** İndekste `44` mükerrer içerik grubunda toplam **`54` fazladan kopya parça** (`3.002` tekil MD5) bulunmaktadır. Özellikle **5018, 4734, 3071 ve 2577 sayılı temel kanunlar** hem `mevzuat_gov_tr` hem de `kanun` kategorisi altında ikişer kez indekslenmiştir.
-- **Menü Artıkları:** `"T.C. CUMHURBAŞKANLIĞI"` başlıklı `6` parça gerçek mevzuat metni değil, web sayfası üst menü/navigasyon kalıntısıdır.
-- **Bozuk PDF CMap Kodlaması:** `243` parçada (`%7,95`) alfabetik karakter oranı `< 0.50` olup, bozuk font tablosu nedeniyle okunamaz karakter dizileri yer almaktadır.
-- **50.000 Karakter Kesmesi (Truncation):** `app/data/scraped/documents.json` içindeki `956` belgenin **`148`'i** (`mevzuat_gov_tr` kategorisindeki `47` ana kanunun `28`'i dahil) kazıma aşamasında tam `50.000` karakterde kesilmiştir. Bu nedenle uzun kanunların (örn. 657 sayılı DMK, 4734 sayılı KİK, 5018 sayılı KMYKK) ilerleyen maddeleri indekste yer almamaktadır.
-
-### 1.3. Python Varsayılan `.lower()` Kaynaklı Türkçe `İ`/`I` Tokenizasyon Hatası
-- `scripts/build_index.py` içinde oluşturulan `TfidfVectorizer`, Python'un standart `.lower()` dönüşümünü ve `(?u)\b\w\w+\b` kelime bölme regex'ini kullanmaktadır.
-- Unicode standardında büyük `İ` (`U+0130`) karakteri `.lower()` uygulandığında `i` + `U+0307` (combining dot above) dizisine dönüşmekte; `\w` regex'i `U+0307` birleştirici nokta karakterinde kelimeyi bölmektedir:
-  - `"İDARİ"` $\to$ `"dari"` (`i` tek harf kaldığı için atılır!)
-  - `"İHALE"` $\to$ `"hale"`
-  - `"İLAN"` $\to$ `"lan"`
-  - `"İŞ"` ve `"İL"` $\to$ tamamen silinir (2 karakter altı kaldığı için)!
-- Benzer şekilde büyük `"I"` karakteri `"ı"` yerine `"i"` harfine dönüşmekte (`"YARGILAMA"` $\to$ `"yargilama"` $\neq$ `"yargılama"`), şapkalı harfler (`"kâr"`, `"hükûmet"`, `"mülkî"`) ise şapkasız sorgularla eşleşmemektedir.
-
-### 1.4. Kaynak İzlenebilirliği (Provenance) Meta Veri Kaybı ve Şema İyileştirme Planı
-Aşağıdaki tablo, kazınmış ham veri (`documents.json`), mevcut üretim indeksi (`chunks.json`) ve önerilen zenginleştirilmiş şema arasındaki farkı göstermektedir:
-
-| Meta Veri Alanı | `documents.json` ($N=956$) | Mevcut `chunks.json` ($N=3.056$) | Metinden Regex ile Kurtarılabilirlik | Önerilen `chunks_v2` Şeması |
-|---|---:|---:|---:|---|
-| `chunk_id` (Kararlı Kimlik) | Yok | **Yok (`%0`)** (liste sırasına bağımlı) | `%100` (`doc_id` + `chunk_index` + `md5[:8]`) | Zorunlu alan (`str`) |
-| `title` (Anlamlı Başlık) | `%58,1` anlamlı | `%58,1` anlamlı (`%41,85` `"PDF Görüntüle"`) | **`%99,6`** (`3.044/3.056` ilk satır/başlık yayılımı ile) | Zorunlu alan (temizlenmiş başlık) |
-| `category` (Mevzuat Türü) | `%100,0` | `%100,0` | `%100,0` | Zorunlu alan (`kanun`, `cbk`, `yonetmelik` vb.) |
-| `source_url` (Resmi Kaynak URL) | **`%95,1`** (`909/956`) | **Yok (`%0`)** (`build_index.py` düşürüyor) | `documents.json` birleştirmesi ile `%95,1` | Zorunlu alan (`url`) |
-| `publish_date` (Yayım Tarihi) | **`%95,1`** (`909/956`) | **Yok (`%0`)** (`build_index.py` düşürüyor) | `documents.json` + metin içi tarih ile `%96,4` | Zorunlu alan (`ISO-8601 date`) |
-| `law_or_cbk_no` (Kanun/CBK No) | Yok | **Yok (`%0`)** | **`%42,7`** (`1.304/3.056` parçada açık numara) | Belge düzeyinden miralanan alan |
-| `article_no` (`Madde X`) | Yok | **Yok (`%0`)** | **`%71,9`** (`2.196/3.056` parçada açık madde no) | Parça düzeyinde çıkarılan liste (`["Madde 4", ...]`) |
-| `content_md5` (Tekilleştirme Özeti) | Yok | **Yok (`%0`)** | `%100,0` | İndeksleme anında tekilleştirme anahtarı |
+> [!WARNING]
+> **Bölüm 2'deki geri getirme metrikleri insan etiketine dayanmaz.** Alaka etiketleri, R3–R6'nın da kullandığı başlık yayılımlı korpus üzerinde sözcüksel eşleşmeyle otomatik üretilmiştir (döngüsellik riski). Dosyadaki `κ = 0.9863` iki otomatik kural arasındadır ve değerlendiriciler arası uyum olarak raporlanamaz. Bu sayılar makalede **yalnızca uzman etiketlemesiyle yeniden hesaplandıktan sonra** kullanılmalıdır. Bölüm 1 (indeks denetimi) bu sorundan etkilenmez.
 
 ---
 
-## 2. Geri Getirme (Retrieval) Yöntemleri Karşılaştırması ($Q_{\text{ans}} = 48$)
+## 1. İndeks hijyeni ve kaynak izlenebilirliği denetimi (`results/e3/provenance_audit.json`)
 
-Altı geri getirme konfigürasyonu aynı `48` cevaplanabilir sorgu üzerinde `Recall@3/5/10`, `HitRate@5/10`, `MRR@10`, dereceli `nDCG@10` (`2000` tekrarlı eşleştirilmiş bootstrap `%95 GA` ve `R1` üretim baz çizgisine karşı iki yönlü eşleştirilmiş permütasyon testi $p$-değeri ile) değerlendirilmiştir (`results/e3/retrieval_comparison.csv`):
+| Bulgu | Değer |
+|---|---:|
+| Jenerik `"PDF Görüntüle"` başlıklı parça | 1.279 / 3.056 (%41,85) |
+| Menü/navigasyon artığı olarak işaretlenen parça | 53 |
+| Birebir MD5 kopya grubu / fazladan kopya parça | 44 / 54 |
+| Alfabetik oranı < 0,50 (bozuk PDF kodlaması şüphesi) | 243 (%7,95) |
+| Kazımada 50.000 karakterde kesilmiş belge | 148 / 956 |
+| `documents.json` içinde `date` / `url` bulunan belge | 909 / 956 (%95,1) |
+| `chunks.json` içinde `date` / `url` / `indexed_at` alanı bulunan parça | **0 / 3.056** |
+| Metinde `Madde N` kalıbı geçen parça (regex ile kurtarılabilir) | 2.196 (%71,9) |
+| Metinde kanun numarası kalıbı geçen parça | 1.304 (%42,7) |
 
-| Kod | Yöntem Tanımı | Recall@3 | Recall@5 [%95 GA] | Recall@10 | HitRate@5 | MRR@10 [%95 GA] | nDCG@10 [%95 GA] | $\Delta\text{nDCG@10}$ ($p$) | Dup@10 | Gecikme (ms) |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| **R1** | `prod_tfidf` (Mevcut Üretim `RAGService`) | 0.3490 | 0.4735 [0.379, 0.575] | 0.6081 | 0.9375 | 0.8142 [0.717, 0.898] | 0.6667 [0.587, 0.745] | Baz çizgisi | %4,38 | **0.09** |
-| **R2** | `raw_tfidf_dedup` (MD5 Tekilleştirme, Başlık Bastırmasız) | 0.3490 | 0.4770 [0.382, 0.576] | 0.6194 | 0.9375 | 0.8142 [0.717, 0.898] | 0.6744 [0.594, 0.751] | +0.0077 ($p<0.001$) | **%0,00** | 0.60 |
-| **R3** | `tr_tfidf_title` (Türkçe `İ`/`I` Norm. + Başlık/Kanun No Yayılımı) | 0.3694 | 0.4926 [0.402, 0.590] | 0.6637 | 0.9792 | 0.8889 [0.810, 0.955] | 0.7460 [0.678, 0.809] | +0.0793 ($p<0.001$) | %0,00 | 0.89 |
-| **R4** | `bm25_tr` (Okapi BM25 $k_1=1.5, b=0.75$ + Türkçe Norm. + Başlık) | 0.4158 | 0.5490 [0.453, 0.646] | 0.7167 | 0.9583 | 0.9201 [0.854, 0.974] | 0.7908 [0.728, 0.848] | +0.1241 ($p<0.001$) | %0,00 | 0.44 |
-| **R5** | **`bm25_tr_prefix` (Okapi BM25 + Türkçe Çekim Eki Kökleme)** | **0.4319** | **0.5786 [0.484, 0.674]** | **0.7472** | **0.9792** | **0.9340 [0.868, 0.979]** | **0.8128 [0.750, 0.870]** | **+0.1462 ($p<0.001$)** | **%0,00** | 0.53 |
-| **R6** | `hybrid_rrf` (Hibrit RRF: `R3` Karakter/Kelime TF-IDF + `R4` BM25) | 0.3910 | 0.4926 [0.405, 0.588] | 0.7031 | **0.9792** | 0.9329 [0.872, 0.980] | 0.7684 [0.707, 0.827] | +0.1017 ($p=0.001$) | %0,00 | 1.38 |
+**Gözlemler:**
+1. **Başlık çakışması:** `RAGService.search` aynı başlıktan en fazla `max(1, top_k // 2)` parça döndürür; `search_multi` tekilleştirmeyi `(title, chunk_index)` ile yapar. Yüzlerce farklı PDF aynı `"PDF Görüntüle"` başlığını taşıdığından, bu PDF'lerin parçaları birbirini bastırır/ezer.
+2. **Türkçe `İ` tokenizasyon hatası (doğrulandı):** Üretim `tfidf.pkl` vektörleyicisi (`lowercase=True`, `token_pattern=(?u)\b\w\w+\b`) `"İDARİ İHALE İLAN İŞ İL YARGILAMA"` girdisini `['dari', 'hale', 'lan', 'yargilama']` olarak ayrıştırır: Python `str.lower()` `İ`'yi `i + U+0307` dizisine çevirir, regex birleştirici noktada keser; `İŞ`/`İL` tamamen düşer; `I` → `i` olur (`yargılama` ile eşleşmez).
+3. **Kaynak meta verisi kaybı:** `scripts/build_index.py`, `documents.json` içinde mevcut olan `url` ve `date` alanlarını parçalara aktarmaz; `indexed_at` hiç üretilmez. Dolayısıyla üretim sistemi bir retrieval sonucunda yayım tarihi, kaynak URL'si veya indeksleme tarihi **gösteremez** (§5.1 gereksinimi karşılanmıyor).
 
-### Temel Çıkarımlar:
-1. **Türkçe Normalizasyon ve Başlık Yayılımının Etkisi (`R1` $\to$ `R3`):** Yalnızca Python `.lower()` kaynaklı `İ`/`I` hatasının giderilmesi (`"İDARİ"` $\to$ `"idari"`, `"İHALE"` $\to$ `"ihale"`) ve belge başındaki kanun numarası/başlığın alt parçalara yayılması bile `MRR@10` değerini `0.8142`'den `0.8889`'a (`+0.0747`, $p=0.011$), `nDCG@10` değerini ise `0.6667`'den `0.7460`'a (`+0.0793`, $p<0.001$) yükseltmektedir.
-2. **BM25 ve Sondan Eklemeli (Agglutinative) Kök Норmalizasyonu (`R5`):** Türkçe mevzuat metinlerinde yoğun çekim ekleri (`"ihalesine"`, `"ihalede"`, `"ihalelerin"` $\to$ `"ihale"`) kelime bazlı tam eşleşmeyi düşürmektedir. Türkçe çekim eki budama/kök eşleştirme destekli Okapi BM25 (`R5_bm25_tr_prefix`), üretimdeki `R1` sistemine kıyasla **`Recall@5`'i `%47,35`'ten `%57,86`'ya (`+10,51` puan, $p<0.001$)**, **`MRR@10`'u `0.8142`'den `0.9340`'a (`+11,98` puan, $p=0.004$)** ve **`nDCG@10`'u `0.6667`'den `0.8128`'e (`+14,62` puan, $p<0.001$)** taşımaktadır. Üstelik sorgu başına gecikme yalnızca `0.53 ms` olup harici bir GPU/vektör veritabanı gerektirmemektedir.
+**§5.1 için önerilen şema iyileştirmesi (uygulanmadı, plan):** Her parçaya `chunk_id` (kararlı kimlik), `source_url`, `publish_date`, `indexed_at`, `law_no` (belge düzeyinden), `article_refs` (regex) ve `content_md5` alanları eklenmeli; `"PDF Görüntüle"` başlıkları belge ilk satırından türetilen başlıkla değiştirilmeli; `search`/`search_multi` tekilleştirmesi `chunk_id` veya `content_md5` ile yapılmalı. Uygulanmazsa makalede sınırlılık olarak belirtilmelidir.
 
 ---
 
-## 3. Kapsam Dışı Sorgular (Unsupported Queries) ve Kanıta Dayalı Çekimser Kalma (Grounded Abstention)
+## 2. Geri getirme karşılaştırması (48 cevaplanabilir sorgu, otomatik qrels)
 
-İndekste karşılığı bulunmayan `12` kapsam dışı sorgu (`Q49`–`Q60`) üzerinde yapılan analiz (`results/e3/unsupported_behavior.json`) iki kritik güvenlik/doğruluk bulgusu sunmaktadır:
+`results/e3/retrieval_metrics.json`. GA: 2.000 tekrarlı bootstrap %95. Δ ve $p$: R1'e karşı eşleştirilmiş bootstrap farkı; $p = 2\min(P(\Delta \ge 0), P(\Delta \le 0))$ (permütasyon testi değildir). 2.000 örneklemin hiçbiri ters işaretli değilse $p<0{,}001$ yazılmıştır.
 
-### 3.1. Sabit Skor Eşiği (`MIN_SCORE = 0.05`) Yetersizliği
-- Üretimdeki `RAGService.MIN_SCORE = 0.05` eşiği altında, `12` kapsam dışı sorgunun **tamamında (`12/12`, `%100` Yanlış Pozitif Geri Getirme Oranı)** en az bir mevzuat parçası eşiği geçerek LLM bağlamına (`__LEGISLATION_DB__`) enjekte edilmektedir (`top-1` skor ortalaması: cevaplanabilir sorgularda `0.3695`, kapsam dışı sorgularda `0.2116`).
-- ROC/Youden analizi, salt sözcüksel benzerlik skoru ile kapsam dışı sorguları ayırmanın mümkün olmadığını göstermektedir (`R1` için en iyi eşik $\tau^* = 0.1465$'te bile $\text{Youden's } J = 0.250$; `R3` için $\tau^* = 0.1818$'de $J = 0.396$). Bunun nedeni, kapsam dışı hukuki soruların da (`"kanun"`, `"yönetmelik"`, `"madde"`, `"ceza"`, `"başvuru"`) genel hukuk terminolojisini paylaşmasıdır.
+| Kod | Yöntem | Recall@5 [%95 GA] | Recall@10 | Hit@5 | Hit@10 | MRR@10 [%95 GA] | nDCG@10 [%95 GA] | Dup@10 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| R1 | Üretim TF-IDF (`RAGService` davranışı) | 0,4735 [0,379–0,575] | 0,6081 | 0,9375 | 0,9375 | 0,8142 [0,717–0,898] | 0,6667 [0,586–0,745] | 0,0438 |
+| R2 | TF-IDF + MD5 tekilleştirme, başlık bastırma yok | 0,4770 [0,382–0,576] | 0,6081 | 0,9375 | 0,9375 | 0,8142 [0,722–0,901] | 0,6744 [0,589–0,752] | 0 |
+| R3 | TF-IDF + Türkçe küçük harf + başlık/kanun no yayılımı | 0,4926 [0,404–0,583] | 0,6668 | 0,9792 | 0,9792 | 0,8889 [0,819–0,955] | 0,7460 [0,673–0,814] | 0 |
+| R4 | BM25 ($k_1=1{,}5$, $b=0{,}75$) + R3 ön işleme | 0,5490 [0,451–0,647] | 0,7167 | 0,9792 | 0,9792 | 0,9201 [0,851–0,976] | 0,7908 [0,724–0,853] | 0 |
+| R5 | R4 + Türkçe ek budama (önek belirteçleri) | **0,5786** [0,484–0,674] | **0,7472** | 0,9792 | 0,9792 | **0,9340** [0,868–0,979] | **0,8128** [0,750–0,870] | 0 |
+| R6 | Hibrit RRF (R3 + R4) | 0,4926 [0,401–0,589] | 0,6740 | 0,9792 | **1,0000** | 0,9329 [0,874–0,986] | 0,7684 [0,699–0,833] | 0 |
 
-### 3.2. `LegislationAgent` Halüsinasyon Testi (`gemma4:12b`) ve Grounded Abstention Çözümü
-Yerel `gemma4:12b` modeli üzerinde `8` cevaplanabilir ve `8` kapsam dışı sorgu ile iki farklı istem (prompt) stratejisi karşılaştırılmıştır:
+**R1'e göre farklar:**
 
-| İstem (Prompt) Stratejisi | Kapsam İçi Doğru Yanıtlama Oranı ($n=8$) | Kapsam Dışı Çekimser Kalma Doğruluğu (Abstention Accuracy, $n=8$) | Kapsam Dışı Halüsinasyon / Uydurma Mevzuat Oranı ($n=8$) | Ort. Gecikme (ms) |
-|---|---:|---:|---:|---:|
-| **Mevcut Üretim İstem Şablonu (`Unconstrained LegislationAgent`)** | `%100,0` (`8/8`) | **`%0,0` (`0/8`)** | **`%100,0` (`8/8`)** | 3.743 ms |
-| **Kanıta Dayalı Çekimser Kalma İstemi (`Grounded Abstention Prompt`)** | **`%100,0` (`8/8`)** | **`%87,5` (`7/8`)** | **`%12,5` (`1/8`)** | 2.660 ms |
+| Kod | ΔRecall@5 ($p$) | ΔMRR@10 ($p$) | ΔnDCG@10 [%95 GA] ($p$) |
+|---|---:|---:|---:|
+| R2 | +0,0035 (0,741) | 0,0000 (tanımsız — tüm farklar sıfır) | +0,0077 [0,002–0,015] (<0,001) |
+| R3 | +0,0191 (0,325) | +0,0747 (0,011) | +0,0793 [0,043–0,117] (<0,001) |
+| R4 | +0,0755 (0,002) | +0,1059 (0,008) | +0,1241 [0,070–0,180] (<0,001) |
+| R5 | +0,1051 (<0,001) | +0,1198 (0,004) | +0,1462 [0,091–0,206] (<0,001) |
+| R6 | +0,0191 (0,615) | +0,1186 (0,003) | +0,1017 [0,051–0,154] (0,001) |
 
-- **Kök Neden:** Mevcut `LegislationAgent` istemi, `__LEGISLATION_DB__` bağlamında ilgili kanun bulunmasa dahi modelden her zaman `relevant_articles` dizisini doldurmasını beklemekte ve açık bir *"yalnızca sağlanan parçalara dayan; parçalarda doğrudan hüküm yoksa `abstention: true` döndür"* kuralı içermemektedir. Sonuç olarak model, kapsam dışı 8 sorunun tamamında (`%100`) ya alakasız bir kanun maddesini soruya zorla uyarlamış ya da kendi parametrik belleğinden gerçekte olmayan kanun/madde numaraları üretmiştir.
-- **Çözüm:** Sisteme eklenen **Grounded Abstention (Kanıta Dayalı Çekimser Kalma)** şeması, kapsam içi sorulardaki `%100` yanıt başarısını korurken, kapsam dışı sorularda uydurma mevzuat üretme (halüsinasyon) oranını **`%100,0`'dan `%12,5`'e (`7/8` doğru reddetme)** düşürmüştür.
+**Yorum (koşullu):** Otomatik qrels altında, Türkçe-duyarlı ön işleme ve BM25 sıralama kalitesini (MRR, nDCG) R1'e göre artırmaktadır; R5 tüm metriklerde en yüksek değeri verir. Ancak qrels'in başlık yayılımlı korpus üzerinde sözcüksel olarak üretilmiş olması, R3–R6 lehine sistematik yanlılık yaratabilir. Bu farklar insan etiketiyle doğrulanmadan "R5 üretim sistemini %X iyileştirir" biçiminde raporlanmamalıdır.
+
+**Bilinen ölçüm sınırlılıkları:**
+- `experiments/e3_rag_eval.py` gecikmeyi `time.time()` ile ölçer; Windows'ta çözünürlük ~1 ms olduğundan medyanlar 0, p95 değerleri ~1 ms çıkmıştır. Alt-milisaniye gecikme karşılaştırması **güvenilir değildir** ve raporlanmamalıdır (düzeltme: `time.perf_counter()`).
+- R2'nin MRR@10 $p$ değeri betikte 2,0 olarak hesaplanmıştır (tüm farklar 0 iken formül hatası); tanımsız kabul edilmelidir.
+
+---
+
+## 3. Cevaplanamaz sorgular ve kanıta dayalı çekimser kalma (`results/e3/unsupported_behavior.json`)
+
+### 3.1. Skor eşiği
+- Üretimdeki `MIN_SCORE = 0,05` eşiğinde 12 cevaplanamaz sorgunun **12'si** (%100) en az bir parça döndürür.
+- top-1 skoruna göre en iyi Youden eşiği: R1 için $\tau^*=0{,}182$, $J=0{,}250$; R3 için $\tau^*=0{,}182$, $J=0{,}396$. Yalnızca sözcüksel benzerlik skoruyla cevaplanabilir/cevaplanamaz ayrımı zayıftır.
+
+### 3.2. LLM davranışı (`gemma4:12b`, 8 cevaplanabilir + 8 cevaplanamaz sorgu)
+
+| İstem | Cevaplanabilirde eşleşme döndürme | Cevaplanamazda çekimser kalma | Cevaplanamazda eşleşme uydurma |
+|---|---:|---:|---:|
+| Kısıtsız (üretim `LegislationAgent` istemine benzer) | 8/8 | 0/8 | 8/8 |
+| Kanıta dayalı çekimser kalma istemi | 8/8 | 7/8 | 1/8 |
+
+**Sınırlılıklar:** Örneklem çok küçüktür (her kolda $n=8$; 7/8 için Wilson %95 GA ≈ [0,53–0,98]). "Cevaplanabilirde eşleşme döndürme" yalnızca boş olmayan bir `matches` listesi demektir; döndürülen mevzuatın doğruluğu ayrıca puanlanmamıştır. Çekimser kalma istemi ayrıca $\tau^*=0{,}14$ altındaki skorlar için sert bir eşik kuralı içerir (BM25 ham skoru ile TF-IDF kosinüs eşiği aynı ölçekte değildir; bu eşik pratikte etkisiz olabilir). Gecikme ölçülmemiştir.
+
+---
+
+## 4. Makale için sonuç
+
+- **Doğrudan raporlanabilir:** Bölüm 1 (indeks denetimi, `İ` hatası, meta veri kaybı) ve Bölüm 3.1 (sabit eşiğin yetersizliği).
+- **Ön bulgu olarak, sınırlılıkla birlikte:** Bölüm 3.2 (küçük örneklem).
+- **Uzman etiketlemesi olmadan raporlanmamalı:** Bölüm 2'deki mutlak değerler ve yöntem farkları.
