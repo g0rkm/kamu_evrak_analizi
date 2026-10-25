@@ -5,7 +5,7 @@ Kamu kurumlarına gelen evrakların **yerel büyük dil modeli (Local LLM — Ge
 ## Özellikler
 
 - **Yerel Yapay Zekâ Yapılandırması (Local LLM — Gemma 4 12B)**: Varsayılan olarak Ollama (`gemma4:12b`) üzerinde kurum içi / çevrimdışı çalışacak şekilde yapılandırılmıştır. *Yerel Ollama yapılandırmasında, uzak LLM uç noktası kapalı ve dış veri akışı ayrıca doğrulanmışsa evrak içeriği yerel işlenebilir.*
-- **Evrak Sınıflandırma**: Sistem taksonomisinde 18 evrak türü tanımlıdır (`app/core/taxonomy.py`, dilekçe, resmî yazı, kanun, yönetmelik, kararname, tebliğ, genelge vb.); **6 kategorilik pilot benchmark (`n=54`): Macro-F1=0.935; 18 sınıfın tamamı henüz değerlendirilmedi.**
+- **Evrak Sınıflandırma**: Sistem taksonomisinde 18 evrak türü tanımlıdır (`app/core/taxonomy.py`, dilekçe, resmî yazı, kanun, yönetmelik, kararname, tebliğ, genelge vb.); **6 kategorilik pilot benchmark (`n=54`): Macro-F1=0.935; 18 sınıflı tam değerlendirme (`n=252` test kümesi, E1): Macro-F1=0.898 (%95 Bootstrap GA: 0.860–0.929), Accuracy=0.905 (%95 Wilson GA: 0.862–0.935).**
 - **İçerik Analizi**: Varlık çıkarma (tarih, kurum, kişi, referans no), eksik alan tespiti, anahtar kelime belirleme
 - **RAG Destekli Mevzuat Eşleştirme**: TF-IDF tabanlı retrieval ile 956 belgeden 3056 parça üzerinde yerel arama (scikit-learn)
 - **PII/KVKK Tespiti**: TC Kimlik (sağlama doğrulamalı), IBAN, telefon, e-posta tespiti ve maskeleme; taslağa kişisel veri sızıntısı kontrolü
@@ -62,11 +62,26 @@ Metin çıkarma → Sınıflandırma ‖ İçerik analizi → Mevzuat ‖ Özet 
 
 **Tek kaynak sözlük**: Evrak türleri, birimler, taslak türleri ve öncelikler `app/core/taxonomy.py` içinde tanımlıdır. LLM prompt'ları, doğrulama kuralları ve arayüz etiketleri (`/api/meta`) buradan üretilir; yeni bir evrak türü eklemek için tek bir kayıt yeterlidir.
 
-## Performans ve Sınıflandırma Başarımı (Pilot Benchmark)
+## Performans ve Sınıflandırma Başarımı (E1 Tam Benchmark ve Pilot Ölçüm)
 
-### 1. Sınıflandırma Doğruluğu — 6 Kategorilik Pilot Benchmark (`gemma4:12b`, `n=54`)
+### 1.A. 18 Sınıflı Tam Değerlendirme (`E1` — `gemma4:12b`, `n=252` Kör Test Kümesi)
 
-> **Örneklem ve Kapsam Uyarısı:** Bu bölümdeki sonuçlar **6 kategorilik pilot benchmark (`n=54`): Macro-F1=0.935** ölçümüne aittir; **`app/core/taxonomy.py` içindeki 18 sınıfın tamamı henüz değerlendirilmemiştir** ve bu skor 18 sınıfın tümüne genellenemez. `50 / 54` doğru tahmin üzerinden hesaplanan genel doğruluk (`%92.6`) için **%95 Wilson güven aralığı yaklaşık `%82.4–%97.1`** düzeyindedir (bu güven aralığı sınıflandırma doğruluğu/accuracy içindir; Macro-F1 güven aralığı değildir).
+[`docs/etiketleme_protokolu.md`](docs/etiketleme_protokolu.md) uyarınca tekilleştirilmiş 360 belgelik değerlendirme kümesinden `seed=42` ile ayrılan **252 belgelik kör test kümesi** (`data/eval/classification/test.json`, 18 sınıf × 14 örnek) üzerinde `experiments/e1_classification.py` ile elde edilen sonuçlar ([`results/e1/metrics.json`](results/e1/metrics.json), [`results/e1/error_analysis.md`](results/e1/error_analysis.md)):
+
+- **Macro-F1 (18 Sınıf, `n=252`):** **`0.8979`** (%95 Bootstrap GA, `B=2000`: **`[0.8598, 0.9294]`**)
+- **Genel Doğruluk (Accuracy / Micro-F1):** **`0.9048`** (`228 / 252`, %95 Wilson GA: **`[0.8622, 0.9352]`**, %95 Bootstrap GA: **`[0.8690, 0.9405]`**)
+- **Sınır Toleranslı Doğruluk (Top-2 / İkincil Aday Eşleşmeli):** **`0.9286`** (`234 / 252`)
+- **Hata Analizi Özeti:** Toplam 24 hatanın 8'i (`%33.3`) `karar` ↔ `kararname` (`Cumhurbaşkanı Kararı` vs `Cumhurbaşkanlığı Kararnamesi`) geçişkenliğinden, 9'u ise kurum içi/kurumlar arası idari yazışma alt türleri (`resmi_yazi` ↔ `bilgilendirme` ↔ `kurum_ici` ↔ `gorus_sorma` ↔ `talep_yazisi`) arasındaki sınır örneklerinden kaynaklanmaktadır. `karar` ve `kararname` dışındaki 16 sınıfta ortalama F1 skoru **`0.9462`** düzeyindedir.
+
+18 sınıflı tam E1 deneyini tekrar çalıştırmak için:
+
+```bash
+python -m experiments.e1_classification --split test
+```
+
+### 1.B. Sınıflandırma Doğruluğu — 6 Kategorilik Pilot Benchmark (`gemma4:12b`, `n=54`)
+
+> **Örneklem ve Kapsam Uyarısı:** Bu alt bölümdeki sonuçlar yalnızca **6 kategorilik ilk pilot benchmark (`n=54`): Macro-F1=0.935** ölçümüne aittir. `50 / 54` doğru tahmin üzerinden hesaplanan genel doğruluk (`%92.6`) için **%95 Wilson güven aralığı yaklaşık `%82.4–%97.1`** düzeyindedir. 18 sınıfın tamamını kapsayan kapsamlı değerlendirme için yukarıdaki **Bölüm 1.A (`n=252`, Macro-F1=0.8979)** sonuçları esas alınmalıdır.
 
 Resmî Gazete ve Mevzuat Bilgi Sistemi'nden toplanan kamu evrakları üzerinde (`scripts/evaluate_f1.py`, `seed=42`, `n=54` belge, 6 mevzuat/evrak kategorisi) yerel **`gemma4:12b` (`Q4_K_M`, `temperature=0.3`, `num_ctx=16384`, `reasoning_effort="none"`)** modeliyle yapılan pilot değerlendirme sonuçları:
 
