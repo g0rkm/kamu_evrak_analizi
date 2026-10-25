@@ -5,7 +5,7 @@
 > **Hakem kararı:** MAJOR REVISION — *konu uygun, mevcut sunumuyla gönderime hazır değil*
 > **Branch:** `makale-hazirlik` (Develop'tan türetildi)
 > **Bu dosyanın amacı:** Rapordaki her eleştiriyi, repodaki somut dosyalara ve ölçülebilir çıktılara bağlayan, adım adım uygulanabilir bir yol haritası sunmak. (Henüz hiçbir düzeltme yapılmadı — bu yalnızca plandır.)
-> **İlerleme işareti:** Faz başlıklarında `[ ]` = yapılmadı, `[X]` = tamamlandı. (Şu an tüm fazlar `[ ]`.)
+> **İlerleme işareti:** Faz başlıklarında `[ ]` = yapılmadı, `[X]` = tamamlandı.
 
 ---
 
@@ -72,7 +72,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 1 — İddiaların düzeltilmesi (P0) · kod/deney gerektirmez
+## [X] FAZ 1 — İddiaların düzeltilmesi (P0) · kod/deney gerektirmez
 
 **Amaç:** Yanıltıcı genellemeleri kaldırmak — hakem §3.1, §2, §3.5, §5.5, Tablo 5. Bu faz **önce** yapılmalı çünkü makale iddiaları buradan türeyecek.
 
