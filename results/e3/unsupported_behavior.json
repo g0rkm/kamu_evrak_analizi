@@ -1,0 +1,514 @@
+{
+  "false_positive_retrieval_rate_at_min_0.05": 1.0,
+  "best_tau_r1": 0.18181818181818182,
+  "youden_j_r1": 0.25,
+  "best_tau_r3": 0.18181818181818182,
+  "youden_j_r3": 0.39583333333333337,
+  "optimal_tau_star": 0.14,
+  "llm_evaluation": {
+    "evaluated_queries_count": 16,
+    "answerable_count": 8,
+    "unanswerable_count": 8,
+    "unconstrained_prompt": {
+      "unsupported_hallucination_rate": 1.0,
+      "abstention_accuracy_on_unanswerable": 0.0,
+      "supported_answer_rate": 1.0
+    },
+    "grounded_prompt": {
+      "unsupported_hallucination_rate": 0.125,
+      "abstention_accuracy_on_unanswerable": 0.875,
+      "supported_answer_rate": 1.0
+    },
+    "query_results": {
+      "U01": {
+        "query": "5442 sayılı İl İdaresi Kanunu kaymakamın ilçe idare şube başkanları üzerindeki denetimi",
+        "answerable": false,
+        "max_bm25_score": 32.9742,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "5302 sayılı İl Özel İdaresi Kanunu",
+            "article": null,
+            "relevance_score": 0.7,
+            "summary": "İl özel idaresi organları ve görev yetkilerini düzenler."
+          },
+          {
+            "legislation_name": "5176 sayılı Kamu Görevlileri Etik Kurulu Kurulması Kanunu",
+            "article": null,
+            "relevance_score": 0.4,
+            "summary": "Kamu görevlilerinin etik ilkeleri ve denetim süreçlerini kapsar."
+          }
+        ],
+        "grounded_abstained": true,
+        "grounded_matches_count": 0,
+        "grounded_response": {
+          "abstained": true,
+          "reason": "5442 sayılı İl İdaresi Kanunu ve kaymakamın ilçe idare şube başkanları üzerindeki denetimi konusu RAG Bağlamı metinlerinde yer almamaktadır.",
+          "matches": []
+        }
+      },
+      "U02": {
+        "query": "213 sayılı Vergi Usul Kanunu uzlaşma ve vergi ziyaı cezası hükümleri",
+        "answerable": false,
+        "max_bm25_score": 25.2323,
+        "unconstrained_matches_count": 1,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "3065 sayılı Katma Değer Vergisi Kanunu",
+            "article": null,
+            "relevance_score": 0.6,
+            "summary": "Vergi hesaplamaları ve muafiyetler hakkında genel hükümler içerir."
+          }
+        ],
+        "grounded_abstained": true,
+        "grounded_matches_count": 0,
+        "grounded_response": {
+          "abstained": true,
+          "reason": "RAG bağlamında 213 sayılı Vergi Usul Kanunu'na ilişkin uzlaşma ve vergi ziyaı cezası hükümleri yer almamaktadır.",
+          "matches": []
+        }
+      },
+      "U03": {
+        "query": "193 sayılı Gelir Vergisi Kanunu gelir vergisi tarifesi ve dilimleri",
+        "answerable": false,
+        "max_bm25_score": 27.837,
+        "unconstrained_matches_count": 1,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "3065 sayılı Katma Değer Vergisi Kanunu",
+            "article": null,
+            "relevance_score": 0.3,
+            "summary": "Vergi mevzuatı kapsamında genel vergi esasları ile ilgili genel bir kategori."
+          }
+        ],
+        "grounded_abstained": true,
+        "grounded_matches_count": 0,
+        "grounded_response": {
+          "abstained": true,
+          "reason": "Sorgulanan 193 sayılı Gelir Vergisi Kanunu ve gelir vergisi tarifesi/dilimleri bilgileri RAG Bağlamı içerisinde yer almamaktadır.",
+          "matches": []
+        }
+      },
+      "U04": {
+        "query": "1136 sayılı Avukatlık Kanunu baro levhasına yazılma şartları",
+        "answerable": false,
+        "max_bm25_score": 22.2027,
+        "unconstrained_matches_count": 1,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "6100 sayılı Hukuk Muhakemeleri Kanunu",
+            "article": null,
+            "relevance_score": 0.4,
+            "summary": "Hukuk yargılaması usulü ve avukatların yargıdaki rolü ile ilgili genel çerçeveyi içerir."
+          }
+        ],
+        "grounded_abstained": true,
+        "grounded_matches_count": 0,
+        "grounded_response": {
+          "abstained": true,
+          "reason": "RAG bağlamında 1136 sayılı Avukatlık Kanunu'na ilişkin baro levhasına yazılma şartları hakkında bir hüküm bulunmamaktadır.",
+          "matches": []
+        }
+      },
+      "U05": {
+        "query": "2918 sayılı Karayolları Trafik Kanunu hız sınırları ve idari para cezaları",
+        "answerable": false,
+        "max_bm25_score": 23.4263,
+        "unconstrained_matches_count": 1,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "2918 sayılı Karayolları Trafik Kanunu",
+            "article": null,
+            "relevance_score": 1.0,
+            "summary": "Karayolları trafik kuralları, hız sınırları ve idari yaptırımları düzenler."
+          }
+        ],
+        "grounded_abstained": true,
+        "grounded_matches_count": 0,
+        "grounded_response": {
+          "abstained": true,
+          "reason": "2918 sayılı Karayolları Trafik Kanunu'nun hız sınırları ve idari para cezalarına ilişkin spesifik hükümleri RAG bağlamında yer almamaktadır.",
+          "matches": []
+        }
+      },
+      "U06": {
+        "query": "Resmi Yazışmalarda Uygulanacak Usul ve Esaslar Hakkında Yönetmelik EBYS elektronik onay",
+        "answerable": false,
+        "max_bm25_score": 30.3724,
+        "unconstrained_matches_count": 1,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "5070 sayılı Elektronik İmza Kanunu",
+            "article": null,
+            "relevance_score": 1.0,
+            "summary": "Elektronik imza geçerliliği ve elektronik belge düzeni hakkında temel esasları belirler."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 1,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "İstanbul Atlas Üniversitesi Ana Yönetmeliğinde Değişiklik Yapılmasına Dair Yönetmelik kapsamında ilgili yönetmelik hükümlerine atıf yapılmaktadır.",
+          "matches": [
+            {
+              "legislation_name": "Resmî Yazışmalarda Uygulanacak Usul ve Esaslar Hakkında Yönetmelik",
+              "article": null,
+              "relevance_score": 1.0,
+              "summary": "Üniversitenin tüm onay ve yazışmaları bu yönetmelik hükümlerine göre yürütülür."
+            }
+          ]
+        }
+      },
+      "U07": {
+        "query": "Kuantum Hesaplama ve Yapay Zekâ Etiği Ulusal Denetim Kanunu",
+        "answerable": false,
+        "max_bm25_score": 23.8562,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "5176 sayılı Kamu Görevlileri Etik Kurulu Kurulması Kanunu",
+            "article": null,
+            "relevance_score": 0.6,
+            "summary": "Kamu görevlileri için etik ilkeleri ve denetim mekanizmalarını düzenler."
+          },
+          {
+            "legislation_name": "37 sayılı Devlet Denetleme Kurulu Hakkında Cumhurbaşkanlığı Kararnamesi",
+            "article": null,
+            "relevance_score": 0.5,
+            "summary": "Devlet denetleme kurulu görev ve yetkilerini kapsar."
+          }
+        ],
+        "grounded_abstained": true,
+        "grounded_matches_count": 0,
+        "grounded_response": {
+          "abstained": true,
+          "reason": "Sorgulanan 'Kuantum Hesaplama ve Yapay Zekâ Etiği Ulusal Denetim Kanunu' RAG bağlamında yer almamaktadır.",
+          "matches": []
+        }
+      },
+      "U08": {
+        "query": "Kripto Varlık Madenciliği Enerji Sübvansiyonu Yönetmeliği",
+        "answerable": false,
+        "max_bm25_score": 18.279,
+        "unconstrained_matches_count": 1,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "3065 sayılı Katma Değer Vergisi Kanunu",
+            "article": null,
+            "relevance_score": 0.4,
+            "summary": "Kripto varlık ve enerji süreçlerindeki vergi muafiyetleri ve hesaplamaları için temel teşkil eder."
+          }
+        ],
+        "grounded_abstained": true,
+        "grounded_matches_count": 0,
+        "grounded_response": {
+          "abstained": true,
+          "reason": "Sorgulanan 'Kripto Varlık Madenciliği Enerji Sübvansiyonu Yönetmeliği' RAG bağlamında yer almamaktadır.",
+          "matches": []
+        }
+      },
+      "Q01": {
+        "query": "657 Sayılı Kanun sadakat ve tarafsızlık yükümlülüğü",
+        "answerable": true,
+        "max_bm25_score": 16.8019,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "2709 sayılı Türkiye Cumhuriyeti Anayasası",
+            "article": null,
+            "relevance_score": 0.8,
+            "summary": "Devletin temel yapısı ve kamu görevlilerinin temel hak ve ödevleri çerçevesini belirler."
+          },
+          {
+            "legislation_name": "5176 sayılı Kamu Görevlileri Etik Kurulu Kurulması Kanunu",
+            "article": null,
+            "relevance_score": 0.7,
+            "summary": "Kamu görevlilerinin uyması gereken etik ilkeleri ve sadakat esaslarını düzenler."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 1,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "657 sayılı Devlet Memurları Kanunu kapsamında sözleşmeli personel ve disiplin hükümleri yer almaktadır.",
+          "matches": [
+            {
+              "legislation_name": "DEVLET MEMURLARI KANUNU (657 sayılı kanun/cbk)",
+              "article": "null",
+              "relevance_score": 0.9,
+              "summary": "Sözleşmeli personelin disiplin cezaları ve görevden uzaklaştırılmasına ilişkin hükümler yer almaktadır."
+            }
+          ]
+        }
+      },
+      "Q02": {
+        "query": "657 Sayılı Kanun ticaret ve diğer kazanç getirici faaliyet yasağı",
+        "answerable": true,
+        "max_bm25_score": 28.6283,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "5237 sayılı Türk Ceza Kanunu",
+            "article": null,
+            "relevance_score": 0.6,
+            "summary": "Kamu görevlilerinin görevle ilgili suçları ve usulsüz kazanç elde etme durumlarını düzenler."
+          },
+          {
+            "legislation_name": "5176 sayılı Kamu Görevlileri Etik Kurulu Kurulması Kanunu",
+            "article": null,
+            "relevance_score": 0.5,
+            "summary": "Kamu görevlilerinin uyması gereken etik ilkeleri ve yasaklar çerçevesini belirler."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 1,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "657 sayılı Devlet Memurları Kanunu'nda ticaret ve kazanç getirici faaliyet yasağı açıkça yer almaktadır.",
+          "matches": [
+            {
+              "legislation_name": "DEVLET MEMURLARI KANUNU (657 sayılı kanun/cbk)",
+              "article": "Madde 28",
+              "relevance_score": 1.0,
+              "summary": "Memurların tacir veya esnaf sayılmalarını gerektirecek faaliyetlerde bulunmaları ve ticaret/sanayi müesseselerinde görev almaları yasaktır."
+            }
+          ]
+        }
+      },
+      "Q03": {
+        "query": "657 Sayılı Kanun memurluğa alınış genel ve özel şartlar",
+        "answerable": true,
+        "max_bm25_score": 19.1238,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "2 sayılı Genel Kadro ve Usulü Hakkında Cumhurbaşkanlığı Kararnamesi",
+            "article": null,
+            "relevance_score": 0.8,
+            "summary": "Kamu kurumlarındaki kadro ihdas usulü ve genel kadro düzenlemelerini içerir."
+          },
+          {
+            "legislation_name": "3 sayılı Üst Kademe Kamu Yöneticileri Atama Kararnamesi",
+            "article": null,
+            "relevance_score": 0.7,
+            "summary": "Üst kademe kamu yöneticilerinin atanma usul ve esaslarını düzenler."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 2,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "657 sayılı Kanun'un 48. maddesindeki genel şartlar ve ilan edilen pozisyonlara özgü özel şartlar bağlamda yer almaktadır.",
+          "matches": [
+            {
+              "legislation_name": "657 Sayılı Devlet Memurları Kanunu",
+              "article": "48",
+              "relevance_score": 1.0,
+              "summary": "Memurluğa alınışta aranan genel şartlar ve ilan edilen pozisyonlara özgü özel nitelikler belirtilmiştir."
+            },
+            {
+              "legislation_name": "Sözleşmeli Personel Çalıştırılmasına İlişkin Esaslar",
+              "article": "Ek 2 (b)",
+              "relevance_score": 0.9,
+              "summary": "Sözleşmeli personel alımında puan sırası ve mezuniyet durumuna göre alınacak kadro sayısı düzenlenmiştir."
+            }
+          ]
+        }
+      },
+      "Q04": {
+        "query": "657 Sayılı Kanun kademe ilerlemesi ve derece yükselmesi",
+        "answerable": true,
+        "max_bm25_score": 48.4361,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "2 sayılı Genel Kadro ve Usulü Hakkında Cumhurbaşkanlığı Kararnamesi",
+            "article": null,
+            "relevance_score": 0.7,
+            "summary": "Kamu kurumlarındaki kadro ve personel yönetimi esaslarını düzenler."
+          },
+          {
+            "legislation_name": "3 sayılı Üst Kademe Kamu Yöneticileri Atama Kararnamesi",
+            "article": null,
+            "relevance_score": 0.5,
+            "summary": "Üst kademe yöneticilerin atanma usul ve esaslarını belirler."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 2,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "657 sayılı Devlet Memurları Kanunu kapsamında kademe ilerlemesi ve derece yükselmesi ile ilgili çeşitli hükümler metinde yer almaktadır.",
+          "matches": [
+            {
+              "legislation_name": "DEVLET MEMURLARI KANUNU (657 sayılı kanun/cbk)",
+              "article": "36, 68, 108",
+              "relevance_score": 1.0,
+              "summary": "Hizmet sürelerine göre kademe ilerlemesi ve derece yükselmesi esasları ile özel durumlar (öğrenim, izin, kooperatif hizmeti) düzenlenmiştir."
+            },
+            {
+              "legislation_name": "DEVLET MEMURLARI KANUNU (657 sayılı kanun/cbk)",
+              "article": "Ortak Hükümler",
+              "relevance_score": 0.9,
+              "summary": "Öğrenim durumlarına göre memurların giriş ve yükselebilecekleri derece ve kademeleri tablo halinde belirtilmiştir."
+            }
+          ]
+        }
+      },
+      "Q05": {
+        "query": "657 Sayılı Kanun günlük çalışma saatleri ve hizmet süreleri",
+        "answerable": true,
+        "max_bm25_score": 21.3148,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "2 sayılı Genel Kadro ve Usulü Hakkında Cumhurbaşkanlığı Kararnamesi",
+            "article": null,
+            "relevance_score": 0.7,
+            "summary": "Kamu kurumlarındaki kadro ve personel usullerini düzenler."
+          },
+          {
+            "legislation_name": "4857 sayılı İş Kanunu",
+            "article": null,
+            "relevance_score": 0.6,
+            "summary": "Çalışma koşulları, çalışma süreleri ve izin haklarını düzenler."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 2,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "657 sayılı Kanun'a atıf yapan ve çalışma saatlerini düzenleyen hükümler bağlamda yer almaktadır.",
+          "matches": [
+            {
+              "legislation_name": "3289 sayılı Gençlik ve Spor Hizmetleri Kanunu",
+              "article": "MADDE 31",
+              "relevance_score": 1.0,
+              "summary": "Gençlik ve Spor Bakanlığı bünyesindeki personelin çalışma saatleri 657 sayılı Kanun dikkate alınarak Bakanlıkça düzenlenir."
+            },
+            {
+              "legislation_name": "657 sayılı Devlet Memurları Kanunu",
+              "article": "null",
+              "relevance_score": 0.9,
+              "summary": "Sözleşmeli personel istihdamı ve memur kadrolarına atanma süreçleri ile ilgili hükümler yer almaktadır."
+            }
+          ]
+        }
+      },
+      "Q06": {
+        "query": "5018 Sayılı Kanun kamu kaynağı ve mali kontrol ilkeleri",
+        "answerable": true,
+        "max_bm25_score": 21.8933,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "6085 sayılı Sayıştay Kanunu",
+            "article": null,
+            "relevance_score": 0.9,
+            "summary": "Sayıştay denetimi ve hesap yargılaması süreçlerini düzenler."
+          },
+          {
+            "legislation_name": "3628 sayılı Mal Bildiriminde Bulunulması, Rüşvet ve Yolsuzluklarla Mücadele Kanunu",
+            "article": null,
+            "relevance_score": 0.7,
+            "summary": "Yolsuzlukla mücadele ve kamu kaynaklarının korunması ilkelerini içerir."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 2,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "5018 sayılı Kanun kapsamında kamu mali yönetimi, mali kontrol ve kamu kaynaklarının kullanımı ilkeleri metinde yer almaktadır.",
+          "matches": [
+            {
+              "legislation_name": "KAMU MALÎ YÖNETİMİ VE KONTROL KANUNU (5018 sayılı kanun/cbk)",
+              "article": "Madde 1",
+              "relevance_score": 1.0,
+              "summary": "Kamu kaynaklarının etkili, ekonomik ve verimli bir şekilde elde edilmesi ve kullanılmasını, hesap verebilirliği ve malî saydamlığı sağlamayı amaçlar."
+            },
+            {
+              "legislation_name": "KAMU MALÎ YÖNETİMİ VE KONTROL KANUNU (5018 sayılı kanun/cbk)",
+              "article": "Madde 4 ve 5",
+              "relevance_score": 0.95,
+              "summary": "Kamu maliyesinin temel ilkeleri arasında malî disiplin, hesap verebilirlik ve ekonomik/sosyal verimlilik ilkeleri yer alır."
+            }
+          ]
+        }
+      },
+      "Q07": {
+        "query": "5018 Sayılı Kanun üst yöneticiler ve hesap verme sorumluluğu",
+        "answerable": true,
+        "max_bm25_score": 30.4406,
+        "unconstrained_matches_count": 2,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "6085 sayılı Sayıştay Kanunu",
+            "article": null,
+            "relevance_score": 0.9,
+            "summary": "Sayıştay denetimi ve hesap yargılaması süreçlerini düzenler."
+          },
+          {
+            "legislation_name": "3 sayılı Üst Kademe Kamu Yöneticileri Atama Kararnamesi",
+            "article": null,
+            "relevance_score": 0.8,
+            "summary": "Üst kademe kamu yöneticilerinin atanma usul ve esaslarını belirler."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 2,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "5018 sayılı Kanun ve 6085 sayılı Kanun'da hesap verme sorumluluğu ve üst yöneticilerin sorumlulukları açıkça düzenlenmiştir.",
+          "matches": [
+            {
+              "legislation_name": "KAMU MALÎ YÖNETİMİ VE KONTROL KANUNU (5018 sayılı kanun/cbk)",
+              "article": "Madde 8",
+              "relevance_score": 1.0,
+              "summary": "Kamu kaynağını elde eden ve kullananların kaynakların etkili, ekonomik, verimli ve hukuka uygun kullanılmasından ve muhasebeleştirilmesinden sorumlu olduklarını belirtir."
+            },
+            {
+              "legislation_name": "SAYIŞTAY KANUNU (6085 sayılı kanun/cbk)",
+              "article": "Madde 7",
+              "relevance_score": 0.95,
+              "summary": "Kamu kaynaklarının elde edilmesi ve kullanılmasında görevli olanların hesap verme sorumluluğunu ve kamu zararı durumundaki tazmin yükümlülüğünü düzenler."
+            }
+          ]
+        }
+      },
+      "Q08": {
+        "query": "5018 Sayılı Kanun bütçe ilkeleri ve ödenek kullanımı",
+        "answerable": true,
+        "max_bm25_score": 22.9977,
+        "unconstrained_matches_count": 1,
+        "unconstrained_matches": [
+          {
+            "legislation_name": "6098 sayılı Türk Borçlar Kanunu",
+            "article": null,
+            "relevance_score": 0.3,
+            "summary": "Borç ilişkileri ve ödeme esasları hakkında genel hükümler içerir."
+          }
+        ],
+        "grounded_abstained": false,
+        "grounded_matches_count": 2,
+        "grounded_response": {
+          "abstained": false,
+          "reason": "5018 sayılı Kanun kapsamında ödeneklerin tahsisi, kullanımı ve bütçe ilkeleri yer almaktadır.",
+          "matches": [
+            {
+              "legislation_name": "KAMU MALÎ YÖNETİMİ VE KONTROL KANUNU (5018 sayılı kanun/cbk)",
+              "article": "Madde 15",
+              "relevance_score": 1.0,
+              "summary": "Merkezî yönetim bütçe kanununun kapsamı, gelir-gider tahminleri ve bütçe düzeni yer alır."
+            },
+            {
+              "legislation_name": "KAMU MALÎ YÖNETİMİ VE KONTROL KANUNU (5018 sayılı kanun/cbk)",
+              "article": "Madde 34",
+              "relevance_score": 0.95,
+              "summary": "Ödeneklerin tahsis edildiği amaçlar doğrultusunda kullanımı ve cari yılda kullanılmayan ödeneklerin iptali düzenlenir."
+            }
+          ]
+        }
+      }
+    }
+  }
+}
