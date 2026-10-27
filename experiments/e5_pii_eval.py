@@ -50,7 +50,7 @@ def main():
             if e_type and e_val:
                 expected_set.add((e_type, e_val))
 
-        all_types = set([t for t, _ in detected_set] | [t for t, _ in expected_set])
+        all_types = {t for t, _ in detected_set} | {t for t, _ in expected_set}
         for t in all_types:
             if t not in per_type_counts:
                 per_type_counts[t] = {"tp": 0, "fp": 0, "fn": 0}
