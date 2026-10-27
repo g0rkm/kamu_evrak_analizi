@@ -204,7 +204,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 8 — E6: Performans ve tekrarlanabilirlik protokolü (P6)
+## [X] FAZ 8 — E6: Performans ve tekrarlanabilirlik protokolü (P6)
 
 **Amaç:** Çelişkili/tekil ölçümleri tekrarlanabilir protokole bağlamak — hakem §3.3, §6, Tablo 8, Tablo 7-E6.
 

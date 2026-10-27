@@ -112,3 +112,21 @@ Hakem raporundaki veri mahremiyeti (§2, §5.3) ve tekrarlanabilirlik (§4.2, §
 3. **Belge Uzunluğu Grupları ve Tekrarlı Ölçüm:**
    - Belgeler karakter/token uzunluğuna göre **kısa**, **orta** ve **uzun** gruplara ayrılır.
    - Her koşulda tekil sıcak koşu yerine çoklu tekrar (`N` tekrar) üzerinden **ortalama, standart sapma, medyan, p95, %95 güven aralığı (GA)** ile kısmi/başarısız analiz oranı ve tepe VRAM/RAM kullanımı raporlanır.
+
+---
+
+## 7. E6 Ölçüm Sonuçları (uygulanmış — `experiments/e6_latency.py`)
+
+`seed=42`, 3 uzunluk grubu × 3 belge × 5 tekrar, 0 başarısız istek. Ayrıntı: [`results/e6/latency.json`](../results/e6/latency.json), analiz: [`results/e6/e6_analysis.md`](../results/e6/e6_analysis.md).
+
+| Koşul (ortalama sn) | kısa | orta | uzun |
+|---|---:|---:|---:|
+| İzole sınıflandırıcı (sıcak) | 0,97 | 1,07 | 1,11 |
+| Eşzamanlı sınıflandırıcı (Classifier ‖ Analyzer) | 3,31 | 3,58 | 2,02 |
+| Aşama duvar-saati (max) | 4,79 | 5,48 | 6,10 |
+
+- **İki hız metriği ayrıştırıldı (§3.3):** izole sınıflandırma ~1,0 sn; aynı çağrı Analyzer ile eşzamanlı tek GPU paylaşımında ~3,3–3,6 sn (kısa/orta). README'deki ~1,3 sn (izole) ve 4,36 sn (eşzamanlı) farklı koşullardır; ikisi de doğrulandı.
+- **Soğuk başlangıç:** 7,65 sn (ağırlık yükleme dâhil) — sıcak çağrıdan ayrı raporlanır.
+- **Tepe VRAM:** 10.783 MiB (~10,5/12 GB; taban 1.489 MiB).
+- **Throughput:** sıralı 0,75 belge/sn → eşzamanlı 0,81 belge/sn (tek GPU'da eşzamanlılık ~%8 kazanç; hesaplama seri).
+- Ollama sürümü ölçüm anında `0.40.11` (künyedeki `v0.40.8`'den güncellenmiş).
