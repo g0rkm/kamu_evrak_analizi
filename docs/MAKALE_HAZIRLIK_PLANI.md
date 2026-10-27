@@ -187,7 +187,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 7 — E5(güvenlik) + PII/KVKK + Prompt injection doğrulaması (P5)
+## [X] FAZ 7 — E5(güvenlik) + PII/KVKK + Prompt injection doğrulaması (P5)
 
 **Amaç:** Güvenlik iddialarını saldırı testleriyle kanıtlamak — hakem §5.2, §5.3, Tablo 4.
 
