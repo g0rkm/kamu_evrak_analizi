@@ -222,7 +222,7 @@ docs/olcum_protokolu.md        # Performans ölçüm protokolü (Faz 8)
 
 ---
 
-## [ ] FAZ 9 — E5(taslak kalitesi) + Human-in-the-loop analizi (P5)
+## [X] FAZ 9 — E5(taslak kalitesi) + Human-in-the-loop analizi (P5)
 
 **Amaç:** Taslak güvenilirliğini ve insan denetimi katkısını veriyle göstermek — hakem §5.4, Tablo 7-E5.
 
