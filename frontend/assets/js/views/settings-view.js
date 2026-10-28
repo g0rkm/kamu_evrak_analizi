@@ -1,114 +1,140 @@
 import { ApiClient } from '../core/api.js';
+import { h, icon, replace } from '../core/dom.js';
+import { fmt } from '../core/vocabulary.js';
+
+const CAPABILITY_LABELS = {
+    file_analysis: 'Evrak analizi',
+    document_analysis: 'Evrak analizi',
+    pii_detection: 'Kişisel veri tespiti',
+    audit_logging: 'İşlem kaydı tutma',
+    backup: 'Yedekleme',
+    backup_restore: 'Yedekleme',
+    rate_limiting: 'İstek sınırlama',
+    soft_delete: 'Geçici silme',
+    bulk_operations: 'Toplu işlemler',
+    data_encryption: 'Veri şifreleme',
+    notifications: 'Bildirimler',
+    csv_export: 'Excel aktarımı',
+    json_export: 'JSON aktarımı',
+    timeline_view: 'Zaman çizelgesi',
+    duplicate_detection: 'Mükerrer evrak tespiti',
+    content_search: 'İçerik içinde arama',
+    templates: 'Şablonlar',
+    search: 'Arama',
+    comparison: 'Karşılaştırma',
+    rag_legislation: 'Mevzuat eşleştirme',
+    ocr: 'Görselden metin okuma',
+    human_in_loop: 'Memur onayı',
+};
+
+const ENV_LABELS = { development: 'Geliştirme', production: 'Üretim', test: 'Test', testing: 'Test' };
+const STATUS_LABELS = { ok: 'Sağlıklı', healthy: 'Sağlıklı', degraded: 'Kısıtlı', warning: 'Uyarılı' };
 
 export class SettingsView {
-  constructor(container) {
-    this._container = container;
-    this._api = new ApiClient();
-  }
+    title = 'Ayarlar';
 
-  async render() {
-    this._container.innerHTML = `
-      <div class="settings-wrapper">
-        <h2>Sistem Ayarları ve Bilgileri</h2>
-        <div id="settingsSections">
-          <div class="settings-section">
-            <h3>Sistem Raporu</h3>
-            <div id="systemReport" class="settings-content"><p>Yükleniyor...</p></div>
-          </div>
-          <div class="settings-section">
-            <h3>Sistem Yetenekleri</h3>
-            <div id="systemCapabilities" class="settings-content"><p>Yükleniyor...</p></div>
-          </div>
-          <div class="settings-section">
-            <h3>Yedekleme</h3>
-            <div class="settings-actions">
-              <button id="createBackupBtn" class="btn btn-primary">Yedek Oluştur</button>
-              <button id="listBackupsBtn" class="btn btn-secondary">Yedekleri Listele</button>
-            </div>
-            <div id="backupResult" class="settings-content"></div>
-          </div>
-        </div>
-      </div>`;
-    this._bindEvents();
-    await this._loadData();
-  }
-
-  _bindEvents() {
-    document.getElementById('createBackupBtn')?.addEventListener('click', () => this._createBackup());
-    document.getElementById('listBackupsBtn')?.addEventListener('click', () => this._listBackups());
-  }
-
-  async _loadData() {
-    try {
-      const [report, caps] = await Promise.all([
-        this._api.request('/system/report'),
-        this._api.request('/system/capabilities')
-      ]);
-      this._renderReport(report);
-      this._renderCapabilities(caps);
-    } catch (e) {
-      const reportEl = document.getElementById('systemReport');
-      if (reportEl) {
-        reportEl.innerHTML = '<p class="error-text">Veriler yüklenemedi.</p>';
-      }
+    constructor(container) {
+        this._container = container;
+        this._api = new ApiClient();
     }
-  }
 
-  _renderReport(report) {
-    const el = document.getElementById('systemReport');
-    if (!el || !report) return;
-    el.innerHTML = `
-      <div class="info-grid">
-        <div class="info-item"><strong>Versiyon:</strong> ${report.version || '-'}</div>
-        <div class="info-item"><strong>Ortam:</strong> ${report.environment || '-'}</div>
-        <div class="info-item"><strong>Durum:</strong> <span class="badge">${report.health?.status || '-'}</span></div>
-        <div class="info-item"><strong>Çalışma Süresi:</strong> ${this._formatUptime(report.uptime_seconds)}</div>
-        <div class="info-item"><strong>Toplam İstek:</strong> ${report.metrics?.total_requests || 0}</div>
-        <div class="info-item"><strong>Hata Oranı:</strong> ${((report.metrics?.error_rate || 0) * 100).toFixed(1)}%</div>
-      </div>`;
-  }
+    async render(root = this._container) {
+        this.reportGrid = h('div', { id: 'systemReport', style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 0 } },
+            h('div', { style: { padding: '10px 14px', color: 'var(--color-neutral-700)' } }, 'Yükleniyor…'));
+        this.capsGrid = h('div', { id: 'systemCapabilities', style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '8px 24px' } });
+        this.backupHint = h('p', { class: 'card-body', style: { fontSize: '14px' } },
+            'Tüm kayıtların bir kopyasını oluşturun. Son yedek: kontrol ediliyor…');
+        this.backupResult = h('div', { id: 'backupResult', style: { fontSize: '14px' } });
 
-  _renderCapabilities(caps) {
-    const el = document.getElementById('systemCapabilities');
-    if (!el || !caps || !caps.features) return;
-    const features = Object.entries(caps.features);
-    el.innerHTML = `<ul class="capability-list">${features.map(([k, v]) =>
-      `<li><span class="${v ? 'active' : 'inactive'}">${v ? '✓' : '✗'}</span> ${k.replace(/_/g, ' ')}</li>`
-    ).join('')}</ul>`;
-  }
+        const section = h('section', { style: { display: 'flex', flexDirection: 'column', gap: '24px' } },
+            h('div', { style: { borderBottom: '1px solid var(--color-divider)', paddingBottom: '18px' } },
+                h('div', { class: 'card-kicker' }, 'Sistem yöneticisi için'),
+                h('h1', { style: { margin: '4px 0 0', fontWeight: 400 } }, 'Ayarlar ve sistem bilgileri')),
+            h('div', { class: 'card', style: { padding: '22px', gap: '14px' } },
+                h('div', { class: 'card-title' }, 'Sistem raporu'),
+                this.reportGrid),
+            h('div', { class: 'card', style: { padding: '22px', gap: '14px' } },
+                h('div', { class: 'card-title' }, 'Açık özellikler'),
+                this.capsGrid),
+            h('div', { class: 'card', style: { padding: '22px', gap: '12px' } },
+                h('div', { class: 'card-title' }, 'Yedekleme'),
+                this.backupHint,
+                h('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap' } },
+                    h('button', { type: 'button', id: 'createBackupBtn', class: 'btn btn-primary', onClick: () => this._createBackup() }, 'Şimdi yedek al'),
+                    h('button', { type: 'button', id: 'listBackupsBtn', class: 'btn btn-secondary', onClick: () => this._listBackups() }, 'Önceki yedekler')),
+                this.backupResult));
 
-  async _createBackup() {
-    const el = document.getElementById('backupResult');
-    if (!el) return;
-    try {
-      const result = await this._api.request('/backup/create', { method: 'POST' });
-      el.innerHTML = `<p class="success-text">Yedek oluşturuldu: ${result.file_count || 0} dosya, ${((result.size_bytes || 0) / 1024).toFixed(1)} KB</p>`;
-    } catch (e) {
-      el.innerHTML = '<p class="error-text">Yedek oluşturulamadı.</p>';
+        replace(root, section);
+        await this._loadData();
     }
-  }
 
-  async _listBackups() {
-    const el = document.getElementById('backupResult');
-    if (!el) return;
-    try {
-      const data = await this._api.request('/backup/list');
-      if (!data.backups?.length) {
-        el.innerHTML = '<p>Henüz yedek yok.</p>';
-        return;
-      }
-      el.innerHTML = `<ul>${data.backups.map(b => `<li>${b.name} - ${((b.size_bytes || 0) / 1024).toFixed(1)} KB</li>`).join('')}</ul>`;
-    } catch (e) {
-      el.innerHTML = '<p class="error-text">Yedekler yüklenemedi.</p>';
+    async _loadData() {
+        const [report, caps, backups] = await Promise.allSettled([
+            this._api.request('/system/report'),
+            this._api.request('/system/capabilities'),
+            this._api.request('/backup/list'),
+        ]);
+        this._renderReport(report.status === 'fulfilled' ? report.value : {});
+        this._renderCapabilities(caps.status === 'fulfilled' ? caps.value : {});
+        if (backups.status === 'fulfilled') {
+            const list = backups.value?.backups || [];
+            this.backupHint.textContent = list.length
+                ? `Tüm kayıtların bir kopyasını oluşturun. Son yedek: ${list[list.length - 1].name}.`
+                : 'Tüm kayıtların bir kopyasını oluşturun. Son yedek: henüz alınmadı.';
+        } else {
+            this.backupHint.textContent = 'Tüm kayıtların bir kopyasını oluşturun. Son yedek: henüz alınmadı.';
+        }
     }
-  }
 
-  _formatUptime(seconds) {
-    if (!seconds) return '-';
-    if (seconds < 60) return Math.round(seconds) + 's';
-    if (seconds < 3600) return Math.round(seconds / 60) + 'dk';
-    const h = Math.floor(seconds / 3600);
-    const m = Math.round((seconds % 3600) / 60);
-    return h + 'sa ' + m + 'dk';
-  }
+    _renderReport(report) {
+        const errPct = ((report.metrics?.error_rate || 0) * 100).toLocaleString('tr-TR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        const items = [
+            ['Sürüm', report.version || '—'],
+            ['Ortam', ENV_LABELS[report.environment] || report.environment || '—'],
+            ['Durum', STATUS_LABELS[report.health?.status] || report.health?.status || '—'],
+            ['Çalışma süresi', fmt.seconds(report.uptime_seconds)],
+            ['Toplam istek', fmt.number(report.metrics?.total_requests || 0)],
+            ['Hata oranı', `%${errPct}`],
+        ];
+        replace(this.reportGrid, ...items.map(([k, v]) => h('div', { style: { padding: '10px 14px', borderLeft: '1px solid var(--color-divider)' } },
+            h('div', { style: { fontSize: '12px', color: 'var(--color-neutral-700)' } }, k),
+            h('div', { style: { fontSize: '16px' } }, v))));
+    }
+
+    _renderCapabilities(caps) {
+        const features = Object.entries(caps?.features || CAPABILITY_LABELS);
+        replace(this.capsGrid, ...features.map(([k, v]) => h('div', {
+            style: { display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px', padding: '6px 0', borderBottom: '1px solid var(--color-divider)', opacity: v === false ? 0.5 : 1 },
+        },
+            h('span', { style: { color: 'var(--color-accent)', display: 'inline-flex' } }, icon(v === false ? 'minus' : 'check')),
+            CAPABILITY_LABELS[k] || k.replace(/_/g, ' '))));
+    }
+
+    async _createBackup() {
+        try {
+            const result = await this._api.request('/backup/create', { method: 'POST', json: {} });
+            replace(this.backupResult, h('span', { class: 'success-text' },
+                `Yedek oluşturuldu (${result.file_count || 0} dosya, ${((result.size_bytes || 0) / 1024).toFixed(1)} KB).`));
+            await this._loadData();
+        } catch {
+            replace(this.backupResult, h('span', { class: 'error-text' }, 'Yedek oluşturulamadı.'));
+        }
+    }
+
+    async _listBackups() {
+        try {
+            const data = await this._api.request('/backup/list');
+            const list = data.backups || [];
+            if (!list.length) {
+                replace(this.backupResult, h('span', { class: 'muted' }, 'Henüz alınmış yedek yok.'));
+                return;
+            }
+            replace(this.backupResult, h('ul', { class: 'list' },
+                ...list.map((b) => h('li', { class: 'run-item' },
+                    h('span', null, b.name),
+                    h('span', { class: 'muted tnum' }, `${((b.size_bytes || 0) / 1024).toFixed(1)} KB`)))));
+        } catch {
+            replace(this.backupResult, h('span', { class: 'error-text' }, 'Yedekler okunamadı.'));
+        }
+    }
 }

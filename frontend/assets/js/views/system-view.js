@@ -1,5 +1,5 @@
-import { h, append, replace } from '../core/dom.js';
 import { ApiClient } from '../core/api.js';
+import { h, replace } from '../core/dom.js';
 
 export class SystemView {
     constructor(context) {
@@ -9,95 +9,74 @@ export class SystemView {
     }
 
     get title() {
-        return "Sistem Durumu";
+        return 'Sistem durumu';
     }
 
     render() {
         if (this.el) return this.el;
 
-        // Ana Konteyner
-        const container = h('div', { class: 'system-view-container' },
-            h('h2', { class: 'section-title' }, 'Sistem Durumu'),
-            
-            // 3 kart bölümü yan yana (CSS grid yapısı için sınıf)
-            this.gridSection = h('div', { class: 'system-grid-3' },
-                this.healthCard = h('div', { class: 'card health-card' },
-                    h('h3', {}, 'Sunucu Sağlığı'),
-                    this.healthContent = h('div', { class: 'card-content' }, 'Yükleniyor...')
-                ),
-                this.directoriesCard = h('div', { class: 'card directories-card' },
-                    h('h3', {}, 'Veri Dizinleri'),
-                    this.directoriesContent = h('div', { class: 'card-content' }, 'Yükleniyor...')
-                ),
-                this.sessionsCard = h('div', { class: 'card sessions-card' },
-                    h('h3', {}, 'Aktif Oturumlar'),
-                    this.sessionsContent = h('div', { class: 'card-content' }, 'Yükleniyor...')
-                )
-            ),
+        this.bannerTitle = h('div', { style: { fontFamily: 'var(--font-heading)', fontSize: '22px' } }, 'Sistem durumu kontrol ediliyor…');
+        this.bannerSub = h('div', { style: { fontSize: '14px', color: 'var(--color-neutral-700)' } }, 'Sunucu ve bağlı servisler sorgulanıyor.');
+        this.serverContent = h('div', { style: { display: 'grid', gridTemplateColumns: '1fr auto', gap: '6px', fontSize: '14px' } },
+            h('span', null, 'Disk kullanımı'), h('span', { style: { color: 'var(--color-neutral-700)' } }, '…'),
+            h('span', null, 'Bellek kullanımı'), h('span', { style: { color: 'var(--color-neutral-700)' } }, '…'));
+        this.directoriesContent = h('div', null, h('p', { class: 'card-body', style: { fontSize: '14px' } }, 'Yükleniyor…'));
+        this.sessionsContent = h('div', null, h('p', { class: 'card-body', style: { fontSize: '14px' } }, 'Yükleniyor…'));
+        this.tasksContent = h('div', null, h('p', { class: 'card-body', style: { fontSize: '14px' } }, 'Yükleniyor…'));
+        this.fileTypesContent = h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } });
 
-            // Alt bölüm kartları
-            this.bottomGrid = h('div', { class: 'system-grid-2' },
-                this.fileTypesCard = h('div', { class: 'card file-types-card' },
-                    h('h3', {}, 'Desteklenen Dosya Türleri'),
-                    this.fileTypesContent = h('div', { class: 'card-content' }, 'Yükleniyor...')
-                ),
-                this.tasksCard = h('div', { class: 'card tasks-card' },
-                    h('h3', {}, 'Zamanlayıcı Görevleri'),
-                    this.tasksContent = h('div', { class: 'card-content' }, 'Yükleniyor...')
-                )
-            )
-        );
+        this.el = h('section', { style: { display: 'flex', flexDirection: 'column', gap: '24px' } },
+            h('div', { style: { borderBottom: '1px solid var(--color-divider)', paddingBottom: '18px' } },
+                h('div', { class: 'card-kicker' }, 'Bilgi işlem personeli için'),
+                h('h1', { style: { margin: '4px 0 0', fontWeight: 400 } }, 'Sistem durumu'),
+                h('p', { style: { margin: '4px 0 0', color: 'var(--color-neutral-700)' } }, 'Sunucunun ve bağlı servislerin anlık durumu.')),
+            h('div', { class: 'card', style: { padding: '22px', flexDirection: 'row', alignItems: 'center', gap: '18px', borderColor: 'var(--color-accent)', flexWrap: 'wrap' } },
+                h('span', { style: { width: '12px', height: '12px', borderRadius: '50%', background: 'var(--color-accent)', flex: 'none' } }),
+                h('div', { style: { flex: 1, minWidth: '220px' } }, this.bannerTitle, this.bannerSub),
+                h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => this.show() }, 'Yeniden kontrol et')),
+            h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' } },
+                h('div', { class: 'card', style: { padding: '20px' } }, h('div', { class: 'card-title' }, 'Sunucu'), this.serverContent),
+                h('div', { class: 'card', style: { padding: '20px' } }, h('div', { class: 'card-title' }, 'Veri klasörleri'), this.directoriesContent),
+                h('div', { class: 'card', style: { padding: '20px' } }, h('div', { class: 'card-title' }, 'Açık oturumlar'), this.sessionsContent),
+                h('div', { class: 'card', style: { padding: '20px' } }, h('div', { class: 'card-title' }, 'Zamanlanmış görevler'), this.tasksContent)),
+            h('div', { class: 'card', style: { padding: '20px', gap: '12px' } },
+                h('div', { class: 'card-title' }, 'Desteklenen dosya türleri'),
+                this.fileTypesContent));
 
-        this.el = container;
         return this.el;
     }
 
     async show() {
-        if (!this.el) {
-            this.render();
-        }
-        // Tüm verileri paralel olarak fetch et ve kartları doldur
+        if (!this.el) this.render();
         await Promise.all([
             this.loadHealthData(),
             this.loadDirectories(),
             this.loadSessions(),
             this.loadFileTypes(),
-            this.loadTasks()
+            this.loadTasks(),
         ]);
     }
 
     async loadHealthData() {
         try {
             const data = await this.api.request('/system/health-check');
-            
-            let badgeClass = 'badge-secondary';
-            let statusText = data.status || 'Bilinmiyor';
-            
-            if (data.status === 'healthy') {
-                badgeClass = 'badge-success';
-                statusText = 'Sağlıklı';
-            } else if (data.status === 'degraded') {
-                badgeClass = 'badge-warning';
-                statusText = 'Hassas / Uyarılı';
-            } else if (data.status === 'unhealthy') {
-                badgeClass = 'badge-danger';
-                statusText = 'Sorunlu';
+            const disk = data.disk_usage_percent != null ? `%${data.disk_usage_percent}` : null;
+            const mem = data.memory_usage_percent != null ? `%${data.memory_usage_percent}` : null;
+            if (data.status === 'healthy' && disk && mem) {
+                this.bannerTitle.textContent = 'Tüm servisler çalışıyor';
+                this.bannerSub.textContent = 'Sunucu ve bağlı bileşenler normal şekilde yanıt veriyor.';
+            } else {
+                this.bannerTitle.textContent = 'Dikkat gerektiren bir durum var';
+                this.bannerSub.textContent = (!disk || !mem)
+                    ? 'Disk ve bellek bilgisi okunamıyor. Analizler çalışıyor; bilgi işlem birimine haber verin.'
+                    : `Sistem durumu: ${data.status || 'uyarı'}.`;
             }
-
-            const content = h('div', {},
-                h('div', { class: 'health-status-row' },
-                    h('span', {}, 'Durum: '),
-                    h('span', { class: `badge ${badgeClass}` }, statusText)
-                ),
-                h('div', { class: 'health-metrics' },
-                    h('p', {}, `Disk Kullanımı: ${data.disk_usage_percent ?? 'N/A'}%`),
-                    h('p', {}, `Bellek Kullanımı: ${data.memory_usage_percent ?? 'N/A'}%`)
-                )
-            );
-
-            replace(this.healthContent, content);
-        } catch (err) {
-            replace(this.healthContent, h('p', { class: 'error-text' }, 'Sağlık bilgileri yüklenemedi.'));
+            replace(this.serverContent,
+                h('span', null, 'Disk kullanımı'), h('span', { style: { color: 'var(--color-neutral-700)' } }, disk || 'Bilinmiyor'),
+                h('span', null, 'Bellek kullanımı'), h('span', { style: { color: 'var(--color-neutral-700)' } }, mem || 'Bilinmiyor'));
+        } catch {
+            this.bannerTitle.textContent = 'Sunucu durumu alınamadı';
+            this.bannerSub.textContent = 'Sağlık kontrolü uç noktasına ulaşılamadı.';
         }
     }
 
@@ -105,36 +84,17 @@ export class SystemView {
         try {
             const data = await this.api.request('/system/directories');
             const dirs = Array.isArray(data) ? data : (data.directories || []);
-
-            if (dirs.length === 0) {
-                replace(this.directoriesContent, h('p', {}, 'Kayıtlı dizin bulunamadı.'));
+            if (!dirs.length) {
+                replace(this.directoriesContent, h('p', { class: 'card-body', style: { fontSize: '14px' } }, 'Kayıtlı klasör bulunamadı.'));
                 return;
             }
-
-            const rows = dirs.map(dir => 
-                h('tr', {},
-                    h('td', {}, dir.name || dir.path || '-'),
-                    h('td', {}, dir.exists ? 'Var' : 'Yok'),
-                    h('td', {}, dir.writable ? 'Evet' : 'Hayır'),
-                    h('td', {}, String(dir.file_count ?? 0))
-                )
-            );
-
-            const table = h('table', { class: 'data-table' },
-                h('thead', {},
-                    h('tr', {},
-                        h('th', {}, 'İsim'),
-                        h('th', {}, 'Durum'),
-                        h('th', {}, 'Yazılabilir'),
-                        h('th', {}, 'Dosya Sayısı')
-                    )
-                ),
-                h('tbody', {}, rows)
-            );
-
-            replace(this.directoriesContent, table);
-        } catch (err) {
-            replace(this.directoriesContent, h('p', { class: 'error-text' }, 'Veri dizinleri yüklenemedi.'));
+            replace(this.directoriesContent, h('div', { style: { display: 'grid', gridTemplateColumns: '1fr auto', gap: '6px', fontSize: '14px' } },
+                ...dirs.flatMap((d) => [
+                    h('span', null, d.name || d.path || '—'),
+                    h('span', { style: { color: 'var(--color-neutral-700)' } }, d.exists ? `${d.file_count ?? 0} dosya` : 'Yok'),
+                ])));
+        } catch {
+            replace(this.directoriesContent, h('p', { class: 'error-text', style: { margin: 0, fontSize: '14px' } }, 'Veri klasörleri okunamadı.'));
         }
     }
 
@@ -142,36 +102,13 @@ export class SystemView {
         try {
             const data = await this.api.request('/sessions/active');
             const sessions = Array.isArray(data) ? data : (data.sessions || []);
-
-            const countInfo = h('p', { class: 'session-count-info' }, `Aktif Oturum Sayısı: ${sessions.length}`);
-
-            if (sessions.length === 0) {
-                replace(this.sessionsContent, h('div', {}, countInfo, h('p', {}, 'Aktif oturum bulunmuyor.')));
+            if (!sessions.length) {
+                replace(this.sessionsContent, h('p', { class: 'card-body', style: { fontSize: '14px' } }, 'Şu anda açık oturum yok.'));
                 return;
             }
-
-            const rows = sessions.map(session => 
-                h('tr', {},
-                    h('td', {}, session.id || session.session_id || '-'),
-                    h('td', {}, session.username || session.user || 'Anonim'),
-                    h('td', {}, session.ip_address || '-')
-                )
-            );
-
-            const table = h('table', { class: 'data-table' },
-                h('thead', {},
-                    h('tr', {},
-                        h('th', {}, 'Oturum ID'),
-                        h('th', {}, 'Kullanıcı'),
-                        h('th', {}, 'IP Adresi')
-                    )
-                ),
-                h('tbody', {}, rows)
-            );
-
-            replace(this.sessionsContent, h('div', {}, countInfo, table));
-        } catch (err) {
-            replace(this.sessionsContent, h('p', { class: 'error-text' }, 'Aktif oturumlar yüklenemedi.'));
+            replace(this.sessionsContent, h('p', { class: 'card-body', style: { fontSize: '14px' } }, `${sessions.length} açık oturum bulunuyor.`));
+        } catch {
+            replace(this.sessionsContent, h('p', { class: 'error-text', style: { margin: 0, fontSize: '14px' } }, 'Oturum bilgisi alınamadı.'));
         }
     }
 
@@ -179,20 +116,16 @@ export class SystemView {
         try {
             const data = await this.api.request('/supported-file-types');
             const types = Array.isArray(data) ? data : (data.types || data.extensions || []);
-
-            if (types.length === 0) {
-                replace(this.fileTypesContent, h('p', {}, 'Desteklenen dosya türü bulunamadı.'));
+            if (!types.length) {
+                replace(this.fileTypesContent, h('span', { class: 'muted' }, 'Tanımlı dosya türü yok.'));
                 return;
             }
-
-            const badges = types.map(type => 
-                h('span', { class: 'badge badge-outline' }, typeof type === 'string' ? type : (type.extension || type.name))
-            );
-
-            const badgeContainer = h('div', { class: 'badge-container' }, badges);
-            replace(this.fileTypesContent, badgeContainer);
-        } catch (err) {
-            replace(this.fileTypesContent, h('p', { class: 'error-text' }, 'Dosya türleri yüklenemedi.'));
+            replace(this.fileTypesContent, ...types.map((t) => {
+                const raw = typeof t === 'string' ? t : (t.extension || t.name || '');
+                return h('span', { class: 'tag tag-outline' }, raw.replace(/^\./, '').toUpperCase());
+            }));
+        } catch {
+            replace(this.fileTypesContent, h('span', { class: 'error-text' }, 'Dosya türleri yüklenemedi.'));
         }
     }
 
@@ -200,34 +133,17 @@ export class SystemView {
         try {
             const data = await this.api.request('/scheduler/tasks');
             const tasks = Array.isArray(data) ? data : (data.tasks || []);
-
-            if (tasks.length === 0) {
-                replace(this.tasksContent, h('p', {}, 'Tanımlı zamanlayıcı görevi bulunmuyor.'));
+            if (!tasks.length) {
+                replace(this.tasksContent, h('p', { class: 'card-body', style: { fontSize: '14px' } }, 'Tanımlı görev yok.'));
                 return;
             }
-
-            const rows = tasks.map(task => 
-                h('tr', {},
-                    h('td', {}, task.name || task.id || '-'),
-                    h('td', {}, task.status || '-'),
-                    h('td', {}, task.next_run || task.schedule || '-')
-                )
-            );
-
-            const table = h('table', { class: 'data-table' },
-                h('thead', {},
-                    h('tr', {},
-                        h('th', {}, 'Görev Adı'),
-                        h('th', {}, 'Durum'),
-                        h('th', {}, 'Sonraki Çalışma')
-                    )
-                ),
-                h('tbody', {}, rows)
-            );
-
-            replace(this.tasksContent, table);
-        } catch (err) {
-            replace(this.tasksContent, h('p', { class: 'error-text' }, 'Zamanlayıcı görevleri yüklenemedi.'));
+            replace(this.tasksContent, h('div', { style: { display: 'grid', gridTemplateColumns: '1fr auto', gap: '6px', fontSize: '14px' } },
+                ...tasks.flatMap((t) => [
+                    h('span', null, t.name || t.id || '—'),
+                    h('span', { style: { color: 'var(--color-neutral-700)' } }, t.status || 'Aktif'),
+                ])));
+        } catch {
+            replace(this.tasksContent, h('p', { class: 'error-text', style: { margin: 0, fontSize: '14px' } }, 'Görevler okunamadı.'));
         }
     }
 }

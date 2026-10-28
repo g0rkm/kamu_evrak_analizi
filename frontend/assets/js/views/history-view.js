@@ -1,4 +1,4 @@
-import { badge, debounce, emptyState, h, icon, meter, replace } from '../core/dom.js';
+import { debounce, h, icon, replace } from '../core/dom.js';
 import { confirmDialog } from '../core/ui.js';
 import { DRAFT_STATUS, fmt } from '../core/vocabulary.js';
 
@@ -15,82 +15,61 @@ export class HistoryView {
         this.items = [];
         this.total = 0;
         this.hasMore = false;
-        this.selectedIds = new Set();
         this.element = this.build();
     }
 
     build() {
-        this.statsRoot = h('div', { class: 'grid-4' });
-        this.distributionRoot = h('div');
-        this.tableRoot = h('div');
-        this.moreRoot = h('div', { class: 'row', style: { justifyContent: 'center' } });
+        this.statsRoot = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '18px' } });
+        this.tableRoot = h('div', { style: { overflowX: 'auto' } });
+        this.moreRoot = h('div', { style: { textAlign: 'center', fontSize: '13px', color: 'var(--color-neutral-700)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' } });
 
-        this.bulkDeleteBtn = h('button', {
-            type: 'button',
-            class: 'btn btn--danger btn--sm',
-            style: { display: 'none' },
-            onClick: () => this.bulkDelete(),
-        }, icon('trash-2'), ' Seçilenleri sil');
-
-        this.search = h('input', { class: 'input', type: 'search', id: 'historySearch', placeholder: 'Özet, başlık, tür veya anahtar kelimede ara…', 'aria-label': 'Arama',
-            onInput: debounce(() => this.load(), 300) });
-        this.typeFilter = h('select', { class: 'select', 'aria-label': 'Evrak türüne göre filtrele', onChange: () => this.load() },
-            h('option', { value: '' }, 'Tüm evrak türleri'),
+        this.search = h('input', {
+            class: 'input', type: 'search', id: 'historySearch',
+            placeholder: 'Başlık, kişi veya konu yazın…',
+            onInput: debounce(() => this.load(), 300),
+        });
+        this.typeFilter = h('select', { class: 'input', id: 'historyType', onChange: () => this.load() },
+            h('option', { value: '' }, 'Tümü'),
             [...this.vocab.documentTypes.values()].map((t) => h('option', { value: t.code }, t.label)));
-        this.statusFilter = h('select', { class: 'select', 'aria-label': 'Taslak durumuna göre filtrele', onChange: () => this.load() },
-            h('option', { value: '' }, 'Tüm durumlar'),
-            h('option', { value: 'pending' }, 'Bekliyor'),
+        this.statusFilter = h('select', { class: 'input', id: 'historyStatus', onChange: () => this.load() },
+            h('option', { value: '' }, 'Tümü'),
+            h('option', { value: 'pending' }, 'Onay bekliyor'),
             h('option', { value: 'approved' }, 'Onaylandı'),
-            h('option', { value: 'rejected' }, 'Reddedildi'),
-            h('option', { value: 'edited' }, 'Düzenlendi'));
-        this.sortSelect = h('select', { class: 'select', 'aria-label': 'Sıralama', onChange: () => this.load() },
+            h('option', { value: 'edited' }, 'Düzenlendi'),
+            h('option', { value: 'rejected' }, 'Reddedildi'));
+        this.sortSelect = h('select', { class: 'input', id: 'historySort', onChange: () => this.load() },
             h('option', { value: 'newest' }, 'En yeni önce'),
             h('option', { value: 'oldest' }, 'En eski önce'),
-            h('option', { value: 'confidence_desc' }, 'Güven (yüksek → düşük)'),
-            h('option', { value: 'confidence_asc' }, 'Güven (düşük → yüksek)'));
-        this.dateFromInput = h('input', { type: 'date', class: 'input input--sm', 'aria-label': 'Başlangıç tarihi', onChange: () => this.load() });
-        this.dateToInput = h('input', { type: 'date', class: 'input input--sm', 'aria-label': 'Bitiş tarihi', onChange: () => this.load() });
-        this.favoriteFilter = h('button', {
-            type: 'button',
-            class: 'btn btn--ghost btn--sm',
-            title: 'Sadece favoriler',
-            'aria-pressed': 'false',
-            onClick: () => {
-                const isActive = this.favoriteFilter.getAttribute('aria-pressed') === 'true';
-                this.favoriteFilter.setAttribute('aria-pressed', String(!isActive));
-                this.favoriteFilter.classList.toggle('btn--active', !isActive);
-                this.load();
-            },
-        }, icon('star'), ' Favoriler');
+            h('option', { value: 'confidence_desc' }, 'Eminlik (yüksek → düşük)'),
+            h('option', { value: 'confidence_asc' }, 'Eminlik (düşük → yüksek)'));
+        this.dateFromInput = h('input', { class: 'input', type: 'date', id: 'historyFrom', onChange: () => this.load() });
+        this.dateToInput = h('input', { class: 'input', type: 'date', id: 'historyTo', onChange: () => this.load() });
+        this.favoriteCheckbox = h('input', { type: 'checkbox', onChange: () => this.load() });
 
-        return h('div', { class: 'stack' },
-            h('div', { class: 'view-header' },
-                h('div', null, h('h1', null, 'Analiz geçmişi'), h('p', null, 'Önceki analizleri arayın, açın ve memur kararlarını takip edin.')),
-                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportAll() }, icon('download'), 'Tümünü dışa aktar'),
-                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.exportCsv() }, icon('download'), 'CSV indir'),
-                this.bulkDeleteBtn,
-                h('button', { type: 'button', class: 'btn btn--danger-ghost btn--sm', onClick: () => this.clearAll() }, icon('trash'), 'Tümünü sil'),
-                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.importRecords() }, icon('upload'), 'İçe aktar'),
-                h('button', { type: 'button', class: 'btn btn--secondary', onClick: () => this.refresh() }, icon('refresh'), 'Yenile')),
+        return h('section', { style: { display: 'flex', flexDirection: 'column', gap: '28px' } },
+            h('div', { class: 'page-bar' },
+                h('div', null,
+                    h('h1', { style: { margin: 0, fontWeight: 400 } }, 'Geçmiş evraklar'),
+                    h('p', { style: { margin: '4px 0 0', color: 'var(--color-neutral-700)' } }, 'Daha önce incelenen evrakları bulun, açın ve onay durumlarını takip edin.')),
+                h('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } },
+                    h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => this.exportCsv() }, 'Excel olarak indir'),
+                    h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => this.navigate('#export') }, 'Diğer aktarım seçenekleri'))),
             this.statsRoot,
-            h('section', { class: 'card' },
-                h('div', { class: 'card__header' }, h('h2', { class: 'card__title' }, icon('chart'), 'Evrak türü dağılımı')),
-                h('div', { class: 'card__body' }, this.distributionRoot)),
-            h('section', { class: 'card' },
-                h('div', { class: 'card__header' }, h('h2', { class: 'card__title' }, icon('history'), 'Kayıtlar')),
-                h('div', { class: 'card__body stack' },
-                    h('div', { class: 'toolbar' },
-                        h('label', { class: 'input-icon' }, h('span', { class: 'sr-only' }, 'Geçmişte ara'), icon('search'), this.search),
-                        this.typeFilter,
-                        this.statusFilter,
-                        this.sortSelect,
-                        h('span', { class: 'small muted' }, 'Tarih:'),
-                        this.dateFromInput,
-                        this.dateToInput,
-                        this.favoriteFilter),
-                    this.tableRoot,
-                    this.moreRoot)),
-        );
+            h('div', { class: 'card', style: { padding: '24px', gap: '18px' } },
+                h('div', { class: 'split', style: { display: 'grid', gridTemplateColumns: 'minmax(220px, 2fr) repeat(3, minmax(140px, 1fr))', gap: '12px' } },
+                    h('div', { class: 'field' }, h('label', { for: 'historySearch' }, 'Ara'), this.search),
+                    h('div', { class: 'field' }, h('label', { for: 'historyType' }, 'Evrak türü'), this.typeFilter),
+                    h('div', { class: 'field' }, h('label', { for: 'historyStatus' }, 'Durum'), this.statusFilter),
+                    h('div', { class: 'field' }, h('label', { for: 'historySort' }, 'Sıralama'), this.sortSelect)),
+                h('div', { style: { display: 'flex', gap: '12px', alignItems: 'flex-end', flexWrap: 'wrap' } },
+                    h('div', { class: 'field', style: { width: '180px' } }, h('label', { for: 'historyFrom' }, 'Başlangıç tarihi'), this.dateFromInput),
+                    h('div', { class: 'field', style: { width: '180px' } }, h('label', { for: 'historyTo' }, 'Bitiş tarihi'), this.dateToInput),
+                    h('label', { class: 'radio', style: { marginLeft: '4px', paddingBottom: '8px' } },
+                        this.favoriteCheckbox,
+                        h('span', { class: 'dot', style: { borderRadius: '3px' } }),
+                        'Yalnızca favoriler')),
+                this.tableRoot,
+                this.moreRoot));
     }
 
     async show() {
@@ -112,38 +91,36 @@ export class HistoryView {
 
     renderStats(stats) {
         const reviewed = (stats.by_draft_status?.approved || 0) + (stats.by_draft_status?.edited || 0);
-        const tile = (iconName, label, value, title = '', extra = null) => h('div', { class: 'stat', title }, h('div', { class: 'stat__label' }, icon(iconName), label, extra), h('div', { class: 'stat__value' }, value));
-        replace(this.statsRoot,
-            tile('file', 'Toplam analiz', fmt.number(stats.total), `${stats.total} analiz kaydı`, h('span', { class: 'badge' }, `Toplam: ${stats.total}`)),
-            tile('shieldCheck', 'Ortalama güven', fmt.percent(stats.avg_confidence), `Ort: %${Math.round(stats.avg_confidence * 100)} · Min: %${Math.round((stats.min_confidence || 0) * 100)} · Maks: %${Math.round((stats.max_confidence || 0) * 100)}`),
-            tile('clock', 'Ortalama süre', fmt.seconds(stats.avg_processing_time), `Ort: ${stats.avg_processing_time.toFixed(1)}s · Min: ${(stats.min_processing_time || 0).toFixed(1)}s · Maks: ${(stats.max_processing_time || 0).toFixed(1)}s`),
-            tile('userCheck', 'Onaylanan taslak', fmt.number(reviewed), `Onaylanmış: ${stats.by_draft_status?.approved || 0}, Düzenlenmiş: ${stats.by_draft_status?.edited || 0}`));
-
-        const entries = Object.entries(stats.by_type || {}).sort((a, b) => b[1] - a[1]);
-        if (!entries.length) {
-            replace(this.distributionRoot, h('p', { class: 'muted' }, 'Henüz veri yok.'));
-            return;
-        }
-        const max = entries[0][1];
-        replace(this.distributionRoot, entries.slice(0, 10).map(([code, count]) => h('div', { class: 'bar-row' },
-            h('span', null, this.vocab.documentType(code)),
-            meter(count / max),
-            h('span', { class: 'bar-row__value' }, `${count} · ${fmt.percent(count / stats.total)}`))));
+        const pending = stats.by_draft_status?.pending ?? Math.max(0, (stats.total || 0) - reviewed);
+        const avgConf = stats.avg_confidence || 0;
+        const confHint = avgConf >= 0.8 ? 'Yüksek düzey' : avgConf >= 0.5 ? 'Orta düzey' : 'Kontrol önerilir';
+        const cards = [
+            ['Toplam evrak', fmt.number(stats.total), 'Bugüne kadar incelenen'],
+            ['Ortalama eminlik', fmt.percent(avgConf), confHint],
+            ['Ortalama süre', fmt.seconds(stats.avg_processing_time), 'Evrak başına'],
+            ['Onaylanan taslak', fmt.number(reviewed), `${pending} taslak onay bekliyor`],
+        ];
+        replace(this.statsRoot, ...cards.map(([label, value, hint]) => h('div', {
+            class: 'card', style: { padding: '20px', textAlign: 'center', alignItems: 'center', gap: '4px' },
+        },
+            h('div', { class: 'card-kicker' }, label),
+            h('div', { style: { fontFamily: 'var(--font-heading)', fontSize: '38px', lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' } }, value),
+            h('div', { style: { fontSize: '12px', color: 'var(--color-neutral-700)' } }, hint))));
     }
 
     async load({ append = false } = {}) {
-        const query = { 
-            q: this.search.value.trim(), 
-            documentType: this.typeFilter.value, 
-            draftStatus: this.statusFilter.value, 
-            sort: this.sortSelect.value, 
-            limit: PAGE_SIZE, 
+        const query = {
+            q: this.search.value.trim(),
+            documentType: this.typeFilter.value,
+            draftStatus: this.statusFilter.value,
+            sort: this.sortSelect.value,
+            limit: PAGE_SIZE,
             offset: append ? this.items.length : 0,
             dateFrom: this.dateFromInput?.value || undefined,
             dateTo: this.dateToInput?.value || undefined,
-            favorite: this.favoriteFilter?.getAttribute('aria-pressed') === 'true' ? true : undefined,
+            favorite: this.favoriteCheckbox?.checked ? true : undefined,
         };
-        if (!append) replace(this.tableRoot, emptyState({ iconName: 'loader', title: 'Yükleniyor…', compact: true }));
+        if (!append) replace(this.tableRoot, h('div', { class: 'loading-line' }, 'Yükleniyor…'));
         try {
             const page = await this.api.history(query);
             this.items = append ? [...this.items, ...page.items] : page.items;
@@ -156,7 +133,7 @@ export class HistoryView {
     }
 
     renderTable() {
-        const filtered = this.search.value.trim() || this.typeFilter.value || this.statusFilter.value || this.dateFromInput?.value || this.dateToInput?.value || this.favoriteFilter?.getAttribute('aria-pressed') === 'true';
+        const filtered = this.search.value.trim() || this.typeFilter.value || this.statusFilter.value || this.dateFromInput?.value || this.dateToInput?.value || this.favoriteCheckbox?.checked;
         const sort = this.sortSelect?.value || 'newest';
         if (sort === 'oldest') this.items.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
         else if (sort === 'confidence_desc') this.items.sort((a, b) => b.confidence_score - a.confidence_score);
@@ -164,65 +141,50 @@ export class HistoryView {
         else this.items.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 
         if (!this.items.length) {
-            replace(this.tableRoot, filtered
-                ? emptyState({ iconName: 'search', title: 'Sonuç bulunamadı', text: 'Arama ölçütlerini değiştirip tekrar deneyin.', compact: true })
-                : emptyState({ iconName: 'history', title: 'Henüz analiz yapılmadı', text: 'İlk analizinizi yaptığınızda burada listelenecek.', compact: true,
-                    action: h('a', { class: 'btn btn--primary', href: '#/analiz' }, icon('sparkles'), 'Analiz başlat') }));
+            replace(this.tableRoot, h('div', { class: 'empty empty--compact' },
+                h('h3', null, filtered ? 'Sonuç bulunamadı' : 'Henüz evrak incelenmedi'),
+                h('p', null, filtered ? 'Arama ölçütlerini değiştirip tekrar deneyin.' : 'İlk evrakınızı analiz ettiğinizde burada listelenecek.')));
             replace(this.moreRoot);
             return;
         }
 
         const rows = this.items.map((item) => {
             const status = DRAFT_STATUS[item.draft_status] || DRAFT_STATUS.pending;
-            const open = () => this.navigate(`#/analiz/${item.id}`);
-            const remove = h('button', {
-                type: 'button', class: 'btn btn--danger-ghost btn--icon btn--sm', 'aria-label': 'Kaydı sil', title: 'Sil',
-                onClick: (e) => { e.stopPropagation(); this.remove(item); },
-            }, icon('trash'));
+            const open = () => this.navigate(`#/analiz/${encodeURIComponent(item.id)}`);
             return h('tr', { class: 'is-clickable', tabindex: 0, onClick: open, onKeydown: (e) => { if (e.key === 'Enter') open(); } },
-                h('td', { class: 'small muted', style: { whiteSpace: 'nowrap' }, 'data-optional': true, title: fmt.date(item.timestamp) }, fmt.relativeTime(item.timestamp)),
-                h('td', null,
-                    h('div', { style: { fontWeight: 600, overflowWrap: 'anywhere' } }, item.source_name || 'Adsız analiz'),
-                    item.summary ? h('div', { class: 'small muted', style: { maxWidth: '520px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, item.summary) : null),
-                h('td', null, badge(this.vocab.documentType(item.document_type), 'primary')),
-                h('td', { style: { minWidth: '90px' }, 'data-optional': true }, h('div', { class: 'small' }, fmt.percent(item.confidence_score)), meter(item.confidence_score)),
-                h('td', null, badge(status.label, status.variant), item.status === 'partial' ? badge('Kısmi', 'warning') : null),
-                h('td', { class: 'small muted', 'data-optional': true }, fmt.seconds(item.processing_time)),
-                h('td', null, remove));
+                h('td', { style: { whiteSpace: 'nowrap', color: 'var(--color-neutral-700)', verticalAlign: 'top', paddingTop: '14px' }, title: fmt.date(item.timestamp) }, fmt.relativeTime(item.timestamp)),
+                h('td', { style: { padding: '12px 9px' } },
+                    h('div', { style: { fontSize: '15px', overflowWrap: 'anywhere' } }, item.source_name || 'Adsız evrak'),
+                    item.summary ? h('div', { style: { fontSize: '12px', color: 'var(--color-neutral-700)', maxWidth: '420px' } }, item.summary) : null),
+                h('td', { style: { verticalAlign: 'top', paddingTop: '14px' } }, h('span', { class: 'tag tag-neutral' }, this.vocab.documentType(item.document_type))),
+                h('td', { style: { verticalAlign: 'top', paddingTop: '14px', fontVariantNumeric: 'tabular-nums' } }, fmt.percent(item.confidence_score)),
+                h('td', { style: { verticalAlign: 'top', paddingTop: '14px' } }, h('span', { class: 'tag tag-accent', style: { whiteSpace: 'nowrap' } }, status.label)),
+                h('td', { style: { verticalAlign: 'top', paddingTop: '8px', textAlign: 'right', whiteSpace: 'nowrap' } },
+                    h('button', { type: 'button', class: 'btn btn-ghost', onClick: (e) => { e.stopPropagation(); open(); } }, 'Aç'),
+                    h('button', { type: 'button', class: 'btn btn-ghost', style: { color: 'var(--color-neutral-700)' }, onClick: (e) => { e.stopPropagation(); this.remove(item); } }, 'Sil')));
         });
 
-        const headers = [['Tarih', true], ['Evrak'], ['Tür'], ['Güven', true], ['Taslak'], ['Süre', true], ['']];
-        replace(this.tableRoot, h('div', { class: 'table-wrap' }, h('table', { class: 'table' },
-            h('thead', null, h('tr', null, headers.map(([t, optional]) => h('th', { scope: 'col', 'data-optional': optional || null }, t)))),
-            h('tbody', null, rows))));
+        replace(this.tableRoot, h('table', { class: 'table' },
+            h('thead', null, h('tr', null,
+                h('th', null, 'Tarih'),
+                h('th', null, 'Evrak'),
+                h('th', null, 'Tür'),
+                h('th', null, 'Eminlik'),
+                h('th', null, 'Durum'),
+                h('th', { style: { textAlign: 'right' } }, 'İşlem'))),
+            h('tbody', null, rows)));
 
         replace(this.moreRoot,
-            h('span', { class: 'small muted' }, `${fmt.number(this.total)} kayıttan ${fmt.number(this.items.length)} tanesi gösteriliyor`,
-                this.total > PAGE_SIZE ? ` · Sayfa ${Math.ceil(this.items.length / PAGE_SIZE)}/${Math.ceil(this.total / PAGE_SIZE)}` : ''),
+            h('div', null, `${fmt.number(this.total)} kayıttan ${fmt.number(this.items.length)} tanesi gösteriliyor`),
             this.hasMore
-                ? h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.load({ append: true }) }, 'Daha fazla yükle')
+                ? h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => this.load({ append: true }) }, 'Daha fazla yükle')
                 : null);
     }
 
-    async bulkDelete() {
-        if (this.selectedIds.size === 0) return;
-        if (!confirm(`${this.selectedIds.size} kaydı silmek istediğinizden emin misiniz?`)) return;
-        try {
-            const result = await this.api.bulkDelete([...this.selectedIds]);
-            this.toaster.success(`${result.deleted} kayıt silindi.`);
-            this.selectedIds.clear();
-            this.bulkDeleteBtn.style.display = 'none';
-            this.load();
-        } catch (e) {
-            this.toaster.error(`Silme başarısız: ${e.message}`);
-        }
-    }
-
     async remove(item) {
-        if (!confirm('Bu analiz kaydını silmek istediğinizden emin misiniz?')) return;
         const ok = await confirmDialog({
-            title: 'Analiz kaydı silinsin mi?',
-            message: `"${item.source_name || 'Adsız analiz'}" kaydı ve memur kararları kalıcı olarak silinecek. Bu işlem geri alınamaz.`,
+            title: 'Evrak kaydı silinsin mi?',
+            message: `"${item.source_name || 'Adsız evrak'}" kaydı ve memur kararları kalıcı olarak silinecek.`,
             confirmText: 'Sil',
             danger: true,
         });
@@ -236,66 +198,10 @@ export class HistoryView {
         }
     }
 
-    async exportAll() {
-        try {
-            const data = await this.api.exportAllRecords();
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `gecmis_${new Date().toISOString().slice(0, 10)}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            this.toaster.success(`${data.total || data.records?.length || 0} kayıt dışa aktarıldı.`);
-        } catch (error) {
-            this.toaster.error(`Dışa aktarma başarısız: ${error.message}`);
-        }
-    }
-
-    async clearAll() {
-        if (!this.items.length) { this.toaster.info('Silinecek kayıt yok.'); return; }
-        const ok = await confirmDialog({
-            title: 'Tüm kayıtlar silinsin mi?',
-            message: `${this.total} analiz kaydı kalıcı olarak silinecek. Bu işlem geri alınamaz.`,
-            confirmText: 'Tümünü sil',
-            danger: true,
-        });
-        if (!ok) return;
-        try {
-            const result = await this.api.clearAllRecords();
-            this.toaster.success(`${result.deleted} kayıt silindi.`);
-            await this.refresh();
-        } catch (error) {
-            this.toaster.error(`Silme başarısız: ${error.message}`);
-        }
-    }
-
-    async importRecords() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.json';
-        input.onchange = async () => {
-            const file = input.files[0];
-            if (!file) return;
-            try {
-                const text = await file.text();
-                const data = JSON.parse(text);
-                const records = Array.isArray(data) ? data : (data.records || data.items || []);
-                if (!records.length) { this.toaster.info('Dosyada kayıt bulunamadı.'); return; }
-                const resp = await this.api.importRecords(records);
-                this.toaster.success(`${resp.imported} kayıt içe aktarıldı.`);
-                await this.refresh();
-            } catch (error) {
-                this.toaster.error(`İçe aktarma başarısız: ${error.message}`);
-            }
-        };
-        input.click();
-    }
-
     async exportCsv() {
         try {
             const resp = await fetch('/api/history/export-csv');
-            if (!resp.ok) throw new Error('CSV indirilemedi.');
+            if (!resp.ok) throw new Error('Tablo indirilemedi.');
             const blob = await resp.blob();
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -303,9 +209,9 @@ export class HistoryView {
             a.download = `gecmis_${new Date().toISOString().slice(0, 10)}.csv`;
             a.click();
             URL.revokeObjectURL(url);
-            this.toaster.success('CSV dosyası indirildi.');
+            this.toaster.success('Excel tablosu indirildi.');
         } catch (error) {
-            this.toaster.error(`CSV indirme başarısız: ${error.message}`);
+            this.toaster.error(`İndirme başarısız: ${error.message}`);
         }
     }
 }

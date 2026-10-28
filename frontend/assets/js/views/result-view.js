@@ -36,21 +36,13 @@ class ReviewController {
 }
 
 function confidenceText(score) {
-    if (score >= 0.8) return 'Yüksek güven — sonuçlar kendi içinde tutarlı.';
-    if (score >= 0.5) return 'Orta güven — düzeltmeleri ve uyarıları gözden geçirin.';
-    return 'Düşük güven — sonuçları göndermeden önce elle kontrol edin.';
-}
-
-function confidenceVariant(score) {
-    return score >= 0.8 ? 'success' : score >= 0.5 ? 'warning' : 'danger';
+    if (score >= 0.8) return 'Yüksek düzey: sonuçlar kendi içinde tutarlı.';
+    if (score >= 0.5) return 'Orta düzey: sistem bu sonuçtan tam emin değil. Lütfen evrak türünü ve birimi kontrol edin.';
+    return 'Düşük düzey: sonuçları göndermeden önce elle kontrol edin.';
 }
 
 function panel(label, ...children) {
     return h('div', { class: 'panel' }, h('div', { class: 'panel__label' }, label), ...children);
-}
-
-function sectionTitle(iconName, text, extra = null) {
-    return h('h3', { class: 'section-title' }, icon(iconName), text, extra);
 }
 
 export class ResultView {
@@ -59,11 +51,11 @@ export class ResultView {
         this.vocab = vocab;
         this.toaster = toaster;
         this.onNewAnalysis = onNewAnalysis;
-        this.activeTab = 'overview';
+        this.activeTab = 'content';
     }
 
     render(result, { historyId = null, review = null } = {}) {
-        if (historyId !== this.historyId) this.activeTab = 'overview';
+        if (historyId !== this.historyId) this.activeTab = 'content';
         this.result = result;
         this.historyId = historyId;
         this.review = new ReviewController({ api: this.api, toaster: this.toaster, historyId, review });
@@ -74,7 +66,6 @@ export class ResultView {
         const attention = validation.filter((v) => v.severity !== 'info').length;
         const analysis = result.analysis || {};
 
-        // Sekme her açıldığında yeniden çizilir; önceki sekmenin abonelikleri bırakılır.
         this.tabSubscriptions = [];
         const scoped = (render) => () => {
             this.tabSubscriptions.forEach((unsubscribe) => unsubscribe());
@@ -83,60 +74,120 @@ export class ResultView {
         };
 
         const tabs = new Tabs([
-            { id: 'overview', label: 'Genel Bakış', icon: 'file', render: scoped(() => this.renderOverview()) },
             { id: 'content', label: 'İçerik', icon: 'network', count: (analysis.missing_fields || []).length || null, countVariant: 'warning', render: scoped(() => this.renderContent()) },
             { id: 'legislation', label: 'Mevzuat', icon: 'scale', count: (analysis.legislation_matches || []).length || null, render: scoped(() => this.renderLegislation()) },
-            { id: 'draft', label: 'Yazı Taslağı', icon: 'pen', render: scoped(() => this.renderDraft()) },
             { id: 'routing', label: 'Yönlendirme', icon: 'route', render: scoped(() => this.renderRouting()) },
             { id: 'validation', label: 'Doğrulama', icon: 'shieldCheck', count: attention || null, countVariant: 'warning', render: scoped(() => this.renderValidation()) },
-            { id: 'trace', label: 'İşlem Kaydı', icon: 'terminal', render: scoped(() => this.renderTrace()) },
+            { id: 'trace', label: 'İşlem kaydı', icon: 'terminal', render: scoped(() => this.renderTrace()) },
         ], { initial: this.activeTab, onChange: (id) => { this.activeTab = id; } });
 
-        return h('div', { class: 'stack' },
-            this.renderHero(),
+        const detailsToggle = h('details', { class: 'card', style: { padding: '18px 22px' } },
+            h('summary', { style: { cursor: 'pointer', fontFamily: 'var(--font-heading)', fontSize: '18px' } },
+                'Ayrıntılı inceleme (varlıklar, mevzuat, yönlendirme, doğrulama)'),
+            tabs.element);
+
+        return h('div', { style: { display: 'flex', flexDirection: 'column', gap: '24px' } },
             result.status === 'partial' ? this.renderPartialWarning() : null,
-            h('section', { class: 'card', 'aria-label': 'Analiz ayrıntıları' }, tabs.element),
-        );
+            this.renderStageDone(),
+            detailsToggle);
     }
 
-    // ── Başlık ───────────────────────────────────────────
+    // ── Tasarımdaki iki sütunlu sonuç görünümü ───────────
 
-    renderHero() {
+    renderStageDone() {
         const { result, vocab } = this;
-        const classification = result.analysis?.classification || {};
-        const routing = result.routing;
+        const analysis = result.analysis || {};
+        const classification = analysis.classification || {};
+        const routing = result.routing || {};
+        const matches = analysis.legislation_matches || [];
         const score = result.confidence_score || 0;
-        const unitValue = h('div', { class: 'kpi__value' }, this.currentUnit() || '—');
-        this.review.subscribe(() => { unitValue.textContent = this.currentUnit() || '—'; });
+        const pct = Math.round(score * 100);
 
-        const copyButton = h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.copySummary(), title: 'Özeti panoya kopyala' }, icon('copy'), 'Kopyala');
-        const printButton = h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => window.print(), title: 'Sayfayı yazdır' }, icon('printer'), 'Yazdır');
-        const exportButton = h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.exportJson() }, icon('download'), 'JSON indir');
-        const newButton = h('button', { type: 'button', class: 'btn btn--primary btn--sm', onClick: () => this.onNewAnalysis?.() }, icon('plus'), 'Yeni analiz');
+        const docTypeText = vocab.documentType(classification.document_type)
+            + (classification.sub_type ? ` (${classification.sub_type})` : '');
+        const prioText = routing.priority ? vocab.priority(routing.priority) : 'Normal';
+        const unitSpan = h('span', null, this.currentUnit() || '—');
+        this.review.subscribe(() => { unitSpan.textContent = this.currentUnit() || '—'; });
+        const legText = matches.length ? matches.map((m) => m.legislation_name).join(', ') : 'Belirtilmedi';
 
-        return h('section', { class: 'card card__body', 'aria-label': 'Analiz özeti' },
-            h('div', { class: 'result-hero' },
+        const leftCol = h('div', { style: { display: 'flex', flexDirection: 'column', gap: '16px' } },
+            h('div', { class: 'card', style: { padding: '22px', gap: '14px' } },
+                h('div', { class: 'card-kicker' }, 'Sonuç özeti'),
+                h('div', { style: { fontFamily: 'var(--font-heading)', fontSize: '22px', lineHeight: 1.2, overflowWrap: 'anywhere' } },
+                    result.source_name || 'İncelenen evrak'),
+                h('div', { style: { display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '8px 16px', fontSize: '14px' } },
+                    h('span', { style: { color: 'var(--color-neutral-700)' } }, 'Evrak türü'), h('span', null, docTypeText),
+                    h('span', { style: { color: 'var(--color-neutral-700)' } }, 'Öncelik'), h('span', null, prioText),
+                    h('span', { style: { color: 'var(--color-neutral-700)' } }, 'Gönderilecek birim'), unitSpan,
+                    h('span', { style: { color: 'var(--color-neutral-700)' } }, 'İlgili mevzuat'), h('span', null, legText))),
+            h('div', { class: 'card', style: { padding: '22px', gap: '10px' } },
+                h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' } },
+                    h('div', { class: 'card-kicker' }, 'Sistemin eminlik düzeyi'),
+                    h('span', { style: { fontFamily: 'var(--font-heading)', fontSize: '24px', fontVariantNumeric: 'tabular-nums' } }, `%${pct}`)),
+                h('div', { style: { height: '5px', background: 'var(--color-neutral-200)', borderRadius: '3px', overflow: 'hidden' } },
+                    h('div', { style: { width: `${pct}%`, height: '100%', background: 'var(--color-accent)' } })),
+                h('p', { style: { margin: 0, fontSize: '13px', color: 'var(--color-neutral-800)', textWrap: 'pretty' } }, confidenceText(score))),
+            h('div', { class: 'card', style: { padding: '22px', gap: '8px' } },
+                h('div', { class: 'card-kicker' }, 'Kısa özet'),
+                h('p', { style: { margin: 0, fontSize: '14px', textAlign: 'justify', hyphens: 'auto' } },
+                    analysis.summary || 'Bu evrak için özet metin üretilemedi.')));
+
+        return h('div', { class: 'split', style: { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.5fr)', gap: '24px', alignItems: 'start' } },
+            leftCol,
+            this.renderDraftCard());
+    }
+
+    renderDraftCard() {
+        const draft = this.result.draft;
+        const statusTag = h('span', { class: 'tag tag-outline' }, 'Onayınızı bekliyor');
+        const body = h('div', { class: 'letter__body', style: { whiteSpace: 'pre-wrap' } }, this.draftBody());
+        const today = new Date(this.result.created_at || Date.now()).toLocaleDateString('tr-TR');
+
+        const letter = draft
+            ? h('article', { class: 'letter', 'aria-label': 'Hazırlanan cevap yazısı taslağı' }, body)
+            : h('div', { class: 'letter' }, 'Bu evrak için cevap yazısı taslağı üretilemedi.');
+
+        const editor = h('div', { class: 'stack-sm', hidden: true });
+        const actions = h('div', { style: { display: 'flex', gap: '10px', justifyContent: 'flex-end', flexWrap: 'wrap' } });
+
+        const syncBar = () => {
+            const status = this.review.state.draft_status || 'pending';
+            const info = DRAFT_STATUS[status] || DRAFT_STATUS.pending;
+            statusTag.textContent = status === 'pending' ? 'Onayınızı bekliyor' : info.label;
+            statusTag.className = status === 'approved' ? 'tag tag-accent' : 'tag tag-outline';
+            body.textContent = this.draftBody();
+
+            replace(actions,
+                h('button', { type: 'button', class: 'btn btn-ghost', onClick: () => this.onNewAnalysis?.() }, 'Yeni evrak'),
+                draft ? h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => this.openEditor(letter, editor) }, 'Düzenle') : null,
+                h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => window.print() }, 'Yazdır'),
+                draft && status !== 'approved'
+                    ? h('button', {
+                        type: 'button', class: 'btn btn-primary', style: { padding: '10px 22px' },
+                        onClick: () => this.review.update({ draft_status: 'approved' }, 'Taslak onaylandı.'),
+                    }, 'Taslağı onayla')
+                    : draft
+                        ? h('button', {
+                            type: 'button', class: 'btn btn-secondary',
+                            onClick: () => this.review.update({ draft_status: 'pending', reject_reason: null }),
+                        }, 'Onayı geri al')
+                        : null);
+        };
+        syncBar();
+        this.review.subscribe(syncBar);
+
+        return h('div', { class: 'card', style: { padding: '28px', gap: '16px' } },
+            h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap' } },
                 h('div', null,
-                    h('h2', { class: 'result-hero__title' }, result.source_name || 'Analiz sonucu'),
-                    h('div', { class: 'result-hero__meta' },
-                        h('span', null, icon('clock'), fmt.date(result.created_at)),
-                        h('span', null, icon(result.input_kind === 'file' ? 'file' : 'type'), result.input_kind === 'file' ? 'Dosya' : 'Metin girişi'),
-                        h('span', null, icon('refresh'), `${fmt.seconds(result.processing_time)} sürdü`),
-                    ),
-                ),
-                h('div', { class: 'result-hero__actions' }, copyButton, printButton, exportButton, newButton),
-            ),
-            h('div', { class: 'kpis' },
-                h('div', { class: 'kpi' }, h('div', { class: 'kpi__label' }, 'Evrak türü'),
-                    h('div', { class: 'kpi__value' }, badge(vocab.documentType(classification.document_type), 'primary', 'badge--lg'))),
-                h('div', { class: 'kpi' }, h('div', { class: 'kpi__label' }, 'Genel güven'),
-                    h('div', { class: 'kpi__value kpi__value--lg' }, fmt.percent(score)),
-                    meter(score, confidenceVariant(score))),
-                h('div', { class: 'kpi' }, h('div', { class: 'kpi__label' }, 'Öncelik'),
-                    h('div', { class: 'kpi__value' }, routing ? badge(vocab.priority(routing.priority), vocab.priorityVariant(routing.priority), 'badge--lg') : '—')),
-                h('div', { class: 'kpi', title: this.currentUnit() || '' }, h('div', { class: 'kpi__label' }, 'Hedef birim'), unitValue),
-            ),
-        );
+                    h('div', { class: 'card-kicker' }, 'Hazırlanan cevap yazısı taslağı'),
+                    h('div', { style: { fontSize: '12px', color: 'var(--color-neutral-700)' } }, 'Göndermeden önce okuyup düzenleyebilirsiniz.')),
+                statusTag),
+            this.leakEntries.length ? h('div', { class: 'alert alert--danger' }, icon('shield'),
+                h('div', null, h('strong', null, 'Taslakta kişisel veri tespit edildi'),
+                    this.leakEntries.map((e) => `${this.vocab.piiLabel(e.field.split('.')[1])} (${e.original_value})`).join(', '))) : null,
+            editor,
+            letter,
+            actions);
     }
 
     renderPartialWarning() {
@@ -144,59 +195,45 @@ export class ResultView {
             h('div', null,
                 h('strong', null, 'Analiz kısmen tamamlandı'),
                 'Bazı adımlar başarısız oldu; bu bölümlerde varsayılan değerler gösteriliyor.',
-                h('ul', null, (this.result.warnings || []).map((w) => h('li', null, w))),
-            ));
+                h('ul', null, (this.result.warnings || []).map((w) => h('li', null, w)))));
     }
 
-    // ── Sekmeler ─────────────────────────────────────────
-
-    renderOverview() {
-        const analysis = this.result.analysis || {};
-        const cls = analysis.classification || {};
-        const keywords = analysis.keywords || [];
-
-        return h('div', { class: 'stack' },
-            panel('Yönetici özeti', h('p', null, analysis.summary || 'Özet oluşturulamadı.')),
-            h('div', { class: 'grid-2' },
-                panel('Sınıflandırma',
-                    h('div', { class: 'row' }, badge(this.vocab.documentType(cls.document_type), 'primary'),
-                        cls.sub_type ? h('span', { class: 'muted small' }, cls.sub_type) : null),
-                    h('div', { class: 'row', style: { marginTop: '10px' } },
-                        h('div', { class: 'grow' }, meter(cls.confidence, confidenceVariant(cls.confidence || 0))),
-                        h('strong', { class: 'small' }, fmt.percent(cls.confidence))),
-                    h('p', { class: 'small muted', style: { marginTop: '8px' } }, cls.reasoning || 'Gerekçe belirtilmedi.')),
-                panel('Anahtar kelimeler',
-                    keywords.length ? h('div', { class: 'chips' }, keywords.map((k) => h('span', { class: 'chip' }, icon('tag'), k)))
-                        : h('p', { class: 'muted' }, 'Anahtar kelime bulunamadı.')),
-            ),
-            h('div', null, sectionTitle('alert', 'Dikkat gerektirenler'), this.renderAttentionList()),
-        );
+    draftBody() {
+        return this.review.state.draft_body ?? this.result.draft?.rendered_text ?? this.result.draft?.body ?? '';
     }
 
-    renderAttentionList() {
-        const analysis = this.result.analysis || {};
-        const corrections = (this.result.validation || []).filter((v) => v.severity === 'correction');
-        const critical = (analysis.missing_fields || []).filter((m) => m.is_critical);
-        const items = [];
-
-        if (this.leakEntries.length) {
-            items.push(['danger', 'shield', 'Taslak yazıda kişisel veri var', 'Göndermeden önce taslaktaki kişisel verileri çıkarın.']);
-        }
-        if (critical.length) {
-            items.push(['warning', 'alert', `${critical.length} kritik eksik alan`, critical.map((m) => fieldLabel(m.field_name)).join(', ')]);
-        }
-        if (this.piiEntries.length) {
-            items.push(['pii', 'shield', `${this.piiEntries.length} kişisel veri tespit edildi`, 'KVKK kapsamında paylaşım öncesi maskeleme gerekebilir.']);
-        }
-        if (corrections.length) {
-            items.push(['info', 'wrench', `Muhakeme ajanı ${corrections.length} düzeltme yaptı`, corrections.map((c) => this.vocab.validationField(c.field)).join(', ')]);
-        }
-        if (!items.length) {
-            return h('div', { class: 'alert alert--success' }, icon('circleCheck'), h('div', null, h('strong', null, 'Kritik bir sorun tespit edilmedi'), 'Yine de taslak ve yönlendirmeyi onaylamadan önce gözden geçirin.'));
-        }
-        return h('div', { class: 'stack-sm' }, items.map(([variant, iconName, title, text]) =>
-            h('div', { class: `alert alert--${variant}` }, icon(iconName), h('div', null, h('strong', null, title), text))));
+    openEditor(letter, editor) {
+        const textarea = h('textarea', { class: 'input', id: 'draftEditor', value: this.draftBody(), style: { minHeight: '260px', fontSize: '14px', lineHeight: 1.7 } });
+        const close = () => { editor.hidden = true; letter.hidden = false; editor.replaceChildren(); };
+        replace(editor,
+            h('div', { class: 'field' }, h('label', { for: 'draftEditor' }, 'Taslak metnini düzenleyin'), textarea),
+            h('div', { class: 'row' },
+                h('button', {
+                    type: 'button', class: 'btn btn-primary',
+                    onClick: async () => { if (await this.review.update({ draft_status: 'edited', draft_body: textarea.value }, 'Düzenlenen taslak kaydedildi.')) close(); },
+                }, 'Kaydet'),
+                h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => this.maskDraftPii(textarea) }, 'Kişisel verileri gizle'),
+                h('button', { type: 'button', class: 'btn btn-ghost', onClick: close }, 'Vazgeç')));
+        letter.hidden = true;
+        editor.hidden = false;
+        textarea.focus();
     }
+
+    async maskDraftPii(textarea) {
+        try {
+            const { masked_text, pii_count } = await this.api.maskPii(textarea.value);
+            if (pii_count === 0) {
+                this.toaster.info('Taslakta kişisel veri bulunamadı.');
+                return;
+            }
+            textarea.value = masked_text;
+            this.toaster.success(`${pii_count} kişisel veri maskelendi.`);
+        } catch (error) {
+            this.toaster.error(`Maskeleme başarısız: ${error.message}`);
+        }
+    }
+
+    // ── Ayrıntı sekmeleri ────────────────────────────────
 
     renderContent() {
         const analysis = this.result.analysis || {};
@@ -205,7 +242,7 @@ export class ResultView {
 
         const entityTable = entities.length
             ? h('div', { class: 'table-wrap' }, h('table', { class: 'table' },
-                h('thead', null, h('tr', null, h('th', { scope: 'col' }, 'Tür'), h('th', { scope: 'col' }, 'Değer'), h('th', { scope: 'col' }, 'Konum'))),
+                h('thead', null, h('tr', null, h('th', null, 'Tür'), h('th', null, 'Değer'), h('th', null, 'Konum'))),
                 h('tbody', null, entities.map((e) => h('tr', null,
                     h('td', null, badge(this.vocab.entity(e.entity_type))),
                     h('td', null, e.value || '—'),
@@ -214,7 +251,7 @@ export class ResultView {
 
         const missingList = missing.length
             ? h('ul', { class: 'list' }, missing.map((m) => h('li', { class: 'list-item' },
-                h('span', { class: 'list-item__icon', style: { color: m.is_critical ? 'var(--danger)' : 'var(--warning)' } }, icon('alert')),
+                h('span', { class: 'list-item__icon' }, icon('alert')),
                 h('div', { class: 'grow' },
                     h('div', { class: 'row' }, h('span', { class: 'list-item__title' }, fieldLabel(m.field_name)),
                         m.is_critical ? badge('Kritik', 'danger') : badge('Önerilen', 'warning')),
@@ -222,163 +259,22 @@ export class ResultView {
             : h('div', { class: 'alert alert--success' }, icon('circleCheck'), 'Eksik alan tespit edilmedi.');
 
         return h('div', { class: 'stack' },
-            h('div', null, sectionTitle('network', 'Çıkarılan bilgiler'), entityTable),
-            h('div', null, sectionTitle('alert', 'Eksik alanlar'), missingList),
-        );
+            h('div', null, h('div', { class: 'card-kicker', style: { marginBottom: '8px' } }, 'Çıkarılan bilgiler'), entityTable),
+            h('div', null, h('div', { class: 'card-kicker', style: { marginBottom: '8px' } }, 'Eksik alanlar'), missingList));
     }
 
     renderLegislation() {
         const matches = this.result.analysis?.legislation_matches || [];
         if (!matches.length) {
-            return emptyState({ iconName: 'scale', title: 'Eşleşen mevzuat bulunamadı', text: 'Evrak metniyle ilişkilendirilebilecek bir mevzuat tespit edilmedi.' });
+            return emptyState({ iconName: 'scale', title: 'Eşleşen mevzuat bulunamadı', text: 'Evrak metniyle ilişkilendirilebilecek bir mevzuat tespit edilmedi.', compact: true });
         }
         return h('div', { class: 'stack-sm' }, matches.map((m) => h('article', { class: 'legislation-card' },
             h('div', { class: 'row row--between' },
                 h('h4', null, m.legislation_name, m.article ? h('span', { class: 'muted small' }, ` · Madde ${String(m.article).replace(/^madde\s*/i, '')}`) : null),
                 badge(`İlgi ${fmt.percent(m.relevance_score)}`, 'primary')),
             meter(m.relevance_score),
-            m.summary ? h('p', { class: 'small', style: { color: 'var(--text-2)' } }, m.summary) : null)));
+            m.summary ? h('p', { class: 'small', style: { margin: 0 } }, m.summary) : null)));
     }
-
-    // ── Taslak ───────────────────────────────────────────
-
-    draftBody() {
-        return this.review.state.draft_body ?? this.result.draft?.body ?? '';
-    }
-
-    draftPlainText() {
-        const d = this.result.draft || {};
-        return [d.formal_greeting, d.subject ? `Konu: ${d.subject}` : '', this.draftBody(), d.closing, d.attachments_note ? `Ek: ${d.attachments_note}` : '']
-            .filter(Boolean).join('\n\n');
-    }
-
-    renderDraft() {
-        const draft = this.result.draft;
-        if (!draft) {
-            return emptyState({ iconName: 'pen', title: 'Taslak oluşturulamadı', text: 'Bu evrak için yazı taslağı üretilemedi. İşlem Kaydı sekmesinden ayrıntılara bakabilirsiniz.' });
-        }
-
-        const body = h('div', { class: 'letter__body' }, this.draftBody());
-        const letter = h('article', { class: 'letter', 'aria-label': 'Resmî yazı taslağı' },
-            draft.formal_greeting ? h('div', null, draft.formal_greeting) : null,
-            draft.subject ? h('div', { class: 'letter__subject' }, h('strong', null, 'Konu: '), draft.subject) : null,
-            body,
-            draft.closing ? h('div', { class: 'letter__closing' }, draft.closing) : null,
-            draft.attachments_note ? h('div', { class: 'letter__attachments' }, h('strong', null, 'Ek: '), draft.attachments_note) : null,
-        );
-
-        const editor = h('div', { class: 'stack-sm', hidden: true });
-        const reviewBar = h('div', { class: 'review-bar' });
-        const renderBar = () => replace(reviewBar, ...this.draftReviewControls(letter, editor));
-        renderBar();
-        this.tabSubscriptions.push(this.review.subscribe(() => { body.textContent = this.draftBody(); renderBar(); }));
-
-        return h('div', { class: 'stack' },
-            reviewBar,
-            this.leakEntries.length ? h('div', { class: 'alert alert--danger' }, icon('shield'),
-                h('div', null, h('strong', null, 'Taslakta kişisel veri tespit edildi'),
-                    this.leakEntries.map((e) => `${this.vocab.piiLabel(e.field.split('.')[1])} (${e.original_value})`).join(', '))) : null,
-            h('div', { class: 'row small muted' }, icon('tag'), 'Yazı türü:', badge(this.vocab.draftType(draft.draft_type), 'primary')),
-            editor,
-            letter,
-            draft.tone_check ? h('div', { class: 'alert alert--info' }, icon('info'), h('div', null, h('strong', null, 'Üslup değerlendirmesi'), draft.tone_check)) : null,
-        );
-    }
-
-    draftReviewControls(letter, editor) {
-        const status = this.review.state.draft_status || 'pending';
-        const info = DRAFT_STATUS[status] || DRAFT_STATUS.pending;
-        const controls = [
-            h('span', { class: 'row grow' }, icon('userCheck'), h('strong', null, 'Memur kararı'), badge(info.label, info.variant)),
-        ];
-
-        if (status === 'pending') {
-            controls.push(
-                h('button', { type: 'button', class: 'btn btn--success btn--sm', onClick: () => this.review.update({ draft_status: 'approved' }, 'Taslak onaylandı.') }, icon('check'), 'Onayla'),
-                h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.openEditor(letter, editor) }, icon('pencil'), 'Düzenle'),
-                h('button', { type: 'button', class: 'btn btn--danger-ghost btn--sm', onClick: () => this.openRejectForm(editor) }, icon('x'), 'Reddet'),
-            );
-        } else {
-            if (status === 'rejected' && this.review.state.reject_reason) {
-                controls.push(h('span', { class: 'small muted' }, `Gerekçe: ${this.review.state.reject_reason}`));
-            }
-            controls.push(h('button', {
-                type: 'button', class: 'btn btn--ghost btn--sm',
-                onClick: () => this.review.update({ draft_status: 'pending', reject_reason: null }),
-            }, icon('refresh'), 'Kararı geri al'));
-        }
-
-        controls.push(
-            h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', title: 'Kopyala', 'aria-label': 'Taslağı kopyala', onClick: () => this.copyDraft() }, icon('copy')),
-            h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', title: 'Metin olarak indir', 'aria-label': 'Taslağı metin olarak indir', onClick: () => downloadBlob(this.draftPlainText(), `taslak_${this.historyId || 'yazi'}.txt`, 'text/plain;charset=utf-8') }, icon('download')),
-            h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', title: 'Yazdır', 'aria-label': 'Taslağı yazdır', onClick: () => window.print() }, icon('printer')),
-            h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', title: 'PII Maskele', 'aria-label': 'Taslaktaki kişisel verileri maskele', onClick: () => this.maskDraftPii(letter) }, icon('shield')),
-        );
-        return controls;
-    }
-
-    openEditor(letter, editor) {
-        const textarea = h('textarea', { class: 'textarea', id: 'draftEditor', value: this.draftBody(), style: { minHeight: '320px', fontFamily: 'var(--font-serif)', fontSize: '15px' } });
-        const close = () => { editor.hidden = true; letter.hidden = false; editor.replaceChildren(); };
-        replace(editor,
-            h('label', { class: 'field__label', for: 'draftEditor' }, 'Taslak metnini düzenleyin'),
-            textarea,
-            h('div', { class: 'row' },
-                h('button', {
-                    type: 'button', class: 'btn btn--primary btn--sm',
-                    onClick: async () => { if (await this.review.update({ draft_status: 'edited', draft_body: textarea.value }, 'Düzenlenen taslak kaydedildi.')) close(); },
-                }, icon('check'), 'Kaydet ve onayla'),
-                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: close }, 'Vazgeç')),
-        );
-        letter.hidden = true;
-        editor.hidden = false;
-        textarea.focus();
-    }
-
-    openRejectForm(editor) {
-        const input = h('input', { class: 'input', id: 'rejectReason', placeholder: 'Örn. Muhatap kurum hatalı, ilgi tarihi eksik', maxlength: 1000 });
-        const close = () => { editor.hidden = true; editor.replaceChildren(); };
-        replace(editor,
-            h('label', { class: 'field__label', for: 'rejectReason' }, 'Reddetme gerekçesi'),
-            input,
-            h('div', { class: 'row' },
-                h('button', {
-                    type: 'button', class: 'btn btn--danger btn--sm',
-                    onClick: async () => {
-                        if (!input.value.trim()) { input.setAttribute('aria-invalid', 'true'); input.focus(); return; }
-                        if (await this.review.update({ draft_status: 'rejected', reject_reason: input.value.trim() }, 'Taslak reddedildi.')) close();
-                    },
-                }, 'Reddi kaydet'),
-                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: close }, 'Vazgeç')),
-        );
-        editor.hidden = false;
-        input.focus();
-    }
-
-    async copyDraft() {
-        try {
-            await navigator.clipboard.writeText(this.draftPlainText());
-            this.toaster.success('Taslak panoya kopyalandı.');
-        } catch {
-            this.toaster.error('Panoya erişilemedi. Metni seçip elle kopyalayın.');
-        }
-    }
-
-    async maskDraftPii(letter) {
-        try {
-            const currentBody = this.draftBody();
-            const { masked_text, pii_count } = await this.api.maskPii(currentBody);
-            if (pii_count === 0) {
-                this.toaster.info('Taslakta kişisel veri bulunamadı.');
-                return;
-            }
-            await this.review.update({ draft_status: 'edited', draft_body: masked_text }, `${pii_count} kişisel veri maskelendi.`);
-        } catch (error) {
-            this.toaster.error(`PII maskeleme başarısız: ${error.message}`);
-        }
-    }
-
-    // ── Yönlendirme ──────────────────────────────────────
 
     currentUnit() {
         return this.review.state.routing_unit || this.result.routing?.target_unit || '';
@@ -387,10 +283,10 @@ export class ResultView {
     renderRouting() {
         const routing = this.result.routing;
         if (!routing) {
-            return emptyState({ iconName: 'route', title: 'Yönlendirme yapılamadı', text: 'Bu evrak için birim önerisi üretilemedi.' });
+            return emptyState({ iconName: 'route', title: 'Yönlendirme yapılamadı', text: 'Bu evrak için birim önerisi üretilemedi.', compact: true });
         }
-        const unitText = h('p', { style: { fontSize: '17px', fontWeight: 700, marginTop: '2px' } }, this.currentUnit());
-        const reviewBar = h('div', { class: 'review-bar' });
+        const unitText = h('p', { style: { fontFamily: 'var(--font-heading)', fontSize: '20px', margin: 0 } }, this.currentUnit());
+        const reviewBar = h('div', { class: 'review-bar', style: { justifyContent: 'flex-start' } });
         const changeArea = h('div', { class: 'stack-sm', hidden: true });
         const renderBar = () => replace(reviewBar, ...this.routingReviewControls(changeArea));
         renderBar();
@@ -402,59 +298,53 @@ export class ResultView {
             reviewBar,
             changeArea,
             h('div', { class: 'grid-2' },
-                panel('Hedef birim', h('div', { class: 'row' }, h('span', { style: { color: 'var(--primary)', fontSize: '20px' } }, icon('building')), unitText)),
+                panel('Hedef birim', unitText),
                 panel('Öncelik', badge(this.vocab.priority(routing.priority), this.vocab.priorityVariant(routing.priority), 'badge--lg'))),
-            panel('Gerekçe', h('p', null, routing.reasoning || 'Gerekçe belirtilmedi.')),
+            panel('Gerekçe', h('p', { style: { margin: 0 } }, routing.reasoning || 'Gerekçe belirtilmedi.')),
             h('div', { class: 'grid-2' },
-                panel('Alternatif birimler', alternatives.length ? h('div', { class: 'chips' }, alternatives.map((u) => h('span', { class: 'chip' }, u))) : h('p', { class: 'muted' }, 'Alternatif önerilmedi.')),
+                panel('Alternatif birimler', alternatives.length ? h('div', { class: 'chips' }, alternatives.map((u) => h('span', { class: 'chip' }, u))) : h('p', { class: 'muted', style: { margin: 0 } }, 'Alternatif önerilmedi.')),
                 panel('Birimden beklenen eylemler', actions.length
-                    ? h('ul', { class: 'list' }, actions.map((a) => h('li', { class: 'row', style: { alignItems: 'flex-start' } }, h('span', { style: { color: 'var(--primary)', marginTop: '2px' } }, icon('arrowRight')), a)))
-                    : h('p', { class: 'muted' }, 'Belirtilmiş bir eylem yok.'))),
-        );
+                    ? h('ul', { class: 'list' }, actions.map((a) => h('li', { class: 'list-item' }, a)))
+                    : h('p', { class: 'muted', style: { margin: 0 } }, 'Belirtilmiş bir eylem yok.'))));
     }
 
     routingReviewControls(changeArea) {
         const status = this.review.state.routing_status || 'pending';
         const info = ROUTING_STATUS[status] || ROUTING_STATUS.pending;
-        const controls = [h('span', { class: 'row grow' }, icon('userCheck'), h('strong', null, 'Yönlendirme kararı'), badge(info.label, info.variant))];
+        const controls = [h('span', { class: 'row grow' }, h('strong', null, 'Yönlendirme kararı:'), badge(info.label, info.variant))];
         if (status === 'pending') {
             controls.push(
-                h('button', { type: 'button', class: 'btn btn--success btn--sm', onClick: () => this.review.update({ routing_status: 'approved' }, 'Yönlendirme onaylandı.') }, icon('check'), 'Onayla'),
-                h('button', { type: 'button', class: 'btn btn--secondary btn--sm', onClick: () => this.openUnitChooser(changeArea) }, icon('compare'), 'Birimi değiştir'),
-            );
+                h('button', { type: 'button', class: 'btn btn-primary btn--sm', onClick: () => this.review.update({ routing_status: 'approved' }, 'Yönlendirme onaylandı.') }, 'Onayla'),
+                h('button', { type: 'button', class: 'btn btn-secondary btn--sm', onClick: () => this.openUnitChooser(changeArea) }, 'Birimi değiştir'));
         } else {
             controls.push(h('button', {
-                type: 'button', class: 'btn btn--ghost btn--sm',
+                type: 'button', class: 'btn btn-ghost btn--sm',
                 onClick: () => this.review.update({ routing_status: 'pending', routing_unit: null }),
-            }, icon('refresh'), 'Kararı geri al'));
+            }, 'Kararı geri al'));
         }
         return controls;
     }
 
     openUnitChooser(area) {
         const current = this.currentUnit();
-        const select = h('select', { class: 'select', id: 'unitSelect' },
+        const select = h('select', { class: 'input', id: 'unitSelect' },
             h('option', { value: '' }, 'Birim seçin…'),
             this.vocab.units.map((u) => h('option', { value: u.label, selected: u.label === current }, u.label)));
         const close = () => { area.hidden = true; area.replaceChildren(); };
         replace(area,
-            h('label', { class: 'field__label', for: 'unitSelect' }, 'Evrakın yönlendirileceği birim'),
-            select,
+            h('div', { class: 'field' }, h('label', { for: 'unitSelect' }, 'Evrakın yönlendirileceği birim'), select),
             h('div', { class: 'row' },
                 h('button', {
-                    type: 'button', class: 'btn btn--primary btn--sm',
+                    type: 'button', class: 'btn btn-primary btn--sm',
                     onClick: async () => {
                         if (!select.value) { select.focus(); return; }
                         if (await this.review.update({ routing_status: 'changed', routing_unit: select.value }, 'Yönlendirme güncellendi.')) close();
                     },
                 }, 'Kaydet'),
-                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: close }, 'Vazgeç')),
-        );
+                h('button', { type: 'button', class: 'btn btn-ghost btn--sm', onClick: close }, 'Vazgeç')));
         area.hidden = false;
         select.focus();
     }
-
-    // ── Doğrulama ────────────────────────────────────────
 
     renderValidation() {
         const validation = this.result.validation || [];
@@ -463,101 +353,55 @@ export class ResultView {
         const warnings = validation.filter((v) => v.severity === 'warning').length;
 
         const header = h('div', { class: 'panel row', style: { gap: '16px' } },
-            scoreRing(score, 'Genel güven skoru'),
+            scoreRing(score, 'Eminlik'),
             h('div', { class: 'grow' },
-                h('div', { class: 'panel__label' }, 'Genel güven skoru'),
-                h('p', null, confidenceText(score)),
-                h('p', { class: 'small muted' }, `${corrections} düzeltme · ${warnings} uyarı · kural tabanlı muhakeme ajanı tarafından hesaplandı`)));
+                h('div', { class: 'panel__label' }, 'Eminlik değerlendirmesi'),
+                h('p', { style: { margin: 0 } }, confidenceText(score)),
+                h('p', { class: 'small muted', style: { margin: '4px 0 0' } }, `${corrections} düzeltme · ${warnings} uyarı`)));
 
-        const pii = this.piiEntries.length ? this.renderPiiSummary() : null;
         const list = validation.length
             ? h('div', { class: 'stack-sm' }, validation.map((v) => this.renderFinding(v)))
             : h('div', { class: 'alert alert--success' }, icon('circleCheck'), 'Doğrulama kurallarının tamamı sorunsuz geçti.');
 
-        return h('div', { class: 'stack' }, header, pii, h('div', null, sectionTitle('listChecks', 'Doğrulama bulguları'), list));
-    }
-
-    renderPiiSummary() {
-        const counts = {};
-        this.piiEntries.forEach((e) => {
-            const type = e.field.split('.')[1];
-            counts[type] = (counts[type] || 0) + 1;
-        });
-        return h('div', { class: 'alert alert--pii' }, icon('shield'),
-            h('div', { class: 'grow' },
-                h('strong', null, `Kişisel veri (KVKK) tespiti: ${this.piiEntries.length} kayıt`),
-                h('div', { class: 'chips', style: { marginTop: '6px' } },
-                    Object.entries(counts).map(([type, count]) => badge(`${this.vocab.piiLabel(type)}: ${count}`, 'pii')))));
+        return h('div', { class: 'stack' }, header, list);
     }
 
     renderFinding(entry) {
         const isPii = entry.field?.startsWith('pii.') || entry.field?.startsWith('draft_pii_leak.');
         const severity = SEVERITY[entry.severity] || SEVERITY.info;
-        const variant = isPii && entry.severity !== 'warning' ? 'pii' : entry.severity || 'info';
         const original = this.vocab.validationValue(entry.field, entry.original_value);
         const corrected = this.vocab.validationValue(entry.field, entry.corrected_value);
 
-        return h('div', { class: `finding finding--${variant}` },
+        return h('div', { class: `finding finding--${entry.severity || 'info'}` },
             h('span', { class: 'finding__icon' }, icon(isPii ? 'shield' : severity.icon)),
             h('div', null,
                 h('div', { class: 'row' }, h('strong', null, this.vocab.validationField(entry.field)), badge(severity.label, severity.variant)),
-                entry.message ? h('p', { class: 'small', style: { marginTop: '4px', color: 'var(--text-2)' } }, entry.message) : null,
+                entry.message ? h('p', { class: 'small', style: { margin: '4px 0 0' } }, entry.message) : null,
                 corrected
                     ? h('div', { class: 'finding__change' }, h('del', null, original), icon('arrowRight'), h('ins', null, corrected))
                     : original && !entry.message ? h('div', { class: 'finding__change muted' }, original) : null));
     }
 
-    // ── İşlem kaydı ──────────────────────────────────────
-
     renderTrace() {
         const timings = this.result.step_timings || [];
         const logs = this.result.agent_logs || [];
         const max = Math.max(0.1, ...timings.map((t) => t.duration || 0));
-        const statusVariant = { failed: 'warning', skipped: '' };
 
         const bars = timings.length
-            ? h('div', null, timings.map((t) => h('div', { class: 'bar-row' },
-                h('span', { class: 'row' }, h('strong', null, t.label || t.step),
-                    t.status && t.status !== 'completed' ? badge(t.status === 'failed' ? 'Başarısız' : 'Atlandı', statusVariant[t.status]) : null),
-                meter((t.duration || 0) / max, t.status === 'failed' ? 'warning' : ''),
-                h('span', { class: 'bar-row__value', title: t.agent }, fmt.seconds(t.duration)))))
+            ? h('div', null, timings.map((t) => h('div', { class: 'bar-row', style: { gridTemplateColumns: '180px 1fr 70px' } },
+                h('span', null, t.label || t.step),
+                meter((t.duration || 0) / max),
+                h('span', { class: 'bar-row__value' }, fmt.seconds(t.duration)))))
             : h('p', { class: 'muted' }, 'Adım süresi kaydı yok.');
 
-        const console = h('div', { class: 'log-console', role: 'log', 'aria-label': 'Agent işlem kayıtları' },
-            logs.length ? logs.map((line) => {
-                const match = /^\[(\d{2}:\d{2}:\d{2})\] \[([^\]]+)\] (.*)$/.exec(line);
-                return match
-                    ? h('div', { class: 'log-console__line' }, h('span', { class: 'log-console__time' }, match[1]), ' ', h('span', { class: 'log-console__agent' }, match[2]), ' ', match[3])
-                    : h('div', { class: 'log-console__line' }, line);
-            }) : 'Kayıt bulunamadı.');
+        const logBox = h('div', { class: 'log-console', role: 'log' },
+            logs.length ? logs.map((line) => h('div', { class: 'log-console__line' }, line)) : 'Kayıt bulunamadı.');
 
         return h('div', { class: 'stack' },
-            h('div', null, sectionTitle('clock', 'Adım süreleri', h('span', { class: 'muted small' }, ` · toplam ${fmt.seconds(this.result.processing_time)}`)), bars),
-            h('div', null, sectionTitle('terminal', 'Agent kayıtları'), console),
-        );
-    }
-
-    // ── Eylemler ─────────────────────────────────────────
-
-    copySummary() {
-        const r = this.result;
-        const a = r.analysis || {};
-        const lines = [
-            `Evrak: ${r.source_name || 'Adsız'}`,
-            `Tür: ${(a.classification || {}).document_type || '?'}`,
-            `Güven: %${Math.round((r.confidence_score || 0) * 100)}`,
-            `Özet: ${a.summary || '—'}`,
-            r.routing ? `Birim: ${r.routing.target_unit || '?'} (${r.routing.priority || '?'})` : '',
-        ].filter(Boolean).join('\n');
-        navigator.clipboard.writeText(lines).then(
-            () => this.toaster.success('Özet panoya kopyalandı.'),
-            () => this.toaster.error('Kopyalama başarısız oldu.'),
-        );
-    }
-
-    exportJson() {
-        const payload = { ...this.result, review: this.review.state };
-        downloadBlob(JSON.stringify(payload, null, 2), `analiz_${this.historyId || 'sonuc'}.json`);
+            h('div', null, h('div', { class: 'card-kicker', style: { marginBottom: '8px' } }, `Adım süreleri · toplam ${fmt.seconds(this.result.processing_time)}`), bars),
+            h('div', null, h('div', { class: 'card-kicker', style: { marginBottom: '8px' } }, 'Sistem kayıtları'), logBox),
+            h('div', { class: 'row' },
+                h('button', { type: 'button', class: 'btn btn-secondary btn--sm', onClick: () => downloadBlob(JSON.stringify({ ...this.result, review: this.review.state }, null, 2), `analiz_${this.historyId || 'sonuc'}.json`) }, 'JSON olarak indir')));
     }
 }
 

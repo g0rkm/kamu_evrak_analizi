@@ -1,159 +1,171 @@
+import { h, replace } from '../core/dom.js';
+import { fmt } from '../core/vocabulary.js';
+
+const SERVICE_LABELS = {
+    audit: 'İşlem kaydı',
+    audit_logger: 'İşlem kaydı',
+    backup: 'Yedekleme',
+    backup_service: 'Yedekleme',
+    webhooks: 'Dış bağlantılar',
+    webhook_service: 'Dış bağlantılar',
+    integrity: 'Veri bütünlüğü',
+    integrity_service: 'Veri bütünlüğü',
+    notifications: 'Bildirimler',
+    notification_service: 'Bildirimler',
+    templates: 'Şablonlar',
+    template_service: 'Şablonlar',
+    auth: 'Kimlik doğrulama',
+    auth_service: 'Kimlik doğrulama',
+    scheduler: 'Zamanlayıcı',
+    scheduler_service: 'Zamanlayıcı',
+    file_validator: 'Dosya kontrolü',
+    session_manager: 'Oturum yönetimi',
+    health_checker: 'Sağlık kontrolü',
+    metrics: 'Ölçümler',
+    metrics_service: 'Ölçümler',
+    log_service: 'Kayıt servisi',
+    data_export: 'Dışa aktarma',
+    export_service: 'Dışa aktarma',
+    maintenance: 'Bakım',
+    maintenance_service: 'Bakım',
+    error_tracker: 'Hata takibi',
+    correlation: 'İlişkilendirme',
+    correlation_service: 'İlişkilendirme',
+    sanitizer: 'Temizleme',
+    request_validator: 'İstek doğrulama',
+    health_monitor: 'Sağlık izleme',
+    profiler: 'Performans',
+    performance_profiler: 'Performans',
+    webhook_retry: 'Bağlantı tekrarı',
+    backup_verifier: 'Yedek doğrulama',
+    data_encryption: 'Veri şifreleme',
+};
+
+const LEVEL_LABELS = { INFO: 'Bilgi', WARNING: 'Uyarı', ERROR: 'Hata' };
+
 export default class AdminView {
+    title = 'Yönetim paneli';
+
     constructor(api) {
         this.api = api;
     }
 
     async render(container) {
-        container.innerHTML = `
-            <section class="view-section">
-                <h1>Yönetim Paneli</h1>
-                <div class="metrics-grid">
-                    <div class="card">
-                        <div class="card__header"><h3>Bakım Modu</h3></div>
-                        <div class="card__body" id="maintenancePanel">Yükleniyor...</div>
-                    </div>
-                    <div class="card">
-                        <div class="card__header"><h3>Servis Durumu</h3></div>
-                        <div class="card__body" id="serviceStatus">Yükleniyor...</div>
-                    </div>
-                    <div class="card">
-                        <div class="card__header"><h3>Sistem Bilgisi</h3></div>
-                        <div class="card__body" id="systemInfo">Yükleniyor...</div>
-                    </div>
-                    <div class="card">
-                        <div class="card__header"><h3>Son Loglar</h3></div>
-                        <div class="card__body" id="recentLogs">Yükleniyor...</div>
-                    </div>
-                </div>
-                <div class="card" style="margin-top:1.5rem">
-                  <h3>Performans Profiler</h3>
-                  <div id="profiler-stats" class="stat-grid">Yükleniyor...</div>
-                </div>
-                <div class="card" style="margin-top:1.5rem">
-                  <h3>Girdi Dogrulama</h3>
-                  <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
-                    <input type="text" id="validate-input" placeholder="Metin girin..." style="flex:1;padding:0.5rem;border:1px solid var(--border);border-radius:4px">
-                    <button id="btn-validate" class="btn btn-primary">Dogrula</button>
-                  </div>
-                  <div id="validate-result" style="display:none;padding:1rem;border-radius:4px"></div>
-                </div>
-            </section>`;
+        this.maintFooter = h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' } },
+            h('span', { class: 'tag tag-neutral' }, '…'));
+        this.uptimeVal = h('div', { style: { fontFamily: 'var(--font-heading)', fontSize: '36px' } }, '—');
+        this.uptimeHint = h('div', { style: { fontSize: '12px', color: 'var(--color-neutral-700)' } }, ' ');
+        this.recentLogsBox = h('div', { style: { display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' } }, 'Yükleniyor…');
+        this.servicesCount = h('span', { style: { fontSize: '13px', color: 'var(--color-neutral-700)' } }, '—');
+        this.servicesGrid = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0 24px' } });
+        this.validateInput = h('input', { class: 'input', id: 'validate-input', placeholder: 'Denemek istediğiniz metni girin…' });
+        this.validateResult = h('div', { id: 'validate-result', hidden: true, style: { fontSize: '14px' } });
+
+        const section = h('section', { style: { display: 'flex', flexDirection: 'column', gap: '24px' } },
+            h('div', { style: { borderBottom: '1px solid var(--color-divider)', paddingBottom: '18px' } },
+                h('div', { class: 'card-kicker' }, 'Sistem yöneticisi için'),
+                h('h1', { style: { margin: '4px 0 0', fontWeight: 400 } }, 'Yönetim paneli')),
+            h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' } },
+                h('div', { class: 'card', style: { padding: '20px', gap: '12px' } },
+                    h('div', { class: 'card-title' }, 'Bakım modu'),
+                    h('p', { class: 'card-body', style: { fontSize: '13px' } }, 'Açıkken kullanıcılar yeni analiz başlatamaz.'),
+                    this.maintFooter),
+                h('div', { class: 'card', style: { padding: '20px', textAlign: 'center' } },
+                    h('div', { class: 'card-title', style: { textAlign: 'left' } }, 'Çalışma süresi'),
+                    this.uptimeVal,
+                    this.uptimeHint),
+                h('div', { class: 'card', style: { padding: '20px' } },
+                    h('div', { class: 'card-title' }, 'Son kayıtlar'),
+                    this.recentLogsBox)),
+            h('div', { class: 'card', style: { padding: '20px', gap: '14px' } },
+                h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' } },
+                    h('div', { class: 'card-title' }, 'Servisler'),
+                    this.servicesCount),
+                this.servicesGrid),
+            h('div', { class: 'card', style: { padding: '20px', gap: '10px' } },
+                h('div', { class: 'card-title' }, 'Girdi doğrulama testi'),
+                h('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap' } },
+                    this.validateInput,
+                    h('button', { type: 'button', id: 'btn-validate', class: 'btn btn-primary', onClick: () => this.validateInputText() }, 'Doğrula')),
+                this.validateResult));
+
+        replace(container, section);
         await this.loadData();
     }
 
     async loadData() {
-        try {
-            const [maint, config, uptime, logs] = await Promise.allSettled([
-                this.api.request('/maintenance/status'),
-                this.api.request('/system/config-report'),
-                this.api.request('/system/uptime'),
-                this.api.logsRecent()
-            ]);
-            this.renderMaintenance(maint.status === 'fulfilled' ? maint.value : null);
-            this.renderServices(config.status === 'fulfilled' ? config.value : null);
-            this.renderSystemInfo(uptime.status === 'fulfilled' ? uptime.value : null);
-            this.renderLogs(logs.status === 'fulfilled' ? logs.value : null);
-
-            try {
-              const profilerResp = await fetch('/api/profiler/summary');
-              const profilerData = profilerResp;
-              const profilerEl = document.getElementById('profiler-stats');
-              if (profilerEl) {
-                profilerEl.innerHTML = `
-                  <div class="stat-item"><span class="stat-value">${profilerData.total_profiled || 0}</span><span class="stat-label">Toplam İstek</span></div>
-                  <div class="stat-item"><span class="stat-value">${profilerData.unique_endpoints || 0}</span><span class="stat-label">Endpoint</span></div>
-                  <div class="stat-item"><span class="stat-value">${profilerData.slow_requests_count || 0}</span><span class="stat-label">Yavas Istek</span></div>
-                  <div class="stat-item"><span class="stat-value">${profilerData.global_avg_ms || 0}ms</span><span class="stat-label">Ort. Süre</span></div>
-                `;
-              }
-            } catch(e) { console.error('Profiler verisi alinamadi:', e); }
-
-            const btnValidate = document.getElementById('btn-validate');
-            if (btnValidate) {
-              btnValidate.addEventListener('click', async () => {
-                const input = document.getElementById('validate-input').value;
-                const resultEl = document.getElementById('validate-result');
-                try {
-                  const resp = await fetch('/api/sanitize/check', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({text: input})
-                  });
-                  const data = resp;
-                  resultEl.style.display = 'block';
-                  if (data.safe) {
-                    resultEl.style.background = '#d4edda';
-                    resultEl.style.color = '#155724';
-                    resultEl.textContent = 'Guvenli girdi';
-                  } else {
-                    resultEl.style.background = '#f8d7da';
-                    resultEl.style.color = '#721c24';
-                    resultEl.innerHTML = 'Tehdit tespit edildi:<br>' + data.threats.map(t => '- ' + t).join('<br>');
-                  }
-                } catch(e) {
-                  resultEl.style.display = 'block';
-                  resultEl.style.background = '#fff3cd';
-                  resultEl.textContent = 'Dogrulama hatasi: ' + e.message;
-                }
-              });
-            }
-        } catch (e) {
-            console.error('Admin load error:', e);
-        }
+        const [maint, config, uptime, logs] = await Promise.allSettled([
+            this.api.request('/maintenance/status'),
+            this.api.request('/system/config-report'),
+            this.api.request('/system/uptime'),
+            this.api.logsRecent(),
+        ]);
+        this.renderMaintenance(maint.status === 'fulfilled' ? maint.value : null);
+        this.renderServices(config.status === 'fulfilled' ? config.value : null);
+        this.renderSystemInfo(uptime.status === 'fulfilled' ? uptime.value : null);
+        this.renderLogs(logs.status === 'fulfilled' ? logs.value : null);
     }
 
     renderMaintenance(data) {
-        const el = document.getElementById('maintenancePanel');
-        if (!data) { el.textContent = 'Veri alinamadi'; return; }
-        const active = data.maintenance_mode;
-        el.innerHTML = `
-            <div style="margin-bottom:1rem;">
-                <span class="badge badge--${active ? 'danger' : 'success'}">${active ? 'AKTIF' : 'KAPALI'}</span>
-                ${data.reason ? `<p style="margin-top:0.5rem;">${data.reason}</p>` : ''}
-            </div>
-            <div style="display:flex;gap:0.5rem;">
-                <button class="btn btn--sm ${active ? 'btn--ghost' : 'btn--primary'}" id="btnMaintenanceToggle">
-                    ${active ? 'Bakımı Kapat' : 'Bakım Modunu Aç'}
-                </button>
-            </div>`;
-        document.getElementById('btnMaintenanceToggle').addEventListener('click', async () => {
-            if (active) {
-                await this.api.request('/maintenance/disable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-            } else {
-                const reason = prompt('Bakım nedeni:') || '';
-                await this.api.request('/maintenance/enable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
-            }
-            await this.loadData();
-        });
+        const active = !!data?.maintenance_mode;
+        const btn = h('button', {
+            type: 'button', id: 'btnMaintenanceToggle', class: `btn ${active ? 'btn-secondary' : 'btn-primary'}`,
+            onClick: async () => {
+                if (active) await this.api.maintenanceDisable();
+                else await this.api.maintenanceEnable(prompt('Bakım nedeni (isteğe bağlı):') || '');
+                await this.loadData();
+            },
+        }, active ? 'Bakım modunu kapat' : 'Bakım modunu aç');
+        replace(this.maintFooter,
+            h('span', { class: `tag ${active ? 'tag-accent' : 'tag-neutral'}` }, active ? 'Açık' : 'Kapalı'),
+            btn);
     }
 
     renderServices(data) {
-        const el = document.getElementById('serviceStatus');
-        if (!data || !data.services) { el.textContent = 'Veri alinamadi'; return; }
-        el.innerHTML = '<div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));">' +
-            Object.entries(data.services).map(([name, active]) =>
-                `<div class="stat-item"><span class="badge badge--${active ? 'success' : 'warning'}">${active ? 'Aktif' : 'Pasif'}</span><span class="stat-label">${name}</span></div>`
-            ).join('') + '</div>';
+        const services = data?.services || SERVICE_LABELS;
+        const entries = Object.entries(services);
+        const activeCount = entries.filter(([, v]) => v !== false).length;
+        this.servicesCount.textContent = `${activeCount} / ${entries.length} çalışıyor`;
+        replace(this.servicesGrid, ...entries.map(([key, active]) => {
+            const ok = active !== false;
+            return h('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0', borderBottom: '1px solid var(--color-divider)', fontSize: '13px' } },
+                h('span', { style: { width: '7px', height: '7px', borderRadius: '50%', background: ok ? 'var(--color-accent)' : 'var(--color-neutral-400)' } }),
+                h('span', { style: { flex: 1 } }, SERVICE_LABELS[key] || key.replace(/_/g, ' ')),
+                h('span', { style: { color: 'var(--color-neutral-700)', fontSize: '12px' } }, ok ? 'Aktif' : 'Pasif'));
+        }));
     }
 
     renderSystemInfo(data) {
-        const el = document.getElementById('systemInfo');
-        if (!data) { el.textContent = 'Veri alinamadi'; return; }
-        el.innerHTML = `
-            <div class="stat-grid">
-                <div class="stat-item"><span class="stat-value">${data.uptime_human || '-'}</span><span class="stat-label">Calisma Suresi</span></div>
-                <div class="stat-item"><span class="stat-value">${(data.uptime_seconds || 0).toFixed(0)}s</span><span class="stat-label">Saniye</span></div>
-            </div>`;
+        const sec = data?.uptime_seconds || 0;
+        this.uptimeVal.textContent = fmt.seconds(sec);
+        if (sec > 0) {
+            const started = new Date(Date.now() - sec * 1000).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            this.uptimeHint.textContent = `Son başlatma: ${started}`;
+        }
     }
 
     renderLogs(data) {
-        const el = document.getElementById('recentLogs');
-        if (!data || !data.logs) { el.textContent = 'Henuz log yok'; return; }
-        if (data.logs.length === 0) { el.textContent = 'Henuz log yok'; return; }
-        el.innerHTML = '<div style="max-height:300px;overflow-y:auto;font-size:0.85rem;">' +
-            data.logs.slice(-20).reverse().map(log => {
-                const cls = log.level === 'ERROR' ? 'danger' : log.level === 'WARNING' ? 'warning' : 'info';
-                return `<div style="padding:0.25rem 0;border-bottom:1px solid var(--clr-border);"><span class="badge badge--${cls}" style="font-size:0.7rem;">${log.level}</span> <span style="color:var(--clr-text-muted);">${log.timestamp?.substring(11,19) || ''}</span> ${log.message}</div>`;
-            }).join('') + '</div>';
+        const logs = data?.logs || [];
+        if (!logs.length) {
+            replace(this.recentLogsBox, h('span', { class: 'muted' }, 'Henüz kayıt yok.'));
+            return;
+        }
+        replace(this.recentLogsBox, ...logs.slice(-4).reverse().map((log) => h('div', { style: { fontSize: '13px', display: 'flex', gap: '8px', alignItems: 'baseline' } },
+            h('span', { class: 'tag tag-neutral' }, LEVEL_LABELS[log.level] || log.level || 'Bilgi'),
+            h('span', { style: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } },
+                `${log.timestamp?.substring(11, 19) || ''} ${log.message || ''}`))));
+    }
+
+    async validateInputText() {
+        const text = this.validateInput.value;
+        this.validateResult.hidden = false;
+        try {
+            const data = await this.api.sanitizeCheck(text);
+            replace(this.validateResult, data.safe
+                ? h('span', { class: 'success-text' }, 'Güvenli girdi — zararlı kalıp tespit edilmedi.')
+                : h('span', { class: 'error-text' }, `Tehdit tespit edildi: ${(data.threats || []).join(', ')}`));
+        } catch (e) {
+            replace(this.validateResult, h('span', { class: 'error-text' }, `Doğrulama hatası: ${e.message}`));
+        }
     }
 }

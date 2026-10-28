@@ -1,4 +1,4 @@
-import { emptyState, h, icon, replace, scoreRing } from '../core/dom.js';
+import { h, icon, replace } from '../core/dom.js';
 import { fmt } from '../core/vocabulary.js';
 
 export class CompareView {
@@ -11,41 +11,46 @@ export class CompareView {
         this.element = this.build();
     }
 
-    textField(id, label) {
-        const counter = h('span', { class: 'field__hint' });
+    textField(id, label, placeholder) {
+        const counter = h('div', { style: { fontSize: '12px', color: 'var(--color-neutral-700)', marginTop: '4px' } });
         const textarea = h('textarea', {
-            class: 'textarea', id, placeholder: 'Evrak metnini yapıştırın…',
+            class: 'input', id, placeholder, style: { minHeight: '240px', fontSize: '15px' },
             onInput: () => {
                 const len = textarea.value.trim().length;
                 const max = this.vocab.limits.max_text_chars;
                 counter.textContent = `${fmt.number(len)} / ${fmt.number(max)} karakter`;
-                counter.style.color = len > max ? 'var(--danger)' : '';
+                counter.style.color = len > max ? 'var(--danger)' : 'var(--color-neutral-700)';
             },
             onKeydown: (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); this.submit(); } },
         });
-        const initialMax = this.vocab.limits.max_text_chars;
-        counter.textContent = `0 / ${fmt.number(initialMax)} karakter`;
-        return { textarea, element: h('div', { class: 'field' }, h('label', { class: 'field__label', for: id }, label), textarea, counter) };
+        counter.textContent = `0 / ${fmt.number(this.vocab.limits.max_text_chars)} karakter`;
+        return {
+            textarea,
+            element: h('div', { class: 'field' },
+                h('label', { for: id, style: { fontSize: '14px', color: 'var(--color-text)' } }, label),
+                textarea, counter),
+        };
     }
 
     build() {
-        this.first = this.textField('compareFirst', 'Birinci evrak');
-        this.second = this.textField('compareSecond', 'İkinci evrak');
-        this.error = h('p', { class: 'field__error', role: 'alert', hidden: true });
-        this.button = h('button', { type: 'button', class: 'btn btn--primary btn--lg', onClick: () => this.submit() }, icon('compare'), 'Karşılaştır');
+        this.first = this.textField('compareFirst', 'Birinci evrak', 'Birinci evrakın metnini yapıştırın…');
+        this.second = this.textField('compareSecond', 'İkinci evrak', 'İkinci evrakın metnini yapıştırın…');
+        this.error = h('p', { class: 'field__error', role: 'alert', hidden: true, style: { justifyContent: 'center' } });
+        this.button = h('button', { type: 'button', class: 'btn btn-primary', style: { fontSize: '17px', padding: '12px 32px' }, onClick: () => this.submit() }, 'Karşılaştır');
         this.resultRoot = h('div', { 'aria-live': 'polite' });
 
-        return h('div', { class: 'stack' },
-            h('div', { class: 'view-header' },
-                h('div', null, h('h1', null, 'Evrak karşılaştırma'), h('p', null, 'İki evrak arasındaki benzerlikleri, farkları ve ortak temaları görün.'))),
-            h('section', { class: 'card card__body stack' },
-                h('div', { class: 'compare-grid' }, this.first.element, this.second.element),
-                h('div', { class: 'row', style: { justifyContent: 'center' } },
-                    h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => this.swap(), title: 'Metinleri yer değiştir' }, icon('refresh'), 'Yer değiştir')),
-                this.error,
-                h('div', { class: 'row' }, this.button, h('span', { class: 'field__hint' }, h('span', { class: 'kbd' }, 'Ctrl'), ' + ', h('span', { class: 'kbd' }, 'Enter')))),
-            this.resultRoot,
-        );
+        return h('section', { style: { display: 'flex', flexDirection: 'column', gap: '28px' } },
+            h('div', { style: { textAlign: 'center' } },
+                h('h1', { style: { margin: 0, fontWeight: 400 } }, 'Evrak karşılaştırma'),
+                h('p', { style: { margin: '6px auto 0', color: 'var(--color-neutral-700)', maxWidth: '560px' } },
+                    'İki evrakın metnini yan yana koyun; sistem benzerlikleri ve farkları sizin için listelesin.')),
+            h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' } },
+                this.first.element, this.second.element),
+            this.error,
+            h('div', { style: { display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' } },
+                h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => this.swap() }, 'Yerlerini değiştir'),
+                this.button),
+            this.resultRoot);
     }
 
     show() {}
@@ -69,62 +74,40 @@ export class CompareView {
         }
         this.error.hidden = true;
         this.button.disabled = true;
-        replace(this.button, icon('loader', 'spin'), 'Karşılaştırılıyor…');
-        replace(this.resultRoot, h('section', { class: 'card' }, emptyState({ iconName: 'loader', title: 'Evraklar karşılaştırılıyor…', compact: true })));
+        replace(this.button, 'Karşılaştırılıyor…');
+        replace(this.resultRoot, h('div', { class: 'card', style: { padding: '26px', textAlign: 'center', color: 'var(--color-neutral-700)' } }, 'Evraklar karşılaştırılıyor…'));
         try {
             this.renderResult(await this.api.compare(text1, text2));
         } catch (error) {
-            const retryBtn = h('button', { type: 'button', class: 'btn btn--primary btn--sm', onClick: () => this.submit() }, icon('refresh'), 'Tekrar dene');
-            replace(this.resultRoot, h('div', { class: 'card card__body stack' },
+            replace(this.resultRoot, h('div', { class: 'card', style: { padding: '22px', gap: '12px' } },
                 h('div', { class: 'alert alert--danger', role: 'alert' }, icon('circleX'), h('div', null, h('strong', null, 'Karşılaştırma yapılamadı'), error.message)),
-                error.code === 'network' ? h('p', { class: 'muted' }, 'Sunucu bağlantısı kesildi. Sunucunun çalıştığından emin olun.') : null,
-                h('div', { class: 'row' }, retryBtn)));
+                h('div', null, h('button', { type: 'button', class: 'btn btn-primary', onClick: () => this.submit() }, 'Tekrar dene'))));
         } finally {
             this.button.disabled = false;
-            replace(this.button, icon('compare'), 'Karşılaştır');
+            replace(this.button, 'Karşılaştır');
         }
     }
 
     renderResult(result) {
+        const pct = Math.round((result.similarity_score || 0) * 100);
         const list = (items, empty) => items?.length
-            ? h('ul', { class: 'list' }, items.map((item) => h('li', { class: 'row', style: { alignItems: 'flex-start', flexWrap: 'nowrap' } }, h('span', { style: { color: 'var(--primary)', marginTop: '3px' } }, icon('arrowRight')), item)))
-            : h('p', { class: 'muted' }, empty);
+            ? h('ul', { style: { margin: 0, paddingLeft: '18px', fontSize: '14px', display: 'flex', flexDirection: 'column', gap: '6px' } },
+                items.map((item) => h('li', null, item)))
+            : h('p', { style: { margin: 0, fontSize: '14px', color: 'var(--color-neutral-700)' } }, empty);
 
-        replace(this.resultRoot, h('section', { class: 'card card__body stack' },
-            h('div', { class: 'row', style: { gap: '16px', flexWrap: 'nowrap' } },
-                scoreRing(result.similarity_score, 'Benzerlik'),
-                h('div', null, h('div', { class: 'panel__label' }, 'Benzerlik ve öneri'), h('p', null, result.recommendation || '—'))),
-            h('div', { class: 'grid-2' },
-                h('div', { class: 'panel' }, h('div', { class: 'panel__label' }, 'Ortak temalar'),
-                    result.common_themes?.length ? h('div', { class: 'chips' }, result.common_themes.map((t) => h('span', { class: 'chip' }, t))) : h('p', { class: 'muted' }, 'Ortak tema bulunamadı.')),
-                h('div', { class: 'panel' }, h('div', { class: 'panel__label' }, 'Farklar'), list(result.differences, 'Belirgin bir fark bulunamadı.'))),
-            h('div', { class: 'grid-2' },
-                h('div', { class: 'panel' }, h('div', { class: 'panel__label' }, 'Yalnızca birinci evrakta'), h('p', null, result.text1_unique || '—')),
-                h('div', { class: 'panel' }, h('div', { class: 'panel__label' }, 'Yalnızca ikinci evrakta'), h('p', null, result.text2_unique || '—'))),
-            h('div', { class: 'row', style: { justifyContent: 'flex-end', gap: '8px' } },
-                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => {
-                    const text = [
-                        `Benzerlik: %${Math.round(result.similarity_score * 100)}`,
-                        `Ortak temalar: ${(result.common_themes || []).join(', ') || '—'}`,
-                        `Farklar: ${(result.differences || []).join(', ') || '—'}`,
-                        `Birinci evrak: ${result.text1_unique || '—'}`,
-                        `İkinci evrak: ${result.text2_unique || '—'}`,
-                        `Öneri: ${result.recommendation || '—'}`,
-                    ].join('\n');
-                    navigator.clipboard.writeText(text).then(() => this.toaster.success('Sonuç kopyalandı.'), () => this.toaster.error('Kopyalama başarısız.'));
-                }}, icon('copy'), 'Sonucu kopyala'),
-                h('button', { type: 'button', class: 'btn btn--ghost btn--sm', onClick: () => {
-                    const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `karsilastirma_${new Date().toISOString().slice(0, 10)}.json`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    this.toaster.success('Sonuç indirildi.');
-                }}, icon('download'), 'JSON indir'),
-            ),
-        ));
+        replace(this.resultRoot, h('div', { class: 'card split', style: { padding: '26px', display: 'grid', gridTemplateColumns: '200px repeat(2, minmax(0, 1fr))', gap: '28px' } },
+            h('div', { style: { textAlign: 'center', borderRight: '1px solid var(--color-divider)', paddingRight: '20px' } },
+                h('div', { class: 'card-kicker' }, 'Benzerlik'),
+                h('div', { style: { fontFamily: 'var(--font-heading)', fontSize: '56px', lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' } }, `%${pct}`),
+                h('div', { style: { fontSize: '13px', color: 'var(--color-neutral-700)' } }, result.recommendation || '—')),
+            h('div', null,
+                h('div', { class: 'card-kicker', style: { marginBottom: '8px' } }, 'Ortak noktalar'),
+                list(result.common_themes, 'Ortak nokta bulunamadı.'),
+                result.text1_unique ? h('p', { style: { margin: '12px 0 0', fontSize: '13px', color: 'var(--color-neutral-700)' } }, `Yalnızca birinci evrakta: ${result.text1_unique}`) : null),
+            h('div', null,
+                h('div', { class: 'card-kicker', style: { marginBottom: '8px' } }, 'Farklar'),
+                list(result.differences, 'Belirgin bir fark bulunamadı.'),
+                result.text2_unique ? h('p', { style: { margin: '12px 0 0', fontSize: '13px', color: 'var(--color-neutral-700)' } }, `Yalnızca ikinci evrakta: ${result.text2_unique}`) : null)));
     }
 
     swap() {

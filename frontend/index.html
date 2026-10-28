@@ -4,64 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Kamu evraklarının yapay zekâ ile sınıflandırılması, analizi, mevzuat eşleştirmesi ve resmî yazı taslağı hazırlanması.">
-    <meta name="color-scheme" content="light dark">
+    <meta name="color-scheme" content="light">
     <title>Kamu Evrak Analizi</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d4ed8'/%3E%3Cpath d='M8 13h16M16 7l9 5H7l9-5zM10 15v7M14 15v7M18 15v7M22 15v7M7 25h18' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='1' y='1' width='30' height='30' rx='4' fill='%23f3f2f2' stroke='%23b68235' stroke-width='1.5'/%3E%3Cpath d='M7 25h18M10 21v-7M14 21v-7M18 21v-7M22 21v-7M16 6l9 5H7z' stroke='%23b68235' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
-    <script>
-        // Tema tercihini ilk boyamadan önce uygula (yanıp sönmeyi önler)
-        (function () {
-            var theme = null;
-            try { theme = localStorage.getItem('theme'); } catch (e) { /* depolama kapalı */ }
-            if (theme !== 'light' && theme !== 'dark') {
-                theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
-    </script>
+    <link rel="stylesheet" href="assets/css/ds.css">
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
     <a href="#viewRoot" class="skip-link">İçeriğe geç</a>
 
+    <div class="app-shell">
+
+    <!-- ÜST MENÜ -->
     <header class="app-header">
         <div class="app-header__inner">
             <a class="brand" href="#dashboard" aria-label="Kamu Evrak Analizi ana sayfa">
                 <span class="brand__mark" data-icon="landmark"></span>
-                <span>
-                    <span class="brand__title">Kamu Evrak Analizi</span><br>
-                    <span class="brand__subtitle">Yapay zekâ destekli evrak işleme</span>
+                <span class="brand__text">
+                    <span class="brand__title">Kamu Evrak Analizi</span>
+                    <span class="brand__subtitle">Yapay zekâ destekli evrak inceleme</span>
                 </span>
             </a>
-            <button type="button" class="nav-toggle" id="navToggle" aria-label="Menüyü aç/kapat" aria-expanded="false" aria-controls="mainNav">☰</button>
-            <nav class="main-nav" id="mainNav" aria-label="Ana menü">
-                <a href="#dashboard" class="nav-link" data-view="dashboard">Kontrol Paneli</a>
-                <a href="#/analiz" class="nav-link" data-route="analiz">Analiz</a>
-                <a href="#/gecmis" class="nav-link" data-route="gecmis">Geçmiş</a>
-                <a href="#/karsilastir" class="nav-link" data-route="karsilastir">Karşılaştır</a>
-                <a href="#search" class="nav-link" data-view="search">Arama</a>
+            <button type="button" class="btn btn-secondary btn-icon nav-toggle" id="navToggle" aria-label="Menüyü aç/kapat" aria-expanded="false" aria-controls="mainNav">☰</button>
+            <nav class="nav main-nav" id="mainNav" aria-label="Ana menü">
+                <a href="#dashboard" data-view="dashboard">Ana sayfa</a>
+                <a href="#/analiz" data-route="analiz">Evrak analizi</a>
+                <a href="#/gecmis" data-route="gecmis">Geçmiş</a>
+                <a href="#/karsilastir" data-route="karsilastir">Karşılaştır</a>
+                <a href="#search" data-view="search">Arama</a>
                 <div class="nav-more">
-                    <button type="button" class="nav-link nav-more__btn" id="navMoreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="navMoreMenu">Daha Fazla <span class="nav-more__caret" aria-hidden="true">▾</span></button>
-                    <div class="nav-more__menu" id="navMoreMenu" role="menu" hidden>
-                        <a href="#/pii" class="nav-link" data-view="pii" role="menuitem">PII Analizi</a>
-                        <a href="#/audit" class="nav-link" data-view="audit" role="menuitem">Denetim Günlüğü</a>
-                        <a href="#/timeline" class="nav-link" data-view="timeline" role="menuitem">Zaman Çizelgesi</a>
-                        <a href="#templates" class="nav-link" data-view="templates" role="menuitem">Şablonlar</a>
-                        <a href="#export" class="nav-link" data-view="export" role="menuitem">Dışa Aktarım</a>
-                        <a href="#notifications" class="nav-link" data-view="notifications" role="menuitem">Bildirimler</a>
-                        <div class="nav-more__sep" role="separator"></div>
-                        <a href="#metrics" class="nav-link" data-view="metrics" role="menuitem">Metrikler</a>
-                        <a href="#system" class="nav-link" data-view="system" role="menuitem">Sistem Durumu</a>
-                        <a href="#admin" class="nav-link" data-view="admin" role="menuitem">Yönetim</a>
-                        <a href="#/settings" class="nav-link" data-view="settings" role="menuitem">Ayarlar</a>
+                    <button type="button" class="btn btn-secondary nav-more__btn" id="navMoreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="navMoreMenu">
+                        Diğer araçlar <span data-icon="chevronDown"></span>
+                    </button>
+                    <div class="nav-more__menu elev-lg" id="navMoreMenu" hidden>
+                        <div class="nav-more__group">
+                            <div class="card-kicker">Günlük işler</div>
+                            <a href="#/pii" class="nav-more__item" data-view="pii"><span class="nav-more__label">Kişisel bilgi kontrolü</span><span class="nav-more__desc">Metindeki kişisel verileri bulun, gizleyin</span></a>
+                            <a href="#templates" class="nav-more__item" data-view="templates"><span class="nav-more__label">Evrak şablonları</span><span class="nav-more__desc">Dilekçe, rapor, tutanak kalıpları</span></a>
+                            <a href="#/timeline" class="nav-more__item" data-view="timeline"><span class="nav-more__label">Zaman çizelgesi</span><span class="nav-more__desc">Evrakları gün gün görün</span></a>
+                            <a href="#notifications" class="nav-more__item" data-view="notifications"><span class="nav-more__label">Bildirimler</span><span class="nav-more__desc">Onay ve uyarı mesajları</span></a>
+                            <a href="#export" class="nav-more__item" data-view="export"><span class="nav-more__label">Rapor ve dışa aktarma</span><span class="nav-more__desc">Excel'e indirin, rapor alın</span></a>
+                        </div>
+                        <div class="nav-more__group">
+                            <div class="card-kicker">Bilgi işlem / yönetici</div>
+                            <a href="#/audit" class="nav-more__item" data-view="audit"><span class="nav-more__label">İşlem kayıtları</span><span class="nav-more__desc">Kim, ne zaman, ne yaptı</span></a>
+                            <a href="#system" class="nav-more__item" data-view="system"><span class="nav-more__label">Sistem durumu</span><span class="nav-more__desc">Sunucu ve servisler</span></a>
+                            <a href="#metrics" class="nav-more__item" data-view="metrics"><span class="nav-more__label">Teknik ölçümler</span><span class="nav-more__desc">Hız ve hata istatistikleri</span></a>
+                            <a href="#admin" class="nav-more__item" data-view="admin"><span class="nav-more__label">Yönetim paneli</span><span class="nav-more__desc">Bakım modu, servisler</span></a>
+                            <a href="#/settings" class="nav-more__item" data-view="settings"><span class="nav-more__label">Ayarlar</span><span class="nav-more__desc">Yedekleme ve sistem bilgisi</span></a>
+                        </div>
                     </div>
                 </div>
             </nav>
             <div class="header-actions">
-                <span class="status-pill" id="systemStatus" role="status" data-state="unknown" title="Sistem durumu kontrol ediliyor">
+                <button type="button" class="status-pill" id="systemStatus" data-state="unknown" title="Sistem durumu kontrol ediliyor">
                     <span class="status-pill__dot"></span><span class="status-pill__text">Kontrol ediliyor…</span>
-                </span>
-                <button type="button" class="btn btn--ghost btn--icon" id="themeToggle" aria-label="Koyu temaya geç"></button>
+                </button>
+                <a href="#notifications" class="btn btn-ghost btn-icon header-bell" id="headerBell" title="Bildirimler" aria-label="Bildirimler"><span data-icon="bell"></span></a>
             </div>
         </div>
     </header>
@@ -69,10 +69,20 @@
     <main class="app-main" id="main" tabindex="-1">
         <div id="viewRoot" role="main">
             <noscript>
-                <div class="card card__body">Bu uygulama JavaScript gerektirir. Lütfen tarayıcınızda JavaScript'i etkinleştirin.</div>
+                <div class="card">Bu uygulama JavaScript gerektirir. Lütfen tarayıcınızda JavaScript'i etkinleştirin.</div>
             </noscript>
         </div>
     </main>
+
+    <footer class="app-footer">
+        <div class="app-footer__inner">
+            <span>Kamu Evrak Analizi · Sürüm <span id="appVersion">—</span></span>
+            <span>Yapay zekâ önerir, son kararı memur verir.</span>
+            <a href="#" id="helpLink">Yardım ve destek</a>
+        </div>
+    </footer>
+
+    </div>
 
     <div class="toaster" id="toaster" role="status" aria-live="polite"></div>
 

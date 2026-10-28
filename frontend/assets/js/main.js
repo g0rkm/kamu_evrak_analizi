@@ -1,6 +1,6 @@
 import { ApiClient } from './core/api.js';
 import { hydrateIcons } from './core/icons.js';
-import { ThemeController, Toaster } from './core/ui.js';
+import { Toaster } from './core/ui.js';
 import { Vocabulary } from './core/vocabulary.js';
 import { AnalyzeView } from './views/analyze-view.js';
 import { CompareView } from './views/compare-view.js';
@@ -39,12 +39,14 @@ class SystemStatus {
     async check() {
         try {
             const health = await this.api.health();
+            const version = document.getElementById('appVersion');
+            if (version && health.version) version.textContent = health.version;
             if (!health.llm_configured) {
-                this.set('warn', 'LLM yapılandırılmamış', 'Sunucuda LLM_API_KEY tanımlı değil; analizler çalışmayacak.');
+                this.set('warn', 'Yapay zekâ bağlı değil', 'Sunucuda LLM_API_KEY tanımlı değil; analizler çalışmayacak.');
             } else if (!health.rag_available) {
-                this.set('warn', 'Mevzuat indeksi yok', 'RAG indeksi bulunamadı; mevzuat eşleştirme yalnızca metadata ile yapılır. (scripts/build_index.py)');
+                this.set('warn', 'Mevzuat dizini yok', 'RAG indeksi bulunamadı; mevzuat eşleştirme yalnızca metadata ile yapılır. (scripts/build_index.py)');
             } else {
-                this.set('ok', 'Sistem hazır', `Model: ${health.llm_model} · ${health.rag_chunks} mevzuat parçası · sürüm ${health.version}`);
+                this.set('ok', 'Sistem çalışıyor', `Model: ${health.llm_model} · ${health.rag_chunks} mevzuat parçası · sürüm ${health.version}`);
             }
         } catch {
             this.set('down', 'Sunucuya ulaşılamıyor', 'API yanıt vermiyor. Sunucunun çalıştığından emin olun.');
@@ -96,9 +98,12 @@ class App {
 
     async start() {
         hydrateIcons();
-        new ThemeController(document.getElementById('themeToggle'));
         new SystemStatus(document.getElementById('systemStatus'), this.api).start();
         this._setupNav();
+        document.getElementById('helpLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Yardım ve destek\n\nKlavye kısayolları:\n0 — Ana sayfa\n1 — Evrak analizi\n2 — Geçmiş\n3 — Karşılaştır\n? — Kısayol listesi\n\nAnaliz sayfasında Ctrl+Enter analizi başlatır.\nSorun yaşarsanız bilgi işlem biriminize başvurun.');
+        });
 
         let meta = null;
         try {
@@ -166,7 +171,7 @@ class App {
                 case '4': e.preventDefault(); this.navigate('#/trends'); break;
                 case '?':
                     e.preventDefault();
-                    alert('Klavye kısayolları:\n\n0 — Kontrol Paneli\n1 — Analiz sayfası\n2 — Geçmiş sayfası\n3 — Karşılaştır sayfası\n4 — Trendler sayfası\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
+                    alert('Klavye kısayolları:\n\n0 — Ana sayfa\n1 — Evrak analizi\n2 — Geçmiş\n3 — Karşılaştır\n4 — Trendler\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
                     break;
             }
         });
@@ -254,11 +259,17 @@ class App {
         document.getElementById('navMoreBtn')?.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('nav-open');
 
+        let inMoreMenu = false;
         this.navLinks.forEach((link) => {
             const linkRoute = link.dataset.route || link.dataset.view;
-            if (linkRoute === routeName) link.setAttribute('aria-current', 'page');
-            else link.removeAttribute('aria-current');
+            if (linkRoute === routeName) {
+                link.setAttribute('aria-current', 'page');
+                if (link.closest('.nav-more__menu')) inMoreMenu = true;
+            } else link.removeAttribute('aria-current');
         });
+        // Alt menüdeki bir sayfadaysak "Diğer araçlar" düğmesini vurgula
+        const moreBtn = document.getElementById('navMoreBtn');
+        if (moreBtn) moreBtn.style.color = inMoreMenu ? 'var(--color-accent)' : '';
         document.title = `${view.title || routeName} · Kamu Evrak Analizi`;
     }
 }
