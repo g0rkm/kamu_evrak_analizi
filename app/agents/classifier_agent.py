@@ -10,6 +10,15 @@ def _build_prompt() -> str:
 Evrak türleri:
 {type_lines}
 
+Sınıflandırma kuralları:
+- EN SPESİFİK türü seç. Daha genel bir tür ("resmi_yazi") ile daha özel bir tür
+  (ör. "genelge", "yonetmelik", "teblig", "yonerge") uyuyorsa, ÖZEL olanı seç.
+- Belgenin başlığında veya metninde "genelge", "... sayılı genelge", "tüm
+  birimlere/personele" ifadeleri geçiyorsa tür "genelge"dir.
+- "document_type" alanı YALNIZCA bir tür KODU içerir; belgenin konusunu buraya YAZMA.
+  Konu/alt başlık bilgisini "sub_type" alanına yaz.
+- Emin değilsen "confidence" değerini dürüstçe düşük ver.
+
 Yanıtını SADECE aşağıdaki JSON formatında ver, başka hiçbir şey yazma:
 {{"document_type": "tur_kodu", "confidence": 0.0-1.0, "sub_type": "alt_tur_veya_null", "reasoning": "sınıflandırma gerekçesi"}}"""
 
