@@ -68,7 +68,7 @@ export class SystemView {
 
     async loadHealthData() {
         try {
-            const data = await this.api.request('/api/system/health-check');
+            const data = await this.api.request('/system/health-check');
             
             let badgeClass = 'badge-secondary';
             let statusText = data.status || 'Bilinmiyor';
@@ -103,7 +103,7 @@ export class SystemView {
 
     async loadDirectories() {
         try {
-            const data = await this.api.request('/api/system/directories');
+            const data = await this.api.request('/system/directories');
             const dirs = Array.isArray(data) ? data : (data.directories || []);
 
             if (dirs.length === 0) {
@@ -140,7 +140,7 @@ export class SystemView {
 
     async loadSessions() {
         try {
-            const data = await this.api.request('/api/sessions/active');
+            const data = await this.api.request('/sessions/active');
             const sessions = Array.isArray(data) ? data : (data.sessions || []);
 
             const countInfo = h('p', { class: 'session-count-info' }, `Aktif Oturum Sayısı: ${sessions.length}`);
@@ -177,7 +177,7 @@ export class SystemView {
 
     async loadFileTypes() {
         try {
-            const data = await this.api.request('/api/supported-file-types');
+            const data = await this.api.request('/supported-file-types');
             const types = Array.isArray(data) ? data : (data.types || data.extensions || []);
 
             if (types.length === 0) {
@@ -198,7 +198,7 @@ export class SystemView {
 
     async loadTasks() {
         try {
-            const data = await this.api.request('/api/scheduler/tasks');
+            const data = await this.api.request('/scheduler/tasks');
             const tasks = Array.isArray(data) ? data : (data.tasks || []);
 
             if (tasks.length === 0) {

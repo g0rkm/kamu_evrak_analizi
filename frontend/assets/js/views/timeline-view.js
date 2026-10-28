@@ -36,7 +36,7 @@ export class TimelineView {
 
     try {
       const resp = await this._api.request(url);
-      const data = await resp.json();
+      const data = resp;
       this._renderTimeline(data.timeline || data.records || []);
     } catch (e) {
       document.getElementById('timelineContent').innerHTML = '<p class="error-text">Zaman çizelgesi yüklenemedi.</p>';

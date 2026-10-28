@@ -46,14 +46,14 @@ export class ProfileView {
   async _loadProfile(token) {
     try {
       const resp = await this._api.validateToken(token);
-      const data = await resp.json();
+      const data = resp;
       if (data.valid) {
         document.getElementById('profileRole').textContent = data.role || '-';
       }
       const rolesResp = await this._api.roles();
-      const roles = await rolesResp.json();
+      const roles = rolesResp;
       const permsResp = await this._api.request('/auth/permissions');
-      const perms = await permsResp.json();
+      const perms = permsResp;
       const userRole = data.role || 'izleyici';
       const roleLevel = roles.roles?.[userRole]?.level || 0;
       const el = document.getElementById('profilePermissions');

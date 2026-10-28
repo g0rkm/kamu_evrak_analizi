@@ -56,7 +56,7 @@ export default class AdminView {
 
             try {
               const profilerResp = await fetch('/api/profiler/summary');
-              const profilerData = await profilerResp.json();
+              const profilerData = profilerResp;
               const profilerEl = document.getElementById('profiler-stats');
               if (profilerEl) {
                 profilerEl.innerHTML = `
@@ -79,7 +79,7 @@ export default class AdminView {
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({text: input})
                   });
-                  const data = await resp.json();
+                  const data = resp;
                   resultEl.style.display = 'block';
                   if (data.safe) {
                     resultEl.style.background = '#d4edda';

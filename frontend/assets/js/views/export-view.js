@@ -69,7 +69,7 @@ export class ExportView {
     el.innerHTML = '<p>Yukleniyor...</p>';
     try {
       const resp = await this._api.exportReport();
-      const data = await resp.json();
+      const data = resp;
       el.innerHTML = `
         <h3>Ozet Rapor</h3>
         <div class="report-grid">

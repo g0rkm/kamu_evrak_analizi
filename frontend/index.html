@@ -33,23 +33,30 @@
                     <span class="brand__subtitle">Yapay zekâ destekli evrak işleme</span>
                 </span>
             </a>
-            <nav class="main-nav" aria-label="Ana menü">
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Menüyü aç/kapat" aria-expanded="false" aria-controls="mainNav">☰</button>
+            <nav class="main-nav" id="mainNav" aria-label="Ana menü">
                 <a href="#dashboard" class="nav-link" data-view="dashboard">Kontrol Paneli</a>
-                <a href="#/analiz" data-route="analiz" aria-label="Analiz" title="Analiz"><span data-icon="sparkles"></span><span class="nav-label">Analiz</span></a>
-                <a href="#/gecmis" data-route="gecmis" aria-label="Geçmiş" title="Geçmiş"><span data-icon="history"></span><span class="nav-label">Geçmiş</span></a>
-                <a href="#/karsilastir" data-route="karsilastir" aria-label="Karşılaştır" title="Karşılaştır"><span data-icon="compare"></span><span class="nav-label">Karşılaştır</span></a>
-                <a href="#/audit" data-route="audit" data-view="audit" aria-label="Denetim Günlüğü" title="Denetim Günlüğü"><span data-icon="file-text"></span><span class="nav-label">Denetim Günlüğü</span></a>
-                <a href="#/pii" data-route="pii" data-view="pii" aria-label="PII Analizi" title="PII Analizi"><span data-icon="shield"></span><span class="nav-label">PII Analizi</span></a>
-                <a href="#/timeline" data-route="timeline" data-view="timeline" aria-label="Zaman Çizelgesi" title="Zaman Çizelgesi"><span data-icon="calendar"></span><span class="nav-label">Zaman Çizelgesi</span></a>
-                <a href="#/settings" data-route="settings" data-view="settings" aria-label="Ayarlar" title="Ayarlar"><span data-icon="settings"></span><span class="nav-label">Ayarlar</span></a>
-                <a href="#templates" class="nav-link" data-view="templates">Şablonlar</a>
+                <a href="#/analiz" class="nav-link" data-route="analiz">Analiz</a>
+                <a href="#/gecmis" class="nav-link" data-route="gecmis">Geçmiş</a>
+                <a href="#/karsilastir" class="nav-link" data-route="karsilastir">Karşılaştır</a>
                 <a href="#search" class="nav-link" data-view="search">Arama</a>
-                <a href="#export" class="nav-link" data-view="export">Dışa Aktarım</a>
-                <a href="#system" class="nav-link" data-view="system">Sistem Durumu</a>
-                <a href="#metrics" class="nav-link" data-view="metrics">Metrikler</a>
-                <a href="#admin" class="nav-link" data-view="admin">Yonetim</a>
-                <a href="#notifications" class="nav-link" data-view="notifications">Bildirimler</a>
-                <a href="#profile" class="nav-link" data-view="profile">Profil</a>
+                <div class="nav-more">
+                    <button type="button" class="nav-link nav-more__btn" id="navMoreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="navMoreMenu">Daha Fazla <span class="nav-more__caret" aria-hidden="true">▾</span></button>
+                    <div class="nav-more__menu" id="navMoreMenu" role="menu" hidden>
+                        <a href="#/pii" class="nav-link" data-view="pii" role="menuitem">PII Analizi</a>
+                        <a href="#/audit" class="nav-link" data-view="audit" role="menuitem">Denetim Günlüğü</a>
+                        <a href="#/timeline" class="nav-link" data-view="timeline" role="menuitem">Zaman Çizelgesi</a>
+                        <a href="#templates" class="nav-link" data-view="templates" role="menuitem">Şablonlar</a>
+                        <a href="#export" class="nav-link" data-view="export" role="menuitem">Dışa Aktarım</a>
+                        <a href="#notifications" class="nav-link" data-view="notifications" role="menuitem">Bildirimler</a>
+                        <div class="nav-more__sep" role="separator"></div>
+                        <a href="#metrics" class="nav-link" data-view="metrics" role="menuitem">Metrikler</a>
+                        <a href="#system" class="nav-link" data-view="system" role="menuitem">Sistem Durumu</a>
+                        <a href="#admin" class="nav-link" data-view="admin" role="menuitem">Yönetim</a>
+                        <a href="#/settings" class="nav-link" data-view="settings" role="menuitem">Ayarlar</a>
+                        <a href="#profile" class="nav-link" data-view="profile" role="menuitem">Profil</a>
+                    </div>
+                </div>
             </nav>
             <div class="header-actions">
                 <span class="status-pill" id="systemStatus" role="status" data-state="unknown" title="Sistem durumu kontrol ediliyor">

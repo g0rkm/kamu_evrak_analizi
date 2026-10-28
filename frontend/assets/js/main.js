@@ -100,6 +100,7 @@ class App {
         hydrateIcons();
         new ThemeController(document.getElementById('themeToggle'));
         new SystemStatus(document.getElementById('systemStatus'), this.api).start();
+        this._setupNav();
 
         let meta = null;
         try {
@@ -124,22 +125,26 @@ class App {
             toaster: this.toaster,
             navigate: (hash) => this.navigate(hash),
         };
+        // Görünüm sözleşmeleri:
+        //  (A) `.element` + `show()` : kalıcı DOM düğümü (analiz, geçmiş, karşılaştır)
+        //  (B) `render(kök)`         : her gezinmede köke çizen görünümler (diğerleri)
+        // (B) tipi görünümler çizim hedefi olarak doğrudan `this.root`'u alır.
         this.views = {
-            dashboard: new DashboardView(context),
+            dashboard: new DashboardView(this.root),
             analiz: new AnalyzeView(context),
             gecmis: new HistoryView(context),
             karsilastir: new CompareView(context),
-            trends: new TrendsView(context),
-            audit: new AuditView(context),
-            pii: new PiiView(context),
-            timeline: new TimelineView(context),
-            settings: new SettingsView(context),
-            login: new LoginView(context),
-            profile: new ProfileView(context.toaster ? this.root : this.root),
-            search: new SearchView(context),
-            notifications: new NotificationsView(context),
-            templates: new TemplatesView(context),
-            export: new ExportView(context),
+            trends: new TrendsView(this.root),
+            audit: new AuditView(this.root),
+            pii: new PiiView(this.root),
+            timeline: new TimelineView(this.root),
+            settings: new SettingsView(this.root),
+            login: new LoginView(this.root),
+            profile: new ProfileView(this.root),
+            search: new SearchView(this.root),
+            notifications: new NotificationsView(this.root),
+            templates: new TemplatesView(this.root),
+            export: new ExportView(this.root),
             system: new SystemView(context),
             metrics: new MetricsView(this.api),
             admin: new AdminView(this.api),
@@ -182,6 +187,42 @@ class App {
         window.addEventListener('online', () => this.toaster.success('İnternet bağlantısı yeniden kuruldu.'));
     }
 
+    /** Mobil hamburger menüsü ve "Daha Fazla" açılır menüsünün etkileşimi. */
+    _setupNav() {
+        const toggle = document.getElementById('navToggle');
+        const moreBtn = document.getElementById('navMoreBtn');
+        const moreMenu = document.getElementById('navMoreMenu');
+
+        toggle?.addEventListener('click', () => {
+            const open = document.body.classList.toggle('nav-open');
+            toggle.setAttribute('aria-expanded', String(open));
+        });
+
+        moreBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const willOpen = moreMenu.hasAttribute('hidden');
+            if (willOpen) moreMenu.removeAttribute('hidden');
+            else moreMenu.setAttribute('hidden', '');
+            moreBtn.setAttribute('aria-expanded', String(willOpen));
+        });
+
+        document.addEventListener('click', (e) => {
+            if (moreMenu && !moreMenu.hasAttribute('hidden') && !e.target.closest('.nav-more')) {
+                moreMenu.setAttribute('hidden', '');
+                moreBtn?.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                moreMenu?.setAttribute('hidden', '');
+                moreBtn?.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('nav-open');
+                toggle?.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
     navigate(hash) {
         if (location.hash !== hash) location.hash = hash;
     }
@@ -192,22 +233,30 @@ class App {
         const routeName = this.views[name] ? name : 'dashboard';
         const view = this.views[routeName];
 
-        if (routeName === 'metrics' || routeName === 'admin') {
+        if (view.element) {
+            // (A) Kalıcı DOM düğümü olan görünümler: düğümü yerleştir, durumu show() ile tazele.
             if (this.currentView !== view) {
+                this.root.replaceChildren(view.element);
                 this.currentView = view;
                 window.scrollTo({ top: 0 });
             }
-            await view.render(this.root);
         } else {
-            if (this.currentView !== view) {
-                this.root.replaceChildren(view.element || view.render());
-                this.currentView = view;
-                window.scrollTo({ top: 0 });
-            }
-            if (typeof view.show === 'function') {
-                view.show({ id: id ? decodeURIComponent(id) : null });
-            }
+            // (B) render(kök) ile çizen görünümler (dashboard, pii, audit, metrics, system…).
+            // render() ya köke innerHTML yazar (undefined döner) ya da bir DOM düğümü döndürür (System).
+            const out = await view.render(this.root);
+            if (out instanceof Node) this.root.replaceChildren(out);
+            this.currentView = view;
+            window.scrollTo({ top: 0 });
         }
+
+        if (typeof view.show === 'function') {
+            view.show({ id: id ? decodeURIComponent(id) : null });
+        }
+
+        // Gezinmede açık menüleri kapat
+        document.getElementById('navMoreMenu')?.setAttribute('hidden', '');
+        document.getElementById('navMoreBtn')?.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
 
         this.navLinks.forEach((link) => {
             const linkRoute = link.dataset.route || link.dataset.view;

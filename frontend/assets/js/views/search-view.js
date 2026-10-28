@@ -41,7 +41,7 @@ export class SearchView {
     el.innerHTML = '<p>Araniyor...</p>';
     try {
       const resp = await this._api.fullTextSearch(query);
-      const data = await resp.json();
+      const data = resp;
       let results = data.results || [];
       if (priority) {
         results = results.filter(r => r.priority === priority);

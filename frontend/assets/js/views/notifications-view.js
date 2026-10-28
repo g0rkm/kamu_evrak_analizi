@@ -30,8 +30,8 @@ export class NotificationsView {
         this._api.notifications(100),
         this._api.notificationStats()
       ]);
-      const notifs = await notifResp.json();
-      const stats = await statsResp.json();
+      const notifs = notifResp;
+      const stats = statsResp;
       this._renderStats(stats);
       this._renderList(notifs.notifications || []);
     } catch (e) {

@@ -30,8 +30,8 @@ export class DashboardView {
         this._api.request('/dashboard/summary'),
         this._api.request('/notifications?limit=5')
       ]);
-      const summary = await summaryResp.json();
-      const notifs = await notifResp.json();
+      const summary = summaryResp;
+      const notifs = notifResp;
       this._renderCards(summary);
       this._renderNotifications(notifs.notifications || []);
     } catch (e) {

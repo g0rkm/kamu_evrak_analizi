@@ -54,7 +54,7 @@ export class AuditView {
     try {
       const params = action ? `?action=${action}` : '';
       const resp = await this._api.request(`/audit/logs${params}`);
-      const data = await resp.json();
+      const data = resp;
       this._renderLogs(data.logs || []);
     } catch (e) {
       const body = document.getElementById('auditLogBody');
@@ -65,7 +65,7 @@ export class AuditView {
   async _loadStats() {
     try {
       const resp = await this._api.request('/audit/stats');
-      const data = await resp.json();
+      const data = resp;
       const el = document.getElementById('auditStats');
       if (el && data.total_logs !== undefined) {
         el.innerHTML = `<div class="stat-card"><strong>Toplam İşlem:</strong> ${data.total_logs}</div>`;

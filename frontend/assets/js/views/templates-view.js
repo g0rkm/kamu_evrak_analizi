@@ -46,7 +46,7 @@ export class TemplatesView {
   async _loadTemplates() {
     try {
       const resp = await this._api.request('/templates');
-      const data = await resp.json();
+      const data = resp;
       this._renderList(data.templates || []);
     } catch (e) {
       document.getElementById('templatesList').innerHTML = '<p class="error-text">Yuklenemedi.</p>';

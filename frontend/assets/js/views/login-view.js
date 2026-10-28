@@ -53,7 +53,7 @@ export class LoginView {
         body: JSON.stringify({ username, password })
       });
       if (!resp.ok) {
-        const data = await resp.json();
+        const data = resp;
         errEl.textContent = data.detail || 'Giris basarisiz.';
         errEl.style.display = 'block';
         return;
