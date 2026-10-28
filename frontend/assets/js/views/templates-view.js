@@ -9,25 +9,25 @@ export class TemplatesView {
   async render() {
     this._container.innerHTML = `
       <div class="templates-wrapper">
-        <h2>Evrak Sablonlari</h2>
+        <h2>Evrak Şablonları</h2>
         <div class="templates-actions">
-          <button id="addTemplateBtn" class="btn btn-primary">Yeni Sablon</button>
+          <button id="addTemplateBtn" class="btn btn-primary">Yeni Şablon</button>
         </div>
         <div id="templateForm" style="display:none" class="template-form">
-          <input type="text" id="tplName" placeholder="Sablon adi" required>
+          <input type="text" id="tplName" placeholder="Şablon adı" required>
           <input type="text" id="tplDocType" placeholder="Evrak turu" required>
           <input type="text" id="tplDesc" placeholder="Aciklama">
           <input type="text" id="tplTags" placeholder="Etiketler (virgul ile)">
           <select id="tplPriority">
             <option value="normal">Normal</option>
-            <option value="high">Yuksek</option>
+            <option value="high">Yüksek</option>
             <option value="urgent">Acil</option>
-            <option value="low">Dusuk</option>
+            <option value="low">Düşük</option>
           </select>
           <button id="saveTemplateBtn" class="btn btn-primary">Kaydet</button>
           <button id="cancelTemplateBtn" class="btn btn-secondary">Iptal</button>
         </div>
-        <div id="templatesList"><p>Yukleniyor...</p></div>
+        <div id="templatesList"><p>Yükleniyor...</p></div>
       </div>`;
     this._bindEvents();
     await this._loadTemplates();
@@ -49,13 +49,13 @@ export class TemplatesView {
       const data = resp;
       this._renderList(data.templates || []);
     } catch (e) {
-      document.getElementById('templatesList').innerHTML = '<p class="error-text">Yuklenemedi.</p>';
+      document.getElementById('templatesList').innerHTML = '<p class="error-text">Yüklenemedi.</p>';
     }
   }
 
   _renderList(templates) {
     const el = document.getElementById('templatesList');
-    if (!templates.length) { el.innerHTML = '<p>Sablon yok.</p>'; return; }
+    if (!templates.length) { el.innerHTML = '<p>Şablon yok.</p>'; return; }
     el.innerHTML = `<div class="templates-grid">${templates.map(t => `
       <div class="template-card">
         <h4>${t.name}</h4>

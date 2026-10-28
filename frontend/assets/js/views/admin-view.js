@@ -6,28 +6,28 @@ export default class AdminView {
     async render(container) {
         container.innerHTML = `
             <section class="view-section">
-                <h1>Yonetim Paneli</h1>
+                <h1>Yönetim Paneli</h1>
                 <div class="metrics-grid">
                     <div class="card">
-                        <div class="card__header"><h3>Bakim Modu</h3></div>
-                        <div class="card__body" id="maintenancePanel">Yukleniyor...</div>
+                        <div class="card__header"><h3>Bakım Modu</h3></div>
+                        <div class="card__body" id="maintenancePanel">Yükleniyor...</div>
                     </div>
                     <div class="card">
                         <div class="card__header"><h3>Servis Durumu</h3></div>
-                        <div class="card__body" id="serviceStatus">Yukleniyor...</div>
+                        <div class="card__body" id="serviceStatus">Yükleniyor...</div>
                     </div>
                     <div class="card">
                         <div class="card__header"><h3>Sistem Bilgisi</h3></div>
-                        <div class="card__body" id="systemInfo">Yukleniyor...</div>
+                        <div class="card__body" id="systemInfo">Yükleniyor...</div>
                     </div>
                     <div class="card">
                         <div class="card__header"><h3>Son Loglar</h3></div>
-                        <div class="card__body" id="recentLogs">Yukleniyor...</div>
+                        <div class="card__body" id="recentLogs">Yükleniyor...</div>
                     </div>
                 </div>
                 <div class="card" style="margin-top:1.5rem">
                   <h3>Performans Profiler</h3>
-                  <div id="profiler-stats" class="stat-grid">Yukleniyor...</div>
+                  <div id="profiler-stats" class="stat-grid">Yükleniyor...</div>
                 </div>
                 <div class="card" style="margin-top:1.5rem">
                   <h3>Girdi Dogrulama</h3>
@@ -60,10 +60,10 @@ export default class AdminView {
               const profilerEl = document.getElementById('profiler-stats');
               if (profilerEl) {
                 profilerEl.innerHTML = `
-                  <div class="stat-item"><span class="stat-value">${profilerData.total_profiled || 0}</span><span class="stat-label">Toplam Istek</span></div>
+                  <div class="stat-item"><span class="stat-value">${profilerData.total_profiled || 0}</span><span class="stat-label">Toplam İstek</span></div>
                   <div class="stat-item"><span class="stat-value">${profilerData.unique_endpoints || 0}</span><span class="stat-label">Endpoint</span></div>
                   <div class="stat-item"><span class="stat-value">${profilerData.slow_requests_count || 0}</span><span class="stat-label">Yavas Istek</span></div>
-                  <div class="stat-item"><span class="stat-value">${profilerData.global_avg_ms || 0}ms</span><span class="stat-label">Ort. Sure</span></div>
+                  <div class="stat-item"><span class="stat-value">${profilerData.global_avg_ms || 0}ms</span><span class="stat-label">Ort. Süre</span></div>
                 `;
               }
             } catch(e) { console.error('Profiler verisi alinamadi:', e); }
@@ -113,14 +113,14 @@ export default class AdminView {
             </div>
             <div style="display:flex;gap:0.5rem;">
                 <button class="btn btn--sm ${active ? 'btn--ghost' : 'btn--primary'}" id="btnMaintenanceToggle">
-                    ${active ? 'Bakimi Kapat' : 'Bakim Modunu Ac'}
+                    ${active ? 'Bakımı Kapat' : 'Bakım Modunu Aç'}
                 </button>
             </div>`;
         document.getElementById('btnMaintenanceToggle').addEventListener('click', async () => {
             if (active) {
                 await this.api.request('/maintenance/disable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
             } else {
-                const reason = prompt('Bakim nedeni:') || '';
+                const reason = prompt('Bakım nedeni:') || '';
                 await this.api.request('/maintenance/enable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
             }
             await this.loadData();

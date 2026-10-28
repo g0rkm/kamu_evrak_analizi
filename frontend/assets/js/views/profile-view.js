@@ -10,7 +10,7 @@ export class ProfileView {
     const token = localStorage.getItem('auth_token');
     const username = localStorage.getItem('auth_user');
     if (!token || !username) {
-      this._container.innerHTML = '<div class="profile-wrapper"><p>Giris yapmadınız. <a href="#login">Giris yapın.</a></p></div>';
+      this._container.innerHTML = '<div class="profile-wrapper"><p>Giriş yapmadınız. <a href="#login">Giriş yapın.</a></p></div>';
       return;
     }
     this._container.innerHTML = `
@@ -19,7 +19,7 @@ export class ProfileView {
         <div class="profile-card">
           <div class="profile-info">
             <p><strong>Kullanici:</strong> <span id="profileUser">${username}</span></p>
-            <p><strong>Rol:</strong> <span id="profileRole">Yukleniyor...</span></p>
+            <p><strong>Rol:</strong> <span id="profileRole">Yükleniyor...</span></p>
             <p><strong>Oturum:</strong> <span id="profileSession">Aktif</span></p>
           </div>
           <div class="profile-actions">
@@ -28,7 +28,7 @@ export class ProfileView {
         </div>
         <div class="profile-section">
           <h3>Izinler</h3>
-          <div id="profilePermissions"><p>Yukleniyor...</p></div>
+          <div id="profilePermissions"><p>Yükleniyor...</p></div>
         </div>
       </div>`;
     this._bindEvents();

@@ -11,7 +11,7 @@ export class LoginView {
     this._container.innerHTML = `
       <div class="login-wrapper">
         <div class="login-card">
-          <h2>Giris Yap</h2>
+          <h2>Giriş Yap</h2>
           <form id="loginForm">
             <div class="form-group">
               <label for="username">Kullanici Adi</label>
@@ -22,7 +22,7 @@ export class LoginView {
               <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
             <div id="loginError" class="error-text" style="display:none"></div>
-            <button type="submit" class="btn btn-primary btn-block">Giris</button>
+            <button type="submit" class="btn btn-primary btn-block">Giriş</button>
           </form>
         </div>
       </div>`;
@@ -54,7 +54,7 @@ export class LoginView {
       });
       if (!resp.ok) {
         const data = resp;
-        errEl.textContent = data.detail || 'Giris basarisiz.';
+        errEl.textContent = data.detail || 'Giriş başarısız.';
         errEl.style.display = 'block';
         return;
       }

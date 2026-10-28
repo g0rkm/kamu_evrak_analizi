@@ -11,14 +11,14 @@ export class DashboardView {
       <div class="dashboard-wrapper">
         <h2>Kontrol Paneli</h2>
         <div id="dashboardCards" class="dashboard-grid">
-          <div class="dash-card" id="cardRecords"><h3>Kayitlar</h3><p>Yukleniyor...</p></div>
-          <div class="dash-card" id="cardPriority"><h3>Oncelik Dagilimi</h3><p>Yukleniyor...</p></div>
-          <div class="dash-card" id="cardNotifications"><h3>Bildirimler</h3><p>Yukleniyor...</p></div>
-          <div class="dash-card" id="cardSystem"><h3>Sistem</h3><p>Yukleniyor...</p></div>
+          <div class="dash-card" id="cardRecords"><h3>Kayıtlar</h3><p>Yükleniyor...</p></div>
+          <div class="dash-card" id="cardPriority"><h3>Öncelik Dağılımı</h3><p>Yükleniyor...</p></div>
+          <div class="dash-card" id="cardNotifications"><h3>Bildirimler</h3><p>Yükleniyor...</p></div>
+          <div class="dash-card" id="cardSystem"><h3>Sistem</h3><p>Yükleniyor...</p></div>
         </div>
         <div class="dashboard-section">
           <h3>Son Bildirimler</h3>
-          <div id="recentNotifications"><p>Yukleniyor...</p></div>
+          <div id="recentNotifications"><p>Yükleniyor...</p></div>
         </div>
       </div>`;
     await this._loadData();
@@ -35,34 +35,34 @@ export class DashboardView {
       this._renderCards(summary);
       this._renderNotifications(notifs.notifications || []);
     } catch (e) {
-      document.getElementById('cardRecords').innerHTML = '<h3>Kayitlar</h3><p class="error-text">Veri yuklenemedi</p>';
+      document.getElementById('cardRecords').innerHTML = '<h3>Kayıtlar</h3><p class="error-text">Veri yüklenemedi</p>';
     }
   }
 
   _renderCards(s) {
     document.getElementById('cardRecords').innerHTML = `
-      <h3>Kayitlar</h3>
+      <h3>Kayıtlar</h3>
       <div class="dash-stat">${s.active_records || 0}</div>
-      <div class="dash-detail">Aktif: ${s.active_records || 0} | Arsiv: ${s.archived_records || 0} | Silinen: ${s.deleted_records || 0}</div>`;
+      <div class="dash-detail">Aktif: ${s.active_records || 0} | Arşiv: ${s.archived_records || 0} | Silinen: ${s.deleted_records || 0}</div>`;
 
     const pd = s.priority_distribution || {};
     document.getElementById('cardPriority').innerHTML = `
-      <h3>Oncelik Dagilimi</h3>
+      <h3>Öncelik Dağılımı</h3>
       <div class="priority-bars">
-        ${['urgent','high','normal','low'].map(p =>
-          `<div class="pbar"><span class="pbar-label ${p}">${p}</span><span class="pbar-count">${pd[p] || 0}</span></div>`
+        ${[['urgent','Acil'],['high','Yüksek'],['normal','Normal'],['low','Düşük']].map(([p, label]) =>
+          `<div class="pbar"><span class="pbar-label ${p}">${label}</span><span class="pbar-count">${pd[p] || 0}</span></div>`
         ).join('')}
       </div>`;
 
     document.getElementById('cardNotifications').innerHTML = `
       <h3>Bildirimler</h3>
       <div class="dash-stat">${s.unread_notifications || 0}</div>
-      <div class="dash-detail">Okunmamis bildirim</div>`;
+      <div class="dash-detail">Okunmamış bildirim</div>`;
 
     document.getElementById('cardSystem').innerHTML = `
       <h3>Sistem</h3>
-      <div class="dash-detail">Calisma: ${this._formatUptime(s.uptime_seconds)}</div>
-      <div class="dash-detail">Denetim kaydi: ${s.audit_log_count || 0}</div>`;
+      <div class="dash-detail">Çalışma: ${this._formatUptime(s.uptime_seconds)}</div>
+      <div class="dash-detail">Denetim kaydı: ${s.audit_log_count || 0}</div>`;
   }
 
   _renderNotifications(notifs) {

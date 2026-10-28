@@ -9,20 +9,20 @@ export class ExportView {
   async render() {
     this._container.innerHTML = `
       <div class="export-wrapper">
-        <h2>Veri Aktarimi</h2>
+        <h2>Veri Aktarımı</h2>
         <div class="export-cards">
           <div class="export-card">
             <h3>CSV Aktar</h3>
-            <p>Kayitlari CSV formatinda indir</p>
-            <button id="exportCsvBtn" class="btn btn-primary">CSV Indir</button>
+            <p>Kayıtları CSV formatında indir</p>
+            <button id="exportCsvBtn" class="btn btn-primary">CSV İndir</button>
           </div>
           <div class="export-card">
             <h3>JSON Aktar</h3>
-            <p>Kayitlari JSON formatinda indir</p>
-            <button id="exportJsonBtn" class="btn btn-primary">JSON Indir</button>
+            <p>Kayıtları JSON formatında indir</p>
+            <button id="exportJsonBtn" class="btn btn-primary">JSON İndir</button>
           </div>
           <div class="export-card">
-            <h3>Ozet Rapor</h3>
+            <h3>Özet Rapor</h3>
             <p>Kayit istatistik raporu</p>
             <button id="exportReportBtn" class="btn btn-secondary">Rapor Goruntule</button>
           </div>
@@ -66,12 +66,12 @@ export class ExportView {
   async _showReport() {
     const el = document.getElementById('exportReport');
     el.style.display = 'block';
-    el.innerHTML = '<p>Yukleniyor...</p>';
+    el.innerHTML = '<p>Yükleniyor...</p>';
     try {
       const resp = await this._api.exportReport();
       const data = resp;
       el.innerHTML = `
-        <h3>Ozet Rapor</h3>
+        <h3>Özet Rapor</h3>
         <div class="report-grid">
           <div><strong>Toplam Kayit:</strong> ${data.total_records}</div>
           <div><strong>Favori:</strong> ${data.favorite_count}</div>
@@ -79,7 +79,7 @@ export class ExportView {
         </div>
         <h4>Evrak Turu Dagilimi</h4>
         <ul>${Object.entries(data.by_document_type || {}).map(([k,v]) => `<li>${k}: ${v}</li>`).join('')}</ul>
-        <h4>Oncelik Dagilimi</h4>
+        <h4>Öncelik Dağılımı</h4>
         <ul>${Object.entries(data.by_priority || {}).map(([k,v]) => `<li>${k}: ${v}</li>`).join('')}</ul>
         ${data.top_tags?.length ? `<h4>En Cok Kullanilan Etiketler</h4><ul>${data.top_tags.map(t => `<li>${t.tag}: ${t.count}</li>`).join('')}</ul>` : ''}`;
     } catch (e) {

@@ -9,19 +9,19 @@ export class SearchView {
   async render() {
     this._container.innerHTML = `
       <div class="search-wrapper">
-        <h2>Gelismis Arama</h2>
+        <h2>Gelişmiş Arama</h2>
         <form id="searchForm" class="search-form">
           <input type="text" id="searchQuery" placeholder="Arama terimi..." required>
           <select id="searchPriority">
-            <option value="">Tum Oncelikler</option>
+            <option value="">Tüm Öncelikler</option>
             <option value="urgent">Acil</option>
-            <option value="high">Yuksek</option>
+            <option value="high">Yüksek</option>
             <option value="normal">Normal</option>
-            <option value="low">Dusuk</option>
+            <option value="low">Düşük</option>
           </select>
           <button type="submit" class="btn btn-primary">Ara</button>
         </form>
-        <div id="searchResults"><p>Arama yapin.</p></div>
+        <div id="searchResults"><p>Arama yapın.</p></div>
       </div>`;
     this._bindEvents();
   }

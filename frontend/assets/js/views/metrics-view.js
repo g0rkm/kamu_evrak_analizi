@@ -9,25 +9,25 @@ export default class MetricsView {
                 <h1>API Metrikleri</h1>
                 <div class="metrics-grid">
                     <div class="card" id="metricsSummaryCard">
-                        <div class="card__header"><h3>Genel Ozet</h3></div>
-                        <div class="card__body" id="metricsSummary">Yukleniyor...</div>
+                        <div class="card__header"><h3>Genel Özet</h3></div>
+                        <div class="card__body" id="metricsSummary">Yükleniyor...</div>
                     </div>
                     <div class="card" id="metricsStatusCard">
                         <div class="card__header"><h3>Durum Dagilimi</h3></div>
-                        <div class="card__body" id="metricsStatus">Yukleniyor...</div>
+                        <div class="card__body" id="metricsStatus">Yükleniyor...</div>
                     </div>
                     <div class="card" id="metricsTopCard">
                         <div class="card__header"><h3>En Cok Kullanilan Endpointler</h3></div>
-                        <div class="card__body" id="metricsTop">Yukleniyor...</div>
+                        <div class="card__body" id="metricsTop">Yükleniyor...</div>
                     </div>
                     <div class="card" id="metricsSlowestCard">
                         <div class="card__header"><h3>En Yavas Endpointler</h3></div>
-                        <div class="card__body" id="metricsSlowest">Yukleniyor...</div>
+                        <div class="card__body" id="metricsSlowest">Yükleniyor...</div>
                     </div>
                 </div>
                 <div class="card" style="margin-top:1rem;">
                     <div class="card__header"><h3>Log Istatistikleri</h3></div>
-                    <div class="card__body" id="logStats">Yukleniyor...</div>
+                    <div class="card__body" id="logStats">Yükleniyor...</div>
                 </div>
             </section>`;
         await this.loadData();
@@ -57,9 +57,9 @@ export default class MetricsView {
         if (!data || data.error) { el.textContent = 'Veri alinamadi'; return; }
         el.innerHTML = `
             <div class="stat-grid">
-                <div class="stat-item"><span class="stat-value">${data.total_requests || 0}</span><span class="stat-label">Toplam Istek</span></div>
-                <div class="stat-item"><span class="stat-value">${(data.avg_duration_ms || 0).toFixed(1)}ms</span><span class="stat-label">Ort. Sure</span></div>
-                <div class="stat-item"><span class="stat-value">${data.unique_endpoints || 0}</span><span class="stat-label">Endpoint Sayisi</span></div>
+                <div class="stat-item"><span class="stat-value">${data.total_requests || 0}</span><span class="stat-label">Toplam İstek</span></div>
+                <div class="stat-item"><span class="stat-value">${(data.avg_duration_ms || 0).toFixed(1)}ms</span><span class="stat-label">Ort. Süre</span></div>
+                <div class="stat-item"><span class="stat-value">${data.unique_endpoints || 0}</span><span class="stat-label">Uç Nokta Sayısı</span></div>
                 <div class="stat-item"><span class="stat-value">${(data.error_rate || 0).toFixed(1)}%</span><span class="stat-label">Hata Orani</span></div>
             </div>`;
     }
@@ -78,7 +78,7 @@ export default class MetricsView {
     renderTop(data) {
         const el = document.getElementById('metricsTop');
         if (!data || !data.top || data.top.length === 0) { el.textContent = 'Henuz veri yok'; return; }
-        el.innerHTML = '<table class="data-table"><thead><tr><th>Endpoint</th><th>Istek</th><th>Ort. Sure</th></tr></thead><tbody>' +
+        el.innerHTML = '<table class="data-table"><thead><tr><th>Endpoint</th><th>İstek</th><th>Ort. Süre</th></tr></thead><tbody>' +
             data.top.map(e => `<tr><td><code>${e.path || e.endpoint || ''}</code></td><td>${e.count || e.requests || 0}</td><td>${(e.avg_duration_ms || e.avg_ms || 0).toFixed(1)}ms</td></tr>`).join('') +
             '</tbody></table>';
     }
@@ -86,7 +86,7 @@ export default class MetricsView {
     renderSlowest(data) {
         const el = document.getElementById('metricsSlowest');
         if (!data || !data.slowest || data.slowest.length === 0) { el.textContent = 'Henuz veri yok'; return; }
-        el.innerHTML = '<table class="data-table"><thead><tr><th>Endpoint</th><th>Ort. Sure</th><th>Istek</th></tr></thead><tbody>' +
+        el.innerHTML = '<table class="data-table"><thead><tr><th>Endpoint</th><th>Ort. Süre</th><th>İstek</th></tr></thead><tbody>' +
             data.slowest.map(e => `<tr><td><code>${e.path || e.endpoint || ''}</code></td><td>${(e.avg_duration_ms || e.avg_ms || 0).toFixed(1)}ms</td><td>${e.count || e.requests || 0}</td></tr>`).join('') +
             '</tbody></table>';
     }

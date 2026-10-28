@@ -11,10 +11,10 @@ export class NotificationsView {
       <div class="notif-wrapper">
         <h2>Bildirimler</h2>
         <div class="notif-actions">
-          <button id="markAllReadBtn" class="btn btn-secondary">Tumunu Okundu Isaretle</button>
+          <button id="markAllReadBtn" class="btn btn-secondary">Tümünü Okundu İşaretle</button>
         </div>
         <div id="notifStats" class="notif-stats"></div>
-        <div id="notifList"><p>Yukleniyor...</p></div>
+        <div id="notifList"><p>Yükleniyor...</p></div>
       </div>`;
     this._bindEvents();
     await this._loadData();
@@ -35,13 +35,13 @@ export class NotificationsView {
       this._renderStats(stats);
       this._renderList(notifs.notifications || []);
     } catch (e) {
-      document.getElementById('notifList').innerHTML = '<p class="error-text">Yuklenemedi.</p>';
+      document.getElementById('notifList').innerHTML = '<p class="error-text">Yüklenemedi.</p>';
     }
   }
 
   _renderStats(stats) {
     const el = document.getElementById('notifStats');
-    el.innerHTML = `<p>Toplam: ${stats.total || 0} | Okunmamis: ${stats.unread || 0}</p>`;
+    el.innerHTML = `<p>Toplam: ${stats.total || 0} | Okunmamış: ${stats.unread || 0}</p>`;
   }
 
   _renderList(notifs) {
