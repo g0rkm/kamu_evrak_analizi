@@ -11,8 +11,6 @@ import { AuditView } from './views/audit-view.js';
 import { PiiView } from './views/pii-view.js';
 import { TimelineView } from './views/timeline-view.js';
 import { SettingsView } from './views/settings-view.js';
-import { LoginView } from './views/login-view.js';
-import { ProfileView } from './views/profile-view.js';
 import { SearchView } from './views/search-view.js';
 import { NotificationsView } from './views/notifications-view.js';
 import { TemplatesView } from './views/templates-view.js';
@@ -139,8 +137,6 @@ class App {
             pii: new PiiView(this.root),
             timeline: new TimelineView(this.root),
             settings: new SettingsView(this.root),
-            login: new LoginView(this.root),
-            profile: new ProfileView(this.root),
             search: new SearchView(this.root),
             notifications: new NotificationsView(this.root),
             templates: new TemplatesView(this.root),
