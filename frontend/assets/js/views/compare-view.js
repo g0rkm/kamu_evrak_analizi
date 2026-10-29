@@ -24,10 +24,39 @@ export class CompareView {
             onKeydown: (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); this.submit(); } },
         });
         counter.textContent = `0 / ${fmt.number(this.vocab.limits.max_text_chars)} karakter`;
+        const fileInput = h('input', {
+            type: 'file', class: 'sr-only', accept: this.vocab.acceptAttribute,
+            onChange: async (e) => {
+                const file = e.target.files[0];
+                e.target.value = '';
+                if (!file) return;
+                uploadBtn.disabled = true;
+                const prev = uploadBtn.textContent;
+                uploadBtn.textContent = 'Okunuyor…';
+                try {
+                    const fd = new FormData();
+                    fd.append('file', file);
+                    const resp = await fetch('/api/extract-text', { method: 'POST', body: fd });
+                    if (!resp.ok) throw new Error('Dosya okunamadı');
+                    const data = await resp.json();
+                    textarea.value = data.text || '';
+                    textarea.dispatchEvent(new Event('input'));
+                } catch (err) {
+                    this.toaster?.error?.('Dosyadan metin çıkarılamadı. Metni elle yapıştırabilirsiniz.');
+                } finally {
+                    uploadBtn.disabled = false;
+                    uploadBtn.textContent = prev;
+                }
+            },
+        });
+        const uploadBtn = h('button', { type: 'button', class: 'btn btn-secondary', style: { fontSize: '13px', padding: '6px 12px' }, onClick: () => fileInput.click() }, 'Dosya yükle');
         return {
             textarea,
             element: h('div', { class: 'field' },
-                h('label', { for: id, style: { fontSize: '14px', color: 'var(--color-text)' } }, label),
+                h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' } },
+                    h('label', { for: id, style: { fontSize: '14px', color: 'var(--color-text)' } }, label),
+                    uploadBtn),
+                fileInput,
                 textarea, counter),
         };
     }
