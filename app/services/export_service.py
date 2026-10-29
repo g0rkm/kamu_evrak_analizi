@@ -39,25 +39,42 @@ class ExportService:
     
     def export_summary(self, records: list) -> dict:
         total = len(records)
-        if total == 0:
-            return {"total": 0, "date_range": None, "categories": {}}
-        categories = {}
+        by_document_type: dict = {}
+        by_priority: dict = {}
+        favorite_count = 0
+        archived_count = 0
         dates = []
         for r in records:
-            if isinstance(r, dict):
-                cat = r.get("category", r.get("siniflandirma", {}).get("kategori", "bilinmiyor"))
-                if isinstance(cat, dict):
-                    cat = cat.get("kategori", "bilinmiyor")
-                categories[cat] = categories.get(cat, 0) + 1
-                ts = r.get("timestamp", r.get("created_at", ""))
-                if ts:
-                    dates.append(str(ts))
+            if not isinstance(r, dict):
+                continue
+            dtype = r.get("document_type") or "bilinmiyor"
+            by_document_type[dtype] = by_document_type.get(dtype, 0) + 1
+            prio = r.get("priority")
+            if not prio:
+                routing = (r.get("result") or {}).get("routing")
+                if isinstance(routing, dict):
+                    prio = routing.get("priority")
+            prio = prio or "normal"
+            by_priority[prio] = by_priority.get(prio, 0) + 1
+            if r.get("favorite"):
+                favorite_count += 1
+            if r.get("archived"):
+                archived_count += 1
+            ts = r.get("timestamp") or r.get("created_at") or ""
+            if ts:
+                dates.append(str(ts))
         dates.sort()
         return {
-            "total": total,
+            "total_records": total,
+            "favorite_count": favorite_count,
+            "archived_count": archived_count,
+            "by_document_type": by_document_type,
+            "by_priority": by_priority,
             "date_range": {"start": dates[0], "end": dates[-1]} if dates else None,
-            "categories": categories,
-            "exported_at": datetime.now().isoformat()
+            "exported_at": datetime.now().isoformat(),
+            # geriye dönük uyumluluk
+            "total": total,
+            "categories": by_document_type,
         }
     
     def get_all_records(self) -> list:
