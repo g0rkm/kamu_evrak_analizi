@@ -12,35 +12,35 @@
 
   /* Tonal ramps — generated in OKLCH on one shared lightness scale, so the
      same step of any role matches the others in visual value. */
-  --color-neutral-100: #f8f4f4;
-  --color-neutral-200: #eae7e7;
-  --color-neutral-300: #d7d3d3;
-  --color-neutral-400: #bab6b6;
-  --color-neutral-500: #9b9797;
-  --color-neutral-600: #7d7979;
-  --color-neutral-700: #605d5d;
-  --color-neutral-800: #444141;
-  --color-neutral-900: #2d2b2b;
+  --color-neutral-100: #f8fafc;
+  --color-neutral-200: #eef1f5;
+  --color-neutral-300: #e4e7ec;
+  --color-neutral-400: #d5dae1;
+  --color-neutral-500: #aeb6c2;
+  --color-neutral-600: #8a93a3;
+  --color-neutral-700: #5b6575;
+  --color-neutral-800: #3d4654;
+  --color-neutral-900: #14181f;
 
-  --color-accent-100: #fff3e4;
-  --color-accent-200: #ffe3bf;
-  --color-accent-300: #facb8d;
-  --color-accent-400: #e1ad66;
-  --color-accent-500: #c28d41;
-  --color-accent-600: #a06f24;
-  --color-accent-700: #7d5411;
-  --color-accent-800: #5a3b0a;
-  --color-accent-900: #3a270d;
+  --color-accent-100: #eaf1fd;
+  --color-accent-200: #d2e2fb;
+  --color-accent-300: #a9c6f6;
+  --color-accent-400: #6f9bee;
+  --color-accent-500: #3f78e3;
+  --color-accent-600: #1f5fd6;
+  --color-accent-700: #1a51b8;
+  --color-accent-800: #17469e;
+  --color-accent-900: #13316e;
 
-  --color-accent-2-100: #fff3e4;
-  --color-accent-2-200: #ffe3be;
-  --color-accent-2-300: #f5cd96;
-  --color-accent-2-400: #dbaf70;
-  --color-accent-2-500: #bc8f4e;
-  --color-accent-2-600: #9b7232;
-  --color-accent-2-700: #79561f;
-  --color-accent-2-800: #573d14;
-  --color-accent-2-900: #382810;
+  --color-accent-2-100: #fff4e0;
+  --color-accent-2-200: #fde8c0;
+  --color-accent-2-300: #f7d390;
+  --color-accent-2-400: #edb85c;
+  --color-accent-2-500: #d99a33;
+  --color-accent-2-600: #b87a1a;
+  --color-accent-2-700: #8a5300;
+  --color-accent-2-800: #6b4000;
+  --color-accent-2-900: #492b00;
 
   --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
   --font-heading-weight: 700;
