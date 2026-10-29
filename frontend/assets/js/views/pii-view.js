@@ -38,7 +38,7 @@ export class PiiView {
             this.textarea,
             h('div', { class: 'split', style: { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '14px' } },
                 actionBtn('btn-secondary', 'piiAnalyzeBtn', 'Bul ve göster', 'Metni değiştirmez', () => this._run('find')),
-                actionBtn('btn-primary', 'piiMaskBtn', 'Gizle (maskele)', 'Örn. 123******78', () => this._run('mask')),
+                actionBtn('btn-secondary', 'piiMaskBtn', 'Gizle (maskele)', 'Örn. 123******78', () => this._run('mask')),
                 actionBtn('btn-secondary', 'piiRedactBtn', 'Tamamen kaldır', 'Yerine [GİZLİ] yazar', () => this._run('redact'))),
             this.resultsRoot);
 
