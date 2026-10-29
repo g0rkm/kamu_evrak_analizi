@@ -60,8 +60,8 @@ export class SystemView {
     async loadHealthData() {
         try {
             const data = await this.api.request('/system/health-check');
-            const disk = data.disk_usage_percent != null ? `%${data.disk_usage_percent}` : null;
-            const mem = data.memory_usage_percent != null ? `%${data.memory_usage_percent}` : null;
+            const disk = data.disk?.used_percent != null ? `%${data.disk.used_percent}` : null;
+            const mem = data.memory?.used_percent != null ? `%${data.memory.used_percent}` : null;
             if (data.status === 'healthy' && disk && mem) {
                 this.bannerTitle.textContent = 'Tüm servisler çalışıyor';
                 this.bannerSub.textContent = 'Sunucu ve bağlı bileşenler normal şekilde yanıt veriyor.';
