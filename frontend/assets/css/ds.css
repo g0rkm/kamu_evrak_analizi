@@ -3,12 +3,12 @@
 @import url('fonts.css');
 
 :root {
-  --color-bg: #f3f2f2;
-  --color-surface: #eae9e9;
-  --color-text: #201f1d;
-  --color-accent: #b68235;
-  --color-accent-2: #ac803e;
-  --color-divider: color-mix(in srgb, #201f1d 16%, transparent);
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-text: #14181f;
+  --color-accent: #1f5fd6;
+  --color-accent-2: #17469e;
+  --color-divider: #e4e7ec;
 
   /* Tonal ramps — generated in OKLCH on one shared lightness scale, so the
      same step of any role matches the others in visual value. */
@@ -42,11 +42,9 @@
   --color-accent-2-800: #573d14;
   --color-accent-2-900: #382810;
 
-  --font-heading: "Cormorant Garamond", system-ui, sans-serif;
-  --font-heading-weight: 600; /* review round 3: bold retired — semibold is the
-     interface headings' ceiling (they need the weight at small sizes); display
-     text goes lighter still, to the normal cut (see the deck) */
-  --font-body: "Lora", system-ui, sans-serif;
+  --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-heading-weight: 700;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
 
   --space-1: 4.6px;
   --space-2: 9.2px;
@@ -55,15 +53,15 @@
   --space-6: 27.6px;
   --space-8: 36.8px;
 
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 7px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
 
   /* Elevation — derived from the ground: soft ink-tinted shadows on a
      light theme, a hairline edge + ambient darkness on a dark one. */
-  --shadow-sm: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
-  --shadow-md: 0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
-  --shadow-lg: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
+  --shadow-sm: 0 1px 2px rgba(16,24,40,.06);
+  --shadow-md: 0 4px 12px rgba(16,24,40,.08);
+  --shadow-lg: 0 16px 40px rgba(16,24,40,.14);
 }
 
 body {
