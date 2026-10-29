@@ -173,13 +173,14 @@ class InputCard {
         const { min_text_chars: min } = this.vocab.limits;
         if (this.textInput.value.trim().length >= min) this.showError(this.textError, null);
         writeSession('draftText', this.textInput.value);
+        writeSession('draftTitle', '');
     }
 
     loadSample() {
         this.setMode('text');
         this.textInput.value = SAMPLE_DOCUMENT;
-        writeSession('draftTitle', 'Örnek: Kaldırım onarımı dilekçesi');
         this.onTextInput();
+        writeSession('draftTitle', 'Örnek: Kaldırım onarımı dilekçesi');
     }
 
     showError(target, message) {
