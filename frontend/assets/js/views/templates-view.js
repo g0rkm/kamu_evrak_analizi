@@ -101,12 +101,16 @@ export class TemplatesView {
     }
 
     _useTemplate(t) {
-        try {
-            sessionStorage.setItem('draftTitle', t.name);
-            sessionStorage.setItem('draftText', this._sampleFor(t));
-        } catch {}
-        storage.set('inputMode', 'text');
-        location.hash = '#/analiz';
+        const textarea = h('textarea', { class: 'input', style: { minHeight: '320px', fontSize: '14px', lineHeight: 1.7 }, value: this._sampleFor(t) });
+        const dialog = h('dialog', { class: 'dialog', style: { width: 'min(720px, 100%)' } },
+            h('div', { class: 'dialog-title' }, t.name),
+            h('div', { class: 'field' }, h('label', null, 'Şablon metni — düzenleyip kopyalayabilir veya indirebilirsiniz'), textarea),
+            h('div', { class: 'dialog-actions' },
+                h('button', { type: 'button', class: 'btn btn-ghost', onClick: () => { dialog.close(); dialog.remove(); } }, 'Kapat'),
+                h('button', { type: 'button', class: 'btn btn-secondary', onClick: () => { const b = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `${t.name}.txt`; a.click(); URL.revokeObjectURL(a.href); } }, 'İndir (.txt)'),
+                h('button', { type: 'button', class: 'btn btn-primary', onClick: () => { navigator.clipboard?.writeText(textarea.value); } }, 'Kopyala')));
+        document.body.append(dialog);
+        dialog.showModal();
     }
 
     _previewTemplate(t) {
