@@ -76,6 +76,25 @@ class PlainTextExtractor(TextExtractor):
         raise TextExtractionError("Metin dosyasının karakter kodlaması çözülemedi.")
 
 
+class DocxExtractor(TextExtractor):
+    extensions = frozenset({".doc", ".docx"})
+
+    def extract(self, path: Path) -> ExtractedText:
+        try:
+            import docx
+        except ImportError as exc:
+            raise TextExtractionError("DOCX desteği için python-docx paketi gereklidir.") from exc
+        try:
+            document = docx.Document(path)
+            parts = [p.text for p in document.paragraphs if p.text.strip()]
+            raw_text = "\n\n".join(parts)
+        except Exception as exc:
+            raise TextExtractionError("Word dosyası açılamadı veya bozuk.") from exc
+        if not raw_text.strip():
+            raise TextExtractionError("Word dosyasında okunabilir metin bulunamadı.")
+        return self._result(raw_text, confidence=0.95)
+
+
 class ImageExtractor(TextExtractor):
     extensions = frozenset({".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"})
 
@@ -129,7 +148,7 @@ class OCRService:
         if extractors is None:
             settings = settings or get_settings()
             engine = TesseractEngine(settings.TESSERACT_CMD, settings.OCR_LANGUAGE)
-            extractors = (PdfExtractor(engine), ImageExtractor(engine), PlainTextExtractor())
+            extractors = (PdfExtractor(engine), ImageExtractor(engine), DocxExtractor(), PlainTextExtractor())
         self.extractors = tuple(extractors)
 
     @property
