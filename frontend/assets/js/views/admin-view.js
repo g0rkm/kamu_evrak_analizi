@@ -1,4 +1,4 @@
-import { h, replace } from '../core/dom.js';
+import { downloadBlob, h, replace } from '../core/dom.js';
 import { fmt } from '../core/vocabulary.js';
 
 const SERVICE_LABELS = {
@@ -76,7 +76,15 @@ export default class AdminView {
                     this.uptimeHint),
                 h('div', { class: 'card', style: { padding: '20px' } },
                     h('div', { class: 'card-title' }, 'Son kayıtlar'),
-                    this.recentLogsBox)),
+                    this.recentLogsBox),
+                h('div', { class: 'card', style: { padding: '20px', textAlign: 'center' } },
+                    h('div', { class: 'card-title', style: { textAlign: 'left' } }, 'Ortalama işlem süresi'),
+                    this.avgTimeVal = h('div', { style: { fontFamily: 'var(--font-heading)', fontSize: '36px' } }, '—'),
+                    h('div', { style: { fontSize: '12px', color: 'var(--color-neutral-700)' } }, 'Evrak başına')),
+                h('div', { class: 'card', style: { padding: '20px', gap: '12px' } },
+                    h('div', { class: 'card-title' }, 'Veri dışa aktarma'),
+                    h('p', { class: 'card-body', style: { fontSize: '13px' } }, 'Tüm kayıtları JSON formatında indirin.'),
+                    h('button', { type: 'button', class: 'btn btn-primary', style: { alignSelf: 'flex-start' }, onClick: () => this.downloadJson() }, 'JSON olarak indir'))),
             h('div', { class: 'card', style: { padding: '20px', gap: '14px' } },
                 h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' } },
                     h('div', { class: 'card-title' }, 'Servisler'),
@@ -94,16 +102,22 @@ export default class AdminView {
     }
 
     async loadData() {
-        const [maint, config, uptime, logs] = await Promise.allSettled([
+        const results = await Promise.allSettled([
             this.api.request('/maintenance/status'),
             this.api.request('/system/config-report'),
             this.api.request('/system/uptime'),
             this.api.logsRecent(),
+            this.api.request('/history/stats'),
         ]);
+        const [maint, config, uptime, logs, stats] = results;
         this.renderMaintenance(maint.status === 'fulfilled' ? maint.value : null);
         this.renderServices(config.status === 'fulfilled' ? config.value : null);
         this.renderSystemInfo(uptime.status === 'fulfilled' ? uptime.value : null);
         this.renderLogs(logs.status === 'fulfilled' ? logs.value : null);
+        const statsVal = stats?.status === 'fulfilled' ? stats.value : null;
+        if (statsVal?.avg_processing_time != null) {
+            this.avgTimeVal.textContent = fmt.seconds(statsVal.avg_processing_time);
+        }
     }
 
     renderMaintenance(data) {
@@ -154,6 +168,13 @@ export default class AdminView {
             h('span', { class: 'tag tag-neutral' }, LEVEL_LABELS[log.level] || log.level || 'Bilgi'),
             h('span', { style: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } },
                 `${log.timestamp?.substring(11, 19) || ''} ${log.message || ''}`))));
+    }
+
+    async downloadJson() {
+        try {
+            const data = await this.api.exportAllRecords().catch(() => this.api.exportJsonFile());
+            downloadBlob(JSON.stringify(data, null, 2), `kayitlar_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
+        } catch {}
     }
 
     async validateInputText() {
