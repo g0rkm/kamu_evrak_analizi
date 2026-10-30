@@ -25,7 +25,6 @@ class SystemStatus {
 
     constructor(element, api) {
         this.element = element;
-        this.text = element.querySelector('.status-pill__text');
         this.api = api;
         element.style.cursor = 'pointer';
         element.addEventListener('click', () => this.showDetails());
@@ -55,7 +54,6 @@ class SystemStatus {
 
     set(state, text, title) {
         this.element.dataset.state = state;
-        this.text.textContent = text;
         this.element.title = title;
         this.element.setAttribute('aria-label', title);
     }
