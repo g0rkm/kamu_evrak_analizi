@@ -30,8 +30,7 @@ export class ExportView {
                 h('p', { style: { margin: '6px 0 0', color: 'var(--color-neutral-700)' } }, 'Kayıtları bilgisayarınıza indirin veya özet bir rapor alın.')),
             h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' } },
                 exportCard('exportCsvBtn', 'Excel tablosu', 'Tüm kayıtları Excel’de açılabilen bir tablo (CSV) olarak indirin.', 'Herkes için', 'Excel olarak indir', () => this._downloadCsv()),
-                exportCard('exportReportBtn', 'Özet rapor', 'Evrak sayıları, öncelikler ve onay durumlarını gösteren yazdırılabilir rapor.', 'Amirler için', 'Raporu görüntüle', () => this._showReport()),
-                exportCard('exportJsonBtn', 'Veri dosyası (JSON)', 'Başka bir sisteme aktarmak için ham veri dosyası.', 'Bilgi işlem için', 'JSON olarak indir', () => this._downloadJson())),
+                exportCard('exportReportBtn', 'Özet rapor', 'Evrak sayıları, öncelikler ve onay durumlarını gösteren yazdırılabilir rapor.', 'Amirler için', 'Raporu görüntüle', () => this._showReport())),
             this.reportBox);
 
         replace(root, section);
@@ -47,13 +46,6 @@ export class ExportView {
             const data = await this._api.exportCsv();
             const csv = typeof data === 'string' ? data : (data.csv || JSON.stringify(data));
             downloadBlob(csv, `kayitlar_${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8');
-        } catch {}
-    }
-
-    async _downloadJson() {
-        try {
-            const data = await this._api.exportAllRecords().catch(() => this._api.exportJsonFile());
-            downloadBlob(JSON.stringify(data, null, 2), `kayitlar_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
         } catch {}
     }
 
