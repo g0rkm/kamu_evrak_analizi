@@ -97,7 +97,6 @@ export class HistoryView {
         const cards = [
             ['Toplam evrak', fmt.number(stats.total), 'Bugüne kadar incelenen'],
             ['Ortalama eminlik', fmt.percent(avgConf), confHint],
-            ['Ortalama süre', fmt.seconds(stats.avg_processing_time), 'Evrak başına'],
             ['Onaylanan taslak', fmt.number(reviewed), `${pending} taslak onay bekliyor`],
         ];
         replace(this.statsRoot, ...cards.map(([label, value, hint]) => h('div', {
