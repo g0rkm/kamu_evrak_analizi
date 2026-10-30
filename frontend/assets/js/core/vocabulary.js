@@ -1,7 +1,20 @@
 // Arka uçtan (/api/meta) gelen sözlük + arayüz metinleri ve biçimlendiriciler.
 
 const FALLBACK_META = {
-    document_types: [],
+    document_types: [
+        { code: 'dilekce', label: 'Dilekçe' },
+        { code: 'rapor', label: 'Rapor' },
+        { code: 'sozlesme', label: 'Sözleşme' },
+        { code: 'tutanak', label: 'Tutanak' },
+        { code: 'karar', label: 'Karar' },
+        { code: 'kararname', label: 'Kararname' },
+        { code: 'genelge', label: 'Genelge' },
+        { code: 'yonerge', label: 'Yönerge' },
+        { code: 'teblig', label: 'Tebliğ' },
+        { code: 'kanun', label: 'Kanun' },
+        { code: 'yonetmelik', label: 'Yönetmelik' },
+        { code: 'resmi_yazi', label: 'Resmî yazı' },
+    ],
     units: [],
     draft_types: [],
     priorities: [],
