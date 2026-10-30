@@ -316,7 +316,8 @@ select.input { appearance: auto; }
 .run-list { display: flex; flex-direction: column; gap: 8px; align-self: stretch; margin-top: 8px; list-style: none; padding: 0; }
 .run-item { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--color-divider); }
 .run-item__state { color: var(--color-neutral-600); white-space: nowrap; }
-.run-item[data-status="running"] .run-item__state { color: var(--color-accent-700); animation: kea-pulse 1.6s ease-in-out infinite; }
+.run-item[data-status="running"] .run-item__state { color: var(--color-accent-700); }
+.run-item__spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--color-accent-200); border-top-color: var(--color-accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 4px; }
 .run-item[data-status="completed"] .run-item__state { color: var(--color-accent-700); }
 .run-item[data-status="failed"] .run-item__state { color: var(--danger); }
 
