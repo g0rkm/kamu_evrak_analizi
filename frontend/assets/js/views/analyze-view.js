@@ -236,12 +236,21 @@ class ProgressCard {
     }
 
     update(job) {
-        const labels = { pending: 'Bekliyor', running: 'Sürüyor…', completed: 'Tamamlandı', failed: 'Başarısız', skipped: 'Atlandı' };
         for (const step of job.steps || []) {
             const entry = this.items.get(step.key);
             if (!entry) continue;
             entry.row.dataset.status = step.status;
-            entry.state.textContent = labels[step.status] || step.status;
+            if (step.status === 'running') {
+                replace(entry.state, h('span', { class: 'run-item__spinner' }), ' Sürüyor…');
+            } else if (step.status === 'completed') {
+                replace(entry.state, 'Tamamlandı');
+            } else if (step.status === 'failed') {
+                replace(entry.state, 'Başarısız');
+            } else if (step.status === 'skipped') {
+                replace(entry.state, 'Atlandı');
+            } else {
+                replace(entry.state, 'Bekliyor');
+            }
         }
     }
 }
