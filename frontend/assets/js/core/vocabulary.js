@@ -32,7 +32,7 @@ const FALLBACK_META = {
         max_file_mb: 20,
         min_text_chars: 20,
         max_text_chars: 100000,
-        allowed_extensions: ['.bmp', '.jpeg', '.jpg', '.md', '.pdf', '.png', '.tif', '.tiff', '.txt'],
+        allowed_extensions: ['.bmp', '.doc', '.docx', '.jpeg', '.jpg', '.md', '.pdf', '.png', '.tif', '.tiff', '.txt'],
     },
 };
 
