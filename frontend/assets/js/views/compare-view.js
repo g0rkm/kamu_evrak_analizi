@@ -24,6 +24,7 @@ export class CompareView {
             onKeydown: (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); this.submit(); } },
         });
         counter.textContent = `0 / ${fmt.number(this.vocab.limits.max_text_chars)} karakter`;
+
         const fileInput = h('input', {
             type: 'file', class: 'sr-only', accept: this.vocab.acceptAttribute,
             onChange: async (e) => {
@@ -41,6 +42,7 @@ export class CompareView {
                     const data = await resp.json();
                     textarea.value = data.text || '';
                     textarea.dispatchEvent(new Event('input'));
+                    setMode('text');
                 } catch (err) {
                     this.toaster?.error?.('Dosyadan metin çıkarılamadı. Metni elle yapıştırabilirsiniz.');
                 } finally {
@@ -49,15 +51,35 @@ export class CompareView {
                 }
             },
         });
-        const uploadBtn = h('button', { type: 'button', class: 'btn btn-secondary', style: { fontSize: '13px', padding: '6px 12px' }, onClick: () => fileInput.click() }, 'Dosya yükle');
+        const uploadBtn = h('button', { type: 'button', class: 'btn btn-primary', style: { fontSize: '14px', padding: '10px 20px' }, onClick: () => fileInput.click() }, 'Dosya seç');
+
+        const filePane = h('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', padding: '30px 16px', border: '2px dashed var(--color-divider)', borderRadius: '8px', textAlign: 'center' } },
+            h('div', { style: { fontSize: '13px', color: 'var(--color-neutral-700)' } }, 'Dosya seçin, metin otomatik çıkarılacak'),
+            uploadBtn, fileInput);
+
+        const textPane = h('div', { class: 'field' }, textarea, counter);
+
+        const fileRadio = h('input', { type: 'radio', name: `mode-${id}`, onChange: () => setMode('file') });
+        const textRadio = h('input', { type: 'radio', name: `mode-${id}`, checked: true, onChange: () => setMode('text') });
+
+        function setMode(mode) {
+            const isFile = mode === 'file';
+            fileRadio.checked = isFile;
+            textRadio.checked = !isFile;
+            filePane.hidden = !isFile;
+            textPane.hidden = isFile;
+        }
+        setMode('text');
+
         return {
             textarea,
-            element: h('div', { class: 'field' },
-                h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' } },
-                    h('label', { for: id, style: { fontSize: '14px', color: 'var(--color-text)' } }, label),
-                    uploadBtn),
-                fileInput,
-                textarea, counter),
+            element: h('div', { class: 'field', style: { gap: '10px' } },
+                h('label', { style: { fontSize: '14px', color: 'var(--color-text)' } }, label),
+                h('div', { class: 'seg', style: { alignSelf: 'flex-start' } },
+                    h('label', { class: 'seg-opt', style: { fontSize: '13px', padding: '6px 14px' } }, fileRadio, 'Dosya yükle'),
+                    h('label', { class: 'seg-opt', style: { fontSize: '13px', padding: '6px 14px' } }, textRadio, 'Metin yapıştır')),
+                filePane,
+                textPane),
         };
     }
 
