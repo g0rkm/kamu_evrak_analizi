@@ -38,6 +38,9 @@ class PIIFinding:
 DEFAULT_PATTERNS: tuple[PIIPattern, ...] = (
     PIIPattern("tc_kimlik", "TC Kimlik Numarası", re.compile(r"\b[1-9]\d{10}\b"), "warning",
                validator=lambda v: is_valid_tc_kimlik(re.sub(r"\s", "", v))),
+    PIIPattern("tc_kimlik", "TC Kimlik Numarası",
+               re.compile(r"(?i)(?:TC|T\.C\.?|TCKN)\s*(?:kimlik)?\s*(?:no|numaras[ıi])?\s*:?\s*(\d{9,11})"),
+               "warning"),
     PIIPattern("iban", "IBAN", re.compile(r"\bTR\s?\d{2}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{2}\b"), "warning"),
     PIIPattern("telefon", "Telefon Numarası", re.compile(r"\b(?:\+90|0)\s?[5]\d{2}\s?\d{3}\s?\d{2}\s?\d{2}\b"), "info"),
     PIIPattern("sabit_tel", "Sabit Telefon", re.compile(r"\b(?:\+90|0)\s?[2-4]\d{2}\s?\d{3}\s?\d{2}\s?\d{2}\b"), "info"),
