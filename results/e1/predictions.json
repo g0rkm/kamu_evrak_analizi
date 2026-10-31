@@ -1,0 +1,4180 @@
+[
+  {
+    "doc_id": "eval_dilekce_006",
+    "title": "Hükmün Açıklanmasının Geriye Bırakılması Sonrası Adli Sicil Kaydı Silme Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "adli_sicil_silme_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın Adalet Bakanlığına hitaben adli sicil kaydının silinmesi talebiyle yazdığı, 'arz ederim' ifadesiyle biten tipik bir dilekçe formatındadır.",
+    "latency_ms": 2862.98
+  },
+  {
+    "doc_id": "eval_dilekce_003",
+    "title": "Emeklilik Hizmet Süresi ve İntibak Hesaplaması Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "emeklilik_intibak_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 3071 sayılı Dilekçe Hakkının Kullanılmasına Dair Kanun'a atıfta bulunarak, bir vatandaşın veya çalışanın hak kaybı yaşamaması adına derece ve kademe intibakının yapılmasını talep ettiği bir dilekçe formatındadır.",
+    "latency_ms": 1302.74
+  },
+  {
+    "doc_id": "eval_dilekce_008",
+    "title": "Numarataj ve Kapı Numarası Tespit Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "numarataj_tespit_dilekcesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın veya kurumun bir talebini içeren, 'arz ederim' ifadesiyle biten ve başlığında açıkça 'Dilekçe' ibaresi bulunan bir başvurudur.",
+    "latency_ms": 1073.14
+  },
+  {
+    "doc_id": "eval_dilekce_013",
+    "title": "Kütüphane Nadir Eserler Koleksiyonu Araştırma İzni Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "araştırma_izni_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bireyin (doktora öğrencisi) bir kurumdan (İzmir Büyükşehir Belediyesi) belirli bir amaçla (tez çalışması için araştırma izni) izin talep ettiğini belirten, 'arz ederim' ifadesiyle biten klasik bir dilekçe formatındadır.",
+    "latency_ms": 1179.63
+  },
+  {
+    "doc_id": "eval_dilekce_007",
+    "title": "Doğum Sonrası Yarım Zamanlı Çalışma Hakkı Kullanım Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "personel_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir çalışanın 657 sayılı Kanun kapsamında doğum sonrası yarım zamanlı çalışma hakkını kullanmak istediğini belirten, 'Gereğini arz ederim' ifadesiyle biten ve kişisel bir talebi içeren bir dilekçedir.",
+    "latency_ms": 1122.74
+  },
+  {
+    "doc_id": "eval_dilekce_009",
+    "title": "Aile Yardımı Ödeneği Bildirim ve Başvuru Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "aile_yardimi_basvurusu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın veya memurun kurumuna yönelik bir talebini içeren, 'arz ederim' ifadesiyle biten ve başlığında açıkça 'Dilekçe' ibaresi bulunan bir başvurudur.",
+    "latency_ms": 1136.28
+  },
+  {
+    "doc_id": "eval_dilekce_012",
+    "title": "Su Aboneliği Güvence Bedeli İadesi Başvuru Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "iade_basvurusu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın idareye hitaben yazdığı, su aboneliği güvence bedelinin iadesini talep eden ve 'arz ederim' ifadesiyle biten bir başvuru dilekçesidir.",
+    "latency_ms": 987.73
+  },
+  {
+    "doc_id": "eval_dilekce_014",
+    "title": "Konu: 2942 Sayılı Kanun Kapsamında Bedel Artırımı ve Uzlaşma Komisyonu Başvurusu",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "bedel_artirimi_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sikayet"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın (başvurucunun) belediye başkanlığına hitaben yazdığı, taşınmaz üzerindeki irtifak hakkı bedelinin artırılmasını talep eden kişisel bir başvuru/dilekçe niteliğindedir.",
+    "latency_ms": 1173.8
+  },
+  {
+    "doc_id": "eval_dilekce_010",
+    "title": "Yabancı Dil Tazminatı Ödenmesi İçin YDS Sonuç Belgesi İbraz Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "tazminat_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "mulga_veya_eski_surum",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın veya personelin kurumuna yönelik olarak bir hak (yabancı dil tazminatı) talebinde bulunduğu, 'arz ederim' ifadesiyle biten ve başlığında açıkça 'Dilekçe' ibaresi geçen bir metindir.",
+    "latency_ms": 1208.02
+  },
+  {
+    "doc_id": "eval_dilekce_020",
+    "title": "Konu: Ağaç Budama ve Çevre Düzenlemesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "vatandas_dilekcesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sikayet"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın (Mahalle Sakini) belediye/kurum birimine yönelik bir talebini içeren, 'arz ederim' ifadesiyle biten standart bir dilekçe formatındadır.",
+    "latency_ms": 1059.18
+  },
+  {
+    "doc_id": "eval_dilekce_011",
+    "title": "Mazeret Sınavına Katılım Başvuru Dilekçesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "mazeret_sinav_basvurusu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın/öğrencinin bir kuruma (Ankara Valiliği İl İdare Kurulu Müdürlüğü) sunduğu, mazeret sınavına katılma talebini içeren ve 'arz ederim' ifadesiyle biten tipik bir dilekçe formatındadır.",
+    "latency_ms": 1145.01
+  },
+  {
+    "doc_id": "eval_dilekce_018",
+    "title": "Konu: İşyeri Açma ve Çalışma Ruhsatı Devir İşlemi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 0.95,
+    "sub_type": "ruhsat_devir_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bireyin (işletme sahibi) bir kurumdan (Belediye/Üniversite birimi) ruhsat devri işlemini gerçekleştirmesi için talebini içeren, 'arz ederim' ifadesiyle biten bir dilekçe formatındadır.",
+    "latency_ms": 1160.12
+  },
+  {
+    "doc_id": "eval_dilekce_017",
+    "title": "Konu: Hükmolunan Vekâlet Ücretinin Ödenmesi",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 0.95,
+    "sub_type": "ödeme_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir mahkeme ilamı doğrultusunda vekâlet ücretinin ödenmesini talep eden, 'arz ederim' ifadesiyle biten ve bir kuruma (Rektörlük) hitaben yazılmış bir dilekçedir.",
+    "latency_ms": 1075.24
+  },
+  {
+    "doc_id": "eval_dilekce_015",
+    "title": "Konu: Eş Durumu Özrü Nedeniyle Yer Değiştirme",
+    "ground_truth": "dilekce",
+    "predicted": "dilekce",
+    "confidence": 1.0,
+    "sub_type": "yer_degistirme_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir personelin eş durumu mazereti nedeniyle yer değişikliği talebini içeren, 'arz ederim' ifadesiyle biten ve kişisel bilgiler içeren bir dilekçe formatındadır.",
+    "latency_ms": 1073.85
+  },
+  {
+    "doc_id": "eval_resmi_yazi_018",
+    "title": "Konu: İdari Para Cezası Tahsilat Takibi",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "kurumlar_arasi_yazisma",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Ege Üniversitesi) başka bir birime veya kuruma yönelik, resmi sayı ve ilgi tutarak hazırladığı, 'Gereğini rica ederim' ifadesiyle biten standart bir resmi üst yazıdır.",
+    "latency_ms": 1119.65
+  },
+  {
+    "doc_id": "eval_resmi_yazi_019",
+    "title": "Konu: Elektronik Belge Yönetim Sistemi (EBYS) Entegrasyon Geçişi",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "kurumlar_arasi_yazisma",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Karayolları Genel Müdürlüğü) başka bir birime veya kuruma hitaben yazdığı, resmi sayı ve ilgi tutan, standart bir üst yazı formatındadır. 'Gereğini arz ederim' ifadesi ve kurumsal yapı resmi yazışma niteliğini doğrulamaktadır.",
+    "latency_ms": 1376.41
+  },
+  {
+    "doc_id": "eval_resmi_yazi_010",
+    "title": "Yetki Devri ve İmza Sirküleri Güncellemesi",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bakanlık birimi tarafından diğer birimlere veya taşra teşkilatına yönelik, resmi bir sayı numarası içeren ve bir işlemin yürütülmesini rica eden standart bir resmi üst yazı formatındadır.",
+    "latency_ms": 1077.72
+  },
+  {
+    "doc_id": "eval_resmi_yazi_006",
+    "title": "Arşiv Malzemesi Devir ve Teslim İşlemleri",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Adalet Bakanlığı Hukuk İşleri Genel Müdürlüğü) birimler arasındaki arşiv devir işlemini resmi bir usulle (sayı ve konu başlığı ile) gerçekleştirdiğini bildiren, 'Gereğini rica ederim' ifadesiyle biten standart bir resmi üst yazıdır.",
+    "latency_ms": 1226.85
+  },
+  {
+    "doc_id": "eval_resmi_yazi_013",
+    "title": "Eğitim Protokolü Kapsamında Katılımcı Listelerinin İletilmesi",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (İzmir Büyükşehir Belediyesi) başka bir birim veya kurumla olan protokol çerçevesinde hazırladığı, resmi sayı ve ilgi tutan, 'gereğini rica ederim' ifadesiyle biten standart bir resmi üst yazıdır.",
+    "latency_ms": 1159.19
+  },
+  {
+    "doc_id": "eval_resmi_yazi_004",
+    "title": "İl Koordinasyon Kurulu 2026 Yılı 2. Dönem Toplantı Katılımı",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "kurumlar_arasi_yazisma",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Bölge Müdürlüğü) başka bir makama (Valilik/İl Koordinasyon Kurulu) gönderdiği, resmi sayı ve ilgi tutan, bir toplantıya katılım bildiren ve bilgi sunan resmi bir üst yazıdır.",
+    "latency_ms": 1221.72
+  },
+  {
+    "doc_id": "eval_resmi_yazi_005",
+    "title": "Tebligat Evrakının İade Edilmesi Hakkında Üst Yazı",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 1.0,
+    "sub_type": "üst_yazı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "teblig"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Sağlık Bakanlığı) başka bir birime veya kuruma gönderdiği, resmi sayı ve ilgi tutan, 'arz ederim' ifadesiyle biten standart bir üst yazıdır.",
+    "latency_ms": 1015.65
+  },
+  {
+    "doc_id": "eval_resmi_yazi_012",
+    "title": "Sayıştay Denetim Bulgularına İlişkin Cevabi Yazı",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "savunma_yazisi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (İstanbul Valiliği) başka bir kurumun (Sayıştay) denetim sorgusuna verdiği resmi bir cevabi yazıdır. Kurumlar arası resmi yazışma formatında olup, savunma ve kanıt sunulmaktadır.",
+    "latency_ms": 1091.93
+  },
+  {
+    "doc_id": "eval_resmi_yazi_002",
+    "title": "Kurumlar Arası Geçici Görevlendirme Onayı İletimi",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 1.0,
+    "sub_type": "kurumlar_arasi_yazisma",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bakanlık genel müdürlüğü tarafından başka bir kuruma gönderilen, resmi sayı ve ilgi tutan, bir onay belgesinin iletildiğini bildiren standart bir resmi üst yazıdır.",
+    "latency_ms": 1181.72
+  },
+  {
+    "doc_id": "eval_resmi_yazi_015",
+    "title": "Konu: 657 Sayılı Kanunun 74. Maddesi Uyarınca Naklen Atama Muvafakati",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 1.0,
+    "sub_type": "muvafakat_yazisi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Belediye) başka bir birime/kuruma gönderdiği, personel naklen ataması hakkında resmi bir üst yazı niteliğindedir. 'Bilgilerinize arz ederim' ifadesi ve resmi sayı/konu başlığı kullanımı resmi yazışma formatına uygundur.",
+    "latency_ms": 1291.66
+  },
+  {
+    "doc_id": "eval_resmi_yazi_009",
+    "title": "Hizmet Binası Tahsis Süresinin Uzatılması Onayı",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "onay_yazisi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Çalışma Genel Müdürlüğü) başka bir birime/kuruma yönelik, bir taşınmazın tahsis süresinin uzatılmasına ilişkin resmi bir onay ve talimat içeren üst yazı niteliğindedir.",
+    "latency_ms": 992.86
+  },
+  {
+    "doc_id": "eval_resmi_yazi_008",
+    "title": "Soruşturma Dosyası Eklerinin Gönderilmesi",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Tarım ve Orman Bakanlığı) başka bir kuruma (Kaymakamlık) gönderdiği, resmi sayı ve ilgi tutan, hakediş raporları gibi belgelerin gönderildiğini bildiren bir üst yazıdır.",
+    "latency_ms": 1038.2
+  },
+  {
+    "doc_id": "eval_resmi_yazi_016",
+    "title": "Konu: 4734 Sayılı Kanun Kapsamında Yasaklama İşlemi",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "ilan"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Ankara Üniversitesi) başka bir birime veya makama gönderdiği, belirli bir ihale süreci ve yasaklama işlemi hakkında bilgi içeren, sayı ve ilgi numarası barındıran resmi bir üst yazıdır.",
+    "latency_ms": 1072.24
+  },
+  {
+    "doc_id": "eval_resmi_yazi_017",
+    "title": "Konu: Sosyal Denge Tazminatı Uygulama Dönemi",
+    "ground_truth": "resmi_yazi",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Gazı Üniversitesi) bir birimi tarafından diğer birime veya ilgili birimlere gönderilen, 'Gereğini rica ederim' ifadesiyle biten, sayı ve ilgi içeren standart bir resmi üst yazıdır.",
+    "latency_ms": 1109.01
+  },
+  {
+    "doc_id": "eval_talep_yazisi_015",
+    "title": "Konu: Fazla Çalışma Ücreti Ödenmesine İlişkin Cetvel",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 0.95,
+    "sub_type": "ücret_onay_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir birimin (Muhasebe Şube Müdürlüğü) üst makama (Mali Hizmetler Dairesi Başkanlığı) personelin fazla çalışma ücretinin ödenmesi için onay verilmesini 'arz ederim' ifadesiyle talep etmektedir.",
+    "latency_ms": 1099.91
+  },
+  {
+    "doc_id": "eval_talep_yazisi_012",
+    "title": "Yabancı Uyruklu Sözleşmeli Akademik Personel Kadro İhdası ve Onay Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "kadro_ve_onay_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir kadro ihdası ve mali vize verilmesi için üst makama (YÖK Yürütme Kurulu) yönelik bir 'arz ederim' ifadesiyle biten resmi bir talep içermektedir.",
+    "latency_ms": 1066.31
+  },
+  {
+    "doc_id": "eval_talep_yazisi_010",
+    "title": "Laboratuvar Sarf Malzemesi ve Kimyasal Kit Temini Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "malzeme_tedarik_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir birimin ihtiyaç duyduğu sarf malzemelerinin ve kimyasal kitlerin temin edilmesini açıkça talep eden resmi bir yazıdır.",
+    "latency_ms": 947.22
+  },
+  {
+    "doc_id": "eval_talep_yazisi_013",
+    "title": "Kurumsal Arşiv Dijitalleştirme Projesi İçin Tarayıcı Donanımı Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "donanım_tedarik_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir proje kapsamında (Kurumsal Arşiv Dijitalleştirme Projesi) birim için gerekli olan donanım (6 adet A3 doküman tarayıcısı) tedarik edilmesini açıkça talep etmekte ve 'arz ederim' ifadesiyle resmi bir talep niteliği taşımaktadır.",
+    "latency_ms": 1166.13
+  },
+  {
+    "doc_id": "eval_talep_yazisi_004",
+    "title": "Saha Denetimleri İçin Hizmet Aracı Tahsisi Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "araç_tahsis_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (İl Müdürlüğü) bir diğer kuruma (Personel Genel Müdürlüğü) denetim faaliyetleri için araç ve şoför tahsis edilmesini açıkça ifade eden bir 'arz/rica' içeren resmi taleptir.",
+    "latency_ms": 1151.96
+  },
+  {
+    "doc_id": "eval_talep_yazisi_001",
+    "title": "2026 Mali Yılı Ek Ödenek Tahsis Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "ek_odenek_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 5018 sayılı Kanun kapsamında belirli bir tutarda ek ödenek tahsis edilmesini açıkça talep eden, 'arz ederim' ifadesiyle biten resmi bir taleptir.",
+    "latency_ms": 1001.65
+  },
+  {
+    "doc_id": "eval_talep_yazisi_020",
+    "title": "Konu: Mobil Baz İstasyonu Kurulumu ve Enerji Bağlantısı",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 0.95,
+    "sub_type": "enerji_baglantisi_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (DSİ) bir işlem (enerji hattı çekilmesi ve abonelik) başlatılması için ilgili birime yaptığı resmi bir talebi içermektedir. 'Arz ederim' ifadesi ve konunun net bir talep üzerine kurulması bu sınıflandırmayı destekler.",
+    "latency_ms": 1280.74
+  },
+  {
+    "doc_id": "eval_talep_yazisi_008",
+    "title": "Siber Olaylara Müdahale Ekibi (SOME) Lisans Yenileme Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "lisans_yenileme_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Tarım ve Orman Bakanlığı) ihtiyaç duyduğu yazılım lisanslarının yenilenmesi için üst makama yaptığı resmi bir talep yazısıdır. 'Arz ederim' ifadesi ve somut bir satın alma/yenileme talebi içermesi bu sınıflandırmayı doğrular.",
+    "latency_ms": 1241.64
+  },
+  {
+    "doc_id": "eval_talep_yazisi_009",
+    "title": "Geçici İşçi Çalıştırma Vizesi Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "vize_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Orman İşletme Müdürlüğü) başka bir kuruma (Çalışma ve Sosyal Güvenlik Bakanlığı) belirli bir süre ve sayı için geçici işçi vizesi verilmesini açıkça talep etmektedir ve 'arz ederim' ifadesiyle resmi bir talep niteliği taşımaktadır.",
+    "latency_ms": 1191.81
+  },
+  {
+    "doc_id": "eval_talep_yazisi_011",
+    "title": "Afet Bölgesi İçin Konteyner ve Jeneratör Gönderilmesi Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "lojistik_talep",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir afet bölgesi için konteyner ve jeneratör sevkiyatı yapılmasını açıkça ifade eden ve 'arz ederim' ifadesiyle biten resmi bir talep yazısıdır.",
+    "latency_ms": 957.72
+  },
+  {
+    "doc_id": "eval_talep_yazisi_018",
+    "title": "Konu: Kış Dönemi Akaryakıt İstihkakı (Motorin) İkmal Planlaması",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 0.95,
+    "sub_type": "akaryakıt_istihkak_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir dönem için akaryakıt istihkakı tanımlanması talebini içeren, resmi bir kurum birimi tarafından yazılmış bir talep yazısıdır.",
+    "latency_ms": 958.35
+  },
+  {
+    "doc_id": "eval_talep_yazisi_014",
+    "title": "Konu: 2026 Yılı Yatırım Programı Revizyonu ve Aktarma İşlemi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "bütçe_aktarma_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Bölge Müdürlüğü) başka bir projeden (2025E040080) bir projeye (2024E040120) ödenek aktarılması için üst makama (Bursa Büyükşehir Belediye Başkanlığı) sunduğu resmi bir talep yazısıdır. 'Arz ederim' ifadesi ve konu başlığı bu sınıflandırmayı desteklemektedir.",
+    "latency_ms": 1417.95
+  },
+  {
+    "doc_id": "eval_talep_yazisi_003",
+    "title": "Açıktan ve Naklen Atama İçin Boş Kadro Kullanım İzni Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "kadro_talep_yazisi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Üniversite Hastanesi) başka bir kuruma (Çevre, Şehircilik ve İklim Değişikliği Bakanlığı) personel ataması için boş kadro kullanım izni istediğini açıkça ifade eden resmi bir talep yazısıdır.",
+    "latency_ms": 1081.33
+  },
+  {
+    "doc_id": "eval_talep_yazisi_007",
+    "title": "Kışla ve Hizmet Binası Çatı Onarımı İçin İhale Onayı ve Bütçe Talebi",
+    "ground_truth": "talep_yazisi",
+    "predicted": "talep_yazisi",
+    "confidence": 1.0,
+    "sub_type": "bütçe_ve_ihale_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir hizmet binasının onarımı için harcama yetkisi, ödenek ve ihale onayı alınmasını açıkça talep eden, 'arz ederim' ifadesiyle biten resmi bir yazıdır.",
+    "latency_ms": 1049.42
+  },
+  {
+    "doc_id": "eval_bilgilendirme_009",
+    "title": "Kış Lastiği Uygulaması Başlangıç Tarihi Hatırlatması",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "hatırlatma",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "genelge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir uygulama tarihini (kış lastiği zorunluluğu) hatırlatmak ve bilgilendirmek amacıyla hazırlanmış, resmi bir kurumdan (Çalışma ve Sosyal Güvenlik Bakanlığı) gönderilen bir yazıdır.",
+    "latency_ms": 1028.58
+  },
+  {
+    "doc_id": "eval_bilgilendirme_020",
+    "title": "Konu: TS EN ISO 9001 Kalite Yönetim Sistemi Gözetim Tetkiki Sonucu",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "tetkik_sonucu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir denetim (gözetim tetkiki) sonucunu ve belgenin geçerliliğini bildiren, bilgi verme amaçlı bir resmi yazıdır.",
+    "latency_ms": 886.87
+  },
+  {
+    "doc_id": "eval_bilgilendirme_006",
+    "title": "Uluslararası Sempozyum ve Akademik Etkinlik Takvimi Duyurusu",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "etkinlik_duyurusu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "ilan"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir sempozyumun takvimi, program kitapçığı ve bildiri özetlerini 'bilgi amaçlı' gönderdiğini belirten, bilgilendirme amaçlı bir resmi yazıdır.",
+    "latency_ms": 931.72
+  },
+  {
+    "doc_id": "eval_bilgilendirme_019",
+    "title": "Konu: Yabancı Resmi Belgelerin Tasdiki (Apostil) Yetkili Makam Listesi",
+    "ground_truth": "bilgilendirme",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Karayolları Genel Müdürlüğü) başka bir birime veya kuruma gönderdiği, resmi bir konuyu (Apostil yetkili makam listesi) bildiren ve 'Bilgilerinize arz ederim' ifadesiyle biten standart bir resmi üst yazıdır.",
+    "latency_ms": 1069.49
+  },
+  {
+    "doc_id": "eval_bilgilendirme_001",
+    "title": "2026 Yılı Resmi Tatil ve İdari İzin Günlerinde Nöbetçi Birim Bilgisi",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "nöbetçi birim bilgisi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, kurum içi veya kurumlar arası bir hizmetin kesintisiz devamı için hazırlanan nöbetçi birim bilgilerini paylaşmaktadır. 'Bilgilerinize arz/rica ederim' ifadesi ve içeriğin bilgilendirme amaçlı olması bu sınıflandırmayı destekler.",
+    "latency_ms": 1058.55
+  },
+  {
+    "doc_id": "eval_bilgilendirme_017",
+    "title": "Konu: Ulusal Coğrafi Bilgi Platformu Veri Katmanı Güncellemesi",
+    "ground_truth": "bilgilendirme",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "kurumlar_arasi_yazisma",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": true,
+    "reasoning": "Metin, bir kurumun (Genel Müdürlük) başka bir kuruma (Gazi Üniversitesi Rektörlüğü) gönderdiği, resmi sayı ve konu başlığı içeren, bilgi aktarımı amaçlı bir üst yazıdır.",
+    "latency_ms": 1039.95
+  },
+  {
+    "doc_id": "eval_bilgilendirme_007",
+    "title": "Mevzuat Değişikliği Özeti Hakkında Bilgilendirme Yazısı",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 1.0,
+    "sub_type": "mevzuat_bilgilendirmesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "teblig"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, yeni yürürlüğe giren bir tebliğdeki parasal eşik değerleri hakkında kurum içi/dışı birimlere bilgi vermek amacıyla hazırlanmış bir bilgilendirme yazısıdır. 'Bilgilerinize rica ederim' ifadesi ve başlık doğrudan bilgilendirme amacını doğrulamaktadır.",
+    "latency_ms": 1290.16
+  },
+  {
+    "doc_id": "eval_bilgilendirme_005",
+    "title": "Hizmet Binası Adres ve Santral Numarası Değişikliği Bildirimi",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "adres_degisikligi_bildirimi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun adres ve santral numarası değişikliğini diğer birimlere/kurumlara bildirmek amacıyla yazılmış, bilgilendirme amaçlı bir resmi yazıdır.",
+    "latency_ms": 950.01
+  },
+  {
+    "doc_id": "eval_bilgilendirme_004",
+    "title": "Üst Yönetici Göreve Başlama ve Vekâlet Bilgilendirmesi",
+    "ground_truth": "bilgilendirme",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Milli Eğitim Bakanlığı) diğer birimlere veya kurumlara yönelik, resmi bir atama ve göreve başlama durumunu bildiren, 'arz ve rica ederim' ifadesi içeren standart bir resmi üst yazıdır.",
+    "latency_ms": 1022.24
+  },
+  {
+    "doc_id": "eval_bilgilendirme_016",
+    "title": "Konu: 7553 Sayılı Kanun Sonrası Katsayı Değişikliği",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "kurum_ici_bilgilendirme",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "genelge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Ankara Üniversitesi) kendi birimleri için maaş katsayılarının sisteme tanımlandığını ve manuel işlem yapılmayacağını bildiren, 'Bilgilerinize rica ederim' ifadesiyle biten bir bilgilendirme yazısıdır.",
+    "latency_ms": 1169.61
+  },
+  {
+    "doc_id": "eval_bilgilendirme_008",
+    "title": "Hizmet İçi Eğitim Sertifika Programı Tamamlanma Bilgisi",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "eğitim_bilgilendirmesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir eğitim programının tamamlandığına ve sertifikaların tanımlandığına dair kurum içi bir bilgilendirme içermektedir. 'Bilgilerinize arz ederim' ifadesiyle bir durumun raporlanması/bilgilendirilmesi amaçlanmıştır.",
+    "latency_ms": 1060.14
+  },
+  {
+    "doc_id": "eval_bilgilendirme_014",
+    "title": "Konu: 2026 Yılı Tüketici Fiyat Endeksi ve Kira Artış Oranı Verileri",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "kurumsal_bilgilendirme",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Bursa Büyükşehir Belediyesi) başka bir birime veya kuruma belirli verileri (TÜFE ve kira artış oranları) aktardığı, 'Bilgilerinize arz ederim' ifadesiyle biten ve bilgilendirme amaçlı bir resmi yazıdır.",
+    "latency_ms": 1249.84
+  },
+  {
+    "doc_id": "eval_bilgilendirme_013",
+    "title": "Emekliye Ayrılan Personelimiz İçin Veda Programı Duyurusu",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "duyuru",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, kurum içindeki bir personelin emekliliği nedeniyle düzenlenecek bir program hakkında çalışanları bilgilendirmeyi ve davet etmeyi amaçlayan bir duyuru yazısıdır.",
+    "latency_ms": 991.72
+  },
+  {
+    "doc_id": "eval_bilgilendirme_010",
+    "title": "Kurumsal Kimlik Kılavuzu Güncellemesi Hakkında Bilgilendirme",
+    "ground_truth": "bilgilendirme",
+    "predicted": "bilgilendirme",
+    "confidence": 1.0,
+    "sub_type": "kurumsal_bilgilendirme",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Sanayi ve Teknoloji Bakanlığı) yeni yayınlanan bir kılavuz hakkında ilgili birimlere veya kişilere bilgi vermek amacıyla oluşturulmuş, 'Bilgilerinize sunulur' ifadesiyle biten bir bilgilendirme yazısıdır.",
+    "latency_ms": 1068.58
+  },
+  {
+    "doc_id": "eval_gorus_sorma_002",
+    "title": "657 Sayılı Kanunun 4/B Sözleşmeli Personelinin Ücretsiz İzin Hakkı Hakkında Görüş İstemi",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 1.0,
+    "sub_type": "hukuki_gorus_istemi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun başka bir kuruma (Hazine ve Maliye Bakanlığı) belirli bir mevzuat maddesi (657 Sayılı Kanun 4/B) çerçevesinde bir uygulama hakkında görüş bildirmesi için yazdığı resmi bir yazıdır. Başlıkta ve içerikte açıkça 'Görüş İstemi' ifadesi yer almaktadır.",
+    "latency_ms": 1273.83
+  },
+  {
+    "doc_id": "eval_gorus_sorma_006",
+    "title": "2886 Sayılı Devlet İhale Kanunu Uyarınca Kira Sözleşmesinin Devri Hakkında Görüş Talebi",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 1.0,
+    "sub_type": "hukuki_mutaala_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Adalet Bakanlığı) bir diğer birimden veya kurumdan, 2886 Sayılı Devlet İhale Kanunu kapsamında bir kira sözleşmesinin devri hususunda hukuki görüş/mütalaa talep ettiğini açıkça belirtmektedir.",
+    "latency_ms": 1130.18
+  },
+  {
+    "doc_id": "eval_gorus_sorma_007",
+    "title": "Disiplin Soruşturmasında Zamanaşımı Süresinin Başlangıcı Hakkında Görüş İstemi",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 1.0,
+    "sub_type": "hukuki_gorus_istemi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Ulaştırma ve Altyapı Bakanlığı) başka bir birimden (Hukuk Hizmetleri Genel Müdürlüğü) belirli bir hukuki konu hakkında görüş talep ettiğini açıkça ifade etmektedir. Başlıkta ve içerikte 'Görüş İstemi' ifadesi net bir şekilde yer almaktadır.",
+    "latency_ms": 1204.1
+  },
+  {
+    "doc_id": "eval_gorus_sorma_005",
+    "title": "5393 Sayılı Belediye Kanunu Kapsamında Meclis Üyesinin İhtisas Komisyonunda Oy Kullanması Hakkında Görüş",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 1.0,
+    "sub_type": "bakanlık_gorus_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir belediye meclisi üyesinin kan hısımlığı durumunda oylamaya katılımı hususunda Bakanlıktan görüş talep ettiğini açıkça ifade etmektedir ('...hususunda Bakanlığınız görüşünün bildirilmesini arz ederim').",
+    "latency_ms": 1198.02
+  },
+  {
+    "doc_id": "eval_gorus_sorma_018",
+    "title": "Konu: 6098 Sayılı Türk Borçlar Kanunu 138. Madde Aşırı İfa Güçlüğü Başvurusu",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 0.95,
+    "sub_type": "idari_degerlendirme_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Rektörlük/Öğrenci İşleri) bir konudaki (kira uyarlama başvurusu) çözüm yöntemi hakkında (idari uzlaşma mı yoksa yargı yolu mu) diğer birimden görüş ve değerlendirme talep etmektedir.",
+    "latency_ms": 1165.38
+  },
+  {
+    "doc_id": "eval_gorus_sorma_015",
+    "title": "Konu: 5510 Sayılı Kanun Kapsamında İş Kazası Bildirim Süresi ve İdari Para Cezası",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 0.95,
+    "sub_type": "hukuki_degerlendirme_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir olayın kanun kapsamında değerlendirilmesi ve sorumlulukların belirlenmesi hususunda bir üst makamdan veya ilgili birimden görüş/değerlendirme talep etmektedir ('değerlendirmenizi rica ederim' ifadesiyle).",
+    "latency_ms": 1091.13
+  },
+  {
+    "doc_id": "eval_gorus_sorma_008",
+    "title": "İşbirliği Protokolü Taslağı Hakkında Hukuki Görüş Bildirilmesi",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 0.95,
+    "sub_type": "hukuki_gorus_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Tarım ve Orman Bakanlığı) başka bir birimden veya kurumdan bir taslak metin hakkında 'hukuki görüş' talep ettiğini açıkça belirtmektedir.",
+    "latency_ms": 995.46
+  },
+  {
+    "doc_id": "eval_gorus_sorma_016",
+    "title": "Konu: 2577 Sayılı Kanunun 28. Maddesi Uyarınca Yürütmenin Durdurulması Kararının Kapsamı",
+    "ground_truth": "gorus_sorma",
+    "predicted": "talep_yazisi",
+    "confidence": 0.95,
+    "sub_type": "bilgi_talep_yazisi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir idari birimin (Genel Sekreterlik) bir üst makama veya ilgili birime, mahkeme kararının kapsamı hakkında bilgi verilmesini ve nasıl hareket edilmesi gerektiğinin bildirilmesini 'arz ederim' ifadesiyle talep etmektedir.",
+    "latency_ms": 1201.84
+  },
+  {
+    "doc_id": "eval_gorus_sorma_017",
+    "title": "Konu: 7201 Sayılı Tebligat Kanunu 7/a Maddesi Elektronik Tebligat Zorunluluğu",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 0.95,
+    "sub_type": "hukuki_gorus_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir mevzuat maddesi (7201 Sayılı Tebligat Kanunu) çerçevesinde belirli bir durumun hukuki geçerliliğinin incelenmesini ve sonucun bildirilmesini rica etmektedir. Bu durum, bir görüş talep etme (gorus_sorma) niteliğindedir.",
+    "latency_ms": 1133.95
+  },
+  {
+    "doc_id": "eval_gorus_sorma_014",
+    "title": "Konu: 3065 Sayılı Katma Değer Vergisi Kanunu Geçici 39. Madde İstisna Uygulaması",
+    "ground_truth": "gorus_sorma",
+    "predicted": "talep_yazisi",
+    "confidence": 0.95,
+    "sub_type": "KDV İstisna Talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "teblig"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Bursa Büyükşehir Belediyesi) başka bir makama (muhtemelen bir vergi dairesi veya üst kurum) belirli bir mevzuat maddesi kapsamında KDV istisnası ve tevkifatı hakkında görüş/karar bildirilmesini 'arz ederim' ifadesiyle talep etmektedir.",
+    "latency_ms": 1242.93
+  },
+  {
+    "doc_id": "eval_gorus_sorma_003",
+    "title": "6698 Sayılı KVKK Kapsamında Kamera Kayıtlarının Mahkeme Dışı İbrazı Hakkında Mütalaa Talebi",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 1.0,
+    "sub_type": "hukuki_mutalaa_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sikayet"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Çevre, Şehircilik ve İklim Değişikliği Bakanlığı) bir hukuki konuda (KVKK kapsamında kamera kayıtlarının paylaşımı) görüş/mütalaa talep ettiğini açıkça belirtmektedir.",
+    "latency_ms": 1075.77
+  },
+  {
+    "doc_id": "eval_gorus_sorma_001",
+    "title": "4734 Sayılı Kamu İhale Kanunu 22/d Maddesi Parasal Sınır Uygulamasında Hukuki Görüş Talebi",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 1.0,
+    "sub_type": "hukuki_gorus_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (İçişleri Bakanlığı) başka bir birimden (Hukuk Müşavirliği) belirli bir kanun maddesinin uygulanması hakkında hukuki görüş talep ettiğini açıkça ifade etmektedir.",
+    "latency_ms": 1055.99
+  },
+  {
+    "doc_id": "eval_gorus_sorma_019",
+    "title": "Konu: 4982 Sayılı Kanun 21. Madde Ticari Sır Niteliğindeki İhale Belgeleri",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 0.95,
+    "sub_type": "hukuki_gorus_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Karayolları Genel Müdürlüğü) bir kanun maddesi kapsamında belgelerin ticari sır niteliği taşıyıp taşımadığına dair bir değerlendirme ve görüş talep etmektedir.",
+    "latency_ms": 1074.01
+  },
+  {
+    "doc_id": "eval_gorus_sorma_013",
+    "title": "6245 Sayılı Harcırah Kanunu Kapsamında Büyükşehir Belediye Sınırları İçinde Gündelik Ödenmesi Görüşü",
+    "ground_truth": "gorus_sorma",
+    "predicted": "gorus_sorma",
+    "confidence": 1.0,
+    "sub_type": "hukuki_gorus_talebi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir mevzuat maddesinin (6245 Sayılı Harcırah Kanunu) uygulanmasına ilişkin bir tereddüt üzerine ilgili birimden görüş talep etmektedir ve 'Görüşünüzün bildirilmesini rica ederim' ifadesiyle bitmektedir.",
+    "latency_ms": 1142.89
+  },
+  {
+    "doc_id": "eval_sikayet_010",
+    "title": "Disiplin Cezasına İtiraz ve Haksız Uygulama Şikâyeti",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 0.95,
+    "sub_type": "disiplin_cezasi_itirazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kamu görevlisinin kendisine verilen disiplin cezasına karşı usul ve yasaya aykırılık iddiasıyla sunduğu bir şikâyet ve itiraz dilekçesidir.",
+    "latency_ms": 972.75
+  },
+  {
+    "doc_id": "eval_sikayet_020",
+    "title": "Konu: Engelli Erişim Rampasının Kapatılması",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 0.95,
+    "sub_type": "engelli_haklari_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın veya kurumun bir hizmet kusurunu (engelli erişiminin engellenmesi) ve mevzuata aykırılığı dile getirerek sorumlular hakkında işlem yapılmasını talep ettiği bir şikayet dilekçesi niteliğindedir.",
+    "latency_ms": 1095.6
+  },
+  {
+    "doc_id": "eval_sikayet_013",
+    "title": "Okul Kantininde Hijyen Kurallarına Uyulmaması Hakkında Şikâyet",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 1.0,
+    "sub_type": "hijyen_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın okul kantinindeki hijyen koşulları ve yasaklı ürün satışı ile ilgili yaşadığı mağduriyeti dile getirerek ilgili makamdan denetim ve yaptırım talep ettiği bir şikâyet dilekçesidir.",
+    "latency_ms": 1009.6
+  },
+  {
+    "doc_id": "eval_sikayet_002",
+    "title": "Toplu Taşıma Hattında Sefer İptali ve Sürücü Davranışı Şikâyeti",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 1.0,
+    "sub_type": "vatandas_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın toplu taşıma hizmetindeki aksaklık ve personel davranışı nedeniyle yaşadığı mağduriyeti dile getirerek disiplin incelemesi talep ettiği bir şikâyet dilekçesidir.",
+    "latency_ms": 1014.31
+  },
+  {
+    "doc_id": "eval_sikayet_004",
+    "title": "Ruhsatsız Kaçak Yapılaşma İhbar ve Şikâyet Başvurusu",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 0.95,
+    "sub_type": "imar_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın komşu parseldeki kaçak yapılaşma ve mevzuata aykırılık durumunu bildiren, 'Şikâyet Başvurusu' başlığı altında sunulan bir şikâyet dilekçesidir.",
+    "latency_ms": 1074.52
+  },
+  {
+    "doc_id": "eval_sikayet_006",
+    "title": "6698 Sayılı KVKK Kapsamında İzinsiz Kişisel Veri Paylaşımı Şikâyeti",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 1.0,
+    "sub_type": "KVKK ihlali şikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın kişisel verilerinin izinsiz paylaşılması üzerine Adalet Bakanlığı'na sunduğu bir şikayet dilekçesidir. İçerikte açıkça 'Şikâyeti' başlığı kullanılmakta ve bir mağduriyetin giderilmesi için işlem yapılması talep edilmektedir.",
+    "latency_ms": 1225.84
+  },
+  {
+    "doc_id": "eval_sikayet_017",
+    "title": "Konu: İşyerinde Psikolojik Taciz (Mobbing) ve Görev Yeri Değişikliği",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 1.0,
+    "sub_type": "mobbing_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir çalışanın yöneticisi tarafından maruz kaldığı psikolojik taciz (mobbing) ve haksız görev yeri değişiklikleri hakkında şikayette bulunarak müfettiş görevlendirilmesini talep eden bir dilekçe niteliğindedir.",
+    "latency_ms": 1057.17
+  },
+  {
+    "doc_id": "eval_sikayet_019",
+    "title": "Konu: Kamulaştırmasız El Atma ve Tarım Arazisi Zararı",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 0.95,
+    "sub_type": "maddi_zarar_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın mülkiyetine yapılan izinsiz müdahale ve oluşan maddi zarar nedeniyle ilgili kuruma yaptığı bir şikayet dilekçesidir. 'Arz ederim' ifadesi ve şikayet konusu net bir şekilde belirtilmiştir.",
+    "latency_ms": 1188.83
+  },
+  {
+    "doc_id": "eval_sikayet_012",
+    "title": "Haksız Su Faturası Tahakkuku ve Sayaç Okuma Hatasına İtiraz",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 0.95,
+    "sub_type": "fatura_itirazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Vatandaşın hatalı fatura ve sayaç okuma işlemi nedeniyle mağduriyetini dile getirerek düzeltme talep ettiği bir şikayet metnidir.",
+    "latency_ms": 844.16
+  },
+  {
+    "doc_id": "eval_sikayet_001",
+    "title": "Kaldırım İşgali ve Gürültü Kirliliği Hakkında Şikâyet Başvurusu",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 1.0,
+    "sub_type": "kamu_şikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın veya kurumun belirli bir işletmenin kaldırım işgali ve gürültü kirliliği yapması üzerine yetkili makama sunduğu bir şikâyet dilekçesidir. 'Şikâyet Başvurusu' başlığı ve mağduriyetin dile getirilmesi bu sınıflandırmayı doğrular.",
+    "latency_ms": 1231.35
+  },
+  {
+    "doc_id": "eval_sikayet_016",
+    "title": "Konu: Sözlü Sınav Komisyonu Uygulamaları Hakkında Başvuru",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 0.95,
+    "sub_type": "sınav_şikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın (adayın) sınav sürecindeki usulsüzlükleri (kamera kaydı alınmaması, keyfi soru yöneltilmesi, düşük puan verilmesi) belirterek işlemin incelenmesini talep ettiği bir şikayet dilekçesidir.",
+    "latency_ms": 1093.64
+  },
+  {
+    "doc_id": "eval_sikayet_003",
+    "title": "Poliklinik Muayene Sırası ve Personel İhmali Şikâyet Dilekçesi",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 1.0,
+    "sub_type": "hasta_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın hastanedeki muayene sırası ve personel davranışı ile ilgili yaşadığı mağduriyeti dile getirerek şikayette bulunduğu ve işlem yapılmasını talep ettiği bir dilekçedir.",
+    "latency_ms": 1004.8
+  },
+  {
+    "doc_id": "eval_sikayet_009",
+    "title": "Kamu Görevlisinin Etik Dışı Davranışı Hakkında Şikâyet",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 1.0,
+    "sub_type": "memur_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kamu görevlisinin etik dışı davranışı, ayrımcılık yapması ve usulsüzlük teşkil eden eylemleri hakkında doğrudan şikayet içerikli bir dilekçedir.",
+    "latency_ms": 958.67
+  },
+  {
+    "doc_id": "eval_sikayet_014",
+    "title": "Konu: 3071 Sayılı Kanun Kapsamında İdari İşlemin Geri Alınması ve İnceleme",
+    "ground_truth": "sikayet",
+    "predicted": "sikayet",
+    "confidence": 0.95,
+    "sub_type": "hukuka_aykirlik_sikayeti",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "dilekce"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir vatandaşın belediye tarafından gerçekleştirilen bir işlem hakkında tebligat yapılmadığını ve hukuka aykırılık olduğunu belirterek şikayette bulunduğu ve düzeltme talep ettiği bir dilekçe niteliğindedir.",
+    "latency_ms": 1148.66
+  },
+  {
+    "doc_id": "eval_kurum_ici_001",
+    "title": "Birim İçi Haftalık Nöbet Çizelgesi ve Mesai Düzeni (İç Yazışma)",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 1.0,
+    "sub_type": "nöbet_çizelgesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun kendi birimi içerisinde (Daire Başkanlığı ve Şube Müdürlüğü arasında) personel nöbet düzenini belirlemek amacıyla hazırlanan bir iç yazışmadır.",
+    "latency_ms": 1017.67
+  },
+  {
+    "doc_id": "eval_kurum_ici_005",
+    "title": "Yıllık İzin Planlama Formlarının Teslimi Hakkında Birim İçi Yazı",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 1.0,
+    "sub_type": "birim_ici_yazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun (Sağlık Bakanlığı) kendi içindeki personel için hazırlanan, birim içi bilgilendirme ve talimat içeren bir yazıdır. Başlığında da açıkça 'Birim İçi Yazı' ifadesi yer almaktadır.",
+    "latency_ms": 1066.98
+  },
+  {
+    "doc_id": "eval_kurum_ici_017",
+    "title": "Konu: Telefon Santrali Dahili Numara Rehberi Güncellemesi",
+    "ground_truth": "kurum_ici",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "kurum_ici_bilgilendirme",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": true,
+    "reasoning": "Metin, bir birimin tamamladığı işlem (IP telefon santrali dönüşümü) hakkında diğer birimlere bilgi vermek amacıyla yazılmış, sayı içeren resmi bir bilgilendirme yazısıdır.",
+    "latency_ms": 914.07
+  },
+  {
+    "doc_id": "eval_kurum_ici_002",
+    "title": "Kurum İçi Fotokopi ve Baskı Cihazlarının Kullanımı Hakkında İç Not",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 1.0,
+    "sub_type": "iç not",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "genelge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, kurumun kendi personeline yönelik hazırladığı, başlığında 'İç Not' ifadesi geçen ve kurum içi işleyişi düzenleyen bir yazıdır.",
+    "latency_ms": 916.99
+  },
+  {
+    "doc_id": "eval_kurum_ici_012",
+    "title": "İç Denetim Birimi Saha Çalışması İçin Oda Tahsisi Notu",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 0.95,
+    "sub_type": "oda_tahsis_notu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun kendi iç birimleri (İç Denetim Birimi ve Destek Bürosu) arasındaki işleyişi düzenleyen, bir oda tahsisi ve teknik hazırlık talep eden kurum içi bir yazışmadır.",
+    "latency_ms": 1026.36
+  },
+  {
+    "doc_id": "eval_kurum_ici_010",
+    "title": "Birim Arşivi Ayıklama ve İmha Hazırlık Çalışması İç Talimatı",
+    "ground_truth": "kurum_ici",
+    "predicted": "yonerge",
+    "confidence": 0.95,
+    "sub_type": "iç_talimat",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurumun kendi iç işleyişinde uygulanacak usul ve esasları belirleyen, 'İç Talimatı' başlığını taşıyan ve belirli bir çalışma yöntemini (arşiv ayıklama ve teslimi) düzenleyen bir yönergedir.",
+    "latency_ms": 1087.13
+  },
+  {
+    "doc_id": "eval_kurum_ici_003",
+    "title": "Şube Müdürlükleri Arası Dosya Devir ve İş Bölümü Müzekkeresi",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 0.95,
+    "sub_type": "müzekkere",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bakanlık birimi içerisinde şube müdürlükleri arasındaki görev dağılımı ve dosya devri hakkında yazılmış, kurum içi işleyişi düzenleyen bir müzekkeredir.",
+    "latency_ms": 902.2
+  },
+  {
+    "doc_id": "eval_kurum_ici_006",
+    "title": "Kurum İçi Otopark Kartı Yenileme İşlemleri",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 0.95,
+    "sub_type": "personel_duyurusu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Adalet Bakanlığı bünyesindeki bir birim tarafından kurum içindeki personele yönelik, otopark kartı yenileme işlemleri hakkında yazılmış bir iç yazışmadır.",
+    "latency_ms": 926.79
+  },
+  {
+    "doc_id": "eval_kurum_ici_013",
+    "title": "Personel Servis Güzergâhı Saat Değişikliği (Kurum İçi Not)",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 1.0,
+    "sub_type": "not",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, kurumun kendi personeli için hazırladığı, başlığında açıkça 'Kurum İçi Not' ibaresi bulunan ve servis saat değişikliğini bildiren bir iç yazışmadır.",
+    "latency_ms": 965.18
+  },
+  {
+    "doc_id": "eval_kurum_ici_009",
+    "title": "Kurum İçi Bilgi Güvenliği — Masaüstü ve Ekran Kilidi Kontrolü",
+    "ground_truth": "kurum_ici",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "kurum_ici_duyuru",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, kurum içindeki personel için bilgi güvenliği kuralları hakkında bilgilendirme ve hatırlatma amacı taşımaktadır. Kurum içi bir durumu tespit edip buna yönelik bir kural hatırlatması yapmaktadır.",
+    "latency_ms": 987.63
+  },
+  {
+    "doc_id": "eval_kurum_ici_015",
+    "title": "Konu: Taşınır Kayıt ve Kontrol Yetkilisi Devir İşlemleri",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 0.95,
+    "sub_type": "birim_içi_yazışma",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir belediye başkanlığı birimi içerisinde (Mali Hizmetler Dairesi Başkanlığı) taşınır kayıt ve kontrol yetkilisi devri gibi operasyonel bir sürecin yürütülmesi için hazırlanan, kurum içi işleyişe yönelik bir yazıdır.",
+    "latency_ms": 1119.06
+  },
+  {
+    "doc_id": "eval_kurum_ici_007",
+    "title": "Birim İçi Performans Değerlendirme Toplantısı Çağrısı",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 0.95,
+    "sub_type": "toplanti_cagrisi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bakanlık birimi içerisinde (Strateji Geliştirme Başkanlığı) şube müdürleri ve şeflerin katılımıyla yapılacak bir iç değerlendirme toplantısını duyurmaktadır. Kurum içi hiyerarşiyi ve birim içi işleyişi ilgilendiren bir yazışmadır.",
+    "latency_ms": 1124.91
+  },
+  {
+    "doc_id": "eval_kurum_ici_004",
+    "title": "Hizmet İçi Oryantasyon Eğitimi Katılım Listesi (Birim İçi Yazışma)",
+    "ground_truth": "kurum_ici",
+    "predicted": "kurum_ici",
+    "confidence": 1.0,
+    "sub_type": "birim_ici_yazisma",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, kurum içindeki bir birimden diğerine (şefliklere) yönelik, personel eğitimi ve katılımı hakkında yazılmış bir iç yazışmadır. 'Birim İçi Yazışma' ibaresi ve kurum içi işleyişe dair talimat içermesi bu sınıflandırmayı doğrular.",
+    "latency_ms": 1327.29
+  },
+  {
+    "doc_id": "eval_kurum_ici_016",
+    "title": "Konu: 2026 Yılı Kırtasiye ve Büro Malzemesi Dağıtım Listesi",
+    "ground_truth": "kurum_ici",
+    "predicted": "bilgilendirme",
+    "confidence": 0.95,
+    "sub_type": "dağıtım_listesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, kurum içindeki bir birimin (Genel Sekreterlik) diğer birimlere (şube müdürlükleri) malzeme dağıtımı hakkında bilgi verdiği ve süreci açıkladığı bir bilgilendirme yazısıdır.",
+    "latency_ms": 923.73
+  },
+  {
+    "doc_id": "eval_genelge_014",
+    "title": "Konu: Kurban Hizmetlerinin Yürütülmesi ve Çevre Sağlığı Tedbirleri (2026/13)",
+    "ground_truth": "genelge",
+    "predicted": "resmi_yazi",
+    "confidence": 0.95,
+    "sub_type": "üst_yazi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "teblig"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bakanlık birimi tarafından valiliklere hitaben yazılmış, bir görevin yerine getirilmesi için 'gereğini rica ederim' ifadesiyle biten standart bir resmi üst yazıdır.",
+    "latency_ms": 971.88
+  },
+  {
+    "doc_id": "eval_genelge_006",
+    "title": "Kamu Binalarında Enerji Tasarrufu ve Verimliliği Genelgesi (2026/5)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "enerji_tasarrufu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'GENELGE' başlığını taşımakta olup, kamu kurumlarına yönelik genel bir talimat ve kuralı içermektedir.",
+    "latency_ms": 930.04
+  },
+  {
+    "doc_id": "eval_genelge_001",
+    "title": "–– Mesleki ve Teknik Eğitim Politika Belgesi ile İlgili 2024/10 Sayılı Cumhurbaşkanlığı Genelgesi",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Genelgesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Cumhurbaşkanlığı Genelgesi' başlığını taşımakta olup, resmi gazete bilgileri ve Cumhurbaşkanı imzası ile desteklenmektedir.",
+    "latency_ms": 865.04
+  },
+  {
+    "doc_id": "eval_genelge_002",
+    "title": "–– Rehberlik, Teftiş ve Denetim Faaliyetlerinin Düzenli ve Etkin Bir Şekilde Yerine Getirilmesi ile İlgili 2024/14 Sayılı Cumhurbaşkanlığı Genelgesi",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Genelgesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Cumhurbaşkanlığı Genelgesi' başlığını taşımakta olup, Cumhurbaşkanı tarafından yayımlanmış resmi bir genelge formatındadır.",
+    "latency_ms": 846.7
+  },
+  {
+    "doc_id": "eval_genelge_010",
+    "title": "Kış Mevsimi Trafik Tedbirleri ve Kar Mücadelesi Genelgesi (2026/9)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "trafik_tedbirleri",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin doğrudan 'Genelge' başlığını taşımakta olup, kurumlar arası koordinasyon ve görev dağılımı içeren bir genelge formatındadır.",
+    "latency_ms": 893.07
+  },
+  {
+    "doc_id": "eval_genelge_011",
+    "title": "Kamu İhalelerinde Yerli Malı Kullanımının Teşvik Edilmesi Genelgesi (2026/10)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "bakanlık_genelgesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "teblig"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'GENELGE' başlığını taşımakta olup, bir bakanlık tarafından tüm harcama birimlerine yönelik talimat ve kural içeren bir duyuru niteliğindedir.",
+    "latency_ms": 1094.54
+  },
+  {
+    "doc_id": "eval_genelge_005",
+    "title": "Kamu Kurum ve Kuruluşlarında Siber Güvenlik Tedbirleri Genelgesi (2026/4)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "siber_guvenlik_tedbirleri",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'GENELGE' başlığını taşımakta olup, kamu kurum ve kuruluşları için siber güvenlik tedbirlerine ilişkin genel bir talimat ve kural seti içermektedir.",
+    "latency_ms": 1146.83
+  },
+  {
+    "doc_id": "eval_genelge_020",
+    "title": "Engelli Vatandaşların Kamu Hizmet Binalarına Erişilebilirliği Genelgesi (2026/19)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "erişilebilirlik_standartları",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'GENELGE' başlığını taşımakta olup, bir kurum tarafından (Ankara Üniversitesi Rektörlüğü) belirli standartların uygulanması ve denetimi konusunda genel bir talimat içermektedir.",
+    "latency_ms": 1146.2
+  },
+  {
+    "doc_id": "eval_genelge_012",
+    "title": "Okul Güvenliği ve Öğrenci Servis Araçları Denetimi Genelgesi (2026/11)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "okul_guvenligi_denetimi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'GENELGE' başlığını taşımakta olup, bir bakanlık genel müdürlüğü tarafından taşra teşkilatına yönelik talimat ve düzenleme içermektedir.",
+    "latency_ms": 1058.46
+  },
+  {
+    "doc_id": "eval_genelge_004",
+    "title": "–– Tasarruf Tedbirleri ile İlgili 2024/7 Sayılı Cumhurbaşkanlığı Genelgesi",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Genelgesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Cumhurbaşkanlığı Genelgesi' başlığını taşımakta olup, Resmî Gazete bilgileri ve Cumhurbaşkanı imzası ile desteklenen bir genelge formatındadır.",
+    "latency_ms": 894.77
+  },
+  {
+    "doc_id": "eval_genelge_008",
+    "title": "Mevsimlik Tarım İşçilerinin Çalışma ve Yaşam Koşullarının İyileştirilmesi Genelgesi (2026/7)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "bakanlık_genelgesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'GENELGE' başlığını taşımakta olup, bir bakanlık tarafından mülki idare amirliklerine yönelik genel bir talimat ve tedbir alınması ricasini içermektedir.",
+    "latency_ms": 1021.15
+  },
+  {
+    "doc_id": "eval_genelge_003",
+    "title": "–– Karma Ekonomik Komisyon Eşbaşkanlıkları ile İlgili 2024/2 Sayılı Cumhurbaşkanlığı Genelgesi",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Genelgesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Cumhurbaşkanlığı Genelgesi' başlığını taşımakta olup, bir genelge numarası (2024/2), tarih ve Cumhurbaşkanı imzası içermektedir.",
+    "latency_ms": 880.12
+  },
+  {
+    "doc_id": "eval_genelge_007",
+    "title": "Resmî Yazışmalarda Elektronik İmza ve e-Yazışma Paketi Standartları Genelgesi (2026/6)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 1.0,
+    "sub_type": "elektronik_yazisma_standartlari",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'GENELGE (2026/6)' başlığını taşımakta olup, kamu kurumları arasındaki yazışma usullerine dair genel bir talimat ve standart içermektedir.",
+    "latency_ms": 1087.96
+  },
+  {
+    "doc_id": "eval_genelge_013",
+    "title": "Konu: Kamu Görevlilerinin Mesai Saatlerine Riayeti ve Hizmet Sunum İlkeleri (2026/12)",
+    "ground_truth": "genelge",
+    "predicted": "genelge",
+    "confidence": 0.95,
+    "sub_type": "kurumsal_talimat",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bakanlık birimi tarafından tüm teşkilata yönelik mesai saatlerine riayet ve hizmet sunum ilkeleri hakkında verilen genel bir talimatı ve kuralı içermektedir. 'Gereğini önemle rica ederim' ifadesi ve konunun tüm teşkilatı kapsaması genelge niteliğindedir.",
+    "latency_ms": 1277.92
+  },
+  {
+    "doc_id": "eval_rapor_013",
+    "title": "Arşiv Dijitalleştirme Projesi İlerleme Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "proje_ilerleme_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Arşiv Dijitalleştirme Projesi İlerleme Raporu' başlığını taşımakta olup, belirli bir döneme ait hedeflenen ve gerçekleşen verileri, yüzdeleri ve teknik başarı oranlarını içeren bir performans değerlendirmesi sunmaktadır.",
+    "latency_ms": 1113.49
+  },
+  {
+    "doc_id": "eval_rapor_005",
+    "title": "İlçe Gıda Denetim Faaliyetleri 2026 Yılı 1. Çeyrek Değerlendirme Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "denetim_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir dönemdeki (2026 Yılı 1. Çeyrek) denetim faaliyetlerini, sayısal verileri ve sonuçları içeren bir 'Değerlendirme Raporu' başlığıyla sunulmaktadır.",
+    "latency_ms": 1010.58
+  },
+  {
+    "doc_id": "eval_rapor_018",
+    "title": "Konu: Trafik Kazası Kara Nokta İyileştirme Çalışması Etki Analizi",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 0.95,
+    "sub_type": "etki_analizi_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir çalışma sonrası elde edilen verilerin (kaza sayıları, yüzdesel azalmalar) analiz edildiği, kıyaslama yapıldığı ve sonuç olarak bir öneri sunduğu teknik bir değerlendirme belgesidir.",
+    "latency_ms": 1020.62
+  },
+  {
+    "doc_id": "eval_rapor_007",
+    "title": "Kurumsal Enerji Verimliliği Etüt Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "enerji_etut_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında ve içeriğinde açıkça 'Etüt Raporu' olarak belirtilmiştir. Belirli bir kanun kapsamında yapılan ölçümler, hesaplamalar ve yatırım geri dönüş süreleri gibi teknik veriler içeren bir değerlendirme belgesidir.",
+    "latency_ms": 1051.39
+  },
+  {
+    "doc_id": "eval_rapor_003",
+    "title": "4483 Sayılı Kanun Kapsamında Ön İnceleme Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "ön inceleme raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'Ön İnceleme Raporu' başlığını taşımakta olup, bir denetim/inceleme sonucunu, delilleri, değerlendirmeyi ve sonucu içeren teknik bir rapor formatındadır.",
+    "latency_ms": 977.53
+  },
+  {
+    "doc_id": "eval_rapor_012",
+    "title": "Kırsal Kalkınma Hibe Projeleri İzleme ve Değerlendirme Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "izleme ve değerlendirme raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında ve içeriğinde açıkça 'İzleme ve Değerlendirme Raporu' olarak belirtilmiştir. Belirli bir projenin (Kırsal Kalkınma Hibe Projeleri) sonuçlarını, istatistiklerini ve saha çalışmalarını içeren bir değerlendirme belgesidir.",
+    "latency_ms": 1155.67
+  },
+  {
+    "doc_id": "eval_rapor_008",
+    "title": "Taşkın Riski ve Dere Yatağı Hidrolik İnceleme Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "teknik_inceleme_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'İnceleme Raporu' olarak belirtilmiş olup, teknik bir heyet tarafından yapılan hesaplamalar ve ulaşılan teknik bulguları içeren bir değerlendirme belgesidir.",
+    "latency_ms": 935.11
+  },
+  {
+    "doc_id": "eval_rapor_011",
+    "title": "Tıbbi Cihaz Kalibrasyon ve Verimlilik Analiz Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "teknik_analiz_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, tıbbi cihazların kalibrasyon ölçüm sonuçlarını içeren, teknik analiz ve değerlendirme içeren bir rapor formatındadır ve başlığında açıkça 'Analiz Raporu' ifadesi geçmektedir.",
+    "latency_ms": 913.58
+  },
+  {
+    "doc_id": "eval_rapor_006",
+    "title": "Disiplin Soruşturması Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "disiplin_soruşturması_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Disiplin Soruşturması Raporu' başlığını taşımakta olup, bir soruşturma sürecinin sonucunu, delilleri ve ulaşılan neticeyi içeren bir değerlendirme belgesidir.",
+    "latency_ms": 995.96
+  },
+  {
+    "doc_id": "eval_rapor_019",
+    "title": "Konu: Hizmet Aracı Filosu Yakıt Tüketimi ve Bakım Maliyet Analizi",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 0.95,
+    "sub_type": "maliyet_analizi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir araç filosunun yakıt tüketimi ve bakım maliyetlerini analiz eden, bulgular sunan ve ekonomik değerlendirme içeren bir rapor niteliğindedir.",
+    "latency_ms": 911.4
+  },
+  {
+    "doc_id": "eval_rapor_004",
+    "title": "Hizmet Binası Deprem Performans Analizi Teknik Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "teknik_degerlendirme_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir binanın deprem performans analizine ilişkin teknik verileri, modelleme sonuçlarını ve yapısal tespitleri içeren bir 'Teknik Değerlendirme Raporu' başlığı ve içeriği taşımaktadır.",
+    "latency_ms": 1002.4
+  },
+  {
+    "doc_id": "eval_rapor_016",
+    "title": "Konu: Heyelan Bölgesi Jeolojik Etüt Bulguları ve Önlem Önerileri",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 0.95,
+    "sub_type": "teknik_rapor",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "talep_yazisi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bölgedeki jeolojik etüt bulgularını, teknik ölçümleri (inklinometre, gerilme çatlakları) ve bu bulgulara dayalı teknik kanaatleri/önerileri içermektedir. Bir durumun analizi ve sonuçlandırılması üzerine kuruludur.",
+    "latency_ms": 1127.94
+  },
+  {
+    "doc_id": "eval_rapor_014",
+    "title": "Konu: 2025 Mali Yılı Taşınır Yönetim Hesabı İnceleme Bulguları ve Kanaat",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "denetim_raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir döneme ait taşınır yönetim hesabı incelemesini içeren bulguları, amaç ve kanaat bölümleriyle sunan teknik bir değerlendirme belgesidir.",
+    "latency_ms": 966.85
+  },
+  {
+    "doc_id": "eval_rapor_001",
+    "title": "2025 Yılı İç Kontrol Sistemi Değerlendirme Raporu",
+    "ground_truth": "rapor",
+    "predicted": "rapor",
+    "confidence": 1.0,
+    "sub_type": "iç kontrol değerlendirme raporu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'Değerlendirme Raporu' olarak belirtilmiş olup; giriş, inceleme/bulgular ve sonuç/öneriler bölümlerinden oluşan yapısal bir rapor formatındadır.",
+    "latency_ms": 938.22
+  },
+  {
+    "doc_id": "eval_tutanak_016",
+    "title": "Konu: Elektronik Tebligat Sunucu Kesintisi Zaman Kaydı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 0.95,
+    "sub_type": "teknik_durum_tutanagi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir tarih ve saat aralığında yaşanan teknik bir kesintinin sistem loglarından kontrol edildiğini ve nöbetçi personel tarafından imza altına alındığını belirten bir olay kaydı/tutanak niteliğindedir.",
+    "latency_ms": 1072.12
+  },
+  {
+    "doc_id": "eval_tutanak_001",
+    "title": "Muayene ve Kabul Komisyonu Teslim ve Kabul Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "teslim ve kabul tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir komisyon tarafından yapılan inceleme sonucunda düzenlenen, imzalarla onaylanan ve 'Tutanak' başlığını açıkça taşıyan bir teslim ve kabul belgesidir.",
+    "latency_ms": 1032.58
+  },
+  {
+    "doc_id": "eval_tutanak_006",
+    "title": "Personel Göreve Gelmeme (Devamsızlık) Tespit Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "devamsızlık_tespit_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir personelin göreve gelmediğini tespit eden, belirli bir tarih ve saat içeren, taraflarca imzalanan bir 'Tespit Tutanağı'dır.",
+    "latency_ms": 977.01
+  },
+  {
+    "doc_id": "eval_tutanak_007",
+    "title": "Zabıta Denetimi — Mühürleme ve Faaliyetten Men Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "mühürleme_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir denetim sonucunda mühürleme işleminin gerçekleştirildiğini belgeleyen, tarih, saat ve mühür numarası içeren resmi bir tutanaktır.",
+    "latency_ms": 929.95
+  },
+  {
+    "doc_id": "eval_tutanak_012",
+    "title": "Kaçak Yapı Tespit ve Yapı Tatil Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "yapı_tatil_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sikayet"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir denetim sonucunda tespit edilen durumu kayıt altına alan, 'Kaçak Yapı Tespit ve Yapı Tatil Tutanağı' başlığını taşıyan ve resmi bir tespit belgesidir.",
+    "latency_ms": 1001.63
+  },
+  {
+    "doc_id": "eval_tutanak_010",
+    "title": "Taşınır Mal Devir ve Teslim Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "taşınır mal devir teslim",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir taşınır mal devir ve teslim işleminin gerçekleştiğini, kalem kalem sayım yapıldığını ve noksanlık bulunmadığının tespit edildiğini belirten bir 'Tutanak' örneğidir.",
+    "latency_ms": 956.94
+  },
+  {
+    "doc_id": "eval_tutanak_019",
+    "title": "Konu: Soğuk Hava Deposu Termograf Arızası ve Ürün İmha Tespit Kaydı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "olay_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir olay (kompresör arızası ve ürün bozulması) üzerine ambar sorumlusu ve laboratuvar şefi tarafından yerinde tespit edilerek kayıt altına alınan, müştereken imzalanan bir durumu ifade etmektedir. 'Tespit Kaydı' ifadesi ve olayın tespiti tutanak niteliğindedir.",
+    "latency_ms": 1186.69
+  },
+  {
+    "doc_id": "eval_tutanak_013",
+    "title": "Bilirkişi Keşif ve Yerinde Tespit Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "bilirkişi_keşif_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bilirkişi heyeti tarafından yapılan keşif ve yerinde tespit işlemlerini kayıt altına alan, taraflarca imzalanan bir 'Keşif Tutanağı'dır.",
+    "latency_ms": 932.41
+  },
+  {
+    "doc_id": "eval_tutanak_004",
+    "title": "Arşiv Malzemesi Ayıklama ve İmha Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "imha_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir komisyon tarafından gerçekleştirilen arşiv malzemesi ayıklama ve imha işlemini kayıt altına alan, 'Tutanak' başlığıyla açıkça belirtilen ve imza altına alındığını ifade eden bir belgedir.",
+    "latency_ms": 1095.74
+  },
+  {
+    "doc_id": "eval_tutanak_015",
+    "title": "Konu: Hizmet Aracı Maddi Hasarlı Park Kazası Olay Kaydı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "olay_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir tarihte ve saatte meydana gelen bir kazayı (hizmet aracının direğe çarpması) tespit eden, olayı kayıt altına alan ve görevlilerce imzalanan bir olay kaydı/tutanak niteliğindedir.",
+    "latency_ms": 1135.19
+  },
+  {
+    "doc_id": "eval_tutanak_009",
+    "title": "Gıda Kontrolü Numune Alma Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "numune_alma_tutanagi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir tarih ve saatte yapılan denetim sonucunda alınan numunelerin mühürlenmesi ve teslim alınması sürecini kayıt altına alan bir 'Numune Alma Tutanağı'dır.",
+    "latency_ms": 909.48
+  },
+  {
+    "doc_id": "eval_tutanak_003",
+    "title": "İşyeri Teslim ve Yer Gösterme Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "işyeri_teslim_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'İşyeri Teslim ve Yer Gösterme Tutanağı' başlığını taşımakta olup, bir olayın (yer teslimi) gerçekleştiğini, tespit edildiğini ve taraflarca imzalandığını belgeleyen bir tutanak formatındadır.",
+    "latency_ms": 1214.86
+  },
+  {
+    "doc_id": "eval_tutanak_008",
+    "title": "Disiplin Kurulu Toplantı ve Müzakere Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "disiplin_kurulu_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Disiplin Kurulu Toplantı ve Müzakere Tutanağı' başlığını taşımakta olup, bir toplantının içeriğini, alınan kararları ve katılımı kayıt altına alan resmi bir tutanak formatındadır.",
+    "latency_ms": 1023.95
+  },
+  {
+    "doc_id": "eval_tutanak_011",
+    "title": "Sınav Salonu Evrak Zarfları Açma ve Kapatma Tutanağı",
+    "ground_truth": "tutanak",
+    "predicted": "tutanak",
+    "confidence": 1.0,
+    "sub_type": "sınav_tutanağı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir sınav salonundaki evrak zarflarının açılması, kontrol edilmesi ve sınavın tamamlanması sürecini belgeleyen, tarih, saat ve işlem detaylarını içeren bir 'Sınav Tutanağı'dır.",
+    "latency_ms": 1003.83
+  },
+  {
+    "doc_id": "eval_yonetmelik_006",
+    "title": "–– İzinsiz Çalıştığı İçin Haklarında Sınır Dışı Etme Kararı Alınan Yabancıların Çeşitli Masraflarının İşverenlerinden Tahsili Hakkında Yönetmelik",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "İşveren Tahsilatı Yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'YÖNETMELİK' başlığı altında yer almakta olup, belirli bir konudaki (izinsiz çalışan yabancıların masraflarının işverenden tahsili) usul ve esasları belirleyen, maddelerden oluşan düzenleyici bir metindir.",
+    "latency_ms": 1571.54
+  },
+  {
+    "doc_id": "eval_yonetmelik_012",
+    "title": "–– İstanbul Üniversitesi Güneydoğu Avrupa Uygulama ve Araştırma Merkezi Yönetmeliği",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "kurum_yonetmeligi",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'YÖNETMELİK' olarak belirtilmiş, maddeler halinde düzenleyici hükümler (amaç, kapsam, dayanak, tanımlar vb.) içeren ve bir kurumun (İstanbul Üniversitesi Güneydoğu Avrupa Uygulama ve Araştırma Merkezi) çalışma usul ve esaslarını belirleyen resmi bir düzenleme belgesidir.",
+    "latency_ms": 1726.59
+  },
+  {
+    "doc_id": "eval_yonetmelik_015",
+    "title": "–– TED Üniversitesi Ticaret Araştırmaları Uygulama ve Araştırma Merkezi Yönetmeliğinde Değişiklik Yapılmasına Dair Yönetmelik",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "yönetmelik değişikliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında ve içeriğinde açıkça 'Yönetmelik' olarak belirtilen, bir kurumun (TED Üniversitesi) uygulama ve araştırma merkezi yönetmeliğinde yapılan değişiklikleri içeren resmi bir düzenleyici işlemdir.",
+    "latency_ms": 1680.64
+  },
+  {
+    "doc_id": "eval_yonetmelik_008",
+    "title": "–– Evcil Hayvan Genetik Kaynaklarının Korunması ve Sürdürülebilir Kullanımı Hakkında Yönetmelikte Değişiklik Yapılmasına Dair Yönetmelik",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "değişiklik yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'YÖNETMELİK' başlığı altında yer almakta olup, mevcut bir yönetmelikte madde bazlı değişiklikler (ibare değişiklikleri, eklemeler ve yürürlük maddeleri) içeren düzenleyici bir metindir.",
+    "latency_ms": 1578.0
+  },
+  {
+    "doc_id": "eval_yonetmelik_007",
+    "title": "–– Türkiye Enerji, Nükleer ve Maden Araştırma Kurumu Fikrî ve Sınai Haklar Yönetmeliği",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "TENMAK Fikrî ve Sınai Haklar Yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'YÖNETMELİK' başlığı altında yer almakta olup, amaç, kapsam, dayanak ve tanımlar gibi standart yönetmelik bölümlerini içermektedir. Ayrıca Resmî Gazete bilgileri ve kanun dayanakları metinde açıkça belirtilmiştir.",
+    "latency_ms": 1766.73
+  },
+  {
+    "doc_id": "eval_yonetmelik_014",
+    "title": "–– TOBB Ekonomi ve Teknoloji Üniversitesi Laboratuvar Okulları Yönetmeliğinde Değişiklik Yapılmasına Dair Yönetmelik",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "değişiklik_yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'YÖNETMELİK' başlığı altında yer alan, mevcut bir yönetmelikte madde bazlı değişiklikler yapan, maddeler halinde düzenlenmiş ve Resmî Gazete formatında yayınlanan resmi bir düzenleyici işlemdir.",
+    "latency_ms": 1480.94
+  },
+  {
+    "doc_id": "eval_yonetmelik_002",
+    "title": "–– Bahçeşehir Üniversitesi Türk Dünyası Uygulama ve Araştırma Merkezi Yönetmeliği",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "üniversite_yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'YÖNETMELİK' başlığı altında yer almakta olup, bir merkezin amaçlarını, faaliyet alanlarını, yönetim organlarını ve çalışma usul ve esaslarını düzenleyen maddelerden oluşmaktadır.",
+    "latency_ms": 1444.45
+  },
+  {
+    "doc_id": "eval_yonetmelik_004",
+    "title": "–– Aydın Adnan Menderes Üniversitesi Ön Lisans ve Lisans Eğitimi Yönetmeliği",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "üniversite_yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'YÖNETMELİK' başlığı altında yer almakta olup, Aydın Adnan Menderes Üniversitesi'nin eğitim esaslarını düzenleyen maddeler, amaç, kapsam ve tanımlar içeren tipik bir yönetmelik metnidir.",
+    "latency_ms": 1597.4
+  },
+  {
+    "doc_id": "eval_yonetmelik_017",
+    "title": "–– Zonguldak Bülent Ecevit Üniversitesi Devrek Bastonu Uygulama ve Araştırma Merkezi Yönetmeliği",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "üniversite_yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'YÖNETMELİK' başlığı altında yer alan, bir üniversite biriminin amaç, kapsam, dayanak ve yönetim organlarını düzenleyen resmi bir düzenleyici işlemdir.",
+    "latency_ms": 1577.1
+  },
+  {
+    "doc_id": "eval_yonetmelik_001",
+    "title": "–– İstanbul Aydın Üniversitesi Afet Eğitim, Uygulama ve Araştırma Merkezi Yönetmeliğinde Değişiklik Yapılmasına Dair Yönetmelik",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "yönetmelik değişikliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'Yönetmelik' başlığı altında yer alan, mevcut bir yönetmelikte değişiklik yapıldığını belirten ve maddeler halinde düzenleyici hükümler içeren resmi bir metindir.",
+    "latency_ms": 1359.78
+  },
+  {
+    "doc_id": "eval_yonetmelik_018",
+    "title": "–– Benzin ve Naftanın Depolanması ve Dağıtılmasından Kaynaklanan Uçucu Organik Bileşik Emisyonlarının Kontrolü Yönetmeliğinde Değişiklik Yapılmasına Dair Yönetmelik",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "değişiklik yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'YÖNETMELİK' başlığı altında yer almakta olup, mevcut bir yönetmelikte yapılan değişiklikleri (madde ekleme, çıkarma, ibare değiştirme) içeren resmi bir düzenleyici işlemdir.",
+    "latency_ms": 1637.98
+  },
+  {
+    "doc_id": "eval_yonetmelik_020",
+    "title": "–– Adlî Tıp Kurumu Döner Sermaye İşletmesi Yönetmeliğinde Değişiklik Yapılmasına Dair Yönetmelik",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "yönetmelik değişikliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'Adlî Tıp Kurumu Döner Sermaye İşletmesi Yönetmeliğinde Değişiklik Yapılmasına Dair Yönetmelik' başlığını taşımakta olup, maddeler halinde düzenleyici hükümler içermekte ve Resmî Gazete'de yayımlanmak üzere hazırlanmıştır.",
+    "latency_ms": 1511.77
+  },
+  {
+    "doc_id": "eval_yonetmelik_011",
+    "title": "–– Ege Üniversitesi Bilim-Teknoloji Uygulama ve Araştırma Merkezi Yönetmeliği",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "üniversite yönetmeliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'Yönetmelik' olarak belirtilmiş, maddeler halinde düzenleyici hükümler (amaç, kapsam, dayanak, tanımlar) içermekte ve bir kurumun (Ege Üniversitesi) çalışma usul ve esaslarını belirlemektedir.",
+    "latency_ms": 1599.7
+  },
+  {
+    "doc_id": "eval_yonetmelik_009",
+    "title": "–– İstanbul Beykent Üniversitesi Uzaktan Öğretim Uygulama ve Araştırma Merkezi Yönetmeliğinin Yürürlükten Kaldırılmasına Dair Yönetmelik",
+    "ground_truth": "yonetmelik",
+    "predicted": "yonetmelik",
+    "confidence": 1.0,
+    "sub_type": "yürürlükten_kaldırma",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'Yönetmelik' başlığı altında yer alan, bir yönetmeliğin yürürlükten kaldırılmasına dair düzenleyici bir işlemdir ve madde yapısına sahiptir.",
+    "latency_ms": 1203.29
+  },
+  {
+    "doc_id": "eval_teblig_014",
+    "title": "–– İthalatta Haksız Rekabetin Önlenmesine İlişkin Tebliğ (No: 2024/23)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "ithalat_haksiz_rekabet_tebligi",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'Tebliğ' olarak belirtilmiş, Resmî Gazete'de yayımlanmış, belirli bir ürün grubu üzerindeki ithalat önlemlerini düzenleyen ve mevzuata dayanan resmi bir tebliğ metnidir.",
+    "latency_ms": 1459.84
+  },
+  {
+    "doc_id": "eval_teblig_007",
+    "title": "–– İş Yeri Dışında Kurulan Sözleşmeler Yönetmeliğinin 2 nci Maddesinde Yer Alan Parasal Sınırın Artırılmasına İlişkin Tebliğ",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "Ticaret Bakanlığı Tebliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında ve içeriğinde açıkça 'TEBLİĞ' olarak belirtilmiş, Resmî Gazete'de yayımlanmak üzere hazırlanmış, mevzuat değişikliği ve parasal sınır artırımı hakkında resmi bir bildirim içermektedir.",
+    "latency_ms": 1469.42
+  },
+  {
+    "doc_id": "eval_teblig_018",
+    "title": "–– Sigortacılık Tekdüzen Hesap Planı ve İzahnamesi Hakkında Tebliğde Değişiklik Yapılmasına Dair Tebliğ",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "değişiklik tebliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'TEBLİĞ' başlığı altında açıkça belirtilmiş olup, bir düzenleme kurumundan (SEDDK) yayımlanan ve mevcut bir tebliğde değişiklik yapan resmî bir tebliğ metnidir.",
+    "latency_ms": 1322.65
+  },
+  {
+    "doc_id": "eval_teblig_015",
+    "title": "–– İthalatta Haksız Rekabetin Önlenmesine İlişkin Tebliğ (No: 2024/22)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "İthalatta Haksız Rekabetin Önlenmesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında ve içeriğinde açıkça 'TEBLİĞ' olarak ifade edilmiştir. Ticaret Bakanlığı tarafından yayımlanan, belirli ürün grupları üzerindeki dampinge karşı önlemlerin bitiş tarihlerini içeren resmî bir tebliğ metnidir.",
+    "latency_ms": 1600.65
+  },
+  {
+    "doc_id": "eval_teblig_009",
+    "title": "–– Tahsilat Genel Tebliği Seri: A Sıra No: 1'de Değişiklik Yapılmasına Dair Tebliğ (Seri: A Sıra No: 16)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "Tahsilat Genel Tebliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Hazine ve Maliye Bakanlığı tarafından yayımlanan, mevcut bir genel tebliğde değişiklik yapan resmi bir 'Tebliğ' belgesidir. Başlığında açıkça 'TEBLİĞ' ifadesi yer almakta ve Resmî Gazete bilgileri içermektedir.",
+    "latency_ms": 1747.32
+  },
+  {
+    "doc_id": "eval_teblig_017",
+    "title": "–– Ulusal Meslek Standartlarına Dair Tebliğde Değişiklik Yapılmasına Dair Tebliğ (No: 2024/7)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "değişiklik tebliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında ve içeriğinde açıkça 'Tebliğ' olarak belirtilmiş, Resmî Gazete'de yayımlanmış ve mevzuatta değişiklik yapan resmi bir düzenlemedir.",
+    "latency_ms": 1248.63
+  },
+  {
+    "doc_id": "eval_teblig_006",
+    "title": "–– Mısır İthalatında Tarife Kontenjanı Uygulanmasına İlişkin Tebliğ",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "Ticaret Bakanlığı Tebliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'TEBLİĞ' olarak belirtilmiş olup, Ticaret Bakanlığı tarafından mısır ithalatında tarife kontenjanı uygulamasına ilişkin usul ve esasları belirleyen resmî bir tebliğdir. Madde yapısı, dayanaklar ve usul esasları içermektedir.",
+    "latency_ms": 1466.0
+  },
+  {
+    "doc_id": "eval_teblig_016",
+    "title": "–– Türk Gıda Kodeksi Aromatize Şarap, Aromatize Şarap Bazlı İçki ve Aromatize Şarap Kokteyli Tebliği (Tebliğ No: 2022/5)’nde Değişiklik Yapılmasına Dair Tebliğ (No: 2026/13)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "Türk Gıda Kodeksi Tebliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'Resmî Gazete'de yayımlanan, bakanlık tarafından çıkarılan ve 'Tebliğ' başlığını taşıyan, mevzuatta değişiklik yapan resmi bir tebliğdir.",
+    "latency_ms": 1497.14
+  },
+  {
+    "doc_id": "eval_teblig_011",
+    "title": "–– Türk Lirası Mevduat ve Katılma Hesaplarına Dönüşümün Desteklenmesi Hakkında Tebliğ (Sayı: 2021/14)’de Değişiklik Yapılmasına Dair Tebliğ (Sayı: 2024/3)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "merkez_bankasi_tebligi",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Türkiye Cumhuriyet Merkez Bankası tarafından yayımlanan, mevcut bir tebliğde değişiklik yapan resmi bir tebliğdir. Başlıkta açıkça 'TEBLİĞ' ifadesi yer almakta ve Resmî Gazete'de yayımlanmak üzere hazırlanmıştır.",
+    "latency_ms": 1470.03
+  },
+  {
+    "doc_id": "eval_teblig_020",
+    "title": "–– İnşaat Demiri İzleme Sistemi Uygulama Genel Tebliğinde Değişiklik Yapılmasına Dair Tebliğ (Seri No: 1)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "genel_teblig",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Hazine ve Maliye Bakanlığı tarafından yayımlanan, bir genel tebliğde değişiklik yaparak resmi bir bildirimde bulunan 'TEBLİĞ' başlığını taşımakta ve Resmî Gazete formatındadır.",
+    "latency_ms": 1277.3
+  },
+  {
+    "doc_id": "eval_teblig_019",
+    "title": "–– Atıksu Arıtma Tesislerinde Çalışan Teknik Personele İlişkin Tebliğde Değişiklik Yapılmasına Dair Tebliğ",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "tebliğde değişiklik",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Çevre, Şehircilik ve İklim Değişikliği Bakanlığı tarafından yayımlanan ve mevcut bir tebliğde değişiklik yapan resmi bir tebliğdir. Başlıkta 'Tebliğ' ifadesi açıkça geçmekte ve maddeler halinde düzenleyici hükümler içermektedir.",
+    "latency_ms": 1397.61
+  },
+  {
+    "doc_id": "eval_teblig_013",
+    "title": "–– İthalatta Haksız Rekabetin Önlenmesine İlişkin Tebliğ (No: 2026/25)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "İthalatta Haksız Rekabetin Önlenmesine İlişkin Tebliğ",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında ve içeriğinde açıkça 'Tebliğ' olarak tanımlanmış, Ticaret Bakanlığı tarafından yayımlanan, maddelerden oluşan ve hukuki bir düzenleme/bilgilendirme içeren resmi bir tebliğ metnidir.",
+    "latency_ms": 1809.46
+  },
+  {
+    "doc_id": "eval_teblig_008",
+    "title": "–– Hukuk Muhakemeleri Kanunu Gider Avansı Tarifesi",
+    "ground_truth": "teblig",
+    "predicted": "yonerge",
+    "confidence": 0.95,
+    "sub_type": "tarife",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Hukuk Muhakemeleri Kanunu kapsamında gider avansının miktarı, ödenmesi ve iadesine ilişkin usul ve esasları belirleyen bir tarife belgesidir. Maddeler halinde düzenlenmiş usul ve esasları içerdiği için 'yonerge' kategorisine uygundur.",
+    "latency_ms": 1493.92
+  },
+  {
+    "doc_id": "eval_teblig_010",
+    "title": "–– Uluslararası Gözetim Şirketlerinin Faaliyetinin Süreli Durdurulması Hakkında Tebliğ (Ürün Güvenliği ve Denetimi: 2024/37)",
+    "ground_truth": "teblig",
+    "predicted": "teblig",
+    "confidence": 1.0,
+    "sub_type": "Ticaret Bakanlığı Tebliği",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'TEBLİĞ' olarak belirtilmiş, Resmî Gazete'de yayımlanmış ve belirli şirketlerin faaliyetlerinin durdurulmasına ilişkin idari bir bildirim içermektedir.",
+    "latency_ms": 1352.67
+  },
+  {
+    "doc_id": "eval_kanun_013",
+    "title": "MAL BİLDİRİMİNDE BULUNULMASI, RÜŞVET VE",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Mal Bildirimi Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'Mal Bildiriminde Bulunulması, Rüşvet ve Yolsuzluklarla Mücadele Kanunu' başlığını taşımakta olup, kanun numarası, kabul tarihi, Resmi Gazete bilgileri ve 'Madde 1', 'Madde 2' gibi kanun maddesi yapılarını içermektedir.",
+    "latency_ms": 1721.43
+  },
+  {
+    "doc_id": "eval_kanun_011",
+    "title": "TEBLİGAT KANUNU[1]",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Tebligat Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'TEBLİGAT KANUNU' başlığını taşımakta olup, kanun numarası, kabul tarihi, Resmi Gazete bilgileri ve maddelerden (Madde 1, Madde 2 vb.) oluşan resmi bir kanun metnidir.",
+    "latency_ms": 1718.64
+  },
+  {
+    "doc_id": "eval_kanun_014",
+    "title": "İŞ KANUNU",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "İş Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'İş Kanunu' başlığını taşımakta, kanun numarası (4857), kabul tarihi ve Resmi Gazete bilgilerini içermekte olup, maddeler halinde hak ve sorumlulukları düzenleyen bir kanun metnidir.",
+    "latency_ms": 1655.65
+  },
+  {
+    "doc_id": "eval_kanun_003",
+    "title": "BİLGİ EDİNME HAKKI KANUNU",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Bilgi Edinme Hakkı Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'Bilgi Edinme Hakkı Kanunu' başlığını taşımakta olup, kanun numarası (4982), kabul tarihi, Resmi Gazete bilgileri ve 'Madde' başlıkları içeren tipik bir kanun metni yapısındadır.",
+    "latency_ms": 1733.58
+  },
+  {
+    "doc_id": "eval_kanun_018",
+    "title": "CEZA MUHAKEMESİ KANUNU",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Ceza Muhakemesi Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'CEZA MUHAKEMESİ KANUNU' başlığını taşımakta olup, kanun numarası, kabul tarihi, Resmi Gazete bilgileri ve maddelerden oluşan bir kanun metnidir.",
+    "latency_ms": 1706.46
+  },
+  {
+    "doc_id": "eval_kanun_002",
+    "title": "TÜRK MEDENİ KANUNU",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Türk Medeni Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'TÜRK MEDENİ KANUNU' başlığını taşımakta olup, kanun numarası, kabul tarihi, Resmi Gazete bilgileri ve 'Madde' yapılarıyla bir kanun metni formatındadır.",
+    "latency_ms": 1675.69
+  },
+  {
+    "doc_id": "eval_kanun_006",
+    "title": "TÜRKİYE CUMHURİYETİ ANAYASASI [1] [2] [3] [4]",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "anayasa",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Türkiye Cumhuriyeti Anayasası'nın başlangıç ve ilk maddelerini içermektedir. Kanun numarası, kabul tarihi ve Resmî Gazete bilgileri açıkça belirtilmiş olup, devletin temel hukuk normlarını içeren bir kanun metnidir.",
+    "latency_ms": 1708.55
+  },
+  {
+    "doc_id": "eval_kanun_016",
+    "title": "BELEDİYE KANUNU",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Belediye Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'BELEDİYE KANUNU' başlığını taşımakta olup, kanun numarası, kabul tarihi, Resmî Gazete bilgileri ve maddelerden oluşan tipik bir kanun metni yapısındadır.",
+    "latency_ms": 1729.74
+  },
+  {
+    "doc_id": "eval_kanun_012",
+    "title": "HARCIRAH KANUNU[1]",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Harcırah Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'HARCIRAH KANUNU' başlığını taşımakta olup, kanun numarası, kabul tarihi, Resmi Gazete bilgileri ve maddelerden oluşan tipik bir kanun metni yapısındadır.",
+    "latency_ms": 1712.38
+  },
+  {
+    "doc_id": "eval_kanun_004",
+    "title": "TÜRK TİCARET KANUNU[1]",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Türk Ticaret Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'Türk Ticaret Kanunu' başlığını taşımakta olup, kanun numarası (6102), kabul tarihi, Resmi Gazete bilgileri ve 'MADDE' başlıkları içeren tipik bir kanun metni yapısındadır.",
+    "latency_ms": 1815.73
+  },
+  {
+    "doc_id": "eval_kanun_008",
+    "title": "MEMURLAR VE DİĞER KAMU GÖREVLİLERİNİN",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Memurlar ve Diğer Kamu Görevlilerinin Yargılanması Hakkında Kanun",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'Kanun' başlığını taşımakta, kanun numarası (4483), kabul tarihi ve Resmi Gazete bilgilerini içermekte olup, maddeler halinde hukuki düzenlemeler (Amaç, Kapsam, Yetkili Merciler) sunmaktadır.",
+    "latency_ms": 1804.43
+  },
+  {
+    "doc_id": "eval_kanun_020",
+    "title": "KAMU GÖREVLİLERİ ETİK KURULU KURULMASI VE",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Kamu Görevlileri Etik Kurulu Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'HAKKINDA KANUN' başlığını taşımakta olup, kanun numarası (5176), kabul tarihi, Resmi Gazete bilgileri ve 'Madde 1', 'Madde 2' gibi kanun maddesi yapılarını açıkça içermektedir.",
+    "latency_ms": 1763.1
+  },
+  {
+    "doc_id": "eval_kanun_010",
+    "title": "SOSYAL SİGORTALAR VE GENEL SAĞLIK",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Sosyal Sigortalar ve Genel Sağlık Sigortası Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'Sosyal Sigortalar ve Genel Sağlık Sigortası Kanunu' başlığını taşımakta olup, kanun numarası (5510), kabul tarihi, Resmi Gazete bilgileri ve 'Madde' yapılarıyla bir kanun metni olduğunu açıkça göstermektedir.",
+    "latency_ms": 1746.27
+  },
+  {
+    "doc_id": "eval_kanun_009",
+    "title": "HUKUK MUHAKEMELERİ KANUNU",
+    "ground_truth": "kanun",
+    "predicted": "kanun",
+    "confidence": 1.0,
+    "sub_type": "Hukuk Muhakemeleri Kanunu",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'HUKUK MUHAKEMELERİ KANUNU' başlığını taşımakta olup, kanun numarası, kabul tarihi, Resmi Gazete bilgileri ve 'MADDE' ibareleriyle düzenlenen bir kanun metnidir.",
+    "latency_ms": 1689.61
+  },
+  {
+    "doc_id": "eval_karar_017",
+    "title": "–– Özelleştirme İdaresi Başkanlığının 22/12/2025 Tarihli ve 2025/ÖİB-K-19 Sayılı Kararı",
+    "ground_truth": "karar",
+    "predicted": "teblig",
+    "confidence": 0.95,
+    "sub_type": "karar_tebligi",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Özelleştirme İdaresi Başkanlığı tarafından alınmış bir kararın (2025/ÖİB-K-19) 'TEBLİĞ' başlığı altında Resmî Gazete'de yayımlanmak üzere sunulduğunu göstermektedir.",
+    "latency_ms": 1280.81
+  },
+  {
+    "doc_id": "eval_karar_011",
+    "title": "–– Cezanın Kaldırılması ile İlgili Kararlar (Karar Sayısı: 8459, 8460, 8461, 8462, 8463, 8464, 8465, 8466, 8467, 8468, 8469, 8470, 8471, 8472)",
+    "ground_truth": "karar",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'CUMHURBAŞKANI KARARLARI' başlığı altında, Cumhurbaşkanı tarafından imzalanmış ve Resmî Gazete'de yayımlanmış karar numaralarını içeren bir Cumhurbaşkanlığı Kararnamesi/Kararı listesidir.",
+    "latency_ms": 1212.39
+  },
+  {
+    "doc_id": "eval_karar_016",
+    "title": "Resmî Gazete Kararı - CUMHURBAŞKANI KARARI",
+    "ground_truth": "karar",
+    "predicted": "kararname",
+    "confidence": 0.95,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": true,
+    "reasoning": "Metin, 'CUMHURBAŞKANI KARARI' başlığı altında, Cumhurbaşkanı tarafından imzalanmış, Resmî Gazete'de yayımlanmış ve bir yönetmelikte değişiklik yaparak hukuki düzenleme yapan bir kararname niteliğindedir.",
+    "latency_ms": 1662.89
+  },
+  {
+    "doc_id": "eval_karar_015",
+    "title": "Resmî Gazete Kararı - CUMHURBAŞKANI KARARI",
+    "ground_truth": "karar",
+    "predicted": "kararname",
+    "confidence": 0.95,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": true,
+    "reasoning": "Metin, 'CUMHURBAŞKANI KARARI' başlığı altında, Cumhurbaşkanı tarafından imzalanmış ve Resmî Gazete'de yayımlanmış bir kararname formatındadır. İçerik, bir üniversite merkezinin yönetmeliğinin yürürlüğe konulmasına ilişkin resmi bir karardır.",
+    "latency_ms": 1801.57
+  },
+  {
+    "doc_id": "eval_karar_005",
+    "title": "–– Özelleştirme İdaresi Başkanlığının 12/06/2025 Tarihli ve 2025/ÖİB-K-08, 09 ve 10 Sayılı Kararları",
+    "ground_truth": "karar",
+    "predicted": "karar",
+    "confidence": 1.0,
+    "sub_type": "kurul_karari",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Özelleştirme İdaresi Başkanlığı tarafından alınmış spesifik karar numaralarına (2025/ÖİB-K-08, 09, 10) sahip resmi kararları içermektedir ve doğrudan 'KARAR' başlığı altında sunulmuştur.",
+    "latency_ms": 1375.5
+  },
+  {
+    "doc_id": "eval_karar_003",
+    "title": "–– Birleşmiş Milletler Güvenlik Konseyinin 1267 (1999), 1988 (2011), 1989 (2011) ve 2253 (2015) Sayılı Kararlarıyla Listelenen Kişi, Kuruluş veya Organizasyonların Tasarrufunda Bulunan Malvarlığının Dondurulması Hakkındaki 30/9/2013 Tarihli ve 2013/5428 Sayılı Bakanlar Kurulu Kararının Eki (1) Sayılı Listede Değişiklik Yapılmasına İlişkin Karar (Karar Sayısı: 11388)",
+    "ground_truth": "karar",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'CUMHURBAŞKANI KARARI' başlığını taşımakta olup, Cumhurbaşkanı tarafından imzalanmış, Resmi Gazete'de yayımlanmış ve belirli bir listeye ilişkin hukuki değişiklikleri içeren bir kararname niteliğindedir.",
+    "latency_ms": 1556.67
+  },
+  {
+    "doc_id": "eval_karar_009",
+    "title": "–– Cumhurbaşkanlığı Tarafından Yapılan Atamalar Hakkında Kararlar (Karar: 2024/259, 260, 261, 262, 263, 264)",
+    "ground_truth": "karar",
+    "predicted": "karar",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan Cumhurbaşkanlığı tarafından alınan ve belirli numaralarla (2024/259 vb.) kayıt altına alınmış atama kararlarını içermektedir. Resmî Gazete formatında yayınlanan bu belgeler 'karar' türüne girmektedir.",
+    "latency_ms": 1439.85
+  },
+  {
+    "doc_id": "eval_karar_018",
+    "title": "DÜZELTME: Sender Ödeme Hizmetleri A.Ş.’nin Faaliyet İzni Kapsamının Genişletilmesine İlişkin Karar ile İlgili",
+    "ground_truth": "karar",
+    "predicted": "ilan",
+    "confidence": 0.95,
+    "sub_type": "resmi_gazete_duzeltme",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Resmî Gazete'de yayımlanan bir kararın düzeltilmesine ilişkin resmi bir duyuru/ilan niteliğindedir. Sayı ve tarih bilgileri ile Resmî Gazete formatı ilan türüne işaret etmektedir.",
+    "latency_ms": 1059.44
+  },
+  {
+    "doc_id": "eval_karar_001",
+    "title": "–– Özelleştirme İdaresi Başkanlığı ile İlgili Kararlar (Karar Sayısı: 8810, 8811, 8812, 8813)",
+    "ground_truth": "karar",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'CUMHURBAŞKANI KARARLARI' başlığı altında, Cumhurbaşkanı tarafından imzalanmış ve Resmî Gazete'de yayımlanmış karar numaralarını içermektedir. Bu nitelikleri nedeniyle kararname sınıfına girmektedir.",
+    "latency_ms": 1094.99
+  },
+  {
+    "doc_id": "eval_karar_020",
+    "title": "–– Cumhurbaşkanlığı Tarafından Yapılan Atamalar Hakkında Kararlar (Karar: 2025/69, 70, 71, 72, 73, 74, 75)",
+    "ground_truth": "karar",
+    "predicted": "karar",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kararname"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Cumhurbaşkanlığı tarafından alınan ve belirli numaralarla (2025/69-75) kayıt altına alınan atama kararlarını içermektedir. Resmi Gazete formatında yayınlanan bu belgeler doğrudan 'karar' niteliğindedir.",
+    "latency_ms": 1087.55
+  },
+  {
+    "doc_id": "eval_karar_006",
+    "title": "–– Cumhurbaşkanlığı Tarafından Yapılan Atamalar Hakkında Kararlar (Karar: 2024/38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56)",
+    "ground_truth": "karar",
+    "predicted": "karar",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan Cumhurbaşkanlığı tarafından alınan ve Resmî Gazete'de yayımlanan çok sayıda atama kararını içermektedir. Başlıkta ve içerikte 'Karar' ibaresi açıkça belirtilmiştir.",
+    "latency_ms": 1287.21
+  },
+  {
+    "doc_id": "eval_karar_012",
+    "title": "–– Özelleştirme İdaresi Başkanlığı ile İlgili Kararlar (Karar Sayısı: 8185, 8186)",
+    "ground_truth": "karar",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'CUMHURBAŞKANI KARARLARI' başlığını taşımakta ve Cumhurbaşkanı tarafından alınan kararları içermektedir. Kararname veya Cumhurbaşkanlığı kararı kategorisine girmektedir.",
+    "latency_ms": 1303.62
+  },
+  {
+    "doc_id": "eval_karar_008",
+    "title": "Resmî Gazete Kararı - CUMHURBAŞKANI KARARI",
+    "ground_truth": "karar",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'CUMHURBAŞKANI KARARI' başlığı altında, Cumhurbaşkanı tarafından imzalanmış ve Resmî Gazete'de yayımlanmış atama ve vekalet işlemleri içeren bir kararname örneğidir.",
+    "latency_ms": 1424.64
+  },
+  {
+    "doc_id": "eval_karar_010",
+    "title": "–– Özelleştirme İdaresi Başkanlığı ile İlgili Kararlar (Karar Sayısı: 8963, 8964, 8965, 8966, 8967)",
+    "ground_truth": "karar",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararı",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'CUMHURBAŞKANI KARARLARI' başlığı altında, Cumhurbaşkanı tarafından imzalanmış ve Resmî Gazete'de yayımlanmış karar numaralarını içermektedir. Bu nitelikleri nedeniyle kararname/karar kategorisine girmektedir.",
+    "latency_ms": 1473.21
+  },
+  {
+    "doc_id": "eval_kararname_014",
+    "title": "Konu: Üst Kademe Kamu Yöneticilerinin Atanma Şartları ve Görev Sürelerine İlişkin Değişiklik Düzenlemesi (No: 168)",
+    "ground_truth": "kararname",
+    "predicted": "yonetmelik",
+    "confidence": 0.95,
+    "sub_type": "düzenleme",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'Madde' yapısına sahip, belirli bir düzenlemeyi (Üst Kademe Kamu Yöneticilerinin Atanma Şartları) içeren, yürürlük tarihi ve yürütme makamı belirtilen bir düzenleyici işlem niteliğindedir.",
+    "latency_ms": 1127.07
+  },
+  {
+    "doc_id": "eval_kararname_017",
+    "title": "Konu: Strateji ve Bütçe Başkanlığı Sektörel Planlama Birimlerinin Yeniden Yapılandırılması (No: 171)",
+    "ground_truth": "kararname",
+    "predicted": "karar",
+    "confidence": 0.95,
+    "sub_type": "kurul_karari",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": true,
+    "reasoning": "Metin, bir kurumun (Ankara Valiliği) teşkilat yapısında değişiklik yaptığını, yeni bir daire kurulduğunu ve kadro dağılımının değiştirildiğini maddeler halinde belirten resmi bir karar metnidir.",
+    "latency_ms": 989.17
+  },
+  {
+    "doc_id": "eval_kararname_013",
+    "title": "4 Sayılı Bakanlıklara Bağlı, İlgili, İlişkili Kurum ve Kuruluşlar Hakkında CBK'da Değişiklik (No: 167)",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'CUMHURBAŞKANLIĞI KARARNAMESİ' başlığını taşımakta ve 4 sayılı Cumhurbaşkanlığı Kararnamesinde değişiklik yaparak yeni bir daire başkanlığı ihdas ettiğini bildirmektedir.",
+    "latency_ms": 1007.37
+  },
+  {
+    "doc_id": "eval_kararname_007",
+    "title": "İklim Değişikliği ve Sıfır Atık Başkanlığı Teşkilatı Hakkında Cumhurbaşkanlığı Kararnamesi (Kararname Numarası: 162)",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Cumhurbaşkanlığı Kararnamesi' başlığını taşımakta olup, bir başkanlığın kuruluş, görev ve teşkilat esaslarını düzenleyen maddeler içermektedir.",
+    "latency_ms": 941.23
+  },
+  {
+    "doc_id": "eval_kararname_012",
+    "title": "375 Sayılı Kanun Hükmünde Kararname Hükümleri (Mali ve Sosyal Haklar Düzenlemesi)",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "KHK",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "mulga_veya_eski_surum",
+    "secondary_candidates": [
+      "kanun"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'KANUN HÜKMÜNDE KARARNAME' başlığını taşımakta ve 375 Sayılı KHK'nın maddelerini içermektedir.",
+    "latency_ms": 849.61
+  },
+  {
+    "doc_id": "eval_kararname_002",
+    "title": "–– Bazı Cumhurbaşkanlığı Kararnamelerinde Değişiklik Yapılmasına Dair Cumhurbaşkanlığı Kararnamesi (Kararname Numarası: 161)",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "mulga_veya_eski_surum",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, açıkça 'CUMHURBAŞKANLIĞI KARARNAMESİ' başlığını taşımakta olup, mevcut kararnamelerde değişiklik yapan resmi bir düzenleme metnidir.",
+    "latency_ms": 1277.24
+  },
+  {
+    "doc_id": "eval_kararname_008",
+    "title": "Bazı Kamu Kurum ve Kuruluşlarına Kadro İhdas ve İptali Hakkında Cumhurbaşkanlığı Kararnamesi (CBK No: 163)",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Cumhurbaşkanlığı Kararnamesi' başlığını taşımakta, bir kararname numarası (163) içermekte ve maddeler halinde hukuki düzenleme (kadro ihdası ve iptali) yapmaktadır.",
+    "latency_ms": 1353.31
+  },
+  {
+    "doc_id": "eval_kararname_005",
+    "title": "DEVLET DENETLEME KURULU HAKKINDA",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'CUMHURBAŞKANLIĞI KARARNAMESİ' başlığını taşımakta ve Devlet Denetleme Kurulu'nun kuruluşu, görevleri ve işleyişine ilişkin düzenlemeleri içeren resmi bir kararname metnidir.",
+    "latency_ms": 1242.55
+  },
+  {
+    "doc_id": "eval_kararname_001",
+    "title": "CUMHURBAŞKANLIĞI TEŞKİLATI HAKKINDA",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'CUMHURBAŞKANLIĞI KARARNAMESİ' olarak belirtilen, Cumhurbaşkanlığı teşkilat yapısını ve görevlerini düzenleyen resmi bir kararname metnidir.",
+    "latency_ms": 1571.66
+  },
+  {
+    "doc_id": "eval_kararname_006",
+    "title": "GENEL KADRO VE USULÜ HAKKINDA",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "scraped_official",
+    "length_bucket": "uzun",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'CUMHURBAŞKANLIĞI KARARNAMESİ' başlığını taşımakta olup, kamu kurum ve kuruluşlarının kadro ve pozisyonlarına dair düzenleyici hükümleri içeren bir Cumhurbaşkanlığı Kararnamesi metnidir.",
+    "latency_ms": 1589.75
+  },
+  {
+    "doc_id": "eval_kararname_011",
+    "title": "Afet ve Yeniden İmar Fonu Kurulması ve Teşkilatı Hakkında Cumhurbaşkanlığı Kararnamesi (CBK No: 166)",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Cumhurbaşkanlığı Kararnamesi' başlığını taşımakta ve CBK No: 166 ile bir fonun kurulması ve teşkilat yapısının düzenlenmesine dair maddeler içermektedir.",
+    "latency_ms": 1259.75
+  },
+  {
+    "doc_id": "eval_kararname_015",
+    "title": "Konu: Milli Saraylar İdaresi Başkanlığı Hizmet Birimleri ve Kadro Cetvelleri Düzenlemesi (No: 169)",
+    "ground_truth": "kararname",
+    "predicted": "yonetmelik",
+    "confidence": 0.95,
+    "sub_type": "kadro_duzenlemesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": true,
+    "reasoning": "Metin, 'Madde' başlıkları içeren, görev ve yetkilerin belirlendiği, kadro ihdası gibi düzenleyici işlemleri içeren ve yürürlük tarihi belirten bir yönetmelik veya usul belgesi yapısındadır.",
+    "latency_ms": 1172.58
+  },
+  {
+    "doc_id": "eval_kararname_020",
+    "title": "Bakanlıklara Bağlı, İlgili, İlişkili Kurum ve Kuruluşlar ile Diğer Kurum ve Kuruluşların Teşkilatı Hakkında Cumhurbaşkanlığı Kararnamesinde Değişiklik Yapılmasına Dair CBK (No: 173)",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 1.0,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "degisiklik_metni",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'CUMHURBAŞKANLIĞI KARARNAMESİ' başlığını taşımakta olup, bir Cumhurbaşkanlığı Kararnamesinde değişiklik yapılmasına dair resmi bir düzenleme içermektedir.",
+    "latency_ms": 975.22
+  },
+  {
+    "doc_id": "eval_kararname_016",
+    "title": "Konu: Devlet Arşivleri Başkanlığı Teşkilat Yapısı ve Danışma Kurulu Oluşumu (No: 170)",
+    "ground_truth": "kararname",
+    "predicted": "kararname",
+    "confidence": 0.95,
+    "sub_type": "Cumhurbaşkanlığı Kararnamesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kanun"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bakanlık birimi için teşkilat yapısı ve kurul oluşumu gibi idari düzenlemeler içermekte olup, 'Cumhurbaşkanı yürütür' ifadesi ve madde yapısı ile bir kararname veya Cumhurbaşkanlığı kararı niteliği taşımaktadır.",
+    "latency_ms": 1224.5
+  },
+  {
+    "doc_id": "eval_ilan_011",
+    "title": "Resmî İlan - 900 TON HUBUBAT SAP BALYASI NAKLİYE HİZMET ALIM İŞİ",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "ihale_ilanı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Resmî Gazete'de yayımlanan bir ihale duyurusudur. 'Resmî İlan' başlığı taşımakta, ihale konusu, şartları, teminat oranları ve başvuru yöntemleri gibi kamuya açık duyuru bilgilerini içermektedir.",
+    "latency_ms": 1290.22
+  },
+  {
+    "doc_id": "eval_ilan_010",
+    "title": "Resmî İlan - GAYRİMENKUL SATILACAKTIR",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "gayrimenkul_satış_ilanı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir belediye tarafından gayrimenkul satışına ilişkin kamuoyuna yönelik yayınlanan resmi bir ilan metnidir. Başlığında 'Resmî İlan' ifadesi açıkça yer almakta ve ihale şartlarını içermektedir.",
+    "latency_ms": 1550.93
+  },
+  {
+    "doc_id": "eval_ilan_015",
+    "title": "Resmî İlan - E68000 TİPİ LOKOMOTİFLERDE KULLANILMAK ÜZERE 117 KALEM YEDEK",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "ihale_ilanı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Resmî Gazete'de yayımlanan bir ihale ilanıdır. İhale konusu, şartları, tarihi ve yer bilgileri açıkça belirtilmiş olup 'Resmî İlan' başlığı ve Resmî Gazete yayın bilgileri metinde yer almaktadır.",
+    "latency_ms": 1685.47
+  },
+  {
+    "doc_id": "eval_ilan_005",
+    "title": "Resmî İlan - Anadolu Üniversitesi Rektörlüğünden:",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "resmi_ilan",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Resmî Gazete'de yayımlanan ve kurumlar tarafından verilen 'İhalelere Katılmaktan Yasaklama Kararı' içerikli resmi bir ilandır. Başlıkta ve içerikte 'Resmî İlan' ifadesi açıkça yer almaktadır.",
+    "latency_ms": 1452.42
+  },
+  {
+    "doc_id": "eval_ilan_012",
+    "title": "Resmî İlan - Çevre, Şehircilik ve İklim Değişikliği Bakanlığı Yapı İşleri Genel Müdürlüğünden:",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "resmi_ilan",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'Resmî İlan' başlığıyla başlamakta olup, bir idari kararın (mahkeme kararı ve makam oluru) kamuoyuna duyurulmasını amaçlamaktadır. 'İlgililere duyurulur' ifadesi ve resmi gazete referansları ilan türünü doğrulamaktadır.",
+    "latency_ms": 1342.44
+  },
+  {
+    "doc_id": "eval_ilan_016",
+    "title": "Resmî İlan - TAŞINMAZ SATILACAKTIR",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "taşınmaz satışı",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Resmî Gazete'de yayımlanan, bir belediyeye ait taşınmazın ihale usulü ile satılacağını duyuran bir ilan metnidir.",
+    "latency_ms": 1113.58
+  },
+  {
+    "doc_id": "eval_ilan_007",
+    "title": "Resmî İlan - 2024 YILI YAŞ ÇAY ALIM KAMPANYASI DÖNEMİNDE YAŞ ÇAY YÜKLEME VE",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "ihale_ilanı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Resmî Gazete'de yayımlanan bir ihale ilanıdır. 'Resmî İlan' başlığı taşınmaktadır ve kamu kurumları tarafından yapılacak bir hizmet alımı ihalesinin şartlarını, tarihlerini ve usullerini içeren bir duyuru niteliğindedir.",
+    "latency_ms": 1457.81
+  },
+  {
+    "doc_id": "eval_ilan_009",
+    "title": "Resmî İlan - Adalet Bakanlığından:",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "resmi_ilan",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Adalet Bakanlığı tarafından bir dosyanın kaybolduğuna dair kamuoyuna yönelik bir 'Resmî İlan' başlığıyla yayınlanmış ve 'ilân olunur' ifadesiyle bitirilmiştir.",
+    "latency_ms": 1207.9
+  },
+  {
+    "doc_id": "eval_ilan_013",
+    "title": "Resmî İlan - Enerji ve Tabii Kaynaklar Bakanlığı Maden ve Petrol İşleri Genel Müdürlüğünden:",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "ruhsat_uzatimi_ilani",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir bakanlık genel müdürlüğü tarafından yayınlanan, bir petrol arama ruhsatının uzatılmasına ilişkin resmi bir duyuru/ilan niteliğindedir. Başlığında ve içeriğinde açıkça 'ilan olunur' ifadesi yer almaktadır.",
+    "latency_ms": 1116.53
+  },
+  {
+    "doc_id": "eval_ilan_019",
+    "title": "Resmî İlan - Adalet Bakanlığından:",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "mahkeme_ilani",
+    "origin_type": "scraped_official",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Adalet Bakanlığı tarafından bir mahkeme dosyasının kaybolması üzerine alınan kararın kamuoyuna duyurulması amacıyla hazırlanmış bir 'Resmî İlan'dır.",
+    "latency_ms": 818.31
+  },
+  {
+    "doc_id": "eval_ilan_014",
+    "title": "Resmî İlan - Adalet Bakanlığından:",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "resmi_gazete_ilani",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "bilgilendirme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'Resmî İlan' başlığıyla başlamakta, Resmî Gazete bilgilerini içermekte ve kamuoyuna yönelik bir duyuru/ilan niteliği taşımaktadır.",
+    "latency_ms": 1102.83
+  },
+  {
+    "doc_id": "eval_ilan_004",
+    "title": "Resmî İlan - KAYSERİ-ÇETİNKAYA ELEKTRİFİKASYON SİSTEMLERİ İÇİN 7 KALEM YEDEK",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "ihale_ilanı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Resmî Gazete'de yayımlanan bir ihale duyurusudur. İhale konusu mal, şartlar, tarih ve yer gibi kamuya açık bilgilendirme içeren bir ilan formatındadır.",
+    "latency_ms": 1369.54
+  },
+  {
+    "doc_id": "eval_ilan_008",
+    "title": "Resmî İlan - Çevre, Şehircilik ve İklim Değişikliği Bakanlığı Yerel Yönetimler Genel Müdürlüğünden:",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "resmi_gazete_ilani",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, Resmi Gazete'de yayımlanan, çeşitli bakanlıkların ihale yasaklama kararlarını ve noterlik atamalarına ilişkin duyuruları içeren resmi bir ilan metnidir.",
+    "latency_ms": 1548.65
+  },
+  {
+    "doc_id": "eval_ilan_003",
+    "title": "Resmî İlan - Türk-Alman Üniversitesi Rektörlüğünden:",
+    "ground_truth": "ilan",
+    "predicted": "ilan",
+    "confidence": 1.0,
+    "sub_type": "öğretim üyesi alım ilanı",
+    "origin_type": "scraped_official",
+    "length_bucket": "orta",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir üniversite rektörlüğü tarafından yayınlanan, belirli kadrolara yapılacak başvurular için şartları ve başvuru usullerini içeren açık bir 'Öğretim Üyesi Alım İlanı'dır.",
+    "latency_ms": 1513.98
+  },
+  {
+    "doc_id": "eval_yonerge_012",
+    "title": "Uzaktan ve Esnek Çalışma Uygulama Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "uzaktan_calisma_yonergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Uzaktan ve Esnek Çalışma Uygulama Yönergesi' başlığını taşımakta olup, belirli bir işin usul ve esaslarını (VPN güvenliği, iş takibi, mesai uyumu) düzenleyen maddeler içermektedir.",
+    "latency_ms": 1385.21
+  },
+  {
+    "doc_id": "eval_yonerge_005",
+    "title": "Kurumsal İletişim ve Sosyal Medya Kullanım Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "kurumsal_iletisim_yonergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "genelge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Kurumsal İletişim ve Sosyal Medya Kullanım Yönergesi' başlığını taşımakta olup, kurum içi usul ve esasları belirleyen maddelerden oluşmaktadır.",
+    "latency_ms": 921.0
+  },
+  {
+    "doc_id": "eval_yonerge_010",
+    "title": "Lojman Tahsis Komisyonu Çalışma ve Puanlama Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "lojman_yonergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Lojman Tahsis Komisyonu Çalışma ve Puanlama Yönergesi' başlığını taşımakta olup, kurum içi usul ve esasları (başvuru takvimi, komisyon çalışma usulleri) düzenleyen bir yönerge formatındadır.",
+    "latency_ms": 1029.74
+  },
+  {
+    "doc_id": "eval_yonerge_017",
+    "title": "Konu: Acil Durum ve Tahliye Ekipleri Görev ve Çalışma Esasları",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 0.95,
+    "sub_type": "çalışma esasları",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'Görev ve Çalışma Esasları' başlığı altında belirli bir konu hakkında usul ve esasları belirleyen maddelerden oluşmaktadır. 'Yönerge' tanımındaki usul ve esaslar belgesi kriterine tam uymaktadır.",
+    "latency_ms": 982.93
+  },
+  {
+    "doc_id": "eval_yonerge_007",
+    "title": "Ziyaretçi Kabul ve Fiziksel Güvenlik Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "güvenlik yönergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Ziyaretçi Kabul ve Fiziksel Güvenlik Yönergesi' başlığını taşımakta olup, maddeler halinde usul ve esasları belirleyen bir yönerge formatındadır.",
+    "latency_ms": 909.91
+  },
+  {
+    "doc_id": "eval_yonerge_001",
+    "title": "Kurum İçi Bilgi Güvenliği ve Taşınabilir Bellek Kullanım Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "bilgi_guvenligi_yonergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'Yönerge' olarak belirtilmiş olup, kurum içi çalışma usul ve esaslarını, maddeler halinde ve belirli bir dayanakla düzenlemektedir.",
+    "latency_ms": 919.07
+  },
+  {
+    "doc_id": "eval_yonerge_019",
+    "title": "Konu: Coğrafi Veri Paylaşımı ve Yetkilendirme İç Esasları",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 0.95,
+    "sub_type": "iç esaslar",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "sozlesme"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, kurum içi birimlerin ve protokol yapılan kurumların veri kullanımı üzerindeki usul ve esasları, yetki profillerini ve loglama kurallarını düzenleyen 'İç Esaslar' niteliği taşımaktadır. Maddeler halinde düzenlenmiş usul ve esas belgeleri 'yonerge' kategorisine girmektedir.",
+    "latency_ms": 1183.41
+  },
+  {
+    "doc_id": "eval_yonerge_002",
+    "title": "Evrak Kayıt, Havale ve Elektronik İmza Çalışma Usul ve Esasları Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "usul ve esaslar",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Çalışma Usul ve Esasları Yönergesi' başlığını taşımakta olup, kurum içi işleyiş esaslarını, maddeler halinde usul ve esasları belirlemektedir.",
+    "latency_ms": 900.74
+  },
+  {
+    "doc_id": "eval_yonerge_020",
+    "title": "Konu: Taşınır Mal Hurda ve Atık Değerlendirme Komisyonu Çalışma İlkeleri",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 0.95,
+    "sub_type": "çalışma ilkeleri",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir komisyonun çalışma ilkelerini, uygulama adımlarını ve usullerini maddeler halinde düzenleyen bir yönerge niteliğindedir.",
+    "latency_ms": 809.5
+  },
+  {
+    "doc_id": "eval_yonerge_018",
+    "title": "Konu: Akademik Teşvik ve Yayın Destekleme Uygulama İlkeleri",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 0.95,
+    "sub_type": "uygulama_ilkeleri",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, belirli bir konu (Akademik Teşvik ve Yayın Destekleme) hakkında usul ve esasları, başvuru ve puanlama kurallarını belirleyen 'Uygulama İlkeleri' niteliğindedir. Madde yapısı ve uygulama esaslarını içermesi nedeniyle 'yonerge' kategorisine uygundur.",
+    "latency_ms": 1064.81
+  },
+  {
+    "doc_id": "eval_yonerge_008",
+    "title": "İç Denetim Birimi Çalışma ve Kalite Güvence Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "İç Denetim Yönergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "rapor"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'İç Denetim Birimi Çalışma ve Kalite Güvence Yönergesi' başlığını taşımakta olup, maddeler halinde usul ve esasları belirleyen bir yönerge formatındadır.",
+    "latency_ms": 909.08
+  },
+  {
+    "doc_id": "eval_yonerge_006",
+    "title": "Etik Davranış İlkeleri ve Çıkar Çatışmasını Önleme Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "etik_davranis_yonergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Yönerge' başlığını taşımakta olup, kurum personelinin uyması gereken usul ve esasları (hediye alma yasağı, çıkar çatışması vb.) düzenleyen maddelerden oluşmaktadır.",
+    "latency_ms": 981.44
+  },
+  {
+    "doc_id": "eval_yonerge_003",
+    "title": "Hizmet İçi Eğitim Planlama ve Uygulama Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "hizmet_ici_egitim_yonergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, başlığında açıkça 'Yönerge' olarak belirtilmiş olup, kurum personelinin hizmet içi eğitimlerine ilişkin usul ve esasları maddeler halinde düzenleyen bir mevzuat niteliğindedir.",
+    "latency_ms": 1001.63
+  },
+  {
+    "doc_id": "eval_yonerge_009",
+    "title": "Kütüphane ve Dokümantasyon Merkezi Ödünç Verme Yönergesi",
+    "ground_truth": "yonerge",
+    "predicted": "yonerge",
+    "confidence": 1.0,
+    "sub_type": "kütüphane_yonergesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "yururlukte",
+    "secondary_candidates": [
+      "yonetmelik"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, doğrudan 'Yönerge' başlığını taşımakta olup, kurum içindeki kütüphane kullanımına ilişkin usul ve esasları (ödünç alma süreleri, iade kuralları vb.) maddeler halinde düzenlemektedir.",
+    "latency_ms": 956.45
+  },
+  {
+    "doc_id": "eval_sozlesme_001",
+    "title": "Personel Taşıma (Servis) Hizmet Alımı Sözleşmesi",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "hizmet_alimi_sozlesmesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "ilan"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Hizmet Alımı Sözleşmesi' başlığını taşımakta olup, taraflar, sözleşme bedeli, iş süresi ve cezai şartlar gibi sözleşme unsurlarını içermektedir.",
+    "latency_ms": 1020.66
+  },
+  {
+    "doc_id": "eval_sozlesme_015",
+    "title": "Konu: Hazineye Ait Taşınmaz Üzerinde 49 Yıllık Bağımsız ve Sürekli Nitelikli İrtifak Hakkı Tesisi Resmi Senedi",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 0.95,
+    "sub_type": "irtifak_hakki_tesisi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, iki taraf (Milli Emlak Müdürlüğü ve Yatırımcı) arasında belirli şartlar (bedel, süre, taahhüt) altında tesis edilen bir irtifak hakkı sözleşmesini/protokolünü içermektedir. Madde yapısı ve taraflar arasındaki hak/yükümlülük dağılımı tipik bir sözleşme formatıdır.",
+    "latency_ms": 1342.53
+  },
+  {
+    "doc_id": "eval_sozlesme_012",
+    "title": "Kamu Kurumları Arası Afet Veri Merkezi Yedekleme (DRC) Mutabakat Zaptı",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "mutabakat_zaptı",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, iki tarafın afet durumlarında veri merkezi yedekleme ve sunucu kabini tahsisi konularında üzerinde mutabık kaldıkları maddeleri içeren bir 'Mutabakat Zaptı' (Memorandum of Understanding) niteliğindedir.",
+    "latency_ms": 954.72
+  },
+  {
+    "doc_id": "eval_sozlesme_005",
+    "title": "Üniversite ve Belediye Arasında Mesleki Eğitim İş Birliği Protokolü",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "protokol",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "resmi_yazi"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir üniversite ve belediye arasında imzalanan, tarafların yükümlülüklerini, amacını ve yürürlük şartlarını içeren bir 'İş Birliği Protokolü'nü içermektedir.",
+    "latency_ms": 862.41
+  },
+  {
+    "doc_id": "eval_sozlesme_020",
+    "title": "Konu: Taşınmaz Tahsisi ve Ortak Kullanım Giderlerinin Paylaşımı Hükümleri",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 0.95,
+    "sub_type": "mutabakat_protokolu",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "kurum_ici"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, iki kurum arasındaki ortak kullanım giderlerinin paylaşımı ve mahsuplaşma usulleri üzerine varılan karşılıklı mutabakatı ve bu konuda sağlanan anlaşmayı ifade etmektedir.",
+    "latency_ms": 931.94
+  },
+  {
+    "doc_id": "eval_sozlesme_011",
+    "title": "Tıbbi Atıkların Toplanması, Taşınması ve Sterilizasyonu Sözleşmesi",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "hizmet_sozlesmesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "tutanak"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin açıkça 'Tıbbi Atıkların Toplanması, Taşınması ve Sterilizasyonu Sözleşmesi' başlığını taşımakta olup, tarafları, maddeleri ve hizmetin karşılıklı yükümlülüklerini içeren bir sözleşme formatındadır.",
+    "latency_ms": 942.48
+  },
+  {
+    "doc_id": "eval_sozlesme_004",
+    "title": "Yapım İşleri Tip Sözleşmesi — Hizmet Binası Güçlendirme İnşaatı",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "yapım işleri sözleşmesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "ilan"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'Yapım İşleri Tip Sözleşmesi' başlığını taşımakta olup taraflar, sözleşme bedeli, teminat ve uyuşmazlık çözümü gibi sözleşme maddelerini içermektedir.",
+    "latency_ms": 987.52
+  },
+  {
+    "doc_id": "eval_sozlesme_018",
+    "title": "Konu: Kurumsal Maaş Ödemeleri ve Bankacılık Hizmetleri İlişki Metni",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 0.95,
+    "sub_type": "protokol",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "ilan"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir kurum (Ege Üniversitesi) ile bir banka arasındaki maaş ödemeleri ve promosyon karşılığı anlaşma şartlarını, tarafların üzerinde anlaştığı maddeleri ve karşılıklı yükümlülükleri içeren bir mutabakat/sözleşme metnidir.",
+    "latency_ms": 1054.89
+  },
+  {
+    "doc_id": "eval_sozlesme_002",
+    "title": "Kurumlar Arası Veri Paylaşımı ve Elektronik Entegrasyon Protokolü",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "protokol",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, iki kurum (Hazine ve Maliye Bakanlığı ile Sosyal Güvenlik Kurumu) arasında karşılıklı yükümlülükleri, veri paylaşım şartlarını ve gizlilik esaslarını belirleyen bir 'Protokol' niteliğindedir. Maddeler halinde düzenlenmiş ve tarafların taahhütlerini içeren bir mutabakat metnidir.",
+    "latency_ms": 1147.55
+  },
+  {
+    "doc_id": "eval_sozlesme_014",
+    "title": "Konu: Türkiye Cumhuriyeti Hükümeti ile Dost Ülke Hükümeti Arasında Ormancılık Alanında İş Birliği Metni",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "uluslararası_is_birligi_metni",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, iki hükümet arasında 'Akit Taraflar' ifadesiyle başlayan, maddelerden oluşan, karşılıklı yükümlülükleri ve iş birliği alanlarını belirleyen bir iş birliği metni/protokol niteliğindedir.",
+    "latency_ms": 1048.26
+  },
+  {
+    "doc_id": "eval_sozlesme_007",
+    "title": "Yazılım Bakım, Destek ve Güncelleme Hizmet Sözleşmesi",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "hizmet_sozlesmesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, 'Yazılım Bakım, Destek ve Güncelleme Hizmet Sözleşmesi' başlığını taşımakta olup, taraflar arasındaki hizmet kapsamı, maddeler ve cezai şartlar gibi sözleşme unsurlarını içermektedir.",
+    "latency_ms": 1003.66
+  },
+  {
+    "doc_id": "eval_sozlesme_009",
+    "title": "5393 Sayılı Kanunun 75. Maddesi Kapsamında Ortak Hizmet Projesi Sözleşmesi",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "ortak_hizmet_sozlesmesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, iki kurum (İl Özel İdaresi ve Belediye) arasında mali ve teknik yükümlülükleri belirleyen bir 'Ortak Hizmet Sözleşmesi'ni açıkça ifade etmektedir ve başlıkta 'Sözleşmesi' ibaresi yer almaktadır.",
+    "latency_ms": 1044.84
+  },
+  {
+    "doc_id": "eval_sozlesme_008",
+    "title": "Kurumsal Gizlilik ve Veri Güvenliği Taahhütnamesi / Sözleşmesi (NDA)",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "Gizlilik Sözleşmesi (NDA)",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "yonerge"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, taraflar arasındaki gizlilik yükümlülüklerini, tazminat şartlarını ve süresini içeren bir 'Gizlilik Sözleşmesi' (NDA) formatındadır ve açıkça 'Sözleşmesi' ibaresini taşımaktadır.",
+    "latency_ms": 1048.88
+  },
+  {
+    "doc_id": "eval_sozlesme_003",
+    "title": "2886 Sayılı Kanun Kapsamında Kantin ve Kafeterya Kira Sözleşmesi",
+    "ground_truth": "sozlesme",
+    "predicted": "sozlesme",
+    "confidence": 1.0,
+    "sub_type": "kira_sozlesmesi",
+    "origin_type": "curated_anonymized",
+    "length_bucket": "kisa",
+    "legal_status": "idari_yazisma_uygulanmaz",
+    "secondary_candidates": [
+      "karar"
+    ],
+    "is_boundary_match": false,
+    "reasoning": "Metin, bir idare ile bir kurum arasında kantin/kafeterya alanı için yapılan kira bedeli, devir yasağı ve kullanım şartlarını içeren açık bir kira sözleşmesi metnidir.",
+    "latency_ms": 978.75
+  }
+]

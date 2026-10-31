@@ -1,0 +1,525 @@
+{
+  "configurations": [
+    {
+      "Config": "C0_Reasoning_OFF",
+      "Accuracy": 0.9047619047619048,
+      "Accuracy_CI_Low": 0.8650793650793651,
+      "Accuracy_CI_High": 0.9404761904761905,
+      "Macro_F1": 0.8978830818491031,
+      "Macro_F1_CI_Low": 0.8591267033189242,
+      "Macro_F1_CI_High": 0.9288312757451913,
+      "True_Corrections": 0,
+      "False_Corrections": 0,
+      "Wrong_To_Wrong": 0,
+      "Draft_Schema_Valid_Rate": 0.8571428571428571,
+      "False_Missing_Field_Warnings": 0,
+      "Mean_Confidence": 0.985515873015873,
+      "ECE": 0.08075396825396819,
+      "Brier_Score": 0.08881944444444445,
+      "Overconfident_Error_Rate": 0.09523809523809523,
+      "Underconfident_Correct_Rate": 0.0,
+      "Latency_ms_mean": 0.0001484123271121274,
+      "Latency_ms_p95": 0.000200001522898674,
+      "McNemar_p_vs_C0": 1.0
+    },
+    {
+      "Config": "C1_Reasoning_ON_v1_Default",
+      "Accuracy": 0.3253968253968254,
+      "Accuracy_CI_Low": 0.2698412698412698,
+      "Accuracy_CI_High": 0.38492063492063494,
+      "Macro_F1": 0.32398448119845175,
+      "Macro_F1_CI_Low": 0.2585624453046771,
+      "Macro_F1_CI_High": 0.3706605643048755,
+      "True_Corrections": 0,
+      "False_Corrections": 146,
+      "Wrong_To_Wrong": 14,
+      "Draft_Schema_Valid_Rate": 0.9047619047619048,
+      "False_Missing_Field_Warnings": 198,
+      "Mean_Confidence": 0.5009920634920635,
+      "ECE": 0.24265873015873013,
+      "Brier_Score": 0.11877976190476189,
+      "Overconfident_Error_Rate": 0.01984126984126984,
+      "Underconfident_Correct_Rate": 0.027777777777777776,
+      "Latency_ms_mean": 0.47363253901176716,
+      "Latency_ms_p95": 2.773395004624035,
+      "McNemar_p_vs_C0": 2.2420775429197073e-44
+    },
+    {
+      "Config": "C2_Reasoning_ON_No_Kw_Override",
+      "Accuracy": 0.9047619047619048,
+      "Accuracy_CI_Low": 0.8650793650793651,
+      "Accuracy_CI_High": 0.9404761904761905,
+      "Macro_F1": 0.8978830818491031,
+      "Macro_F1_CI_Low": 0.8591267033189242,
+      "Macro_F1_CI_High": 0.9288312757451913,
+      "True_Corrections": 0,
+      "False_Corrections": 0,
+      "Wrong_To_Wrong": 0,
+      "Draft_Schema_Valid_Rate": 0.996031746031746,
+      "False_Missing_Field_Warnings": 210,
+      "Mean_Confidence": 0.8214285714285714,
+      "ECE": 0.08333333333333352,
+      "Brier_Score": 0.09501984126984127,
+      "Overconfident_Error_Rate": 0.06349206349206349,
+      "Underconfident_Correct_Rate": 0.027777777777777776,
+      "Latency_ms_mean": 0.6103952386876612,
+      "Latency_ms_p95": 3.112754995527208,
+      "McNemar_p_vs_C0": 1.0
+    },
+    {
+      "Config": "C3_Reasoning_ON_v2_Calibrated",
+      "Accuracy": 0.9365079365079365,
+      "Accuracy_CI_Low": 0.9047619047619048,
+      "Accuracy_CI_High": 0.9642857142857143,
+      "Macro_F1": 0.9357258368848408,
+      "Macro_F1_CI_Low": 0.9016490839137354,
+      "Macro_F1_CI_High": 0.9621445678920401,
+      "True_Corrections": 8,
+      "False_Corrections": 0,
+      "Wrong_To_Wrong": 0,
+      "Draft_Schema_Valid_Rate": 0.996031746031746,
+      "False_Missing_Field_Warnings": 0,
+      "Mean_Confidence": 0.985515873015873,
+      "ECE": 0.049007936507936445,
+      "Brier_Score": 0.05786706349206349,
+      "Overconfident_Error_Rate": 0.06349206349206349,
+      "Underconfident_Correct_Rate": 0.0,
+      "Latency_ms_mean": 0.5023920652641368,
+      "Latency_ms_p95": 2.7559250171179883,
+      "McNemar_p_vs_C0": 0.0078125
+    }
+  ],
+  "rule_breakdown": [
+    {
+      "Rule_Code": "keyword_classification",
+      "Rule_Title": "Sınıflandırma tutarlılığı",
+      "Config": "C1_v1_Default",
+      "Trigger_Count": 193,
+      "Corrections_Count": 160,
+      "Warnings_Count": 0,
+      "Info_Count": 33,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 146,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": -146
+    },
+    {
+      "Rule_Code": "draft_type_consistency",
+      "Rule_Title": "Taslak türü uygunluğu",
+      "Config": "C1_v1_Default",
+      "Trigger_Count": 48,
+      "Corrections_Count": 48,
+      "Warnings_Count": 0,
+      "Info_Count": 0,
+      "True_Positive_Actions": 24,
+      "False_Positive_Actions": 24,
+      "Precision": 0.5,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "priority_rules",
+      "Rule_Title": "Öncelik kuralı",
+      "Config": "C1_v1_Default",
+      "Trigger_Count": 96,
+      "Corrections_Count": 96,
+      "Warnings_Count": 0,
+      "Info_Count": 0,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 0,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "pattern_missing_field",
+      "Rule_Title": "Zorunlu alan kontrolü",
+      "Config": "C1_v1_Default",
+      "Trigger_Count": 541,
+      "Corrections_Count": 0,
+      "Warnings_Count": 541,
+      "Info_Count": 0,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 198,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": -198
+    },
+    {
+      "Rule_Code": "keyword_routing",
+      "Rule_Title": "Yönlendirme tutarlılığı",
+      "Config": "C1_v1_Default",
+      "Trigger_Count": 28,
+      "Corrections_Count": 28,
+      "Warnings_Count": 0,
+      "Info_Count": 0,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 0,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "pii_detection",
+      "Rule_Title": "Kişisel veri (KVKK) tespiti",
+      "Config": "C1_v1_Default",
+      "Trigger_Count": 13,
+      "Corrections_Count": 0,
+      "Warnings_Count": 1,
+      "Info_Count": 12,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 0,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "keyword_classification",
+      "Rule_Title": "Sınıflandırma tutarlılığı",
+      "Config": "C3_v2_Calibrated",
+      "Trigger_Count": 189,
+      "Corrections_Count": 0,
+      "Warnings_Count": 0,
+      "Info_Count": 189,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 0,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "draft_type_consistency",
+      "Rule_Title": "Taslak türü uygunluğu",
+      "Config": "C3_v2_Calibrated",
+      "Trigger_Count": 36,
+      "Corrections_Count": 36,
+      "Warnings_Count": 0,
+      "Info_Count": 0,
+      "True_Positive_Actions": 35,
+      "False_Positive_Actions": 1,
+      "Precision": 0.9722222222222222,
+      "Net_Accuracy_Impact": 34
+    },
+    {
+      "Rule_Code": "priority_rules",
+      "Rule_Title": "Öncelik kuralı",
+      "Config": "C3_v2_Calibrated",
+      "Trigger_Count": 59,
+      "Corrections_Count": 59,
+      "Warnings_Count": 0,
+      "Info_Count": 0,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 0,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "pattern_missing_field",
+      "Rule_Title": "Zorunlu alan kontrolü",
+      "Config": "C3_v2_Calibrated",
+      "Trigger_Count": 161,
+      "Corrections_Count": 0,
+      "Warnings_Count": 161,
+      "Info_Count": 0,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 0,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "keyword_routing",
+      "Rule_Title": "Yönlendirme tutarlılığı",
+      "Config": "C3_v2_Calibrated",
+      "Trigger_Count": 28,
+      "Corrections_Count": 0,
+      "Warnings_Count": 0,
+      "Info_Count": 28,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 0,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "pii_detection",
+      "Rule_Title": "Kişisel veri (KVKK) tespiti",
+      "Config": "C3_v2_Calibrated",
+      "Trigger_Count": 13,
+      "Corrections_Count": 0,
+      "Warnings_Count": 0,
+      "Info_Count": 13,
+      "True_Positive_Actions": 0,
+      "False_Positive_Actions": 0,
+      "Precision": 0.0,
+      "Net_Accuracy_Impact": 0
+    },
+    {
+      "Rule_Code": "structural_classification",
+      "Rule_Title": "Yapısal sınıflandırma",
+      "Config": "C3_v2_Calibrated",
+      "Trigger_Count": 8,
+      "Corrections_Count": 8,
+      "Warnings_Count": 0,
+      "Info_Count": 0,
+      "True_Positive_Actions": 8,
+      "False_Positive_Actions": 0,
+      "Precision": 1.0,
+      "Net_Accuracy_Impact": 8
+    }
+  ],
+  "examples": {
+    "C1_false_corrections": [
+      {
+        "doc_id": "eval_dilekce_006",
+        "gold": "dilekce",
+        "init_pred": "dilekce",
+        "final_pred": "resmi_yazi",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "dilekce",
+            "corrected_value": "resmi_yazi",
+            "rule": "keyword_classification",
+            "severity": "correction",
+            "message": "Metindeki anahtar kelimeler 'Resmî Yazı' türünü daha güçlü destekliyor; sınıflandırma düzeltildi."
+          },
+          {
+            "field": "draft.draft_type",
+            "original_value": "ic_yazisma",
+            "corrected_value": "cevap_yazisi",
+            "rule": "draft_type_consistency",
+            "severity": "correction",
+            "message": "'Resmî Yazı' için 'İç Yazışma' uygun değil; 'Cevap Yazısı' olarak düzeltildi."
+          },
+          {
+            "field": "routing.priority",
+            "original_value": "acil",
+            "corrected_value": "normal",
+            "rule": "priority_rules",
+            "severity": "correction",
+            "message": "Öncelik 'Normal' olarak ayarlandı: 'Resmî Yazı' türü için varsayılan öncelik."
+          },
+          {
+            "field": "missing_fields.tarih",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Tarih' alanı metinde bulunamadı."
+          },
+          {
+            "field": "missing_fields.konu",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Konu' alanı metinde bulunamadı."
+          }
+        ]
+      },
+      {
+        "doc_id": "eval_dilekce_003",
+        "gold": "dilekce",
+        "init_pred": "dilekce",
+        "final_pred": "resmi_yazi",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "dilekce",
+            "corrected_value": "resmi_yazi",
+            "rule": "keyword_classification",
+            "severity": "correction",
+            "message": "Metindeki anahtar kelimeler 'Resmî Yazı' türünü daha güçlü destekliyor; sınıflandırma düzeltildi."
+          },
+          {
+            "field": "missing_fields.tarih",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Tarih' alanı metinde bulunamadı."
+          },
+          {
+            "field": "missing_fields.konu",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Konu' alanı metinde bulunamadı."
+          }
+        ]
+      },
+      {
+        "doc_id": "eval_dilekce_008",
+        "gold": "dilekce",
+        "init_pred": "dilekce",
+        "final_pred": "resmi_yazi",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "dilekce",
+            "corrected_value": "resmi_yazi",
+            "rule": "keyword_classification",
+            "severity": "correction",
+            "message": "Metindeki anahtar kelimeler 'Resmî Yazı' türünü daha güçlü destekliyor; sınıflandırma düzeltildi."
+          },
+          {
+            "field": "missing_fields.tarih",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Tarih' alanı metinde bulunamadı."
+          },
+          {
+            "field": "missing_fields.konu",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Konu' alanı metinde bulunamadı."
+          }
+        ]
+      },
+      {
+        "doc_id": "eval_dilekce_013",
+        "gold": "dilekce",
+        "init_pred": "dilekce",
+        "final_pred": "resmi_yazi",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "dilekce",
+            "corrected_value": "resmi_yazi",
+            "rule": "keyword_classification",
+            "severity": "correction",
+            "message": "Metindeki anahtar kelimeler 'Resmî Yazı' türünü daha güçlü destekliyor; sınıflandırma düzeltildi."
+          },
+          {
+            "field": "missing_fields.tarih",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Tarih' alanı metinde bulunamadı."
+          },
+          {
+            "field": "missing_fields.konu",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Konu' alanı metinde bulunamadı."
+          }
+        ]
+      },
+      {
+        "doc_id": "eval_dilekce_007",
+        "gold": "dilekce",
+        "init_pred": "dilekce",
+        "final_pred": "resmi_yazi",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "dilekce",
+            "corrected_value": "resmi_yazi",
+            "rule": "keyword_classification",
+            "severity": "correction",
+            "message": "Metindeki anahtar kelimeler 'Resmî Yazı' türünü daha güçlü destekliyor; sınıflandırma düzeltildi."
+          },
+          {
+            "field": "missing_fields.tarih",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Tarih' alanı metinde bulunamadı."
+          },
+          {
+            "field": "missing_fields.konu",
+            "original_value": "not_detected",
+            "corrected_value": null,
+            "rule": "pattern_missing_field",
+            "severity": "warning",
+            "message": "'Konu' alanı metinde bulunamadı."
+          }
+        ]
+      }
+    ],
+    "C3_true_corrections": [
+      {
+        "doc_id": "eval_karar_011",
+        "gold": "karar",
+        "init_pred": "kararname",
+        "final_pred": "karar",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "kararname",
+            "corrected_value": "karar",
+            "rule": "structural_classification",
+            "severity": "correction",
+            "message": "Metin başlığında karar yapısal kalıbı doğrulandı; sınıflandırma düzeltildi."
+          }
+        ]
+      },
+      {
+        "doc_id": "eval_karar_016",
+        "gold": "karar",
+        "init_pred": "kararname",
+        "final_pred": "karar",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "kararname",
+            "corrected_value": "karar",
+            "rule": "structural_classification",
+            "severity": "correction",
+            "message": "Metin başlığında karar yapısal kalıbı doğrulandı; sınıflandırma düzeltildi."
+          }
+        ]
+      },
+      {
+        "doc_id": "eval_karar_015",
+        "gold": "karar",
+        "init_pred": "kararname",
+        "final_pred": "karar",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "kararname",
+            "corrected_value": "karar",
+            "rule": "structural_classification",
+            "severity": "correction",
+            "message": "Metin başlığında karar yapısal kalıbı doğrulandı; sınıflandırma düzeltildi."
+          }
+        ]
+      },
+      {
+        "doc_id": "eval_karar_003",
+        "gold": "karar",
+        "init_pred": "kararname",
+        "final_pred": "karar",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "kararname",
+            "corrected_value": "karar",
+            "rule": "structural_classification",
+            "severity": "correction",
+            "message": "Metin başlığında karar yapısal kalıbı doğrulandı; sınıflandırma düzeltildi."
+          }
+        ]
+      },
+      {
+        "doc_id": "eval_karar_001",
+        "gold": "karar",
+        "init_pred": "kararname",
+        "final_pred": "karar",
+        "validation_entries": [
+          {
+            "field": "classification.document_type",
+            "original_value": "kararname",
+            "corrected_value": "karar",
+            "rule": "structural_classification",
+            "severity": "correction",
+            "message": "Metin başlığında karar yapısal kalıbı doğrulandı; sınıflandırma düzeltildi."
+          }
+        ]
+      }
+    ]
+  }
+}

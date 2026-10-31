@@ -1,0 +1,122 @@
+{
+  "baseline_a1_taxonomy_keywords": {
+    "method_name": "Kural Tabanlı (Keywords)",
+    "accuracy": 0.5397,
+    "macro_f1": 0.5368,
+    "weighted_f1": 0.5368,
+    "boundary_tolerant_acc": 0.6151,
+    "wilson_ci": [
+      0.478,
+      0.6002
+    ],
+    "mean_latency_ms": 0.0516,
+    "macro_f1_ci": [
+      0.48,
+      0.5816
+    ],
+    "accuracy_ci": [
+      0.4762,
+      0.5993
+    ]
+  },
+  "baseline_a2_structural_rules": {
+    "method_name": "Kural Tabanlı (Header/Structural)",
+    "accuracy": 0.6468,
+    "macro_f1": 0.685,
+    "weighted_f1": 0.685,
+    "boundary_tolerant_acc": 0.7103,
+    "wilson_ci": [
+      0.586,
+      0.7032
+    ],
+    "mean_latency_ms": 0.0198,
+    "macro_f1_ci": [
+      0.6239,
+      0.7329
+    ],
+    "accuracy_ci": [
+      0.5873,
+      0.7024
+    ]
+  },
+  "tfidf_logreg": {
+    "method_name": "TF-IDF + Logistic Regression",
+    "accuracy": 0.7579,
+    "macro_f1": 0.7544,
+    "weighted_f1": 0.7544,
+    "boundary_tolerant_acc": 0.7897,
+    "wilson_ci": [
+      0.7014,
+      0.8067
+    ],
+    "mean_latency_ms": 0.7246288042219858,
+    "macro_f1_ci": [
+      0.6959,
+      0.7998
+    ],
+    "accuracy_ci": [
+      0.7024,
+      0.8135
+    ]
+  },
+  "tfidf_linearsvc": {
+    "method_name": "TF-IDF + LinearSVC",
+    "accuracy": 0.7619,
+    "macro_f1": 0.7568,
+    "weighted_f1": 0.7568,
+    "boundary_tolerant_acc": 0.8056,
+    "wilson_ci": [
+      0.7056,
+      0.8103
+    ],
+    "mean_latency_ms": 0.6609369838048541,
+    "macro_f1_ci": [
+      0.6978,
+      0.8023
+    ],
+    "accuracy_ci": [
+      0.7103,
+      0.8135
+    ]
+  },
+  "qwen3_8b": {
+    "method_name": "Qwen3:8b (Alternatif LLM)",
+    "accuracy": 0.75,
+    "macro_f1": 0.7301,
+    "weighted_f1": 0.7301,
+    "boundary_tolerant_acc": 0.8214,
+    "wilson_ci": [
+      0.6931,
+      0.7994
+    ],
+    "mean_latency_ms": 1224.56,
+    "macro_f1_ci": [
+      0.6734,
+      0.775
+    ],
+    "accuracy_ci": [
+      0.6984,
+      0.8016
+    ]
+  },
+  "gemma4_12b": {
+    "method_name": "Gemma 4:12b (Referans)",
+    "accuracy": 0.9048,
+    "macro_f1": 0.8979,
+    "weighted_f1": 0.8979,
+    "boundary_tolerant_acc": 0.9286,
+    "wilson_ci": [
+      0.8622,
+      0.9352
+    ],
+    "mean_latency_ms": 1194.25,
+    "macro_f1_ci": [
+      0.8598,
+      0.9294
+    ],
+    "accuracy_ci": [
+      0.869,
+      0.9405
+    ]
+  }
+}

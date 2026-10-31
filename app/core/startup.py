@@ -39,7 +39,7 @@ def verify_environment(settings: Settings) -> list[str]:
 
     # RAG indeksi
     rag_path = settings.rag_index_path
-    if not (rag_path / "tfidf_matrix.npz").exists():
+    if not (rag_path / "tfidf.pkl").exists():
         warnings.append("RAG indeksi bulunamadı — mevzuat eşleştirme yalnızca metadata ile çalışacak.")
 
     # Disk alanı kontrolü

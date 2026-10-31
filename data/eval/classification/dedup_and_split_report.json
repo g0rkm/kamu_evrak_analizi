@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-10-25T12:56:01.455708",
+  "total_raw_records": 956,
+  "full_issue_pdf_wrappers": 107,
+  "http_404_records": 6,
+  "empty_mevzuat_search_forms": 0,
+  "garbled_or_too_short_records": 335,
+  "duplicate_content_sha256_records": 4,
+  "scraper_label_corrections": {
+    "yonetmelik_soft_correction": 101,
+    "kanun_vs_kararname_correction": 1,
+    "teblig_tarife_correction": 6,
+    "cb_kararnamesi_mapping": 5
+  },
+  "split_distribution": {
+    "dev": 108,
+    "test": 252,
+    "total": 360
+  },
+  "origin_distribution": {
+    "curated_anonymized": 250,
+    "scraped_official": 110
+  },
+  "class_distribution": {
+    "dilekce": 20,
+    "resmi_yazi": 20,
+    "talep_yazisi": 20,
+    "bilgilendirme": 20,
+    "gorus_sorma": 20,
+    "sikayet": 20,
+    "kurum_ici": 20,
+    "genelge": 20,
+    "rapor": 20,
+    "tutanak": 20,
+    "yonetmelik": 20,
+    "teblig": 20,
+    "kanun": 20,
+    "karar": 20,
+    "kararname": 20,
+    "ilan": 20,
+    "yonerge": 20,
+    "sozlesme": 20
+  },
+  "annotation_provenance": {
+    "annotators": 1,
+    "independent_second_annotator": false,
+    "cohens_kappa": null,
+    "automatic_layer_agreement_rate": 0.8333,
+    "total_annotated_samples": 360,
+    "note": "Tek arastirmaci tarafindan etiketlendi; bagimsiz ikinci insan etiketleyici yoktur. curated_templates ornekleri tanim geregi (by construction) etiketlidir. Gercek bir degerlendiriciler arasi uyum (Cohen's kappa) raporlanamaz. Onceki surumdeki 0.8235 degeri iki otomatik katman (primary=ground-truth; secondary=kodla uretilen perturbasyon) arasindaydi ve gecersizdir. Tek etiketleyici siniri paper/limitations_notes.md'de belirtilmistir."
+  }
+}

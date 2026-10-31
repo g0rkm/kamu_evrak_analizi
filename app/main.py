@@ -166,7 +166,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     
     @app.middleware("http")
     async def maintenance_mode_middleware(request: Request, call_next):
-        if request.app.state.container.settings.MAINTENANCE_MODE:
+        maintenance = getattr(request.app.state.container, 'maintenance', None)
+        if maintenance and maintenance.is_active:
             if not request.url.path.startswith("/api/health"):
                 from starlette.responses import JSONResponse as _JSONResp
                 return _JSONResp(

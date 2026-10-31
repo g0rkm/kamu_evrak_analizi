@@ -1,0 +1,28 @@
+{
+  "total_chunks": 3056,
+  "total_scraped_docs": 956,
+  "generic_titles_count": 0,
+  "menu_stubs_count": 53,
+  "exact_md5_duplicate_groups": 44,
+  "redundant_chunks_count": 54,
+  "low_alpha_garbled_chunks": 243,
+  "truncated_docs_50k": 148,
+  "scraped_docs_stats": {
+    "docs_with_date": 909,
+    "docs_with_url": 909
+  },
+  "chunks_provenance_stats": {
+    "chunks_with_date_field": 0,
+    "chunks_with_url_field": 0,
+    "chunks_with_indexed_at": 3056,
+    "chunks_with_article_regex": 2196,
+    "chunks_with_law_no_regex": 1304
+  },
+  "attribution_fields_status": {
+    "legislation_name": "Recoverable / Present",
+    "article_or_number": "Recoverable via Regex (2196/3056)",
+    "publication_or_effective_date": "Partial Scraped (909/956)",
+    "source_url_or_id": "Scraped URLs (909/956)",
+    "indexed_at": "Present (3056/3056)"
+  }
+}

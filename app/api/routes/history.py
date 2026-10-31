@@ -235,8 +235,13 @@ async def history_trends(
 
 
 @router.get('/history/timeline', summary='Zaman cigizi gorunumu')
-async def history_timeline(limit: int = Query(50, ge=1, le=200), container: ServiceContainer = Depends(get_container)):
-    items = container.history.list_records(limit=limit)['items']
+async def history_timeline(
+    limit: int = Query(50, ge=1, le=200),
+    start_date: str = Query(None, max_length=10, description="Başlangıç tarihi (YYYY-MM-DD)"),
+    end_date: str = Query(None, max_length=10, description="Bitiş tarihi (YYYY-MM-DD)"),
+    container: ServiceContainer = Depends(get_container),
+):
+    items = container.history.list_records(limit=limit, date_from=start_date, date_to=end_date)['items']
     timeline = []
     for item in items:
         timeline.append({

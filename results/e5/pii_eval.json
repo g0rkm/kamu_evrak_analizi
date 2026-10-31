@@ -1,0 +1,138 @@
+{
+  "overall": {
+    "TP": 15,
+    "FP": 2,
+    "FN": 1,
+    "precision": 0.8824,
+    "recall": 0.9375,
+    "micro_f1": 0.9091,
+    "macro_f1": 0.8722,
+    "total_records": 22
+  },
+  "per_type": {
+    "tc_kimlik": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "iban": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "telefon": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.6667,
+      "f1": 0.8
+    },
+    "sabit_tel": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "eposta": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "plaka": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6667
+    },
+    "pasaport": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "kredi_kart": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "vergi_no": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "saglik_no": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "ehliyet": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "sgk_no": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "false_positives": [
+    {
+      "record_id": "trap_amount_plate",
+      "type": "plaka",
+      "matched_text": "34 TL 100"
+    },
+    {
+      "record_id": "trap_file_number",
+      "type": "sgk_no",
+      "matched_text": "1234567-89"
+    }
+  ],
+  "false_negatives": [
+    {
+      "record_id": "pii_phone_intl",
+      "type": "telefon",
+      "value": "+90 533 987 65 43"
+    }
+  ],
+  "mask_leakage": {
+    "leak_count": 1,
+    "leaks": [
+      {
+        "record_id": "pii_phone_intl",
+        "value": "+90 533 987 65 43"
+      }
+    ]
+  }
+}

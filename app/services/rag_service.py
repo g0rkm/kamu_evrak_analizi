@@ -23,6 +23,10 @@ class RetrievedChunk:
     type: str
     source: str
     chunk_index: int
+    source_url: str = ""
+    publish_date: str = ""
+    chunk_id: str = ""
+    law_no: str = ""
 
 
 class RAGService:
@@ -102,6 +106,10 @@ class RAGService:
                 type=chunk.get("type", ""),
                 source=chunk.get("source", ""),
                 chunk_index=chunk.get("chunk_index", 0),
+                source_url=chunk.get("source_url", ""),
+                publish_date=chunk.get("publish_date", ""),
+                chunk_id=chunk.get("chunk_id", ""),
+                law_no=chunk.get("law_no", "") or "",
             ))
             if len(results) >= top_k:
                 break
@@ -114,10 +122,11 @@ class RAGService:
         top_k = top_k or self.default_top_k
         per_query_k = max(3, top_k // len(queries) + 1)
 
-        best: dict[tuple[str, int], RetrievedChunk] = {}
+        best: dict = {}
         for query in queries:
             for hit in self.search(query, top_k=per_query_k):
-                key = (hit.title, hit.chunk_index)
+                # Kararlı chunk_id ile tekilleştir (yoksa başlık+indeks'e düş).
+                key = hit.chunk_id or (hit.title, hit.chunk_index)
                 if key not in best or hit.score > best[key].score:
                     best[key] = hit
         return sorted(best.values(), key=lambda h: h.score, reverse=True)[:top_k]

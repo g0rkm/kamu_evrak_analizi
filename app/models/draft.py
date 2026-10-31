@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import re
 from typing import Literal, Optional
 from uuid import uuid4
 
@@ -19,11 +20,17 @@ class DraftResponse(BaseModel):
     closing: str = ""
     attachments_note: Optional[str] = None
     tone_check: str = ""  # Üslup uygunluk notu
+    rendered_text: str = ""  # Şablonla üretilmiş tam resmî yazı metni
 
     @field_validator("attachments_note", mode="before")
     @classmethod
     def _blank_attachments(cls, value):
-        return none_if_blank(value)
+        cleaned = none_if_blank(value)
+        if isinstance(cleaned, str):
+            cleaned = re.sub(r"^\s*ek(ler)?\s*:\s*", "", cleaned, flags=re.IGNORECASE).strip()
+            if not cleaned:
+                return None
+        return cleaned
 
 
 class RoutingDecision(BaseModel):

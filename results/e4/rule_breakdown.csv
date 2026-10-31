@@ -1,0 +1,14 @@
+Rule_Code,Rule_Title,Config,Trigger_Count,Corrections_Count,Warnings_Count,Info_Count,True_Positive_Actions,False_Positive_Actions,Precision,Net_Accuracy_Impact
+keyword_classification,Sınıflandırma tutarlılığı,C1_v1_Default,193,160,0,33,0,146,0.0,-146
+draft_type_consistency,Taslak türü uygunluğu,C1_v1_Default,48,48,0,0,24,24,0.5,0
+priority_rules,Öncelik kuralı,C1_v1_Default,96,96,0,0,0,0,0.0,0
+pattern_missing_field,Zorunlu alan kontrolü,C1_v1_Default,541,0,541,0,0,198,0.0,-198
+keyword_routing,Yönlendirme tutarlılığı,C1_v1_Default,28,28,0,0,0,0,0.0,0
+pii_detection,Kişisel veri (KVKK) tespiti,C1_v1_Default,13,0,1,12,0,0,0.0,0
+keyword_classification,Sınıflandırma tutarlılığı,C3_v2_Calibrated,189,0,0,189,0,0,0.0,0
+draft_type_consistency,Taslak türü uygunluğu,C3_v2_Calibrated,36,36,0,0,35,1,0.9722222222222222,34
+priority_rules,Öncelik kuralı,C3_v2_Calibrated,59,59,0,0,0,0,0.0,0
+pattern_missing_field,Zorunlu alan kontrolü,C3_v2_Calibrated,161,0,161,0,0,0,0.0,0
+keyword_routing,Yönlendirme tutarlılığı,C3_v2_Calibrated,28,0,0,28,0,0,0.0,0
+pii_detection,Kişisel veri (KVKK) tespiti,C3_v2_Calibrated,13,0,0,13,0,0,0.0,0
+structural_classification,Yapısal sınıflandırma,C3_v2_Calibrated,8,8,0,0,8,0,1.0,8

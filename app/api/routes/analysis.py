@@ -89,6 +89,31 @@ async def analyze_text(body: TextAnalysisRequest, service: AnalysisService = Dep
     return await service.analyze_text(body.text, body.title)
 
 
+@router.post("/extract-text", summary="Dosyadan metin çıkar (karşılaştırma için)")
+async def extract_text_from_file(
+    request: Request,
+    file: UploadFile = File(...),
+    storage: UploadStorage = Depends(get_storage),
+    container: ServiceContainer = Depends(get_container),
+):
+    contents = await file.read()
+    max_size = container.settings.MAX_FILE_SIZE_MB * 1024 * 1024
+    if len(contents) > max_size:
+        raise FileValidationError(
+            f'Dosya boyutu {len(contents) / 1024 / 1024:.1f} MB, maksimum {container.settings.MAX_FILE_SIZE_MB} MB'
+        )
+    await file.seek(0)
+    stored = await storage.save(file)
+    try:
+        extracted = container.ocr.extract(stored.path)
+        return {"text": extracted.cleaned_text, "confidence": extracted.confidence}
+    finally:
+        try:
+            stored.path.unlink(missing_ok=True)
+        except OSError:
+            pass
+
+
 @router.post("/analyze-batch", response_model=BatchResponse, summary="Birden çok dosyayı sırayla analiz et")
 async def analyze_batch(
     files: list[UploadFile] = File(...),

@@ -1,93 +1,86 @@
 import { ApiClient } from '../core/api.js';
+import { h, replace } from '../core/dom.js';
+import { fmt } from '../core/vocabulary.js';
+
+const ACTION_LABELS = {
+    analyze: 'Analiz',
+    review: 'Onay',
+    delete: 'Silme',
+    update_tags: 'Etiket güncelleme',
+    update_notes: 'Not güncelleme',
+    archive: 'Arşivleme',
+    unarchive: 'Arşivden çıkarma',
+    favorite: 'Favori',
+    bulk_delete: 'Toplu silme',
+    import_records: 'İçe aktarma',
+};
 
 export class AuditView {
-  constructor(container) {
-    this._container = container;
-    this._api = new ApiClient();
-  }
+    title = 'İşlem kayıtları';
 
-  async render() {
-    this._container.innerHTML = `
-      <div class="audit-wrapper">
-        <h2>Denetim Günlüğü</h2>
-        <div class="audit-filters">
-          <select id="auditActionFilter">
-            <option value="">Tüm İşlemler</option>
-            <option value="analyze">Analiz</option>
-            <option value="delete">Silme</option>
-            <option value="update_tags">Etiket Güncelleme</option>
-            <option value="update_notes">Not Güncelleme</option>
-            <option value="archive">Arşivleme</option>
-            <option value="unarchive">Arşivden Çıkarma</option>
-            <option value="favorite">Favori</option>
-            <option value="bulk_delete">Toplu Silme</option>
-            <option value="import_records">İçe Aktarma</option>
-          </select>
-          <button id="auditRefreshBtn" class="btn btn-sm">Yenile</button>
-        </div>
-        <div id="auditStats" class="audit-stats"></div>
-        <table class="audit-table">
-          <thead>
-            <tr>
-              <th>Zaman</th>
-              <th>İşlem</th>
-              <th>Kullanıcı</th>
-              <th>Kayıt ID</th>
-              <th>Detay</th>
-            </tr>
-          </thead>
-          <tbody id="auditLogBody"></tbody>
-        </table>
-      </div>`;
-    this._bindEvents();
-    await this._loadLogs();
-    await this._loadStats();
-  }
-
-  _bindEvents() {
-    document.getElementById('auditRefreshBtn')?.addEventListener('click', () => this._loadLogs());
-    document.getElementById('auditActionFilter')?.addEventListener('change', () => this._loadLogs());
-  }
-
-  async _loadLogs() {
-    const action = document.getElementById('auditActionFilter')?.value || '';
-    try {
-      const params = action ? `?action=${action}` : '';
-      const resp = await this._api.request(`/audit/logs${params}`);
-      const data = await resp.json();
-      this._renderLogs(data.logs || []);
-    } catch (e) {
-      const body = document.getElementById('auditLogBody');
-      if (body) body.innerHTML = '<tr><td colspan="5">Yüklenemedi</td></tr>';
+    constructor(container) {
+        this._container = container;
+        this._api = new ApiClient();
     }
-  }
 
-  async _loadStats() {
-    try {
-      const resp = await this._api.request('/audit/stats');
-      const data = await resp.json();
-      const el = document.getElementById('auditStats');
-      if (el && data.total_logs !== undefined) {
-        el.innerHTML = `<div class="stat-card"><strong>Toplam İşlem:</strong> ${data.total_logs}</div>`;
-      }
-    } catch (e) { /* silent */ }
-  }
+    async render(root = this._container) {
+        this.filter = h('select', { class: 'input', id: 'auditActionFilter', style: { width: '180px' }, onChange: () => this._loadLogs() },
+            h('option', { value: '' }, 'Tüm işlemler'),
+            ...Object.entries(ACTION_LABELS).map(([k, label]) => h('option', { value: k }, label)));
+        this.tbody = h('tbody', { id: 'auditLogBody' });
+        this.emptyBox = h('div', { style: { textAlign: 'center', padding: '40px 0', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' } },
+            h('div', { style: { fontFamily: 'var(--font-heading)', fontSize: '22px' } }, 'Henüz kayıt yok'),
+            h('div', { style: { fontSize: '14px', color: 'var(--color-neutral-700)' } }, 'Bir evrak analiz edildiğinde veya onaylandığında burada görünecek.'));
 
-  _renderLogs(logs) {
-    const body = document.getElementById('auditLogBody');
-    if (!body) return;
-    if (!logs.length) {
-      body.innerHTML = '<tr><td colspan="5" class="empty-state">Henüz kayıt yok</td></tr>';
-      return;
+        const section = h('section', { style: { display: 'flex', flexDirection: 'column', gap: '24px' } },
+            h('div', { class: 'page-bar' },
+                h('div', null,
+                    h('h1', { style: { margin: 0, fontWeight: 400 } }, 'İşlem kayıtları'),
+                    h('p', { style: { margin: '4px 0 0', color: 'var(--color-neutral-700)' } }, 'Sistemde kimin, ne zaman, hangi işlemi yaptığı burada tutulur.')),
+                h('div', { style: { display: 'flex', gap: '10px', alignItems: 'flex-end' } },
+                    h('div', { class: 'field' }, h('label', { for: 'auditActionFilter' }, 'İşlem türü'), this.filter),
+                    h('button', { type: 'button', class: 'btn btn-secondary', id: 'auditRefreshBtn', onClick: () => this._loadLogs() }, 'Yenile'))),
+            h('div', { class: 'table-wrap' },
+                h('table', { class: 'table' },
+                    h('thead', null, h('tr', null,
+                        h('th', null, 'Zaman'),
+                        h('th', null, 'İşlem'),
+                        h('th', null, 'Kullanıcı'),
+                        h('th', null, 'Kayıt no'),
+                        h('th', null, 'Ayrıntı'))),
+                    this.tbody)),
+            this.emptyBox);
+
+        replace(root, section);
+        await this._loadLogs();
     }
-    const sorted = [...logs].reverse();
-    body.innerHTML = sorted.map(l => `
-      <tr>
-        <td>${l.timestamp || '-'}</td>
-        <td><span class="badge">${l.action || '-'}</span></td>
-        <td>${l.user || 'system'}</td>
-        <td>${l.record_id || '-'}</td>
-        <td>${l.details ? JSON.stringify(l.details).slice(0, 80) : '-'}</td>
-      </tr>`).join('');
-  }
+
+    async _loadLogs() {
+        const action = this.filter?.value || '';
+        try {
+            const params = action ? `?action=${encodeURIComponent(action)}` : '';
+            const data = await this._api.request(`/audit/logs${params}`);
+            this._renderLogs(data.logs || []);
+        } catch {
+            this.emptyBox.hidden = true;
+            replace(this.tbody, h('tr', null, h('td', { colspan: 5, class: 'error-text' }, 'İşlem kayıtları yüklenemedi.')));
+        }
+    }
+
+    _renderLogs(logs) {
+        if (!logs.length) {
+            replace(this.tbody);
+            this.emptyBox.hidden = false;
+            return;
+        }
+        this.emptyBox.hidden = true;
+        const sorted = [...logs].reverse();
+        replace(this.tbody, ...sorted.map((l) => h('tr', null,
+            h('td', { style: { whiteSpace: 'nowrap', color: 'var(--color-neutral-700)' } }, fmt.date(l.timestamp)),
+            h('td', null, h('span', { class: 'tag tag-neutral' }, ACTION_LABELS[l.action] || l.action || '—')),
+            h('td', null, l.user || 'sistem'),
+            h('td', { class: 'mono' }, l.record_id || '—'),
+            h('td', { style: { color: 'var(--color-neutral-700)', fontSize: '13px' } },
+                l.details ? (typeof l.details === 'string' ? l.details : JSON.stringify(l.details)).slice(0, 100) : '—'))));
+    }
 }
