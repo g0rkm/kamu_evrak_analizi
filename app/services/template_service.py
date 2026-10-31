@@ -61,12 +61,17 @@ class TemplateService:
         self._ensure_defaults()
 
     def _ensure_defaults(self):
-        """Varsayilan sablonlari yukler."""
+        """Varsayılan şablonları yükler, mevcut builtin'lerin adını ve açıklamasını günceller."""
         templates = self._load()
-        existing_ids = {t["id"] for t in templates}
-        for tpl in DEFAULT_TEMPLATES:
-            if tpl["id"] not in existing_ids:
-                templates.append(tpl)
+        existing = {t["id"]: t for t in templates}
+        for default in DEFAULT_TEMPLATES:
+            if default["id"] in existing:
+                t = existing[default["id"]]
+                if t.get("builtin"):
+                    t["name"] = default["name"]
+                    t["description"] = default["description"]
+            else:
+                templates.append(default)
         self._save(templates)
 
     def _load(self) -> list:
