@@ -14,7 +14,7 @@ export class LoginView {
           <h2>Giriş Yap</h2>
           <form id="loginForm">
             <div class="form-group">
-              <label for="username">Kullanici Adi</label>
+              <label for="username">Kullanıcı adı</label>
               <input type="text" id="username" name="username" required autocomplete="username">
             </div>
             <div class="form-group">
@@ -42,28 +42,25 @@ export class LoginView {
     const errEl = document.getElementById('loginError');
     errEl.style.display = 'none';
     if (!username || !password) {
-      errEl.textContent = 'Kullanici adi ve parola zorunludur.';
+      errEl.textContent = 'Kullanıcı adı ve parola zorunludur.';
       errEl.style.display = 'block';
       return;
     }
     try {
-      const resp = await this._api.request('/auth/login', {
+      const data = await this._api.request('/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        json: { username, password },
       });
-      if (!resp.ok) {
-        const data = resp;
-        errEl.textContent = data.detail || 'Giriş başarısız.';
+      if (data.error || data.detail) {
+        errEl.textContent = data.detail || data.error || 'Giriş başarısız.';
         errEl.style.display = 'block';
         return;
       }
-      const data = await resp.json();
       localStorage.setItem('auth_token', data.token);
-      localStorage.setItem('auth_user', data.username);
+      localStorage.setItem('auth_user', JSON.stringify({ username: data.username, role: data.role || 'memur' }));
       if (this._onLogin) this._onLogin(data);
     } catch (e) {
-      errEl.textContent = 'Baglanti hatasi.';
+      errEl.textContent = 'Bağlantı hatası.';
       errEl.style.display = 'block';
     }
   }
