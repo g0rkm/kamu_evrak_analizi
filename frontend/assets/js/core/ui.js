@@ -1,4 +1,4 @@
-import { h, icon, storage } from './dom.js';
+import { h, icon } from './dom.js';
 
 /** Sağ altta beliren, kendiliğinden kapanan bildirimler. */
 export class Toaster {
@@ -9,7 +9,7 @@ export class Toaster {
     }
 
     show(message, type = 'info', timeout = type === 'error' ? 8000 : type === 'warning' ? 5000 : type === 'success' ? 3000 : 4000) {
-        const close = h('button', { type: 'button', class: 'btn btn--ghost btn--icon btn--sm', 'aria-label': 'Bildirimi kapat' }, icon('x'));
+        const close = h('button', { type: 'button', class: 'btn btn-ghost btn--icon btn--sm', 'aria-label': 'Bildirimi kapat' }, icon('x'));
         const toast = h('div', { class: `toast toast--${type}`, role: type === 'error' ? 'alert' : 'status' },
             h('span', { class: 'toast__icon' }, icon(Toaster.ICONS[type] || 'info')),
             h('div', { class: 'toast__message' }, message),
@@ -30,42 +30,13 @@ export class Toaster {
     warn(message) { this.show(message, 'warning', 5000); }
 }
 
-/** Açık/koyu tema tercihi. Tercih, ilk boyamadan önce index.html'deki betikle uygulanır. */
-export class ThemeController {
-    constructor(button) {
-        this.button = button;
-        this.button.addEventListener('click', () => this.toggle());
-        this.render();
-    }
-
-    get current() {
-        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    }
-
-    toggle() {
-        const next = this.current === 'dark' ? 'light' : 'dark';
-        document.documentElement.classList.add('theme-transitioning');
-        document.documentElement.setAttribute('data-theme', next);
-        storage.set('theme', next);
-        this.render();
-        setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 400);
-    }
-
-    render() {
-        const dark = this.current === 'dark';
-        this.button.replaceChildren(icon(dark ? 'sun' : 'moon'));
-        this.button.setAttribute('aria-label', dark ? 'Açık temaya geç' : 'Koyu temaya geç');
-        this.button.title = this.button.getAttribute('aria-label');
-    }
-}
-
 /** Yerel <dialog> tabanlı onay penceresi. `await confirmDialog({...})` → true/false */
 export function confirmDialog({ title, message, confirmText = 'Onayla', cancelText = 'Vazgeç', danger = false }) {
     return new Promise((resolve) => {
-        const confirmBtn = h('button', { type: 'button', class: `btn ${danger ? 'btn--danger' : 'btn--primary'}` }, confirmText);
-        const cancelBtn = h('button', { type: 'button', class: 'btn btn--secondary' }, cancelText);
+        const confirmBtn = h('button', { type: 'button', class: `btn ${danger ? 'btn--danger' : 'btn-primary'}` }, confirmText);
+        const cancelBtn = h('button', { type: 'button', class: 'btn btn-secondary' }, cancelText);
         const dialog = h('dialog', { class: 'dialog', 'aria-labelledby': 'dialogTitle' },
-            h('div', { class: 'dialog__body' }, h('h2', { id: 'dialogTitle' }, title), h('p', { class: 'muted' }, message)),
+            h('div', { class: 'dialog__body' }, h('h2', { id: 'dialogTitle', class: 'dialog-title' }, title), h('p', { class: 'dialog-body', style: { margin: 0 } }, message)),
             h('div', { class: 'dialog__footer' }, cancelBtn, confirmBtn),
         );
         const finish = (result) => {

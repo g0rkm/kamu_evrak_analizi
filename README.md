@@ -1,15 +1,15 @@
 # Kamu Evrak Analizi Sistemi
 
-Kamu kurumlarına gelen evrakların **%100 yerel yapay zekâ (Local LLM — Gemma 4 12B)** ile otomatik sınıflandırılması, içerik analizi, mevzuat eşleştirmesi, resmî yazı taslağı oluşturulması ve ilgili birime yönlendirilmesi işlemlerini gerçekleştiren çok ajanlı (multi-agent) bir sistemdir.
+Kamu kurumlarına gelen evrakların **yerel büyük dil modeli (Local LLM — Gemma 4 12B)** ile otomatik sınıflandırılması, içerik analizi, mevzuat eşleştirmesi, resmî yazı taslağı oluşturulması ve ilgili birime yönlendirilmesi işlemlerini gerçekleştiren **ajan tabanlı çok aşamalı bir pipeline (agent-based multi-stage pipeline)** sistemidir.
 
 ## Özellikler
 
-- **%100 Yerel Yapay Zekâ (Local LLM — Gemma 4 12B)**: Ollama (`gemma4:12b`) üzerinde tamamen kurum içi / çevrimdışı çalışır; hiçbir evrak verisi bulut API'lerine gönderilmez
-- **Evrak Sınıflandırma**: 18 farklı evrak türü (dilekçe, resmî yazı, kanun, yönetmelik, kararname, tebliğ, genelge vb. — **Macro F1: 0.935**)
+- **Yerel Yapay Zekâ Yapılandırması (Local LLM — Gemma 4 12B)**: Varsayılan olarak Ollama (`gemma4:12b`) üzerinde kurum içi / çevrimdışı çalışacak şekilde yapılandırılmıştır. *Yerel Ollama yapılandırmasında, uzak LLM uç noktası kapalı ve dış veri akışı ayrıca doğrulanmışsa evrak içeriği yerel işlenebilir.*
+- **Evrak Sınıflandırma**: Sistem taksonomisinde 18 evrak türü tanımlıdır (`app/core/taxonomy.py`). Kanıtlanmış başarım **gerçek resmî belgeler** üzerindedir: **6 kategorilik pilot (`n=54`): Macro-F1=0.935; E1 gerçek-belge alt kümesi (`n=78`): Macro-F1=0.834.** 18 sınıfa genişletilmiş kümede (`n=252`) toplam Macro-F1=0.898'dir; ancak bu kümenin %69'u (11 sınıf tamamen) KVKK nedeniyle sentetik/temsilî şablondan oluştuğundan toplam değer gerçek dünya 18-sınıf başarımı sayılmamalıdır (bkz. Bölüm 1.A).
 - **İçerik Analizi**: Varlık çıkarma (tarih, kurum, kişi, referans no), eksik alan tespiti, anahtar kelime belirleme
 - **RAG Destekli Mevzuat Eşleştirme**: TF-IDF tabanlı retrieval ile 956 belgeden 3056 parça üzerinde yerel arama (scikit-learn)
 - **PII/KVKK Tespiti**: TC Kimlik (sağlama doğrulamalı), IBAN, telefon, e-posta tespiti ve maskeleme; taslağa kişisel veri sızıntısı kontrolü
-- **Human-in-the-Loop**: Taslak (Onayla / Düzenle / Reddet) ve yönlendirme (Onayla / Birimi değiştir) kararları sunucuda kalıcı olarak saklanır
+- **Human-in-the-Loop**: Taslak (Onayla / Düzenle / Reddet) ve yönlendirme (Onayla / Birimi değiştir) için insan denetimi mekanizması uygulanmıştır; kararlar sunucuda kalıcı olarak saklanır
 - **Resmî Yazı Taslağı**: Evrak türüne uygun cevap/işlem yazısı; yazdırma ve `.txt` indirme
 - **Birim Yönlendirme**: 8 kamu birimi arasında otomatik yönlendirme ve önceliklendirme
 - **Kural Tabanlı Doğrulama**: LLM çıktılarını deterministik kurallarla denetleyen `ReasoningAgent` (6 kural)
@@ -19,7 +19,7 @@ Kamu kurumlarına gelen evrakların **%100 yerel yapay zekâ (Local LLM — Gemm
 - **Analiz Geçmişi**: Arama, türe göre filtreleme, istatistik paneli, JSON dışa aktarma/içe aktarma
 - **Toplu İşleme ve Karşılaştırma**: Batch analiz API'si, iki evrak arasında benzerlik/fark analizi
 - **Çevrimdışı Çalışan Arayüz**: CDN bağımlılığı yok; kurum içi / internetsiz ağlarda da çalışır. Açık/koyu tema, mobil uyumlu, klavye ve ekran okuyucu erişilebilirliği
-- **Prompt Injection Koruması**: Evrak metni `<evrak>` etiketleri arasına alınır ve iç etiketler etkisizleştirilir
+- **Prompt Injection Azaltma Önlemi**: Evrak metni `<evrak>` etiketleri arasına alınır ve iç etiketler etkisizleştirilerek istem enjeksiyonu riskini azaltmaya yönelik savunma katmanı uygulanır
 - **LLM Yanıt Önbelleği ve GPU Kuyruk Koruması**: SHA-256 hash tabanlı önbellek, yerel GPU için eşzamanlı istek semaforu (`LLM_MAX_CONCURRENT_REQUESTS`), JSON modu (`response_format`) ve otomatik düşünme bloğu (`strip_thinking`) temizliği
 - **Rate Limiting & Request ID İzleme**: IP tabanlı istek sınırlama ve her API yanıtında `X-Request-ID`
 - **Docker Desteği**: Tek komutla production dağıtımı (`host.docker.internal` üzerinden ana makinedeki Ollama'ya bağlanabilir)
@@ -39,18 +39,20 @@ Kamu kurumlarına gelen evrakların **%100 yerel yapay zekâ (Local LLM — Gemm
    OrchestratorAgent ── her çalıştırma için yeni örnek, PipelineObserver ile ilerleme bildirir
 ```
 
-**Agent hiyerarşisi**
+**Ajan hiyerarşisi (ajan tabanlı çok aşamalı pipeline)**
 
 ```
 BaseAgent (soyut)
 ├── OCRAgent              → Metin çıkarma (OCRService: PdfExtractor / ImageExtractor / PlainTextExtractor)
 ├── ReasoningAgent        → ValidationRule zinciri (deterministik, LLM yok)
-├── OrchestratorAgent     → Pipeline koordinasyonu
+├── OrchestratorAgent     → Sabit aşamalı pipeline koordinasyonu ve kısmi hata kurtarma
 └── LLMAgent (soyut)      → system prompt + ask_json/ask_text + Gemma 4 / Ollama yerel LLM entegrasyonu
     ├── ClassifierAgent   ├── AnalyzerAgent   ├── LegislationAgent (RAG)
     ├── SummaryAgent      ├── DraftAgent      ├── RoutingAgent
     └── ComparisonAgent
 ```
+
+> **Mimari Notu:** Sistem, bağımsız açık uçlu planlama veya otonom görev devri yapan etmenler yerine, `OrchestratorAgent` yönetiminde önceden tanımlı girdi/çıktı sözleşmelerine, paralel yürütme aşamalarına ve deterministik doğrulama kurallarına dayanan **ajan tabanlı çok aşamalı bir pipeline** olarak tasarlanmıştır.
 
 **Pipeline** (aynı satırdakiler paralel çalışır):
 
@@ -60,11 +62,35 @@ Metin çıkarma → Sınıflandırma ‖ İçerik analizi → Mevzuat ‖ Özet 
 
 **Tek kaynak sözlük**: Evrak türleri, birimler, taslak türleri ve öncelikler `app/core/taxonomy.py` içinde tanımlıdır. LLM prompt'ları, doğrulama kuralları ve arayüz etiketleri (`/api/meta`) buradan üretilir; yeni bir evrak türü eklemek için tek bir kayıt yeterlidir.
 
-## Performans ve Sınıflandırma Başarımı (F1 Benchmark)
+## Performans ve Sınıflandırma Başarımı (E1 Genişletilmiş Değerlendirme ve Pilot Ölçüm)
 
-### 1. Sınıflandırma Doğruluğu (`gemma4:12b`)
+### 1.A. 18 Sınıfa Genişletilmiş Değerlendirme (`E1` — `gemma4:12b`, `n=252`)
 
-Resmî Gazete ve Mevzuat Bilgi Sistemi'nden toplanan gerçek kamu evrakları üzerinde (`scripts/evaluate_f1.py`, `seed=42`, 54 belge, 6 ana mevzuat/evrak kategorisi) yerel **`gemma4:12b` (Q4_K_M)** modeliyle yapılan değerlendirme sonuçları:
+> **⚠️ Veri bileşimi uyarısı (önce okuyun):** Bu değerlendirme kümesinin yalnızca **%31'i (78/252) gerçek resmî belgedir** (Resmî Gazete / Mevzuat Bilgi Sistemi). Kalan **%69'u (174/252), KVKK gereği kamuya açık olmayan idari yazışma sınıfları için yazılmış temsilî/sentetik şablondur** (`source: curated_templates`). 18 sınıfın **11'inde test örneklerinin tamamı sentetiktir**; yalnızca `ilan, kanun, karar, teblig, yonetmelik` sınıfları tümüyle gerçek belgeye dayanır. Bu nedenle **toplam skorlar gerçek dünya 18-sınıf başarımı olarak okunmamalıdır.**
+
+[`docs/etiketleme_protokolu.md`](docs/etiketleme_protokolu.md) uyarınca tekilleştirilmiş 360 belgelik kümeden `seed=42` ile ayrılan 252 belgelik test kümesi (`data/eval/classification/test.json`, 18 sınıf × 14 örnek) üzerinde `experiments/e1_classification.py` ile elde edilen sonuçlar ([`results/e1/metrics.json`](results/e1/metrics.json)):
+
+| Alt küme | n | Accuracy | Macro-F1 |
+|---|---:|---:|---:|
+| **Gerçek resmî belgeler** (≈6 mevzuat sınıfı) | 78 | 0.859 | **`0.834`** |
+| Sentetik/temsilî idari şablonlar (12 idari sınıf) | 174 | 0.925 | 0.930 |
+| Toplam (sentetik çoğunluk etkili) | 252 | 0.905 | 0.898 |
+
+- **Kanıtlanmış asıl sonuç — gerçek belgelerde Macro-F1 = `0.834`** (acc 0.859, `n=78`); bu değer 6 kategorilik pilot ölçümle (Bölüm 1.B, 0.935) tutarlıdır. Makalede ana sonuç olarak **gerçek-belge alt kümesi ile sınıf başı örneklem/GA değerleri** verilmelidir.
+- Toplam `0.898` (Bootstrap GA `B=2000`: `[0.860, 0.929]`; Accuracy 0.905, Wilson GA `[0.862, 0.935]`) sentetik çoğunluk tarafından yukarı çekilmiştir ve tek başına raporlanmamalıdır.
+- **Hata dağılımı:** 24 hatanın 8'i `karar` ↔ `kararname`, 9'u idari yazışma alt türleri (`resmi_yazi`/`bilgilendirme`/`kurum_ici`/`gorus_sorma`/`talep_yazisi`) sınır örnekleridir.
+
+18 sınıfa genişletilmiş E1 deneyini tekrar çalıştırmak için:
+
+```bash
+python -m experiments.e1_classification --split test
+```
+
+### 1.B. Sınıflandırma Doğruluğu — 6 Kategorilik Pilot Benchmark (`gemma4:12b`, `n=54`)
+
+> **Örneklem ve Kapsam Uyarısı:** Bu alt bölümdeki sonuçlar yalnızca **6 kategorilik ilk pilot benchmark (`n=54`): Macro-F1=0.935** ölçümüne aittir. `50 / 54` doğru tahmin üzerinden hesaplanan genel doğruluk (`%92.6`) için **%95 Wilson güven aralığı yaklaşık `%82.4–%97.1`** düzeyindedir. 18 sınıfın tamamını kapsayan kapsamlı değerlendirme için yukarıdaki **Bölüm 1.A (`n=252`, Macro-F1=0.8979)** sonuçları esas alınmalıdır.
+
+Resmî Gazete ve Mevzuat Bilgi Sistemi'nden toplanan kamu evrakları üzerinde (`scripts/evaluate_f1.py`, `seed=42`, `n=54` belge, 6 mevzuat/evrak kategorisi) yerel **`gemma4:12b` (`Q4_K_M`, `temperature=0.3`, `num_ctx=16384`, `reasoning_effort="none"`)** modeliyle yapılan pilot değerlendirme sonuçları:
 
 | Evrak Türü | Precision (Kesinlik) | Recall (Duyarlılık) | F1 Skoru | Doğru / Toplam (TP / Destek) |
 |------------|---------------------:|--------------------:|---------:|-----------------------------:|
@@ -74,18 +100,18 @@ Resmî Gazete ve Mevzuat Bilgi Sistemi'nden toplanan gerçek kamu evrakları üz
 | **Kanun** (`kanun`) | 0.900 | 0.900 | **0.900** | 9 / 10 |
 | **Karar** (`karar`) | 1.000 | 0.800 | **0.889** | 8 / 10 |
 | **Kararname** (`kararname`) | 0.778 | 0.875 | **0.824** | 7 / 8 |
-| **Macro Ortalama (Macro F1)** | **0.946** | **0.929** | **0.935** | **50 / 54** |
-| **Genel Doğruluk (Micro F1 / Accuracy)** | **0.926** | **0.926** | **0.926** | **%92.6** |
+| **Macro Ortalama (Macro-F1 — 6 sınıf, n=54)** | **0.946** | **0.929** | **0.935** | **50 / 54** |
+| **Genel Doğruluk (Accuracy — %95 Wilson GA: ~%82.4–97.1)** | **0.926** | **0.926** | **0.926** | **%92.6** |
 
-F1 ölçümünü tekrar çalıştırmak için:
+Pilot F1 ölçümünü tekrar çalıştırmak için:
 
 ```bash
 python scripts/evaluate_f1.py
 ```
 
-### 2. Yerel Donanım Hız ve VRAM Performansı
+### 2. Yerel Donanım Hız ve VRAM Performansı (Ön Ölçüm)
 
-**Test Sistemi:** NVIDIA GeForce RTX 5070 (12GB GDDR7 VRAM) · AMD Ryzen 7 7700X · 16GB DDR5 RAM · Ollama `v0.40.8` (`gemma4:12b`, `%100 GPU`, `reasoning_effort="none"`):
+**Test Sistemi:** NVIDIA GeForce RTX 5070 (12GB GDDR7 VRAM) · AMD Ryzen 7 7700X · 16GB DDR5 RAM · Ollama `v0.40.8` (`gemma4:12b`, `%100 GPU`, `reasoning_effort="none"`, `LLM_MAX_CONCURRENT_REQUESTS=2` — tam ortam künyesi için bkz. [`docs/olcum_protokolu.md`](docs/olcum_protokolu.md)):
 
 | Pipeline Aşaması | Çalışma Şekli | Süre (sn) |
 |------------------|---------------:|----------:|
@@ -97,7 +123,7 @@ python scripts/evaluate_f1.py
 | **Toplam Uçtan Uca Evrak Analizi (6 LLM Çağrısı)** | **Tam Pipeline** | **`16.10 sn`** |
 
 - **VRAM Tüketimi**: ~10.2 GB / 12.2 GB (%100 GPU belleğinde, sistem RAM'ine taşma yok)
-- **Tekil Sınıflandırma Hızı**: Evrak başına ortalama **~1.3 saniye**
+- **Tekil Sınıflandırma Hızı vs. Pipeline Çağrısı**: Yalnızca `ClassifierAgent` tek başına sıcak modele çağrıldığında evrak başına süre **~1.3 saniye** iken, tam pipeline içinde `AnalyzerAgent` ile eşzamanlı (`LLM_MAX_CONCURRENT_REQUESTS=2` altında paralel GPU paylaşımıyla) çalıştığında `4.36 saniye` olarak ölçülmüştür. Soğuk/sıcak başlangıç ve belge uzunluğu dağılımlarına göre tekrarlı istatistik protokolü [`docs/olcum_protokolu.md`](docs/olcum_protokolu.md) içinde tanımlanmıştır.
 
 ## Kurulum
 
@@ -204,26 +230,34 @@ kamu_evrak_analizi/
 │       ├── css/app.css         # Tasarım sistemi (açık/koyu tema)
 │       └── js/                 # ES modülleri: core/ (api, dom, ui, vocabulary, icons) + views/
 ├── scripts/                    # scraper.py, build_index.py, evaluate_f1.py
-├── tests/                      # pytest — sahte LLM ile uçtan uca testler (479 test)
+├── tests/                      # pytest — sahte (mock) LLM ile yazılım doğrulama testleri (479 test; model kalitesini ölçmez)
 ├── requirements.txt / requirements-dev.txt
 └── .env.example
 ```
 
-## Testler
+## Testler (Yazılım Doğrulama vs. Model Kalitesi Ayrımı)
 
 ```bash
 pip install -r requirements-dev.txt
 python -m pytest
 ```
 
-Testler gerçek LLM'e istek atmaz; `tests/conftest.py` içindeki sahte LLM ile pipeline, API, hata senaryoları (LLM erişilemez, kısmi başarısızlık), dosya doğrulama, path traversal koruması, memur kararları, yerel LLM düşünme bloğu temizliği ve iş ilerlemesi doğrulanır.
+Projede iki farklı doğrulama ve kanıt katmanı birbirinden ayrı tutulmaktadır:
 
-## Güvenlik ve KVKK
+1. **Yazılım Doğrulama ve Hata Toleransı Testleri (`pytest`, 479 test — Sahte LLM):**
+   - Bu testler **gerçek LLM'e istek atmaz** ve **gerçek model/çıktı kalitesini ölçmez**.
+   - `tests/conftest.py` içindeki deterministik sahte (mock) LLM kullanılarak API sözleşmeleri, şema doğrulama, çok aşamalı pipeline akışı, hata senaryoları (LLM erişilemezliği, kısmi başarısızlık, devre kesici), dosya doğrulama, path traversal önlemi, memur inceleme kararlarının saklanması, yerel LLM düşünme bloğu (`strip_thinking`) temizliği ve arka plan iş ilerlemesi doğrulanır.
+2. **Model ve Çıktı Kalitesi Deneyleri (Gerçek Yerel LLM — `gemma4:12b`):**
+   - Evrak sınıflandırma doğruluğu, RAG mevzuat erişim kalitesi ve taslak güvenilirliği gibi anlamsal çıktılar yalnızca gerçek yerel model üzerinde yürütülen deneysel değerlendirme betikleriyle (`scripts/evaluate_f1.py` ve `experiments/` altındaki deney protokolleri) ölçülür.
 
-- **Tam Veri Mahremiyeti**: Yerel LLM (`gemma4:12b`) kullanımı sayesinde evrak içerikleri kurum dışına çıkmaz
+## Güvenlik ve KVKK Çerçevesi
+
+- **Yerel İşleme Koşulu ve Sınırları**: Yerel Ollama (`gemma4:12b`) yapılandırmasında, uzak LLM uç noktası (`LLM_API_BASE`) kapalı ve dış veri akışı ayrıca doğrulanmışsa evrak içeriği yerel işlenebilir. Yerel model kullanımı dış ağa veri aktarımı riskini azaltmakla birlikte tek başına kurum güvenliği veya tam KVKK uyumunu garanti etmez; uygulama logları (`data/logs/`), analiz geçmişi (`data/history/`), yedekler (`data/backups/`) ve erişim yetkileri kurum güvenlik politikalarına göre ayrıca denetlenmelidir
+- **İstem Enjeksiyonu (Prompt Injection) Azaltma Önlemi**: Evrak metni `<evrak>` etiketleri arasına alınır ve iç etiketler (`app/core/sanitizer.py`) etkisizleştirilerek istem enjeksiyonu riskini azaltmaya yönelik savunma katmanı uygulanır
+- **PII/KVKK Tespiti ve Maskeleme**: T.C. Kimlik Numarası (algoritmik sağlama doğrulamalı), IBAN, telefon ve e-posta örüntüleri tespit edilerek maskelenebilir; taslak çıktısında kişisel veri sızıntısı kural tabanlı olarak denetlenir
 - Yüklenen dosyalar rastgele adla saklanır ve varsayılan olarak analizden sonra silinir (`KEEP_UPLOADS`)
 - Kayıt kimlikleri doğrulanır; dizin dışına erişim (path traversal) engellenir
-- LLM çıktısı arayüzde hiçbir zaman HTML olarak yorumlanmaz (XSS koruması)
+- LLM çıktısı arayüzde hiçbir zaman HTML olarak yorumlanmaz (XSS azaltma önlemi)
 - CORS varsayılan olarak kapalıdır; gerekiyorsa `CORS_ORIGINS` ile açıkça izin verilir
 - Yanıtlara `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` başlıkları eklenir
 

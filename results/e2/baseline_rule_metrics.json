@@ -1,0 +1,620 @@
+{
+  "timestamp": "2026-10-25T13:27:12.994019",
+  "split": "test",
+  "git_info": {
+    "commit": "cc2c935d2ef0b04e6ac2f44547f8ad50f05abf02",
+    "branch": "makale-hazirlik"
+  },
+  "baseline_a1_taxonomy_keywords": {
+    "accuracy": 0.5397,
+    "macro_precision": 0.7552,
+    "macro_recall": 0.5397,
+    "macro_f1": 0.5368,
+    "weighted_precision": 0.7552,
+    "weighted_recall": 0.5397,
+    "weighted_f1": 0.5368,
+    "micro_f1": 0.5397,
+    "classes": {
+      "dilekce": {
+        "precision": 0.9,
+        "recall": 0.6429,
+        "f1": 0.75,
+        "support": 14,
+        "tp": 9,
+        "fp": 1,
+        "fn": 5
+      },
+      "resmi_yazi": {
+        "precision": 0.1176,
+        "recall": 0.7143,
+        "f1": 0.202,
+        "support": 14,
+        "tp": 10,
+        "fp": 75,
+        "fn": 4
+      },
+      "talep_yazisi": {
+        "precision": 0.6,
+        "recall": 0.2143,
+        "f1": 0.3158,
+        "support": 14,
+        "tp": 3,
+        "fp": 2,
+        "fn": 11
+      },
+      "bilgilendirme": {
+        "precision": 1.0,
+        "recall": 0.0714,
+        "f1": 0.1333,
+        "support": 14,
+        "tp": 1,
+        "fp": 0,
+        "fn": 13
+      },
+      "gorus_sorma": {
+        "precision": 1.0,
+        "recall": 0.1429,
+        "f1": 0.25,
+        "support": 14,
+        "tp": 2,
+        "fp": 0,
+        "fn": 12
+      },
+      "sikayet": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "support": 14,
+        "tp": 7,
+        "fp": 0,
+        "fn": 7
+      },
+      "kurum_ici": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14,
+        "tp": 0,
+        "fp": 1,
+        "fn": 14
+      },
+      "genelge": {
+        "precision": 1.0,
+        "recall": 0.8571,
+        "f1": 0.9231,
+        "support": 14,
+        "tp": 12,
+        "fp": 0,
+        "fn": 2
+      },
+      "rapor": {
+        "precision": 0.9091,
+        "recall": 0.7143,
+        "f1": 0.8,
+        "support": 14,
+        "tp": 10,
+        "fp": 1,
+        "fn": 4
+      },
+      "tutanak": {
+        "precision": 0.5,
+        "recall": 0.0714,
+        "f1": 0.125,
+        "support": 14,
+        "tp": 1,
+        "fp": 1,
+        "fn": 13
+      },
+      "yonetmelik": {
+        "precision": 0.7778,
+        "recall": 1.0,
+        "f1": 0.875,
+        "support": 14,
+        "tp": 14,
+        "fp": 4,
+        "fn": 0
+      },
+      "teblig": {
+        "precision": 1.0,
+        "recall": 0.9286,
+        "f1": 0.963,
+        "support": 14,
+        "tp": 13,
+        "fp": 0,
+        "fn": 1
+      },
+      "kanun": {
+        "precision": 0.4242,
+        "recall": 1.0,
+        "f1": 0.5957,
+        "support": 14,
+        "tp": 14,
+        "fp": 19,
+        "fn": 0
+      },
+      "karar": {
+        "precision": 0.5652,
+        "recall": 0.9286,
+        "f1": 0.7027,
+        "support": 14,
+        "tp": 13,
+        "fp": 10,
+        "fn": 1
+      },
+      "kararname": {
+        "precision": 1.0,
+        "recall": 0.0714,
+        "f1": 0.1333,
+        "support": 14,
+        "tp": 1,
+        "fp": 0,
+        "fn": 13
+      },
+      "ilan": {
+        "precision": 1.0,
+        "recall": 0.5714,
+        "f1": 0.7273,
+        "support": 14,
+        "tp": 8,
+        "fp": 0,
+        "fn": 6
+      },
+      "yonerge": {
+        "precision": 1.0,
+        "recall": 0.7143,
+        "f1": 0.8333,
+        "support": 14,
+        "tp": 10,
+        "fp": 0,
+        "fn": 4
+      },
+      "sozlesme": {
+        "precision": 0.8,
+        "recall": 0.5714,
+        "f1": 0.6667,
+        "support": 14,
+        "tp": 8,
+        "fp": 2,
+        "fn": 6
+      }
+    },
+    "total_samples": 252,
+    "wilson_95_ci": [
+      0.478,
+      0.6002
+    ],
+    "bootstrap_ci": {
+      "accuracy_ci": [
+        0.4762,
+        0.5993
+      ],
+      "macro_f1_ci": [
+        0.48,
+        0.5816
+      ],
+      "weighted_f1_ci": [
+        0.4675,
+        0.5972
+      ],
+      "classes": {
+        "dilekce": {
+          "f1_ci": [
+            0.5,
+            0.9167
+          ]
+        },
+        "resmi_yazi": {
+          "f1_ci": [
+            0.1,
+            0.3089
+          ]
+        },
+        "talep_yazisi": {
+          "f1_ci": [
+            0.0,
+            0.5714
+          ]
+        },
+        "bilgilendirme": {
+          "f1_ci": [
+            0.0,
+            0.381
+          ]
+        },
+        "gorus_sorma": {
+          "f1_ci": [
+            0.0,
+            0.5333
+          ]
+        },
+        "sikayet": {
+          "f1_ci": [
+            0.381,
+            0.875
+          ]
+        },
+        "kurum_ici": {
+          "f1_ci": [
+            0.0,
+            0.0
+          ]
+        },
+        "genelge": {
+          "f1_ci": [
+            0.7826,
+            1.0
+          ]
+        },
+        "rapor": {
+          "f1_ci": [
+            0.5926,
+            0.9445
+          ]
+        },
+        "tutanak": {
+          "f1_ci": [
+            0.0,
+            0.375
+          ]
+        },
+        "yonetmelik": {
+          "f1_ci": [
+            0.7221,
+            0.9744
+          ]
+        },
+        "teblig": {
+          "f1_ci": [
+            0.8696,
+            1.0
+          ]
+        },
+        "kanun": {
+          "f1_ci": [
+            0.4,
+            0.7541
+          ]
+        },
+        "karar": {
+          "f1_ci": [
+            0.5,
+            0.8463
+          ]
+        },
+        "kararname": {
+          "f1_ci": [
+            0.0,
+            0.4
+          ]
+        },
+        "ilan": {
+          "f1_ci": [
+            0.4615,
+            0.9091
+          ]
+        },
+        "yonerge": {
+          "f1_ci": [
+            0.6154,
+            0.9656
+          ]
+        },
+        "sozlesme": {
+          "f1_ci": [
+            0.4,
+            0.8649
+          ]
+        }
+      }
+    },
+    "latency": 0.07539798342992389,
+    "boundary_tolerant_accuracy": 0.6151,
+    "mean_latency_ms": 0.0516
+  },
+  "baseline_a2_structural_rules": {
+    "accuracy": 0.6468,
+    "macro_precision": 0.8351,
+    "macro_recall": 0.6468,
+    "macro_f1": 0.685,
+    "weighted_precision": 0.8351,
+    "weighted_recall": 0.6468,
+    "weighted_f1": 0.685,
+    "micro_f1": 0.6468,
+    "classes": {
+      "dilekce": {
+        "precision": 0.8182,
+        "recall": 0.6429,
+        "f1": 0.72,
+        "support": 14,
+        "tp": 9,
+        "fp": 2,
+        "fn": 5
+      },
+      "resmi_yazi": {
+        "precision": 0.137,
+        "recall": 0.7143,
+        "f1": 0.2299,
+        "support": 14,
+        "tp": 10,
+        "fp": 63,
+        "fn": 4
+      },
+      "talep_yazisi": {
+        "precision": 0.5,
+        "recall": 0.2143,
+        "f1": 0.3,
+        "support": 14,
+        "tp": 3,
+        "fp": 3,
+        "fn": 11
+      },
+      "bilgilendirme": {
+        "precision": 1.0,
+        "recall": 0.3571,
+        "f1": 0.5263,
+        "support": 14,
+        "tp": 5,
+        "fp": 0,
+        "fn": 9
+      },
+      "gorus_sorma": {
+        "precision": 1.0,
+        "recall": 0.2857,
+        "f1": 0.4444,
+        "support": 14,
+        "tp": 4,
+        "fp": 0,
+        "fn": 10
+      },
+      "sikayet": {
+        "precision": 1.0,
+        "recall": 0.6429,
+        "f1": 0.7826,
+        "support": 14,
+        "tp": 9,
+        "fp": 0,
+        "fn": 5
+      },
+      "kurum_ici": {
+        "precision": 1.0,
+        "recall": 0.3571,
+        "f1": 0.5263,
+        "support": 14,
+        "tp": 5,
+        "fp": 0,
+        "fn": 9
+      },
+      "genelge": {
+        "precision": 1.0,
+        "recall": 0.8571,
+        "f1": 0.9231,
+        "support": 14,
+        "tp": 12,
+        "fp": 0,
+        "fn": 2
+      },
+      "rapor": {
+        "precision": 0.9167,
+        "recall": 0.7857,
+        "f1": 0.8462,
+        "support": 14,
+        "tp": 11,
+        "fp": 1,
+        "fn": 3
+      },
+      "tutanak": {
+        "precision": 0.9231,
+        "recall": 0.8571,
+        "f1": 0.8889,
+        "support": 14,
+        "tp": 12,
+        "fp": 1,
+        "fn": 2
+      },
+      "yonetmelik": {
+        "precision": 0.9286,
+        "recall": 0.9286,
+        "f1": 0.9286,
+        "support": 14,
+        "tp": 13,
+        "fp": 1,
+        "fn": 1
+      },
+      "teblig": {
+        "precision": 1.0,
+        "recall": 0.7857,
+        "f1": 0.88,
+        "support": 14,
+        "tp": 11,
+        "fp": 0,
+        "fn": 3
+      },
+      "kanun": {
+        "precision": 0.6364,
+        "recall": 1.0,
+        "f1": 0.7778,
+        "support": 14,
+        "tp": 14,
+        "fp": 8,
+        "fn": 0
+      },
+      "karar": {
+        "precision": 0.8125,
+        "recall": 0.9286,
+        "f1": 0.8667,
+        "support": 14,
+        "tp": 13,
+        "fp": 3,
+        "fn": 1
+      },
+      "kararname": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "support": 14,
+        "tp": 7,
+        "fp": 0,
+        "fn": 7
+      },
+      "ilan": {
+        "precision": 0.6667,
+        "recall": 0.4286,
+        "f1": 0.5217,
+        "support": 14,
+        "tp": 6,
+        "fp": 3,
+        "fn": 8
+      },
+      "yonerge": {
+        "precision": 1.0,
+        "recall": 0.7143,
+        "f1": 0.8333,
+        "support": 14,
+        "tp": 10,
+        "fp": 0,
+        "fn": 4
+      },
+      "sozlesme": {
+        "precision": 0.6923,
+        "recall": 0.6429,
+        "f1": 0.6667,
+        "support": 14,
+        "tp": 9,
+        "fp": 4,
+        "fn": 5
+      }
+    },
+    "total_samples": 252,
+    "wilson_95_ci": [
+      0.586,
+      0.7032
+    ],
+    "bootstrap_ci": {
+      "accuracy_ci": [
+        0.5873,
+        0.7024
+      ],
+      "macro_f1_ci": [
+        0.6239,
+        0.7329
+      ],
+      "weighted_f1_ci": [
+        0.6225,
+        0.7382
+      ],
+      "classes": {
+        "dilekce": {
+          "f1_ci": [
+            0.4615,
+            0.9
+          ]
+        },
+        "resmi_yazi": {
+          "f1_ci": [
+            0.1136,
+            0.3542
+          ]
+        },
+        "talep_yazisi": {
+          "f1_ci": [
+            0.0,
+            0.5455
+          ]
+        },
+        "bilgilendirme": {
+          "f1_ci": [
+            0.2,
+            0.7778
+          ]
+        },
+        "gorus_sorma": {
+          "f1_ci": [
+            0.1248,
+            0.7059
+          ]
+        },
+        "sikayet": {
+          "f1_ci": [
+            0.5455,
+            0.9412
+          ]
+        },
+        "kurum_ici": {
+          "f1_ci": [
+            0.1818,
+            0.7778
+          ]
+        },
+        "genelge": {
+          "f1_ci": [
+            0.7826,
+            1.0
+          ]
+        },
+        "rapor": {
+          "f1_ci": [
+            0.6667,
+            0.9677
+          ]
+        },
+        "tutanak": {
+          "f1_ci": [
+            0.72,
+            1.0
+          ]
+        },
+        "yonetmelik": {
+          "f1_ci": [
+            0.8,
+            1.0
+          ]
+        },
+        "teblig": {
+          "f1_ci": [
+            0.7,
+            1.0
+          ]
+        },
+        "kanun": {
+          "f1_ci": [
+            0.5926,
+            0.913
+          ]
+        },
+        "karar": {
+          "f1_ci": [
+            0.6956,
+            0.9756
+          ]
+        },
+        "kararname": {
+          "f1_ci": [
+            0.3747,
+            0.8696
+          ]
+        },
+        "ilan": {
+          "f1_ci": [
+            0.2498,
+            0.7407
+          ]
+        },
+        "yonerge": {
+          "f1_ci": [
+            0.6154,
+            0.9656
+          ]
+        },
+        "sozlesme": {
+          "f1_ci": [
+            0.4166,
+            0.8462
+          ]
+        }
+      }
+    },
+    "latency": 0.07539798342992389,
+    "boundary_tolerant_accuracy": 0.7103,
+    "mean_latency_ms": 0.0198
+  }
+}

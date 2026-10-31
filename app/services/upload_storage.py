@@ -12,7 +12,7 @@ from app.core.exceptions import FileTooLargeError, InvalidInputError, Unsupporte
 
 logger = logging.getLogger("upload_storage")
 
-ALLOWED_EXTENSIONS = frozenset({".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".txt", ".md"})
+ALLOWED_EXTENSIONS = frozenset({".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".txt", ".md", ".doc", ".docx"})
 
 MAGIC_BYTES: dict[str, list[bytes]] = {
     ".pdf": [b"%PDF"],

@@ -63,12 +63,20 @@ class LegislationAgent(LLMAgent):
     def format_rag_context(self, hits: list[RetrievedChunk]) -> str:
         if not hits:
             return "İlgili mevzuat parçası bulunamadı."
-        blocks = [
-            f"--- Mevzuat Parçası {i} (skor: {hit.score:.2f}) ---\n"
-            f"Kaynak: {hit.title} ({hit.type})\n"
-            f"{hit.text[: self.RAG_SNIPPET_CHARS]}\n"
-            for i, hit in enumerate(hits, 1)
-        ]
+        blocks = []
+        for i, hit in enumerate(hits, 1):
+            meta = f"Kaynak: {hit.title} ({hit.type})"
+            if hit.law_no:
+                meta += f" | Kanun No: {hit.law_no}"
+            if hit.publish_date:
+                meta += f" | Yayım: {hit.publish_date}"
+            if hit.source_url:
+                meta += f" | URL: {hit.source_url}"
+            blocks.append(
+                f"--- Mevzuat Parçası {i} (skor: {hit.score:.2f}) ---\n"
+                f"{meta}\n"
+                f"{hit.text[: self.RAG_SNIPPET_CHARS]}\n"
+            )
         return "\n".join(blocks)
 
     async def execute(self, text: str, document_type: str = "", keywords: list[str] | None = None) -> list[LegislationMatch]:

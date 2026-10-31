@@ -395,7 +395,7 @@ export class ApiClient {
     async recordsByPriority(priority) { return this.request(`/history/by-priority/${priority}`); }
     async bulkPriority(ids, priority) { return this.request('/history/bulk-priority', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, priority }) }); }
 
-    async fullTextSearch(query, fields, limit) { return this.request('/history/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query, fields, limit }) }); }
+    async fullTextSearch(query, fields, limit) { return this.request('/history/search', { method: 'POST', json: { query, fields, limit } }); }
     async dailyStats(days = 30) { return this.request(`/history/stats/daily?days=${days}`); }
     async exportJsonFile() { return this.request('/history/export/json-file'); }
     async exportReport() { return this.request('/history/export/report'); }

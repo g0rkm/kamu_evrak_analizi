@@ -1,6 +1,6 @@
 import { ApiClient } from './core/api.js';
 import { hydrateIcons } from './core/icons.js';
-import { ThemeController, Toaster } from './core/ui.js';
+import { Toaster } from './core/ui.js';
 import { Vocabulary } from './core/vocabulary.js';
 import { AnalyzeView } from './views/analyze-view.js';
 import { CompareView } from './views/compare-view.js';
@@ -11,12 +11,11 @@ import { AuditView } from './views/audit-view.js';
 import { PiiView } from './views/pii-view.js';
 import { TimelineView } from './views/timeline-view.js';
 import { SettingsView } from './views/settings-view.js';
-import { LoginView } from './views/login-view.js';
-import { ProfileView } from './views/profile-view.js';
 import { SearchView } from './views/search-view.js';
 import { NotificationsView } from './views/notifications-view.js';
 import { TemplatesView } from './views/templates-view.js';
 import { ExportView } from './views/export-view.js';
+import { LoginView } from './views/login-view.js';
 import { SystemView } from "./views/system-view.js";
 import MetricsView from './views/metrics-view.js';
 import AdminView from './views/admin-view.js';
@@ -27,7 +26,6 @@ class SystemStatus {
 
     constructor(element, api) {
         this.element = element;
-        this.text = element.querySelector('.status-pill__text');
         this.api = api;
         element.style.cursor = 'pointer';
         element.addEventListener('click', () => this.showDetails());
@@ -41,12 +39,14 @@ class SystemStatus {
     async check() {
         try {
             const health = await this.api.health();
+            const version = document.getElementById('appVersion');
+            if (version && health.version) version.textContent = health.version;
             if (!health.llm_configured) {
-                this.set('warn', 'LLM yapılandırılmamış', 'Sunucuda LLM_API_KEY tanımlı değil; analizler çalışmayacak.');
+                this.set('warn', 'Yapay zekâ bağlı değil', 'Sunucuda LLM_API_KEY tanımlı değil; analizler çalışmayacak.');
             } else if (!health.rag_available) {
-                this.set('warn', 'Mevzuat indeksi yok', 'RAG indeksi bulunamadı; mevzuat eşleştirme yalnızca metadata ile yapılır. (scripts/build_index.py)');
+                this.set('warn', 'Mevzuat dizini yok', 'RAG indeksi bulunamadı; mevzuat eşleştirme yalnızca metadata ile yapılır. (scripts/build_index.py)');
             } else {
-                this.set('ok', 'Sistem hazır', `Model: ${health.llm_model} · ${health.rag_chunks} mevzuat parçası · sürüm ${health.version}`);
+                this.set('ok', 'Sistem çalışıyor', `Model: ${health.llm_model} · ${health.rag_chunks} mevzuat parçası · sürüm ${health.version}`);
             }
         } catch {
             this.set('down', 'Sunucuya ulaşılamıyor', 'API yanıt vermiyor. Sunucunun çalıştığından emin olun.');
@@ -55,7 +55,6 @@ class SystemStatus {
 
     set(state, text, title) {
         this.element.dataset.state = state;
-        this.text.textContent = text;
         this.element.title = title;
         this.element.setAttribute('aria-label', title);
     }
@@ -98,8 +97,51 @@ class App {
 
     async start() {
         hydrateIcons();
-        new ThemeController(document.getElementById('themeToggle'));
+
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            this._showLogin();
+            return;
+        }
+        try {
+            const validation = await this.api.request('/auth/validate', {
+                method: 'POST',
+                json: { token },
+            });
+            if (!validation.valid) {
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('auth_user');
+                this._showLogin();
+                return;
+            }
+            localStorage.setItem('auth_user', JSON.stringify({ username: validation.username, role: validation.role || 'memur' }));
+        } catch {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            this._showLogin();
+            return;
+        }
+
+        this._initApp();
+    }
+
+    _showLogin() {
+        document.querySelector('.app-header')?.classList.add('hidden');
+        const login = new LoginView(this.root, (data) => {
+            document.querySelector('.app-header')?.classList.remove('hidden');
+            this._initApp();
+        });
+        login.render();
+    }
+
+    async _initApp() {
+        this._applyRoleVisibility();
         new SystemStatus(document.getElementById('systemStatus'), this.api).start();
+        this._setupNav();
+        document.getElementById('helpLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Yardım ve destek\n\nKlavye kısayolları:\n0 — Ana sayfa\n1 — Evrak analizi\n2 — Geçmiş\n3 — Karşılaştır\n? — Kısayol listesi\n\nAnaliz sayfasında Ctrl+Enter analizi başlatır.\nSorun yaşarsanız bilgi işlem biriminize başvurun.');
+        });
 
         let meta = null;
         try {
@@ -124,22 +166,24 @@ class App {
             toaster: this.toaster,
             navigate: (hash) => this.navigate(hash),
         };
+        // Görünüm sözleşmeleri:
+        //  (A) `.element` + `show()` : kalıcı DOM düğümü (analiz, geçmiş, karşılaştır)
+        //  (B) `render(kök)`         : her gezinmede köke çizen görünümler (diğerleri)
+        // (B) tipi görünümler çizim hedefi olarak doğrudan `this.root`'u alır.
         this.views = {
-            dashboard: new DashboardView(context),
+            dashboard: new DashboardView(this.root),
             analiz: new AnalyzeView(context),
             gecmis: new HistoryView(context),
             karsilastir: new CompareView(context),
-            trends: new TrendsView(context),
-            audit: new AuditView(context),
-            pii: new PiiView(context),
-            timeline: new TimelineView(context),
-            settings: new SettingsView(context),
-            login: new LoginView(context),
-            profile: new ProfileView(context.toaster ? this.root : this.root),
-            search: new SearchView(context),
-            notifications: new NotificationsView(context),
-            templates: new TemplatesView(context),
-            export: new ExportView(context),
+            trends: new TrendsView(this.root),
+            audit: new AuditView(this.root),
+            pii: new PiiView(this.root),
+            timeline: new TimelineView(this.root),
+            settings: new SettingsView(this.root),
+            search: new SearchView(this.root),
+            notifications: new NotificationsView(this.root),
+            templates: new TemplatesView(this.root),
+            export: new ExportView(this.root),
             system: new SystemView(context),
             metrics: new MetricsView(this.api),
             admin: new AdminView(this.api),
@@ -165,7 +209,7 @@ class App {
                 case '4': e.preventDefault(); this.navigate('#/trends'); break;
                 case '?':
                     e.preventDefault();
-                    alert('Klavye kısayolları:\n\n0 — Kontrol Paneli\n1 — Analiz sayfası\n2 — Geçmiş sayfası\n3 — Karşılaştır sayfası\n4 — Trendler sayfası\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
+                    alert('Klavye kısayolları:\n\n0 — Ana sayfa\n1 — Evrak analizi\n2 — Geçmiş\n3 — Karşılaştır\n4 — Trendler\n? — Bu yardım penceresi\n\nAnaliz sayfasında:\nCtrl+Enter — Analizi başlat');
                     break;
             }
         });
@@ -178,8 +222,63 @@ class App {
             }
         } catch {}
 
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            location.reload();
+        });
+
         window.addEventListener('offline', () => this.toaster.warn('İnternet bağlantısı kesildi.'));
         window.addEventListener('online', () => this.toaster.success('İnternet bağlantısı yeniden kuruldu.'));
+    }
+
+    _applyRoleVisibility() {
+        let role = 'memur';
+        try {
+            const stored = JSON.parse(localStorage.getItem('auth_user') || '{}');
+            role = stored.role || 'memur';
+        } catch {}
+        const adminGroup = document.querySelector('#navMoreMenu .nav-more__group:last-child');
+        if (adminGroup) {
+            const isAdmin = role === 'admin' || role === 'yonetici';
+            adminGroup.style.display = isAdmin ? '' : 'none';
+        }
+    }
+
+    /** Mobil hamburger menüsü ve "Daha Fazla" açılır menüsünün etkileşimi. */
+    _setupNav() {
+        const toggle = document.getElementById('navToggle');
+        const moreBtn = document.getElementById('navMoreBtn');
+        const moreMenu = document.getElementById('navMoreMenu');
+
+        toggle?.addEventListener('click', () => {
+            const open = document.body.classList.toggle('nav-open');
+            toggle.setAttribute('aria-expanded', String(open));
+        });
+
+        moreBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const willOpen = moreMenu.hasAttribute('hidden');
+            if (willOpen) moreMenu.removeAttribute('hidden');
+            else moreMenu.setAttribute('hidden', '');
+            moreBtn.setAttribute('aria-expanded', String(willOpen));
+        });
+
+        document.addEventListener('click', (e) => {
+            if (moreMenu && !moreMenu.hasAttribute('hidden') && !e.target.closest('.nav-more')) {
+                moreMenu.setAttribute('hidden', '');
+                moreBtn?.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                moreMenu?.setAttribute('hidden', '');
+                moreBtn?.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('nav-open');
+                toggle?.setAttribute('aria-expanded', 'false');
+            }
+        });
     }
 
     navigate(hash) {
@@ -192,28 +291,42 @@ class App {
         const routeName = this.views[name] ? name : 'dashboard';
         const view = this.views[routeName];
 
-        if (routeName === 'metrics' || routeName === 'admin') {
+        if (view.element) {
+            // (A) Kalıcı DOM düğümü olan görünümler: düğümü yerleştir, durumu show() ile tazele.
             if (this.currentView !== view) {
+                this.root.replaceChildren(view.element);
                 this.currentView = view;
                 window.scrollTo({ top: 0 });
             }
-            await view.render(this.root);
         } else {
-            if (this.currentView !== view) {
-                this.root.replaceChildren(view.element || view.render());
-                this.currentView = view;
-                window.scrollTo({ top: 0 });
-            }
-            if (typeof view.show === 'function') {
-                view.show({ id: id ? decodeURIComponent(id) : null });
-            }
+            // (B) render(kök) ile çizen görünümler (dashboard, pii, audit, metrics, system…).
+            // render() ya köke innerHTML yazar (undefined döner) ya da bir DOM düğümü döndürür (System).
+            const out = await view.render(this.root);
+            if (out instanceof Node) this.root.replaceChildren(out);
+            this.currentView = view;
+            window.scrollTo({ top: 0 });
         }
 
+        if (typeof view.show === 'function') {
+            view.show({ id: id ? decodeURIComponent(id) : null });
+        }
+
+        // Gezinmede açık menüleri kapat
+        document.getElementById('navMoreMenu')?.setAttribute('hidden', '');
+        document.getElementById('navMoreBtn')?.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
+
+        let inMoreMenu = false;
         this.navLinks.forEach((link) => {
             const linkRoute = link.dataset.route || link.dataset.view;
-            if (linkRoute === routeName) link.setAttribute('aria-current', 'page');
-            else link.removeAttribute('aria-current');
+            if (linkRoute === routeName) {
+                link.setAttribute('aria-current', 'page');
+                if (link.closest('.nav-more__menu')) inMoreMenu = true;
+            } else link.removeAttribute('aria-current');
         });
+        // Alt menüdeki bir sayfadaysak "Diğer araçlar" düğmesini vurgula
+        const moreBtn = document.getElementById('navMoreBtn');
+        if (moreBtn) moreBtn.style.color = inMoreMenu ? 'var(--color-accent)' : '';
         document.title = `${view.title || routeName} · Kamu Evrak Analizi`;
     }
 }

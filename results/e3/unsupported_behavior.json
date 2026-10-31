@@ -1,0 +1,198 @@
+{
+  "false_positive_retrieval_rate_at_min_0.05": 1.0,
+  "best_tau_r1": 0.18181818181818182,
+  "youden_j_r1": 0.29166666666666663,
+  "best_tau_r3": 0.18686868686868688,
+  "youden_j_r3": 0.375,
+  "optimal_tau_star": 0.14,
+  "llm_evaluation": {
+    "evaluated_queries_count": 16,
+    "answerable_count": 8,
+    "unanswerable_count": 8,
+    "unconstrained_prompt": {
+      "unsupported_hallucination_rate": 0.375,
+      "supported_answer_rate": 0.875
+    },
+    "grounded_prompt": {
+      "unsupported_hallucination_rate": 0.0,
+      "abstention_accuracy_on_unanswerable": 1.0,
+      "supported_answer_rate": 0.0
+    },
+    "query_results": {
+      "U01": {
+        "query": "5442 sayılı İl İdaresi Kanunu kaymakamın ilçe idare şube başkanları üzerindeki denetimi",
+        "answerable": false,
+        "max_score": 34.78710326355917,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "5442 sayılı İl İdaresi Kanunu": "",
+          "kaymakamın ilçe idare şube başkanları üzerindeki denetimi": "5442 sayılı İl İdaresi Kanunu ve ilgili mevzuat çerçevesinde, kaymakamın ilçe idare şube başkanları ve diğer birimler üzerindeki denetim yetkisi şu temel esaslara dayanır: \n\n1. **İlçe İdaresinin En Üst Amiri:** Kaymakam, ilçede devletin temsilcisidir ve ilçedeki tüm kamu hizmetlerinin yürütülmesinden birinci derecede sorumludur. Bu sorumluluk, ilçedeki tüm kamu kurum ve kuruluşlarının, şube başkanlarının ve personelin faaliyetlerini denetleme yetkisini beraberinde getirir.\n\n2. **Hiyerarşik Denetim ve Yönlendirme:** Kaymakam, ilçedeki kamu hizmetlerinin mevzuata uygun, hızlı ve etkin bir şekilde yürütülmesini sağlamak amacıyla şube başkanlarına talimat verme, bu talimatların uygulanmasını kontrol etme ve denetleme yetkisine sahiptir. Şube başkanları, kaymakamın belirlediği stratejik planlar ve yıllık çalışma programları doğrultusunda hareket etmekle yükümlüdür.\n\n3. **Atama ve Görevlendirme Yetkisi:** Paylaştığınız metinde de belirtildiği üzere; *ilçe yazı işleri müdürü, ilçe nüfus müdürü ve ilçe sivil toplumla ilişkiler müdürü* gibi kadrolar **kaymakamın teklifi ve valinin onayı** ile atanır. Bu durum, kaymakamın bu birimlerin seçimi ve yönetimi üzerindeki doğrudan idari otoritesini gösterir.\n\n4. **Disiplin ve Performans Denetimi:** Kaymakam, şube başkanlarının görevlerini yerine getirme biçimlerini, performanslarını ve disiplin kurallarına uygunluklarını denetler. Birim amirleri veya mülkiye müfettişlerince yapılan değerlendirmeler sonucunda, görevini yapamayacağı tespit edilen müdürler veya şube başkanları hakkında idari işlem yapma yetkisi kaymakamın (veya valinin) tasarrufundadır.\n\n5. **Hizmetlerin Koordinasyonu:** Kaymakam, ilçedeki farklı birimlerin (sağlık, eğitim, güvenlik, nüfus vb.) birbiriyle uyumlu çalışmasını sağlamak amacıyla şube başkanları arasında koordinasyon kurar ve bu koordinasyonun başarısını denetler.\\n\\n**Özetle:** Kaymakam, ilçedeki kamu hizmetlerinin "
+        }
+      },
+      "U02": {
+        "query": "213 sayılı Vergi Usul Kanunu uzlaşma ve vergi ziyaı cezası hükümleri",
+        "answerable": false,
+        "max_score": 26.165551838778484,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "Sorgu": "213 sayılı Vergi Usul Kanunu uzlaşma ve vergi ziyaı cezası hükümleri"
+        }
+      },
+      "U03": {
+        "query": "193 sayılı Gelir Vergisi Kanunu gelir vergisi tarifesi ve dilimleri",
+        "answerable": false,
+        "max_score": 27.867421492051403,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "Sorgu": "193 sayılı Gelir Vergisi Kanunu gelir vergisi tarifesi ve dilimleri",
+          "Cevap": "Paylaştığınız metin 5520 sayılı Katma Değer Vergisi Kanunu ve bazı vergi yapılandırma düzenlemeleri ile ilgili olup, **193 sayılı Gelir Vergisi Kanunu'ndaki gelir vergisi tarifesi ve dilimlerini içermemektedir.**\n\nAncak, genel bilgi olarak 193 sayılı Gelir Vergisi Kanunu'na göre uygulanan gelir vergisi tarifesi **artan oranlı (dilimli)** bir sistemdir. 2024 yılı için geçerli olan gelir vergisi dilimleri şu şekildedir:\n\n*   **110.000 TL'e kadar:** %15\n*   **110.000 TL - 230.000 TL arası:** %20\n*   **230.000 TL - 580.000 TL arası:** %27\n*   **580.000 TL - 3.000.000 TL arası:** %35\n*   **3.000.000 TL'den fazlası:** %40\n\n*Not: Bu dilimler her yıl yeniden değerleme oranına göre güncellenmektedir. Vergi hesaplanırken, her bir dilimdeki kazancın o dilime ait oranı üzerinden hesaplama yapılır."
+        }
+      },
+      "U04": {
+        "query": "1136 sayılı Avukatlık Kanunu baro levhasına yazılma şartları",
+        "answerable": false,
+        "max_score": 23.146537949335237,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "query": "1136 sayılı Avukatlık Kanunu baro levhasına yazılma şartları",
+          "context": "The user is asking about the requirements for being registered on the bar association list (baro levhası) according to the Attorneys' Law No. 1136, based on the provided legal text.",
+          "analysis": "The provided text contains excerpts from the 'Avukatlık Asgari Ücret Tarifesi' (Attorneyship Minimum Fee Tariff) and mentions the '1136 sayılı Kanun' (Law No. 1136) in the context of calculating fees, bad faith litigation, and attorney-client disputes. However, the provided text **does not** contain the specific articles of the Attorneyship Law (Avukatlık Kanunu) that list the requirements for registration on the bar list (such as education, internship, and exams).",
+          "answer": "Paylaştığınız metin içerisinde 1136 sayılı Avukatlık Kanunu'na atıflar bulunmakla birlikte, **baro levhasına yazılma şartlarına ilişkin maddeler yer almamaktadır.**\n\nPaylaşılan metin ağırlıklı olarak **Avukatlık Asgari Ücret Tarifesi** üzerindeki değişiklikleri, vekalet ücreti hesaplamalarını (tüketici hakem heyeti, manevi tazminat, icra işlemleri vb.) ve kötü niyetli dava açılması durumundaki ücret takdirlerini içermektedir.\n\nGenel hukuk bilgisi çerçevesinde (metinde yer almasa da), 1136 sayılı Avukatlık Kanunu'na göre baro levhasına yazılma için temel şartlar şunlardır:\n1. **Hukuk Fakültesi Mezuniyeti:** Bir hukuk fakültesi veya yüksekokulundan mezun olmak.\n2. **Staj:** Belirlenen sürede (genellikle 1 yıl) avukatlık stajını başarıyla tamamlamak.\n3. **Mesleğe Kabul:** İlgili baroya başvurarak mesleğe kabul edilmek ve baro levhasına kaydedilmek.\n\nEğer bu şartların detaylarını içeren spesifik bir madde arıyorsanız, metin dışında 1136 sayılı Kanun'un ilgili maddelerine bakılması gerekmektedir."
+        }
+      },
+      "U05": {
+        "query": "2918 sayılı Karayolları Trafik Kanunu hız sınırları ve idari para cezaları",
+        "answerable": false,
+        "max_score": 25.853486359784846,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "2918 sayılı Karayolları Trafik Kanunu": "Hız sınırları ve idari para cezaları, bu kanun çerçevesinde çıkarılan yönetmelikler ve her yıl güncellenen "
+        }
+      },
+      "U06": {
+        "query": "Resmi Yazışmalarda Uygulanacak Usul ve Esaslar Hakkında Yönetmelik EBYS elektronik onay",
+        "answerable": false,
+        "max_score": 30.227911196314345,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "matches": []
+        }
+      },
+      "U07": {
+        "query": "Kuantum Hesaplama ve Yapay Zekâ Etiği Ulusal Denetim Kanunu",
+        "answerable": false,
+        "max_score": 23.85390137143519,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "answer": "Paylaştığınız metin içerisinde **'Kuantum Hesaplama ve Yapay Zekâ Etiği Ulusal Denetim Kanunu'** ile ilgili herhangi bir bilgi, madde veya ibare **bulunmamaktadır.**"
+        }
+      },
+      "U08": {
+        "query": "Kripto Varlık Madenciliği Enerji Sübvansiyonu Yönetmeliği",
+        "answerable": false,
+        "max_score": 18.28658830789793,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "answer": "Paylaştığınız metinlerde \"Kripto Varlık Madenciliği Enerji Sübvansiyonu Yönetmeliği\" isimli bir düzenleme veya bu konuya ilişkin bir madde yer almamaktadır. Sunulan metinler, kripto varlık hizmet sağlayıcılarının çalışma usul ve esasları, sermaye yeterliliği, müşteri tanıma (KYC) kuralları ve saklama hizmetleri gibi operasyonel ve hukuki yükümlülükleri içeren Tebliğleri kapsamaktadır."
+        }
+      },
+      "Q01": {
+        "query": "657 Sayılı Kanun sadakat ve tarafsızlık yükümlülüğü",
+        "answerable": true,
+        "max_score": 12.424332234266835,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "query": "657 Sayılı Kanun sadakat ve tarafsızlık yükümlülüğü",
+          "analysis": "Paylaştığınız metinler içerisinde 657 Sayılı Devlet Memurları Kanunu'na ait spesifik maddeler veya bu kanundaki 'sadakat ve tarafsızlık' yükümlülüğüne dair doğrudan bir hüküm bulunmamaktadır. Paylaştığınız metinler ağırlıklı olarak Bilgi Edinme Hakkı, Şarj Hizmeti Yönetmeliği, Kişisel Verilerin Korunması Kanunu ve bir Kurulun üye seçim usullerine ilişkindir.",
+          "relevant_content": "Metnin en sonunda yer alan (muhtemelen KVKK veya benzeri bir Kurulun üye seçimi ile ilgili) bölümde, seçilen üyelerin görevlerini yerine getirirken uymaları gereken ilkelere dair şu ifade yer almaktadır: \n\n'...Görevimi Anayasaya ve kanunlara uygun olarak, tam bir tarafsızlık, dürüstlük... [metin burada kesiliyor].'\n\nBu ifade, genel bir kamu görevlisi veya kurul üyesi için beklenen 'tarafsızlık' ilkesini vurgulamaktadır.",
+          "summary": "Paylaştığınız metinlerde 657 Sayılı Kanun'un sadakat ve tarafsızlık yükümlülüğü yer almamaktadır. Ancak metnin son kısmında görevli kişilerin 'tam bir tarafsızlık' ilkesine uygun hareket etmeleri gerektiği belirtilmektedir."
+        }
+      },
+      "Q02": {
+        "query": "657 Sayılı Kanun ticaret ve diğer kazanç getirici faaliyet yasağı",
+        "answerable": true,
+        "max_score": 26.6980286262041,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "query": "657 Sayılı Kanun ticaret ve diğer kazanç getirici faaliyet yasağı",
+          "analysis": "Kullanıcı, 657 sayılı Devlet Memurları Kanunu'nda yer alan 'ticaret ve diğer kazanç getirici faaliyet yasağı' hakkında bilgi talep etmektedir. Sağlanan metinler arasında bu konuyu doğrudan içeren bir metin bulunmamaktadır (metinler kripto varlık hizmet sağlayıcıları, inşaat ihalesi ve sosyal sigorta mevzuatı üzerinedir). Ancak, genel hukuk bilgisi ve 657 sayılı Kanun'un standart hükümleri çerçevesinde bu soru yanıtlanmalıdır.",
+          "answer": "657 sayılı Devlet Memurları Kanunu kapsamında memurların ticaret ve kazanç getirici faaliyetlere ilişkin temel esaslar şunlardır:\n\n1. **Ticaret Yasağı:** Devlet memurları, Türk Ticaret Kanunu'na göre 'tacir' veya 'esnaf' sayılmalarını gerektirecek faaliyetlerde bulunamazlar. Memurların ticaret yapmaları veya bir şirkette ortak olmaları (yönetim yetkisi dahilinde) yasaktır.\n\n2. **Kazanç Getirici Diğer Faaliyetler:** Memurlar, devlet memurluğunda görevleriyle bağdaşmayacak nitelikteki kazanç getirici faaliyetlerde bulunamazlar. Bu yasak, memurun görevine odaklanmasını sağlamak ve kamu hizmetinin tarafsızlığını korumak amacıyla konulmuştur.\n\n3. **İstisnalar ve Sınırlamalar:** \n   - Memurlar, sadece kendi emekleri ve mesailerinin dışında kalan zamanlarda, devletin hizmetine engel teşkil etmeyecek ve kamu görevini aksatmayacak nitelikteki bazı faaliyetlerde (örneğin telif hakları, bazı eğitim faaliyetleri vb.) belirli şartlar dahilinde bulunabilirler.\n   - Ancak bu faaliyetlerin 'ticari' bir nitelik taşımaması ve memurun görevine zarar vermemesi esastır.\n\n4. **Disiplin Cezası:** Bu yasaklara aykırı hareket eden memurlar hakkında disiplin mevzuatı uyarınca idari yaptırımlar uygulanır.\n\n*Not: Sağladığınız metinler arasında 657 sayılı Kanun'un bu maddesine dair spesifik bir ibare yer almamaktadır; yukarıdaki bilgiler genel mevzuat bilgisi doğrultusundadır.*"
+        }
+      },
+      "Q03": {
+        "query": "657 Sayılı Kanun memurluğa alınış genel ve özel şartlar",
+        "answerable": true,
+        "max_score": 15.950214511265024,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "Sorgu": "657 Sayılı Kanun memurluğa alınış genel ve özel şartlar",
+          "Cevap": "Paylaştığınız metinlerde yer alan bilgilere göre, 657 sayılı Kanun kapsamında memuriyet veya sözleşmeli personel alımlarında aranan genel ve özel şartlar şu şekilde özetlenmiştir:\n\n### 1. Genel Şartlar (Tüm Pozisyonlar İçin Ortak)\nMetinlerde belirtilen ortak genel şartlar şunlardır:\n*   **657 Sayılı Kanun Madde 48:** Adayların, 657 sayılı Devlet Memurları Kanunu’nun 48. maddesinde belirtilen genel şartları haiz olması gerekir.\n*   **Sağlık Durumu:** Görevini devamlı yapmasına engel olabilecek akıl hastalığı bulunmamak (657 Sayılı Kanun Madde 53).\n*   **Yaş Sınırı:** Bazı ilanlarda (örneğin Amasya Üniversitesi ilanı) başvuru tarihi itibarıyla **35 yaşını bitirmemiş olmak** şartı aranmaktadır.\n*   **Mevcut Çalışma Durumu:** Herhangi bir kamu kurumunda 657 sayılı Kanun’un 4/A veya 4/B maddeleri gereğince istihdam ediliyor olmamak.\n*   **Askerlik Durumu:** Erkek adaylar için askerlik hizmeti ile ilişiği bulunmamak.\n*   **Belge Geçerliliği:** İstenilen belge ve sertifikalara ilanın Resmi Gazete’de yayımlandığı tarihten önce sahip olmak.\n\n### 2. Özel Şartlar (Pozisyona Göre Değişenler)\nMetinde farklı kadrolar için farklı özel şartlar belirtilmiştir:\n\n**A. Bilişim Personeli (Bilgi Güvenliği Yöneticisi, Sistem Uzmanı vb.) İçin:\n*   **Eğitim:** Bilgisayar, Yazılım, Elektrik, Elektronik veya Endüstri Mühendisliği bölümlerinden ya da Fen-Edebiyat, Eğitim Fakülteleri bünyesindeki İstatistik, Matematik, Fizik veya Bilgisayar/Teknoloji bölümlerinden mezun olmak.\n*   **Mesleki Tecrübe:** Yazılım tasarımı, yönetimi veya büyük ölçekli ağ sistemleri konusunda (ücret tavanına göre) **3 veya 5 yıllık** mesleki tecrübe.\n*   **Teknik Bilgi:** Bilgisayar çevre birimlerinin donanımı ve ağ yönetimi güvenliği hakkında bilgi sahibi olmak ve **güncel programlama dillerinden en az ikisini** bildiğini belgelemek.\n\n**B. Bilgisayar İşletmeni / Veri Hazırlama ve Kontrol İşletmeni İçin:\n*   **Eğitim:** En az lise veya dengi okul mezunu olmak.\n*   **Sertifika:** Milli Eğitim Bakanlığından onaylı bilgisayar işletmeni sertifikası veya öğrenim sırasında alınan bilgisayar dersini belgelemek.\n*   **Deneyim:** Aşçı, bekçi, hizmetli, kaloriferci veya teknisyen yardımcısı kadrolarında en az 2 yıl görev yapmış olmak ve toplamda en az 3 yıl hizmet süresi bulunmak.\n\n**C. Hukuk Müşaviri İçin:\n*   **Eğitim:** Hukuk fakültesi mezunu olmak.\n*   **Hizmet Süresi:** Toplam on yıl hizmet süresi bulunmak.\n\n**D. Uzman Kadrosu İçin:\n*   **Eğitim:** En az dört yıllık yükseköğrenim mezunu olmak.\n*   **Deneyim:** Şef kadrosunda en az 2 yıl veya sayman/muhasebeci kadrolarında toplam en az 3 yıl görev yapmış olmak ve en az 4 yıl hizmet süresi bulunmak.\n\n### 3. Önemli Uyarı (Gerçeğe Aykırı Beyan)\nMetinde, gerçeğe aykırı beyanda bulunanların veya şartları taşımadığı tespit edilenlerin sınavlarının geçersiz sayılacağı, atamalarının iptal edileceği ve 5237 sayılı Türk Ceza Kanunu uyarınca suç duyurusunda bulunulacağı açıkça belirtilmiştir."
+        }
+      },
+      "Q04": {
+        "query": "657 Sayılı Kanun kademe ilerlemesi ve derece yükselmesi",
+        "answerable": true,
+        "max_score": 47.452907451452134,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "657 Sayılı Devlet Memurları Kanunu": "kademe ilerlemesi ve derece yükselmesi"
+        }
+      },
+      "Q05": {
+        "query": "657 Sayılı Kanun günlük çalışma saatleri ve hizmet süreleri",
+        "answerable": true,
+        "max_score": 19.942195682939627,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "Sorgu": "657 Sayılı Kanun günlük çalışma saatleri ve hizmet süreleri",
+          "Cevap": "Paylaşılan metinlerde 657 sayılı Kanun kapsamındaki personelin genel günlük çalışma saatleri hakkında spesifik bir süre (örneğin 40 saat/hafta gibi) belirtilmemiştir. Ancak metinde şu iki önemli ayrıntı yer almaktadır:\n\n1. **Çarşı ve Mahalle Bekçileri İçin Çalışma Saatleri:** Metnin başında yer alan hükme göre, çarşı ve mahalle bekçilerinin günlük çalışma saatleri esas olarak **güneşin batış saatinden doğuş saatine kadar olan zaman dilimini** kapsayacak şekilde düzenlenir. Olağanüstü hallerde İçişleri Bakanı'nın onayı ile bu zaman dilimi dışında da çalıştırılabilirler.\n\n2. **Hizmet Süresi Tanımı:** Yönetmeliğin 4. maddesinin (f) bendinde \"Hizmet süresi\" kavramı, **657 sayılı Kanunun 68 inci maddesinin (B) bendinde sayılan süreler** olarak tanımlanmıştır. Metin içerisinde bu sürelerin tam listesi yer almamakta, doğrudan ilgili kanun maddesine atıf yapılmaktadır."
+        }
+      },
+      "Q06": {
+        "query": "5018 Sayılı Kanun kamu kaynağı ve mali kontrol ilkeleri",
+        "answerable": true,
+        "max_score": 19.20608230329426,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "matches": []
+        }
+      },
+      "Q07": {
+        "query": "5018 Sayılı Kanun üst yöneticiler ve hesap verme sorumluluğu",
+        "answerable": true,
+        "max_score": 29.963069831795263,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "matches": []
+        }
+      },
+      "Q08": {
+        "query": "5018 Sayılı Kanun bütçe ilkeleri ve ödenek kullanımı",
+        "answerable": true,
+        "max_score": 19.4371099168579,
+        "abstained": false,
+        "matches_count": 0,
+        "llm_response": {
+          "5018 Sayılı Kamu Malî Yönetimi ve Kontrol Kanunu": -1,
+          "bütçe ilkeleri": -1,
+          "ödenek kullanımı": -1
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ from app.agents.base_agent import BaseAgent
 from app.agents.validation_rules import ReasoningContext, ValidationRule, default_rules
 from app.models.analysis import AnalysisResult
 from app.models.draft import DraftResponse, RoutingDecision, ValidationEntry
+from app.services.draft_renderer import render_draft
 
 
 class ReasoningOutcome(BaseModel):
@@ -64,6 +65,12 @@ class ReasoningAgent(BaseAgent):
             rule.apply(ctx)
         for note in ctx.notes:
             self.log(note)
+
+        if ctx.draft is not None:
+            try:
+                ctx.draft.rendered_text = render_draft(ctx.draft, ctx.analysis, ctx.routing)
+            except Exception as exc:  # render başarısızsa ham alanlara düşülür
+                self.log(f"Taslak render edilemedi: {exc}")
 
         confidence = self.calculator.score(ctx.analysis.classification.confidence, ctx.validation)
         self.log(f"Muhakeme tamamlandı: {len(ctx.validation)} bulgu, güven: {confidence:.2f}")

@@ -1,0 +1,28 @@
+{
+  "description": "Faz 7 (E5) PII/KVKK degerlendirme kumesi. Her kayitta 'expected' alani, metinde GERCEKTEN kisisel veri olan (insan yargisiyla) span'lari (tip+deger) verir. Degerlendirme: detektor ciktisi expected ile karsilastirilir; tip+birebir alt dize eslesmesi TP, expected'da olmayan tespit FP (yanlis pozitif), tespit edilmeyen expected FN (yanlis negatif). Deger = detektorun match.group'unun birebir karsiligi; TC numaralari sentetik (gercek kisi degil), checksum gecerli.",
+  "records": [
+    {"id": "pii_tc_1", "text": "İlgili personelin T.C. kimlik numarası 62601815964 olarak kayıtlıdır.", "expected": [{"type": "tc_kimlik", "value": "62601815964"}]},
+    {"id": "pii_tc_2", "text": "Başvuru sahibi 18301661332 numaralı vatandaştır.", "expected": [{"type": "tc_kimlik", "value": "18301661332"}]},
+    {"id": "pii_iban", "text": "Ödemenin TR33 0006 1005 1978 6457 8413 26 numaralı hesaba yapılması rica olunur.", "expected": [{"type": "iban", "value": "TR33 0006 1005 1978 6457 8413 26"}]},
+    {"id": "pii_phone_mobile", "text": "Cep telefonu: 0532 123 45 67 üzerinden bilgi verilebilir.", "expected": [{"type": "telefon", "value": "0532 123 45 67"}]},
+    {"id": "pii_phone_intl", "text": "İrtibat numarası: +90 533 987 65 43", "expected": [{"type": "telefon", "value": "+90 533 987 65 43"}]},
+    {"id": "pii_landline", "text": "Kurum santrali: 0312 419 65 00 numaralı hattan aranabilir.", "expected": [{"type": "sabit_tel", "value": "0312 419 65 00"}]},
+    {"id": "pii_email", "text": "Yazışmalar ahmet.yilmaz@icisleri.gov.tr adresi üzerinden yürütülecektir.", "expected": [{"type": "eposta", "value": "ahmet.yilmaz@icisleri.gov.tr"}]},
+    {"id": "pii_plate", "text": "Olaya karışan aracın plakası 34 ABC 123 olarak tespit edilmiştir.", "expected": [{"type": "plaka", "value": "34 ABC 123"}]},
+    {"id": "pii_passport", "text": "Yurt dışı görevlendirmede Pasaport No: U 12 345 678 kullanılacaktır.", "expected": [{"type": "pasaport", "value": "U 12 345 678"}]},
+    {"id": "pii_credit_card", "text": "Tahsilat kartı: 4532 1234 5678 9012 numarasına işlendi.", "expected": [{"type": "kredi_kart", "value": "4532 1234 5678 9012"}]},
+    {"id": "pii_vergi", "text": "Şirketin vergi kimlik bilgisi VD: 1234567890 şeklindedir.", "expected": [{"type": "vergi_no", "value": "VD: 1234567890"}]},
+    {"id": "pii_saglik", "text": "Sağlık provizyon kaydı: PRV-12345678", "expected": [{"type": "saglik_no", "value": "PRV-12345678"}]},
+    {"id": "pii_ehliyet", "text": "Sürücü belgesi Ehliyet No: 123456 ibraz edilmiştir.", "expected": [{"type": "ehliyet", "value": "Ehliyet No: 123456"}]},
+    {"id": "pii_mixed", "text": "Vatandaş 28609139020 TC kimlik numaralı, 0532 123 45 67 telefonlu, mehmet@example.com e-postalı başvuru yapmıştır.", "expected": [{"type": "tc_kimlik", "value": "28609139020"}, {"type": "telefon", "value": "0532 123 45 67"}, {"type": "eposta", "value": "mehmet@example.com"}]},
+
+    {"id": "trap_invalid_tc_1", "text": "Ürün barkod numarası 62601815965 ambalaj üzerinde yer almaktadır.", "expected": []},
+    {"id": "trap_invalid_tc_2", "text": "Depo sıra numarası 18301661333 ile kayıt altına alındı.", "expected": []},
+    {"id": "trap_barcode", "text": "Stok barkodu 29876543210 olarak okutulmuştur.", "expected": []},
+    {"id": "trap_amount_plate", "text": "Hizmet bedeli olarak toplam 34 TL 100 kuruş tahsil edilmiştir.", "expected": []},
+    {"id": "trap_file_number", "text": "Konu, 1234567-89 sayılı dosyada görüşülmüştür.", "expected": []},
+    {"id": "trap_ref_number", "text": "Sayı: E-12345678 / 2024 sayılı yazımız ilgidir.", "expected": []},
+    {"id": "trap_date_range", "text": "2024/2025 eğitim öğretim yılı takvimi ektedir.", "expected": []},
+    {"id": "trap_plain_text", "text": "Bu yazı herhangi bir kişisel veri içermemekte olup genel bilgilendirme amaçlıdır.", "expected": []}
+  ]
+}

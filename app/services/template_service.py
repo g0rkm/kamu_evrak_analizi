@@ -9,9 +9,9 @@ from typing import Optional
 DEFAULT_TEMPLATES = [
     {
         "id": "tpl_dilekce",
-        "name": "Dilekce",
+        "name": "Dilekçe",
         "document_type": "dilekce",
-        "description": "Standart dilekce sablonu",
+        "description": "Standart dilekçe şablonu",
         "default_tags": ["dilekce", "resmi"],
         "default_priority": "normal",
         "fields": ["gonderen", "alici", "konu", "tarih"],
@@ -21,7 +21,7 @@ DEFAULT_TEMPLATES = [
         "id": "tpl_rapor",
         "name": "Rapor",
         "document_type": "rapor",
-        "description": "Teknik veya idari rapor sablonu",
+        "description": "Teknik veya idari rapor şablonu",
         "default_tags": ["rapor"],
         "default_priority": "normal",
         "fields": ["baslik", "yazar", "tarih", "bolum"],
@@ -29,9 +29,9 @@ DEFAULT_TEMPLATES = [
     },
     {
         "id": "tpl_sozlesme",
-        "name": "Sozlesme",
+        "name": "Sözleşme",
         "document_type": "sozlesme",
-        "description": "Sozlesme veya protokol sablonu",
+        "description": "Sözleşme veya protokol şablonu",
         "default_tags": ["sozlesme", "hukuki"],
         "default_priority": "high",
         "fields": ["taraflar", "konu", "tarih", "sure"],
@@ -41,7 +41,7 @@ DEFAULT_TEMPLATES = [
         "id": "tpl_tutanak",
         "name": "Tutanak",
         "document_type": "tutanak",
-        "description": "Toplanti veya olay tutanagi sablonu",
+        "description": "Toplantı veya olay tutanağı şablonu",
         "default_tags": ["tutanak"],
         "default_priority": "normal",
         "fields": ["tarih", "yer", "katilimcilar", "konu"],
@@ -61,12 +61,17 @@ class TemplateService:
         self._ensure_defaults()
 
     def _ensure_defaults(self):
-        """Varsayilan sablonlari yukler."""
+        """Varsayılan şablonları yükler, mevcut builtin'lerin adını ve açıklamasını günceller."""
         templates = self._load()
-        existing_ids = {t["id"] for t in templates}
-        for tpl in DEFAULT_TEMPLATES:
-            if tpl["id"] not in existing_ids:
-                templates.append(tpl)
+        existing = {t["id"]: t for t in templates}
+        for default in DEFAULT_TEMPLATES:
+            if default["id"] in existing:
+                t = existing[default["id"]]
+                if t.get("builtin"):
+                    t["name"] = default["name"]
+                    t["description"] = default["description"]
+            else:
+                templates.append(default)
         self._save(templates)
 
     def _load(self) -> list:

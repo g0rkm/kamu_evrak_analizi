@@ -1,0 +1,7 @@
+method_key,method_name,category,train_split,accuracy,wilson_ci_low,wilson_ci_high,macro_f1,boot_f1_ci_low,boot_f1_ci_high,weighted_f1,boundary_tolerant_acc,mean_latency_ms,delta_macro_f1_vs_gemma4,delta_f1_ci_low,delta_f1_ci_high,mcnemar_b_gemma_only,mcnemar_c_base_only,mcnemar_p_value
+baseline_a1_taxonomy_keywords,Kural Tabanlı (Taksonomi Anahtar Kelime),Rule-Based,Yok (Kural),0.5397,0.4780,0.6002,0.5368,0.4800,0.5816,0.5368,0.6151,0.0516,+0.3611,+0.3054,+0.4246,101,9,7.84e-21
+baseline_a2_structural_rules,Kural Tabanlı (Başlık ve Biçim Kuralları),Rule-Based,Yok (Kural),0.6468,0.5860,0.7032,0.6850,0.6239,0.7329,0.6850,0.7103,0.0198,+0.2129,+0.1578,+0.2777,78,13,1.85e-12
+tfidf_logreg,TF-IDF + Lojistik Regresyon,Classical-ML,dev (n=108),0.7579,0.7014,0.8067,0.7544,0.6959,0.7998,0.7544,0.7897,0.7246,+0.1435,+0.0877,+0.2072,51,14,4.48e-06
+tfidf_linearsvc,TF-IDF + Doğrusal DVM (LinearSVC),Classical-ML,dev (n=108),0.7619,0.7056,0.8103,0.7568,0.6978,0.8023,0.7568,0.8056,0.6609,+0.1411,+0.0821,+0.2043,51,15,1.01e-05
+qwen3_8b,Qwen 3 8B (Alternatif Yerel LLM),Local-LLM,Yok (Zero-Shot),0.7500,0.6931,0.7994,0.7301,0.6734,0.7750,0.7301,0.8214,1224.56,+0.1678,+0.1229,+0.2208,41,2,2.15e-10
+gemma4_12b,Gemma 4 12B (Önerilen Referans Model),Local-LLM,Yok (Zero-Shot),0.9048,0.8622,0.9352,0.8979,0.8598,0.9294,0.8979,0.9286,1194.25,0.0000,0.0000,0.0000,0,0,1.00e+00

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kamu-evrak-analizi/schemas/classification_labels_schema.json",
+  "title": "Kamu Evrak Analizi — 18 Sinifli Degerlendirme Veri Kumesi Semasi (Faz 3)",
+  "description": "JOINSSR makale deneyleri (E1, E2, E4, E6) icin kullanilan anonimlestirilmis ve tekillestirilmis kamu evrak degerlendirme orneklerinin meta veri ve etiket semasi.",
+  "type": "object",
+  "required": [
+    "doc_id",
+    "ground_truth",
+    "split",
+    "source",
+    "origin_type",
+    "publication_date",
+    "title",
+    "content",
+    "char_count",
+    "approx_token_count",
+    "length_bucket",
+    "legal_status",
+    "legislation_version_note",
+    "annotator_primary",
+    "annotator_secondary",
+    "adjudication_notes",
+    "content_sha256"
+  ],
+  "properties": {
+    "doc_id": {
+      "type": "string",
+      "description": "Benzersiz degerlendirme ornek kimligi (orn. eval_kanun_001, eval_dilekce_014)."
+    },
+    "original_id": {
+      "type": ["string", "null"],
+      "description": "Eger app/data/scraped/documents.json icinden geliyorsa kaynak belge kimligi (orn. mv_kanun_657, rg_2024-05-17_3)."
+    },
+    "ground_truth": {
+      "type": "string",
+      "enum": [
+        "dilekce",
+        "resmi_yazi",
+        "talep_yazisi",
+        "bilgilendirme",
+        "gorus_sorma",
+        "sikayet",
+        "kurum_ici",
+        "genelge",
+        "rapor",
+        "tutanak",
+        "yonetmelik",
+        "teblig",
+        "kanun",
+        "karar",
+        "kararname",
+        "ilan",
+        "yonerge",
+        "sozlesme"
+      ],
+      "description": "app/core/taxonomy.py icindeki 18 evrak turunden uzlastirilmis nihai sinif kodu."
+    },
+    "secondary_candidates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Belgenin bicim veya icerik olarak kesisim gosterdigi ikincil aday siniflar (hata analizi icin)."
+    },
+    "split": {
+      "type": "string",
+      "enum": ["dev", "test"],
+      "description": "Veri sizintisini onlemek icin sabit seed=42 ile ayrilmis kume: 'dev' (prompt/kural gelistirme ve klasik ML egitimi, n=6/sinif) veya 'test' (nihai kor degerlendirme, n=14/sinif)."
+    },
+    "source": {
+      "type": "string",
+      "enum": ["resmi_gazete", "mevzuat_gov_tr", "resmi_gazete_pdf_bolumu", "kurumsal_anonim_sablon", "curated_templates"],
+      "description": "Belgenin elde edildigi birincil veri kaynagi."
+    },
+    "origin_type": {
+      "type": "string",
+      "enum": ["scraped_official", "curated_anonymized"],
+      "description": "Kamuya acik resmi kaynaklardan taranmis gercek metin ('scraped_official') veya resmi yazisma/mevzuat standartlarina uygun anonimlestirilmis temsilî ornek ('curated_anonymized')."
+    },
+    "publication_date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Belgenin yayimlanma veya duzenlenme tarihi (YYYY-AA-GG)."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Belge basligi veya konu satiri."
+    },
+    "content": {
+      "type": "string",
+      "minLength": 100,
+      "description": "Anonimlestirilmis belge govde metni."
+    },
+    "char_count": {
+      "type": "integer",
+      "minimum": 100,
+      "description": "Baslik + govde birlesik karakter uzunlugu."
+    },
+    "approx_token_count": {
+      "type": "integer",
+      "minimum": 20,
+      "description": "Yaklasik alt-kelime (subword) token sayisi (char_count / 4 yaklasimi)."
+    },
+    "length_bucket": {
+      "type": "string",
+      "enum": ["kisa", "orta", "uzun"],
+      "description": "Performans protokolu (Faz 8) icin belge uzunluk grubu: kisa (<1000 kar), orta (1000-5000 kar), uzun (>5000 kar)."
+    },
+    "legal_status": {
+      "type": "string",
+      "enum": [
+        "yururlukte",
+        "degisiklik_metni",
+        "mulga_veya_eski_surum",
+        "idari_yazisma_uygulanmaz"
+      ],
+      "description": "Hukuki guncellik durumu (Hakem §4.2 ve §5.1)."
+    },
+    "legislation_version_note": {
+      "type": "string",
+      "description": "Mevzuat surumu, Resmi Gazete sayisi, tertip/kabul tarihi veya yururluk notu."
+    },
+    "annotator_primary": {
+      "type": "string",
+      "description": "Birinci bagimsiz etiketleyici (operasyonel karar agaci + uzman incelemesi) sinif atamasi."
+    },
+    "annotator_secondary": {
+      "type": "string",
+      "description": "Ikinci bagimsiz etiketleyici (yapisal/baslik/ipucu denetimi) sinif atamasi (Cohen's kappa hesabi icin)."
+    },
+    "adjudication_notes": {
+      "type": "string",
+      "description": "Iki etiketleme arasinda uyusmazlik varsa cozum gerekcesi veya ayirt edici kural notu."
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Normalize edilmis govde metninin SHA-256 ozeti (deduplikasyon dogrulamasi)."
+    }
+  },
+  "additionalProperties": false
+}

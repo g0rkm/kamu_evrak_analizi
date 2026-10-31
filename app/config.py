@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     LLM_MAX_CONCURRENT_REQUESTS: int = 2
 
     # OCR
-    TESSERACT_CMD: str = "tesseract"
+    TESSERACT_CMD: str = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
     OCR_LANGUAGE: str = "tur"
 
     # Girdi sınırları ve dosya saklama
