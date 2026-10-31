@@ -53,9 +53,37 @@ export class CompareView {
         });
         const uploadBtn = h('button', { type: 'button', class: 'btn btn-primary', style: { fontSize: '14px', padding: '10px 20px' }, onClick: () => fileInput.click() }, 'Dosya seç');
 
-        const filePane = h('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', padding: '30px 16px', border: '2px dashed var(--color-divider)', borderRadius: '8px', textAlign: 'center' } },
-            h('div', { style: { fontSize: '13px', color: 'var(--color-neutral-700)' } }, 'Dosya seçin, metin otomatik çıkarılacak'),
-            uploadBtn, fileInput);
+        const dropzone = h('div', {
+            class: 'dropzone', role: 'button', tabindex: 0,
+            onClick: () => fileInput.click(),
+            onKeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } },
+        },
+            h('span', { class: 'dropzone__icon' }, icon('upload')),
+            h('div', { class: 'dropzone__title' }, 'Dosyanızı buraya sürükleyip bırakın'),
+            h('div', { style: { fontSize: '14px' } }, 'veya ', h('a', { href: '#', onClick: (e) => { e.preventDefault(); e.stopPropagation(); fileInput.click(); } }, 'bilgisayarınızdan seçin')),
+            h('div', { style: { fontSize: '12px', color: 'var(--color-neutral-700)' } },
+                'PDF, Word, resim (JPG, PNG, TIFF) veya metin dosyası · en fazla 50 MB'));
+        ['dragenter', 'dragover'].forEach((type) => dropzone.addEventListener(type, (e) => { e.preventDefault(); dropzone.classList.add('is-dragover'); }));
+        ['dragleave', 'drop'].forEach((type) => dropzone.addEventListener(type, (e) => { e.preventDefault(); dropzone.classList.remove('is-dragover'); }));
+        dropzone.addEventListener('drop', (e) => {
+            const file = e.dataTransfer.files[0];
+            if (!file) return;
+            uploadBtn.disabled = true;
+            const prev = uploadBtn.textContent;
+            uploadBtn.textContent = 'Okunuyor…';
+            const fd = new FormData();
+            fd.append('file', file);
+            fetch('/api/extract-text', { method: 'POST', body: fd })
+                .then(resp => { if (!resp.ok) throw new Error('Dosya okunamadı'); return resp.json(); })
+                .then(data => {
+                    textarea.value = data.text || '';
+                    textarea.dispatchEvent(new Event('input'));
+                    setMode('text');
+                })
+                .catch(() => { this.toaster?.error?.('Dosyadan metin çıkarılamadı.'); })
+                .finally(() => { uploadBtn.disabled = false; uploadBtn.textContent = prev; });
+        });
+        const filePane = h('div', null, dropzone, fileInput);
 
         const textPane = h('div', { class: 'field' }, textarea, counter);
 
