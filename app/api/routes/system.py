@@ -1193,6 +1193,38 @@ async def list_templates(request: Request, container: ServiceContainer = Depends
         return {"templates": []}
     return {"templates": container.templates.list_templates()}
 
+@router.post("/templates/generate", tags=["Sistem"])
+async def generate_document(request: Request, body: dict, container: ServiceContainer = Depends(get_container)):
+    """Kullanıcının verdiği açıklamaya göre LLM ile evrak taslağı üretir."""
+    description = (body.get("description") or "").strip()
+    doc_type = (body.get("document_type") or "dilekce").strip()
+    if not description:
+        raise InvalidInputError("Evrak açıklaması (description) zorunludur.")
+    if not container.llm or not container.llm.is_configured:
+        raise InvalidInputError("Yapay zekâ servisi yapılandırılmamış.")
+
+    system_prompt = """Sen bir kamu evrak yazım uzmanısın. Kullanıcının verdiği açıklamaya göre eksiksiz, resmî üsluba uygun bir Türkçe evrak taslağı oluştur.
+
+KURALLAR:
+- Evrak türüne uygun format ve üslup kullan.
+- Dilekçe ise: hitap ("T.C. ... BAŞKANLIĞINA"), konu, gövde, "Gereğini arz ederim" kapanışı, ad-soyad-tarih bloğu olmalı.
+- Rapor ise: başlık, konu, bölümler (amaç, bulgular, sonuç), imza bloğu olmalı.
+- Sözleşme ise: taraflar, konu, maddeler, imza alanları olmalı.
+- Tutanak ise: tarih, yer, katılımcılar, gündem, kararlar olmalı.
+- Resmî yazı ise: sayı, konu, ilgi, gövde, kapanış olmalı.
+- Kişisel veri üretme (TC kimlik no, telefon vb.), bunları [AD SOYAD], [TARİH], [KURUM ADI] gibi yer tutucularla göster.
+- Yanıtın SADECE evrak metnini içersin, başka açıklama ekleme."""
+
+    user_prompt = f"Evrak türü: {doc_type}\nAçıklama: {description}\n\nBu açıklamaya uygun eksiksiz bir evrak taslağı oluştur."
+
+    try:
+        generated_text = await container.llm.chat(system_prompt, user_prompt, temperature=0.7)
+    except Exception as exc:
+        raise InvalidInputError(f"Evrak üretimi başarısız: {exc}")
+
+    return {"generated_text": generated_text, "document_type": doc_type}
+
+
 @router.get("/templates/{template_id}", tags=["Sistem"])
 async def get_template(template_id: str, request: Request, container: ServiceContainer = Depends(get_container)):
     if not container.templates:
