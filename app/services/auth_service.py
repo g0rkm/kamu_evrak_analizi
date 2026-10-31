@@ -45,6 +45,14 @@ class AuthService:
         self._file = os.path.join(self._dir, "users.json")
         self._tokens_file = os.path.join(self._dir, "tokens.json")
         self._lock = threading.Lock()
+        self._seed_defaults()
+
+    def _seed_defaults(self):
+        users = self._load_users()
+        if "admin" not in users:
+            self.create_user("admin", "admin123", role="admin", full_name="Sistem Yöneticisi")
+        if "kullanici" not in users:
+            self.create_user("kullanici", "kamu123", role="memur", full_name="Standart Kullanıcı")
 
     def _load_users(self) -> dict:
         if not os.path.exists(self._file):
