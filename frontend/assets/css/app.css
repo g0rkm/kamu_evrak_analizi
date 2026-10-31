@@ -490,3 +490,14 @@ dialog.dialog::backdrop { background: color-mix(in srgb, var(--color-neutral-900
     .meter__fill { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     a { color: #111; text-decoration: none; }
 }
+
+/* ---------- Giriş ekranı ---------- */
+.hidden { display: none !important; }
+.login-wrapper { display: flex; align-items: center; justify-content: center; min-height: 80vh; padding: 24px; }
+.login-card { background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: 12px; padding: 36px; width: 100%; max-width: 380px; box-shadow: var(--shadow-lg); }
+.login-card h2 { margin: 0 0 24px; font-family: var(--font-heading); font-weight: 500; font-size: 24px; text-align: center; }
+.login-card .form-group { margin-bottom: 16px; }
+.login-card label { display: block; font-size: 14px; margin-bottom: 6px; color: var(--color-text); }
+.login-card input { width: 100%; padding: 10px 12px; border: 1px solid var(--color-divider); border-radius: 6px; font-size: 15px; background: var(--color-bg); color: var(--color-text); }
+.login-card input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(var(--color-accent-rgb, 59, 130, 246), 0.15); }
+.login-card .btn-block { width: 100%; margin-top: 8px; }
