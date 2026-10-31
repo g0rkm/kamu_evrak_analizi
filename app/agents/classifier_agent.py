@@ -10,30 +10,37 @@ def _build_prompt() -> str:
 Evrak türleri:
 {type_lines}
 
-ÖNEMLİ AYIRT EDİCİ KURALLAR:
+SINIFLANDIRMA ADIMLARI (sırayla uygula):
 
-1. DİLEKÇE vs RESMİ YAZI:
-   - "Dilekçe" bir vatandaşın veya kişinin kuruma hitaben yazdığı başvurudur. "Rica ederim", "Arz ederim", "Saygılarımla", "başvurumun" gibi ifadeler içerir. Genellikle "T.C. ... BAŞKANLIĞINA" veya "... MÜDÜRLÜĞÜNE" gibi hitap ile başlar.
-   - "Resmî yazı" ise bir kurumun başka bir kuruma yazdığı yazıdır. "Sayı:", "Konu:", "İlgi:" gibi resmî üst yazı unsurları içerir ve genellikle kurum başlıklı kâğıttadır.
+ADIM 1 — BAŞLIĞI OKU: Evrakın ilk 3-5 satırındaki başlığı veya üst bilgiyi incele. Evrak türü genellikle burada açıkça belirtilir (örn. "DİLEKÇE", "TUTANAK", "YÖNETMELİK", "GENELGE", "RAPOR"). Başlıkta tür açıkça yazıyorsa o türü seç.
 
-2. KARARNAME vs YÖNETMELİK:
-   - "Kararname" Cumhurbaşkanlığı veya Bakanlar Kurulu tarafından çıkarılan üst düzey düzenleyici işlemdir. "Cumhurbaşkanlığı Kararnamesi", "KHK", "Kanun Hükmünde Kararname" ifadeleri içerir.
-   - "Yönetmelik" ise kurumların çıkardığı alt düzey düzenleyici işlemdir. "Yönetmelik" kelimesini başlığında taşır, "madde", "hüküm", "yürürlük" gibi mevzuat dilini kullanır.
+ADIM 2 — YAPISAL UNSURLARI TARA:
+- Dilekçe: Bir kişinin kuruma hitabı ("...BAŞKANLIĞINA"), birinci tekil şahıs ("başvurumun", "talebimin"), vatandaş dilekçe kalıpları ("Arz ederim", "Rica ederim", "Saygılarımla"), Ad Soyad + Tarih + İmza bloğu altta
+- Resmî yazı: Kurumdan kuruma yazı, "Sayı:", "Konu:", "İlgi:" üst yazı başlıkları, resmî kapanış ("Bilgilerinize arz/rica ederim")
+- Kararname: "Cumhurbaşkanlığı Kararnamesi", "KHK", "Kanun Hükmünde Kararname" ifadeleri, madde yapısı, Resmî Gazete yayımı
+- Yönetmelik: Başlıkta "YÖNETMELİK" kelimesi, "BİRİNCİ BÖLÜM", "Amaç, Kapsam, Dayanak", maddeler, geçici maddeler, yürürlük-yürütme
+- Kanun: Başlıkta "KANUN" veya "KANUNU", TBMM'de kabul, kanun numarası
+- Karar: "KARAR", "Kurul Kararı", tek bir konuda alınan karar, atama kararı
+- Genelge: "GENELGE" başlığı, "Tüm birimlere/personele duyurulur"
+- Tutanak: "TUTANAK" başlığı, tarih/yer/katılımcılar, gündem maddeleri, kararlar
+- Rapor: "RAPOR" başlığı, amaç-bulgular-sonuç yapısı
+- Sözleşme: "SÖZLEŞME" veya "PROTOKOL" başlığı, taraflar, maddeler
+- Tebliğ: "TEBLİĞ" başlığı, usul ve esaslar
 
-3. GENELGE: "Genelge" kelimesi başlıkta veya metin içinde açıkça geçmelidir. "Tüm birimlere", "tüm personele" ifadeleri ipucudur.
+ADIM 3 — BAĞLAM AYIRT EDİCİLERİ:
+- Dilekçe HER ZAMAN bir kişinin (vatandaş, memur, öğrenci vb.) kuruma yaptığı BİREYSEL başvurudur. "Arz ederim" kalıbı tek başına yeterli değil — yazanın birey olması gerekir.
+- Resmî yazı bir KURUMUN başka bir kuruma yazdığı resmi yazıdır.
+- Bir evrakta başka mevzuata ATIF yapılması onu o tür yapmaz. Örneğin "4982 sayılı Kanun kapsamında" yazan bir dilekçe, kanun değil dilekçedir.
+- Cumhurbaşkanlığı Kararnamesi ≠ Karar. Kararname düzenleyici (normatif) bir işlemdir, karar bireysel bir işlemdir.
 
-4. KANUN vs DİĞER MEVZUAT: "Kanun" veya "Kanunu" başlıkta geçmelidir. Sadece kanuna atıf yapılması (ör. "4982 sayılı Kanun kapsamında") evrakı kanun yapmaz.
-
-5. SPESİFİKLİK KURALI: Mümkün olan en spesifik türü seç. Örneğin, bir evrak hem "resmi_yazi" hem de "genelge" olabilir, ancak genelge daha spesifiktir.
-
-6. GÜVENİLİRLİK (confidence) KURALLARI:
-   - Başlıkta evrak türü açıkça belirtilmişse: 0.85-0.95
-   - Metin içeriğinden güçlü ipuçları varsa: 0.70-0.85
-   - Belirsiz veya birden fazla türe uyabilecek içerik: 0.40-0.65
-   - Çok kısa veya bozuk metin: 0.20-0.40
+GÜVENİLİRLİK (confidence) KURALLARI:
+- Başlıkta evrak türü açıkça yazıyorsa: 0.85-0.95
+- Yapısal unsurlardan güçlü eşleşme varsa: 0.70-0.85
+- Birden fazla türe uyabilecek: 0.50-0.65
+- Çok kısa, bozuk veya belirsiz metin: 0.25-0.45
 
 Yanıtını SADECE aşağıdaki JSON formatında ver, başka hiçbir şey yazma:
-{{"document_type": "tur_kodu", "confidence": 0.0-1.0, "sub_type": "alt_tur_veya_null", "reasoning": "sınıflandırma gerekçesi"}}"""
+{{"document_type": "tur_kodu", "confidence": 0.0-1.0, "sub_type": "alt_tur_veya_null", "reasoning": "kısa sınıflandırma gerekçesi"}}"""
 
 
 class ClassifierAgent(LLMAgent):
@@ -41,7 +48,7 @@ class ClassifierAgent(LLMAgent):
 
     name = "ClassifierAgent"
     system_prompt = _build_prompt()
-    max_input_chars = 3000
+    max_input_chars = 5000
 
     async def execute(self, text: str) -> ClassificationResult:
         self.log("Evrak sınıflandırma başlatılıyor...")
