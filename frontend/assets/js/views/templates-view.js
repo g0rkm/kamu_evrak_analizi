@@ -22,6 +22,7 @@ export class TemplatesView {
 
     async render(root = this._container) {
         this.formBox = this._buildForm();
+        this.aiCard = this._buildAiCard();
         this.listRoot = h('div', { id: 'templatesList' }, h('div', { class: 'loading-line' }, 'Yükleniyor…'));
 
         const section = h('section', { style: { display: 'flex', flexDirection: 'column', gap: '26px' } },
@@ -34,6 +35,7 @@ export class TemplatesView {
                     onClick: () => { this.formBox.hidden = !this.formBox.hidden; },
                 }, 'Yeni şablon oluştur')),
             this.formBox,
+            this.aiCard,
             this.listRoot);
 
         replace(root, section);
@@ -63,6 +65,91 @@ export class TemplatesView {
                 h('button', { type: 'button', class: 'btn btn-secondary', id: 'cancelTemplateBtn', onClick: () => { box.hidden = true; } }, 'Vazgeç'),
                 h('button', { type: 'button', class: 'btn btn-primary', id: 'saveTemplateBtn', onClick: () => this._saveTemplate() }, 'Kaydet')));
         return box;
+    }
+
+    _buildAiCard() {
+        this.aiDocType = h('select', { class: 'input', id: 'aiDocType' },
+            h('option', { value: 'dilekce' }, 'Dilekçe'),
+            h('option', { value: 'rapor' }, 'Rapor'),
+            h('option', { value: 'sozlesme' }, 'Sözleşme'),
+            h('option', { value: 'tutanak' }, 'Tutanak'),
+            h('option', { value: 'resmi_yazi' }, 'Resmî yazı'));
+        this.aiDesc = h('textarea', {
+            class: 'input', id: 'aiDesc', rows: 3,
+            placeholder: 'Örn. Belediyeye imar planı hakkında bilgi edinme dilekçesi yaz'
+        });
+        this.aiStatus = h('div', { style: { fontSize: '13px', color: 'var(--color-neutral-700)' } });
+        this.aiBtn = h('button', {
+            type: 'button', class: 'btn btn-primary', id: 'aiGenerateBtn',
+            onClick: () => this._generateWithAi()
+        }, 'Oluştur');
+
+        return h('div', { class: 'card', style: { padding: '22px', gap: '14px' } },
+            h('div', { class: 'card-title' }, 'Yapay zekâ ile evrak oluştur'),
+            h('p', { style: { fontSize: '13px', color: 'var(--color-neutral-700)', margin: 0 } },
+                'Ne tür bir evrak istediğinizi açıklayın, yapay zekâ sizin için bir taslak oluştursun.'),
+            h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '12px', alignItems: 'start' } },
+                h('div', { class: 'field' }, h('label', { for: 'aiDocType' }, 'Evrak türü'), this.aiDocType),
+                h('div', { class: 'field' }, h('label', { for: 'aiDesc' }, 'Açıklama'), this.aiDesc)),
+            h('div', { style: { display: 'flex', gap: '10px', alignItems: 'center' } },
+                this.aiBtn, this.aiStatus));
+    }
+
+    async _generateWithAi() {
+        const description = this.aiDesc.value.trim();
+        if (!description) return;
+        this.aiBtn.disabled = true;
+        this.aiBtn.textContent = 'Oluşturuluyor…';
+        this.aiStatus.textContent = 'Yapay zekâ evrak taslağını hazırlıyor, lütfen bekleyin…';
+        try {
+            const data = await this._api.request('/templates/generate', {
+                method: 'POST',
+                json: { description, document_type: this.aiDocType.value }
+            });
+            this.aiBtn.disabled = false;
+            this.aiBtn.textContent = 'Oluştur';
+            this.aiStatus.textContent = '';
+            this._showGeneratedDocument(data.generated_text, this.aiDocType.value);
+        } catch (err) {
+            this.aiBtn.disabled = false;
+            this.aiBtn.textContent = 'Oluştur';
+            this.aiStatus.textContent = 'Hata: ' + (err.message || 'Evrak oluşturulamadı');
+        }
+    }
+
+    _showGeneratedDocument(text, docType) {
+        const textarea = h('textarea', {
+            class: 'input',
+            style: { minHeight: '360px', fontSize: '14px', lineHeight: 1.7 },
+            value: text
+        });
+        const dialog = h('dialog', { class: 'dialog', style: { width: 'min(720px, 100%)' } },
+            h('div', { class: 'dialog-title' }, 'Üretilen evrak taslağı'),
+            h('div', { class: 'field' },
+                h('label', null, 'Taslağı düzenleyebilir, kopyalayabilir veya indirebilirsiniz'),
+                textarea),
+            h('div', { class: 'dialog-actions' },
+                h('button', {
+                    type: 'button', class: 'btn btn-ghost',
+                    onClick: () => { dialog.close(); dialog.remove(); }
+                }, 'Kapat'),
+                h('button', {
+                    type: 'button', class: 'btn btn-secondary',
+                    onClick: () => {
+                        const b = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(b);
+                        a.download = `evrak_taslagi_${docType}.txt`;
+                        a.click();
+                        URL.revokeObjectURL(a.href);
+                    }
+                }, 'İndir (.txt)'),
+                h('button', {
+                    type: 'button', class: 'btn btn-primary',
+                    onClick: () => { navigator.clipboard?.writeText(textarea.value); }
+                }, 'Kopyala')));
+        document.body.append(dialog);
+        dialog.showModal();
     }
 
     async _loadTemplates() {
