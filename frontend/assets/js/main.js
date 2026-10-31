@@ -15,6 +15,7 @@ import { SearchView } from './views/search-view.js';
 import { NotificationsView } from './views/notifications-view.js';
 import { TemplatesView } from './views/templates-view.js';
 import { ExportView } from './views/export-view.js';
+import { LoginView } from './views/login-view.js';
 import { SystemView } from "./views/system-view.js";
 import MetricsView from './views/metrics-view.js';
 import AdminView from './views/admin-view.js';
@@ -96,6 +97,45 @@ class App {
 
     async start() {
         hydrateIcons();
+
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            this._showLogin();
+            return;
+        }
+        try {
+            const validation = await this.api.request('/auth/validate', {
+                method: 'POST',
+                json: { token },
+            });
+            if (!validation.valid) {
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('auth_user');
+                this._showLogin();
+                return;
+            }
+            localStorage.setItem('auth_user', JSON.stringify({ username: validation.username, role: validation.role || 'memur' }));
+        } catch {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            this._showLogin();
+            return;
+        }
+
+        this._initApp();
+    }
+
+    _showLogin() {
+        document.querySelector('.app-header')?.classList.add('hidden');
+        const login = new LoginView(this.root, (data) => {
+            document.querySelector('.app-header')?.classList.remove('hidden');
+            this._initApp();
+        });
+        login.render();
+    }
+
+    async _initApp() {
+        this._applyRoleVisibility();
         new SystemStatus(document.getElementById('systemStatus'), this.api).start();
         this._setupNav();
         document.getElementById('helpLink')?.addEventListener('click', (e) => {
@@ -182,8 +222,27 @@ class App {
             }
         } catch {}
 
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            location.reload();
+        });
+
         window.addEventListener('offline', () => this.toaster.warn('İnternet bağlantısı kesildi.'));
         window.addEventListener('online', () => this.toaster.success('İnternet bağlantısı yeniden kuruldu.'));
+    }
+
+    _applyRoleVisibility() {
+        let role = 'memur';
+        try {
+            const stored = JSON.parse(localStorage.getItem('auth_user') || '{}');
+            role = stored.role || 'memur';
+        } catch {}
+        const adminGroup = document.querySelector('#navMoreMenu .nav-more__group:last-child');
+        if (adminGroup) {
+            const isAdmin = role === 'admin' || role === 'yonetici';
+            adminGroup.style.display = isAdmin ? '' : 'none';
+        }
     }
 
     /** Mobil hamburger menüsü ve "Daha Fazla" açılır menüsünün etkileşimi. */
